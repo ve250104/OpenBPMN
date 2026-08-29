@@ -137,7 +137,7 @@ The following are valid BPMN concepts but outside Consulting Core 1.0.0:
 - engine-specific task configuration, expressions, connectors, listeners, deployment metadata, and input/output mappings; and
 - vendor extensions, including Celonis eBPMN or execution-engine namespaces.
 
-When a Deferred Concept is required, OpenBPMN returns a stable diagnostic, retains the requirement in Working State, and explains supported alternatives. It may use an alternative only after explicit human approval. It never silently removes, downgrades, or substitutes the concept.
+When a Deferred Concept is required, OpenBPMN returns a stable diagnostic, retains the requirement in Session State and the Quality Report, and explains supported alternatives. It may use an alternative only after explicit human approval. It never silently removes, downgrades, or substitutes the concept. An explicitly requested Handoff File preserves the requirement for a later session.
 
 ## Model constraints
 
@@ -152,7 +152,7 @@ Every generated artifact follows these profile rules:
 7. Processes are design-time models and carry no implied executability.
 8. BPMN standard documentation content is allowed only when intentionally approved as process meaning.
 9. OpenBPMN metadata, quality findings, assumptions, and Lifecycle Status remain in companion artifacts.
-10. Unsupported requirements remain visible in Working State and the Quality Report even when omitted from a Snapshot Export.
+10. Unsupported requirements remain visible in Session State and the Quality Report even when omitted from a Snapshot Export.
 
 ## Snapshot and Clean Export behavior
 
@@ -170,7 +170,7 @@ A human may request a Snapshot Export at any point for sharing or clarification.
 
 OpenBPMN makes the snapshot well-formed, schema-valid, and semantically valid whenever technically possible. Its Quality Report declares every limitation. “Snapshot” describes the artifact operation, not a forced draft or working status.
 
-If valid BPMN cannot be produced, OpenBPMN still exports the Read-Only Preview, Structured Process Evidence, Working State, and Quality Report. Invalid `.bpmn` output is available only through explicit expert override and is unmistakably reported as invalid; it is never called a Clean Export.
+If valid BPMN cannot be produced, OpenBPMN still returns the Quality Report and a Read-Only Preview where one can be rendered from the current Session State. The human may explicitly request a Handoff File. Invalid `.bpmn` output is available only through explicit expert override and is unmistakably reported as invalid; it is never called a Clean Export.
 
 ### Clean Export
 

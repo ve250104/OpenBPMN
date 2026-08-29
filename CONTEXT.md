@@ -24,6 +24,10 @@ _Avoid_: BPMN Process Model when referring only to appearance
 The agent role that elicits missing process knowledge, challenges ambiguity, and iteratively shapes a BPMN Process Model while the human owns the decisions.
 _Avoid_: Generator
 
+**Modeling Skill**:
+The single model-invoked, host-portable front door for Conversational Modeling. It carries a short core workflow and progressively loads specialized consulting, BPMN, quality, and compatibility guidance when relevant.
+_Avoid_: Command catalog, wizard, host-specific agent
+
 **Quality Report**:
 A companion assessment that makes model-validity findings, assumptions, and unresolved process questions visible to the Process Consultant.
 _Avoid_: Hidden validation
@@ -69,8 +73,12 @@ The disciplined translation of incomplete, ambiguous, or contradictory stakehold
 _Avoid_: Elite diagram, BPMN syntax knowledge
 
 **Agent Workflow**:
-An automated or human-guided interaction in which an AI coding agent helps create or refine a BPMN Process Model.
-_Avoid_: Automated process
+A session-first interaction in which a Host Agent helps create or refine a BPMN Process Model through a natural, guided conversation. It requires no workspace initialization or durable project state.
+_Avoid_: Automated process, wizard
+
+**Execute-Then-Review**:
+The default interaction pattern in which the Host Agent interprets a user prompt, generates or updates the model, and presents the result for reaction. Pre-action confirmation is reserved for consequential ambiguity, unsupported approximation, or destructive file replacement.
+_Avoid_: Approval gate, confirmation-first workflow
 
 **Agent-Native Experience**:
 Conversational Modeling performed inside a user's existing agent environment, without requiring a standalone OpenBPMN application.
@@ -92,9 +100,21 @@ _Avoid_: Host Agent, standalone editor, hosted platform
 An external tool, such as SAP Signavio, Celonis, or Camunda Modeler, that imports a Clean Export and owns enterprise governance, collaboration, repositories, simulation, execution, or optional visual polishing.
 _Avoid_: OpenBPMN dependency, OpenBPMN user interface
 
-**Working State**:
-Local, structured companion data that preserves process evidence, assumptions, unresolved questions, and review status between Agent Workflow sessions. Working State stays outside a Clean Export.
-_Avoid_: BPMN extension data, chat history
+**Session State**:
+Temporary process evidence, decisions, conflicts, assumptions, and review context held within the current Host Agent session. OpenBPMN does not require it to persist after the session ends.
+_Avoid_: Workspace, repository state
+
+**Modeling Decision**:
+An explicit human choice that settles consequential process meaning such as scope, perspective, responsibility, routing, exception behavior, decomposition, or an accepted omission. It remains distinct from agent inference.
+_Avoid_: Agent decision, implicit assumption
+
+**Handoff File**:
+An optional, explicitly requested portable snapshot of Session State used to continue work in another session or Host Agent. It is never created automatically and is separate from a Clean Export.
+_Avoid_: Required sidecar, workspace
+
+**Output Bundle**:
+The three sibling deliverables produced by normal generation: a BPMN Process Model (`.bpmn`), a Read-Only Preview (`.svg`), and a machine-readable Quality Report (`.quality.json`). It contains no persistent Session State.
+_Avoid_: Workspace, project database
 
 **Lifecycle Status**:
 An optional, human-owned classification such as draft, working version, or approved. OpenBPMN neither infers nor requires a Lifecycle Status, and it does not embed one in a Clean Export.

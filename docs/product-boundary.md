@@ -13,7 +13,8 @@ OpenBPMN is not a hosted assistant, document-ingestion platform, graphical edito
 | Read interviews, notes, PDFs, presentations, spreadsheets, and other source material | Host Agent | Interpret untrusted source material in the user's chosen agent environment. |
 | Conduct the consulting dialogue | Host Agent | Elicit scope, participants, activities, events, decisions, exceptions, handoffs, assumptions, and missing information. The human confirms process decisions. |
 | Normalize agreed meaning | Host Agent | Produce Structured Process Evidence; do not author BPMN XML. |
-| Preserve evidence, assumptions, questions, and review status | OpenBPMN Working State | Store local structured sidecars outside the `.bpmn` export. Do not depend on one agent's chat history. |
+| Hold evidence, assumptions, questions, and review context during modeling | Host Agent Session State | Keep the normal experience session-first, with no workspace initialization or automatic sidecars. |
+| Preserve a session for later continuation | Modeling Skill | Create one portable Handoff File only when the human explicitly requests it. |
 | Own the canonical process representation | OpenBPMN Core | Accept structured, agent-independent input and apply stable identifiers. |
 | Compile BPMN 2.0 | OpenBPMN Core | Map the canonical representation to deterministic, vendor-neutral BPMN XML. |
 | Validate process and model quality | OpenBPMN Core | Produce stable machine-readable findings and a separate Quality Report. |
@@ -32,7 +33,7 @@ source material + human knowledge
 Host Agent consulting dialogue
                |
                v
-Structured Process Evidence + local Working State
+Session State -> ephemeral Structured Process Evidence
                |
                v
 OpenBPMN Core: compile -> validate -> layout -> preview -> export
@@ -52,7 +53,8 @@ The MVP must:
 - support iterative natural-language-to-BPMN creation through a portable agent skill;
 - expose a deterministic local CLI that remains useful without an AI agent;
 - accept Structured Process Evidence rather than raw arbitrary documents;
-- preserve local Working State independently of agent chat history;
+- require no workspace initialization or durable state for a normal session;
+- optionally emit one Handoff File when the user requests cross-session continuation;
 - compile, validate, lay out, preview, and cleanly export a Design-Time Model;
 - keep the Quality Report separate from BPMN XML;
 - provide Compatibility Profiles, fixtures, and import tests for priority downstream consumers;
@@ -62,6 +64,7 @@ The MVP must:
 ## Explicitly outside the MVP
 
 - a standalone graphical BPMN editor or OpenBPMN chat application;
+- a persistent OpenBPMN project workspace or automatic session sidecars;
 - a hosted service, account system, remote process store, or maintainer-operated infrastructure;
 - general-purpose extraction from arbitrary document formats;
 - authenticated Signavio, Celonis, or other vendor API integrations;
@@ -78,9 +81,10 @@ Existing BPMN may be validated or rendered when that can be done without promisi
 2. The CLI can compile and validate without an AI service.
 3. A Clean Export contains only portable BPMN model and diagram data.
 4. Agent-specific instructions remain thin adapters around one shared consulting and CLI contract.
-5. Compatibility is demonstrated through tests and guidance, not vendor coupling in the core.
-6. Process content stays within the environment deliberately chosen by the user.
-7. OpenBPMN never silently overwrites a user artifact or performs undisclosed network activity.
+5. Normal use is session-first; cross-session continuation is an explicit Handoff File operation.
+6. Compatibility is demonstrated through tests and guidance, not vendor coupling in the core.
+7. Process content stays within the environment deliberately chosen by the user.
+8. OpenBPMN never silently overwrites a user artifact or performs undisclosed network activity.
 
 ## Deferred decisions
 
