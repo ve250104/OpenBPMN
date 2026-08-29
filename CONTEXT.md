@@ -64,6 +64,10 @@ _Avoid_: Offline, hosted platform
 A practitioner who elicits, challenges, structures, and communicates business processes. Process consultants are OpenBPMN's primary professional audience.
 _Avoid_: End user
 
+**Consulting Modeling Practice**:
+The disciplined translation of incomplete, ambiguous, or contradictory stakeholder evidence into a scoped, appropriately abstracted, readable, and reviewable BPMN Process Model. It covers modeling judgment beyond notation correctness.
+_Avoid_: Elite diagram, BPMN syntax knowledge
+
 **Agent Workflow**:
 An automated or human-guided interaction in which an AI coding agent helps create or refine a BPMN Process Model.
 _Avoid_: Automated process
