@@ -1,0 +1,224 @@
+# Consulting Core Profile
+
+## Decision
+
+OpenBPMN will publish a versioned **Consulting Core Profile** for design-time Process and Collaboration modeling. Version 1 is broad enough for the large majority of process discovery, documentation, analysis, and handoff scenarios while making every unsupported concept explicit.
+
+The profile is informed by the OMG BPMN 2.0.2 Analytic subclass but is not presented as official OMG Process Modeling or Analytic conformance. OpenBPMN may make such a claim only after every applicable normative requirement is implemented and independently evidenced.
+
+## Profile identity
+
+- Profile name: **OpenBPMN Consulting Core**
+- Initial version: **1.0.0**
+- BPMN interchange target: **BPMN 2.0.2**
+- Modeling purpose: **Design-Time Models**
+- Supported model families: **Processes and Collaborations**
+- Explicitly excluded model families: **Choreographies and Conversations**
+- Execution promise: **none**; task and event types communicate design-time meaning only
+
+The project's eventual public name may change without changing the profile's semantic contract.
+
+## Meaning of support
+
+A BPMN concept is **Supported** only when OpenBPMN can:
+
+1. derive it from Structured Process Evidence;
+2. represent its meaning without approximation;
+3. serialize its required elements, attributes, and references correctly;
+4. generate complete BPMN DI for every visible shape, connector, and label;
+5. enforce its BPMN placement and relationship constraints;
+6. render it deterministically; and
+7. demonstrate positive and negative behavior with fixtures.
+
+The stable matrix has three classifications:
+
+| Classification | Meaning |
+| --- | --- |
+| Supported | Meets the complete quality bar above. |
+| Deferred | Valid BPMN deliberately outside the current profile. OpenBPMN reports it precisely and does not approximate it. |
+| Invalid | The requested placement or relationship violates BPMN or the selected modeling context. |
+
+The stable profile does not use “partial,” “experimental,” or “best effort.” A Deferred Concept can move to Supported only through a profile release with the complete evidence package.
+
+## Supported concept matrix
+
+### Definitions, processes, and collaborations
+
+| Concept | BPMN representation | v1 constraints |
+| --- | --- | --- |
+| Definitions | `definitions` | One self-contained definitions document with an explicit target namespace and deterministic namespace declarations. |
+| Process | `process` | Design-time process; no engine deployment promise. Processes referenced by a Call Activity remain in the same file. |
+| Collaboration | `collaboration` | Contains participants and Message Flows; one collaboration is the primary exported subject. |
+| White-box Pool | `participant` with `processRef` | References a process contained in the same file. |
+| Black-box Pool | `participant` without `processRef` | May participate through Message Flows but exposes no internal flow. |
+| Lane and nested Lane | `laneSet`, `lane`, nested `childLaneSet` | Flow-node membership is explicit and visually contained by the matching lane. |
+
+### Activities
+
+| Concept | BPMN representation | v1 constraints |
+| --- | --- | --- |
+| Generic Task | `task` | Design-time activity without a more specific classification. |
+| User Task | `userTask` | Human-system interaction classification only. |
+| Manual Task | `manualTask` | Human activity outside workflow-system execution. |
+| Service Task | `serviceTask` | Automated-service classification without connector or deployment configuration. |
+| Business Rule Task | `businessRuleTask` | Rule-evaluation classification without engine-specific rule bindings. |
+| Send Task | `sendTask` | Communication classification; may reference a named Message. |
+| Receive Task | `receiveTask` | Communication classification; may reference a named Message. |
+| Script Task | `scriptTask` | Design-time classification; OpenBPMN does not execute scripts or require executable code. |
+| Embedded Subprocess | `subProcess` | Expanded and collapsed presentations are supported; contained flow remains semantically present in either presentation. |
+| Call Activity | `callActivity` | Must resolve to a callable Process contained in the same self-contained file. |
+| Standard Loop | `standardLoopCharacteristics` | Marker and semantics are serialized and rendered. |
+| Sequential Multi-Instance | `multiInstanceLoopCharacteristics` | `isSequential=true`; executable collection configuration is outside the profile. |
+| Parallel Multi-Instance | `multiInstanceLoopCharacteristics` | `isSequential=false`; executable collection configuration is outside the profile. |
+
+### Gateways and control flow
+
+| Concept | BPMN representation | v1 constraints |
+| --- | --- | --- |
+| Exclusive Gateway | `exclusiveGateway` | Splitting decisions use labeled conditions; an optional default references an outgoing Sequence Flow. |
+| Parallel Gateway | `parallelGateway` | Represents unconditional synchronization or parallelization; conditional outgoing flows are invalid. |
+| Inclusive Gateway | `inclusiveGateway` | Outgoing alternatives use explicit conditions; an optional default is supported. |
+| Event-Based Gateway | `eventBasedGateway` | Outgoing targets and event behavior must satisfy BPMN event-based routing constraints. |
+| Sequence Flow | `sequenceFlow` | Remains within one Process; source and target references resolve to legal Flow Nodes. |
+| Conditional Sequence Flow | `sequenceFlow` with `conditionExpression` | Used only where BPMN permits a condition. Human-readable condition wording is retained without engine expression bindings. |
+| Default Sequence Flow | `default` reference plus `sequenceFlow` | The default Flow is an outgoing Flow of the owning Activity or Gateway and carries no competing condition. |
+
+### Events
+
+Support applies only in placements permitted by BPMN 2.0.2. A supported event definition in an illegal position is **Invalid**, not Deferred.
+
+| Event definition | Supported placements in v1 | Key constraints |
+| --- | --- | --- |
+| None | Start Event, End Event | Used for ordinary entry and completion. |
+| Message | Start, Intermediate Catch/Throw, Boundary, End | Catching and throwing direction is explicit; named Message references resolve. |
+| Timer | Start, Intermediate Catch, Boundary | Exactly one timer form is present; no throwing Timer Event. |
+| Conditional | Start, Intermediate Catch, Boundary | Represents a stated business condition, not engine-specific code. |
+| Signal | Start, Intermediate Catch/Throw, Boundary, End | Named Signal references resolve and broadcast semantics remain explicit. |
+| Error | Boundary Catch, End Throw | Error references resolve; Boundary use is attached to an Activity. |
+| Escalation | Intermediate Throw, Boundary Catch, End Throw | Escalation references resolve and interruption behavior is explicit where applicable. |
+| Terminate | End Event | Terminates the enclosing Process or Subprocess scope according to BPMN semantics. |
+| Link | Intermediate Catch/Throw | Used as a same-level visual continuation; links do not cross Process or Subprocess scope. |
+
+Boundary Events support interrupting and non-interrupting behavior wherever the selected event definition legally permits it. Event Subprocess Start Events remain Deferred even when their event definition is otherwise listed above.
+
+### Collaboration, data, and documentation
+
+| Concept | BPMN representation | v1 constraints |
+| --- | --- | --- |
+| Message Flow | `messageFlow` | Connects different participants; never connects elements within one participant. |
+| Named Message | `message` and reference | Used by Message Events, Send/Receive Tasks, or Message Flows without vendor payload schemas. |
+| Data Object | `dataObject`, `dataObjectReference` | Represents information used or produced by the process. |
+| Data Input/Output | `dataInput`, `dataOutput` | Design-time information semantics only; no engine mapping promise. |
+| Data Store | `dataStore`, `dataStoreReference` | Represents persistent information independently of a vendor repository. |
+| Data Association | `dataInputAssociation`, `dataOutputAssociation` | Connects data to Activities or Events where BPMN permits it. |
+| Text Annotation | `textAnnotation` | Contains Intentional Process Documentation approved by the human. |
+| Group | `group` with Category references | Organizes related visible elements without changing control flow. |
+| Association | `association` | Connects annotations and artifacts without implying Sequence or Message Flow. |
+
+OpenBPMN assumptions, provenance, validation findings, Lifecycle Status, and review workflow never become Text Annotations or vendor extension data automatically.
+
+## Deferred matrix
+
+The following are valid BPMN concepts but outside Consulting Core 1.0.0:
+
+- Event Subprocesses;
+- Ad Hoc Subprocesses;
+- Transactions;
+- compensation activities and Compensation Events;
+- Cancel Events;
+- Multiple and Parallel Multiple Events;
+- Complex Gateways;
+- Choreography and Conversation models;
+- choreography tasks and call choreographies;
+- formal Resources and resource-role assignment;
+- Correlations and correlation subscriptions;
+- Interfaces and Operations;
+- formal item definitions and external data schemas;
+- engine-specific task configuration, expressions, connectors, listeners, deployment metadata, and input/output mappings; and
+- vendor extensions, including Celonis eBPMN or execution-engine namespaces.
+
+When a Deferred Concept is required, OpenBPMN returns a stable diagnostic, retains the requirement in Working State, and explains supported alternatives. It may use an alternative only after explicit human approval. It never silently removes, downgrades, or substitutes the concept.
+
+## Model constraints
+
+Every generated artifact follows these profile rules:
+
+1. One self-contained `.bpmn` file represents one primary Process or Collaboration.
+2. A Collaboration file may contain multiple Processes when its participants or Call Activities reference them.
+3. The file contains one primary `BPMNDiagram` and a `BPMNPlane` for its primary Process or Collaboration.
+4. Every intended visible semantic element has matching BPMN DI; every visible connector has useful waypoints.
+5. IDs are stable, unique XML identifiers. Every semantic and DI reference resolves.
+6. Sequence Flows remain within a Process. Message Flows cross participant boundaries.
+7. Processes are design-time models and carry no implied executability.
+8. BPMN standard documentation content is allowed only when intentionally approved as process meaning.
+9. OpenBPMN metadata, quality findings, assumptions, and Lifecycle Status remain in companion artifacts.
+10. Unsupported requirements remain visible in Working State and the Quality Report even when omitted from a Snapshot Export.
+
+## Snapshot and Clean Export behavior
+
+OpenBPMN separates artifact availability from readiness or approval.
+
+### Snapshot Export
+
+A human may request a Snapshot Export at any point for sharing or clarification. It captures the currently confirmed model and may have:
+
+- unresolved process questions;
+- non-blocking consulting-quality findings;
+- blocking profile findings;
+- explicitly approved omissions of Deferred Concepts; or
+- a human-selected Lifecycle Status held outside the BPMN file.
+
+OpenBPMN makes the snapshot well-formed, schema-valid, and semantically valid whenever technically possible. Its Quality Report declares every limitation. “Snapshot” describes the artifact operation, not a forced draft or working status.
+
+If valid BPMN cannot be produced, OpenBPMN still exports the Read-Only Preview, Structured Process Evidence, Working State, and Quality Report. Invalid `.bpmn` output is available only through explicit expert override and is unmistakably reported as invalid; it is never called a Clean Export.
+
+### Clean Export
+
+A Clean Export:
+
+- passes XML integrity and BPMN 2.0.2 schema validation;
+- passes normative reference and semantic constraints;
+- uses only Supported Concepts in legal placements;
+- includes complete BPMN DI for its primary Process Diagram;
+- contains no OpenBPMN-specific notes, statuses, tags, or vendor extensions; and
+- remains eligible even when non-blocking consulting-quality findings exist.
+
+A Clean Export does not imply that the human considers the model complete, approved, production-ready, or governed. Those are human or Downstream Modeling Tool decisions.
+
+## Validity versus consulting quality
+
+Blocking Model Validity findings and advisory consulting-quality findings are separate.
+
+| Finding class | Examples | Default export effect |
+| --- | --- | --- |
+| XML/BPMN validity | Malformed references, illegal Flow relationships, invalid event placement, missing required semantic data | Blocks Clean Export |
+| Profile validity | Deferred Concept required without an approved omission, incomplete DI, unresolved Call Activity reference | Blocks Clean Export |
+| Consulting quality | Vague task names, unclear ownership, missing exception detail, avoidable complexity | Reported; does not block Clean Export by default |
+| Human governance | Draft, working version, reviewed, approved | Never inferred; does not determine technical export validity |
+
+The dedicated Quality Report decision may refine severity and override behavior but must preserve these category boundaries.
+
+## Versioning and evidence
+
+The Consulting Core Profile follows semantic versioning:
+
+- **Patch**: clarifies rules or fixes behavior without changing the supported semantic contract.
+- **Minor**: adds Supported Concepts or backward-compatible capabilities.
+- **Major**: removes or changes supported meaning, artifact rules, or validation behavior incompatibly.
+
+Every release publishes:
+
+1. an element-and-attribute conformance matrix;
+2. legal-placement and relationship rules;
+3. positive fixtures for every Supported Concept;
+4. negative fixtures for invalid placements, references, and Deferred Concepts;
+5. expected semantic-graph snapshots;
+6. expected BPMN DI and deterministic renderings; and
+7. validation and downstream-consumer observations where applicable.
+
+## Related evidence and decisions
+
+- [BPMN and downstream interoperability baseline](https://github.com/ve250104/OpenBPMN/issues/6)
+- [OpenBPMN product boundary](product-boundary.md)
+
+The exact canonical schema, diagnostic codes, module interfaces, layout algorithm, and downstream fixture mechanics remain decisions for their dedicated Wayfinder tickets.

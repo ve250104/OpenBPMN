@@ -29,12 +29,32 @@ A companion assessment that makes model-validity findings, assumptions, and unre
 _Avoid_: Hidden validation
 
 **Clean Export**:
-A BPMN Process Model that can be exported at any point without OpenBPMN-specific notes, statuses, or tags embedded in it. Any Quality Report remains a separate companion artifact.
-_Avoid_: Annotated export
+A BPMN Process Model that passes all blocking Model Validity checks and contains no OpenBPMN-specific notes, statuses, or tags. It may still have non-blocking consulting-quality findings in a separate Quality Report and carries no implied Lifecycle Status.
+_Avoid_: Approved model, annotated export
+
+**Snapshot Export**:
+A human-requested, point-in-time representation of the currently confirmed model for sharing or clarification. It may have unresolved questions, explicitly approved omissions, or blocking profile findings, but never silently presents itself as a Clean Export.
+_Avoid_: Draft status, failed Clean Export
 
 **Consulting Core**:
 The BPMN concepts needed across the large majority of process discovery, documentation, analysis, and handoff scenarios encountered by Process Consultants.
 _Avoid_: Complete BPMN 2.0 coverage, percentage of specification elements
+
+**Consulting Core Profile**:
+A versioned, explicit contract listing the BPMN concepts and attributes OpenBPMN supports at its full quality bar. It is informed by OMG conformance subsets without implying an official conformance claim.
+_Avoid_: Full BPMN support, informal subset
+
+**Supported Concept**:
+A BPMN concept OpenBPMN can create from Structured Process Evidence, preserve semantically, include in a complete Process Diagram, validate, and export predictably. Anything below that bar is explicitly unsupported.
+_Avoid_: Parseable element, best-effort support
+
+**Deferred Concept**:
+A valid BPMN concept deliberately outside the current Consulting Core Profile. OpenBPMN identifies the gap explicitly and never silently substitutes another concept.
+_Avoid_: Partial support, approximate support
+
+**Model Validity**:
+Whether a BPMN Process Model satisfies XML integrity, BPMN schema, semantic-reference, and applicable Consulting Core Profile constraints. Model Validity is separate from consulting quality and Lifecycle Status.
+_Avoid_: Readiness, approval, completeness
 
 **Local-First**:
 An operating boundary in which OpenBPMN provides no hosted service and process content remains within the environment deliberately chosen by the user.
@@ -71,6 +91,14 @@ _Avoid_: OpenBPMN dependency, OpenBPMN user interface
 **Working State**:
 Local, structured companion data that preserves process evidence, assumptions, unresolved questions, and review status between Agent Workflow sessions. Working State stays outside a Clean Export.
 _Avoid_: BPMN extension data, chat history
+
+**Lifecycle Status**:
+An optional, human-owned classification such as draft, working version, or approved. OpenBPMN neither infers nor requires a Lifecycle Status, and it does not embed one in a Clean Export.
+_Avoid_: Quality finding, agent-assigned status
+
+**Intentional Process Documentation**:
+Human-approved explanatory content modeled with standard BPMN Text Annotations, Groups, and Associations because it communicates process meaning. It is distinct from OpenBPMN assumptions, warnings, provenance, and Lifecycle Status.
+_Avoid_: Quality Report content, agent note
 
 **Read-Only Preview**:
 A locally generated SVG or HTML presentation used to inspect a BPMN Process Model without becoming a graphical modeling environment.
