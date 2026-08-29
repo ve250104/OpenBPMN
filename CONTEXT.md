@@ -51,3 +51,31 @@ _Avoid_: Automated process
 **Agent-Native Experience**:
 Conversational Modeling performed inside a user's existing agent environment, without requiring a standalone OpenBPMN application.
 _Avoid_: OpenBPMN editor
+
+**Host Agent**:
+The user-chosen AI environment, such as Claude Code, Codex, or Copilot, that conducts the consulting dialogue, interprets source material, identifies gaps, and confirms assumptions. It hands Structured Process Evidence to OpenBPMN rather than authoring BPMN XML directly.
+_Avoid_: OpenBPMN runtime, BPMN generator
+
+**Structured Process Evidence**:
+Agent-independent input that records the agreed process scope, participants, activities, events, decisions, exceptions, handoffs, assumptions, and relevant source references. A Host Agent derives it from natural language and source material before OpenBPMN compiles a model.
+_Avoid_: Prompt, raw document, BPMN XML
+
+**OpenBPMN Core**:
+The local, deterministic capability that owns the canonical process representation and compiles, validates, lays out, previews, and cleanly exports a BPMN Process Model. It remains usable and testable through a CLI without a Host Agent.
+_Avoid_: Host Agent, standalone editor, hosted platform
+
+**Downstream Modeling Tool**:
+An external tool, such as SAP Signavio, Celonis, or Camunda Modeler, that imports a Clean Export and owns enterprise governance, collaboration, repositories, simulation, execution, or optional visual polishing.
+_Avoid_: OpenBPMN dependency, OpenBPMN user interface
+
+**Working State**:
+Local, structured companion data that preserves process evidence, assumptions, unresolved questions, and review status between Agent Workflow sessions. Working State stays outside a Clean Export.
+_Avoid_: BPMN extension data, chat history
+
+**Read-Only Preview**:
+A locally generated SVG or HTML presentation used to inspect a BPMN Process Model without becoming a graphical modeling environment.
+_Avoid_: Editor, source of truth
+
+**Compatibility Profile**:
+A documented and tested interpretation of a Downstream Modeling Tool's BPMN import expectations. It verifies a Clean Export without introducing vendor-specific data into the OpenBPMN Core.
+_Avoid_: Vendor integration, deployment profile
