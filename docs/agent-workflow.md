@@ -123,7 +123,7 @@ Normal generation creates three sibling deliverables:
 
 The Host Agent summarizes the consequential findings in conversation rather than dumping the full Quality Report.
 
-If the user does not provide an output path, the skill derives a safe filename from the process name in the current working directory. A collision never causes an implicit overwrite: the agent selects a new filename or obtains an explicit replacement instruction. Successful replacements use atomic writes so an earlier Output Bundle survives failure.
+If the user does not provide an output path, the skill derives a safe filename from the process name in the current working directory. A collision never causes an implicit overwrite: the agent selects a new filename or obtains a target-specific replacement instruction. A natural-language request to update or replace that named process is sufficient authority; the skill passes it to the CLI explicitly and does not add a second confirmation prompt. Bundle Replacement stages and validates all three artifacts before touching the previous bundle and restores the previous bundle if replacement fails.
 
 No Output Bundle file contains persistent Session State or an inferred Lifecycle Status. The `.bpmn` remains free of OpenBPMN-specific quality and review metadata.
 
@@ -161,6 +161,8 @@ All commands:
 - perform no network activity, telemetry, or implicit package installation; and
 - never overwrite an existing artifact without explicit authority.
 
+The CLI relies on Host-Native Authority for filesystem permissions. It does not implement a second sandbox or interactive permission layer. An explicit replace option carries target-specific authority from the Modeling Skill; an invalid-export option applies to one invocation and is never remembered.
+
 The stable exit-code classes are:
 
 | Exit | Meaning |
@@ -172,6 +174,10 @@ The stable exit-code classes are:
 | `4` | A filesystem or overwrite safety rule refused the operation. |
 
 Exact finding codes and the full Quality Report schema belong to the dedicated quality-contract decision.
+
+On failure, the CLI returns Quality Report content through the structured result envelope, removes staged and temporary files, and leaves the destination unchanged. A first-run failure creates no destination artifacts.
+
+An Invalid Expert Export uses distinct `.invalid.bpmn` and `.invalid.quality.json` names and may add `.invalid.svg` only when rendering succeeds. It never replaces a valid Output Bundle and never yields `clean_export_ready`.
 
 ## Result envelope and completion signals
 
@@ -231,3 +237,5 @@ OpenBPMN does not promise identical language, identical follow-up questions, ide
 - host-specific forks of the consulting method.
 
 A later local stdio MCP adapter may expose the same four operations over the same core after the CLI contract is stable.
+
+The local trust and file rules are specified in [Local trust, consent, and file safety](local-trust-and-file-safety.md).

@@ -58,7 +58,8 @@ The MVP must:
 - compile, validate, lay out, preview, and cleanly export a Design-Time Model;
 - keep the Quality Report separate from BPMN XML;
 - provide Compatibility Profiles, fixtures, and import tests for priority downstream consumers;
-- use explicit user-selected paths, preview changes before replacement, require overwrite consent, and write files atomically; and
+- use explicit user-selected paths, preview changes before replacement, require overwrite consent, and write files atomically;
+- inherit Host-Native Authority instead of implementing a second permission or policy system; and
 - make no hidden network requests, telemetry calls, or package downloads.
 
 ## Explicitly outside the MVP
@@ -85,6 +86,7 @@ Existing BPMN may be validated or rendered when that can be done without promisi
 6. Compatibility is demonstrated through tests and guidance, not vendor coupling in the core.
 7. Process content stays within the environment deliberately chosen by the user.
 8. OpenBPMN never silently overwrites a user artifact or performs undisclosed network activity.
+9. Safety remains a small set of fixed local invariants, not a security platform.
 
 ## Deferred decisions
 

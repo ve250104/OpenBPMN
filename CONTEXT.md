@@ -64,6 +64,10 @@ _Avoid_: Readiness, approval, completeness
 An operating boundary in which OpenBPMN provides no hosted service and process content remains within the environment deliberately chosen by the user.
 _Avoid_: Offline, hosted platform
 
+**Lightweight Core**:
+The product constraint that OpenBPMN remains a small local skill and deterministic CLI with no service, database, account, workspace initialization, custom permission system, policy engine, or audit store. Its usefulness comes from consulting quality and reliable BPMN artifacts rather than platform breadth.
+_Avoid_: Process platform, security platform, full-scale application
+
 **Process Consultant**:
 A practitioner who elicits, challenges, structures, and communicates business processes. Process consultants are OpenBPMN's primary professional audience.
 _Avoid_: End user
@@ -88,9 +92,21 @@ _Avoid_: OpenBPMN editor
 The user-chosen AI environment, such as Claude Code, Codex, or Copilot, that conducts the consulting dialogue, interprets source material, identifies gaps, and confirms assumptions. It hands Structured Process Evidence to OpenBPMN rather than authoring BPMN XML directly.
 _Avoid_: OpenBPMN runtime, BPMN generator
 
+**Host-Native Authority**:
+The filesystem scope, approval prompts, and sandbox enforced by the user's chosen Host Agent. OpenBPMN operates within that authority and never requests, assumes, or grants broader access of its own.
+_Avoid_: OpenBPMN permission system, universal sandbox
+
 **Structured Process Evidence**:
 Agent-independent input that records the agreed process scope, participants, activities, events, decisions, exceptions, handoffs, assumptions, and relevant source references. A Host Agent derives it from natural language and source material before OpenBPMN compiles a model.
 _Avoid_: Prompt, raw document, BPMN XML
+
+**Untrusted Process Evidence**:
+Source material interpreted only as information about a process. Commands, prompts, scripts, links, and tool requests found inside it carry no authority to direct the Host Agent or OpenBPMN.
+_Avoid_: Agent instruction, executable input
+
+**Data-Minimized Artifact**:
+An artifact that contains only the paraphrased evidence, display references, findings, and decisions needed for its purpose, excluding original source files, unnecessary passages, credentials, and detected secrets.
+_Avoid_: Source archive, transcript
 
 **OpenBPMN Core**:
 The local, deterministic capability that owns the canonical process representation and compiles, validates, lays out, previews, and cleanly exports a BPMN Process Model. It remains usable and testable through a CLI without a Host Agent.
@@ -115,6 +131,14 @@ _Avoid_: Required sidecar, workspace
 **Output Bundle**:
 The three sibling deliverables produced by normal generation: a BPMN Process Model (`.bpmn`), a Read-Only Preview (`.svg`), and a machine-readable Quality Report (`.quality.json`). It contains no persistent Session State.
 _Avoid_: Workspace, project database
+
+**Bundle Replacement**:
+A target-specific, human-authorized update that stages and validates an entire new Output Bundle before replacing an existing one. Routine model corrections may authorize replacement through natural language; the CLI never infers that authority from a filename collision.
+_Avoid_: Implicit overwrite, per-file update
+
+**Invalid Expert Export**:
+An explicitly requested, separately named BPMN artifact that preserves known validation failures for expert inspection. It never replaces a valid Output Bundle or qualifies as a Clean Export.
+_Avoid_: Snapshot Export, forced Clean Export
 
 **Lifecycle Status**:
 An optional, human-owned classification such as draft, working version, or approved. OpenBPMN neither infers nor requires a Lifecycle Status, and it does not embed one in a Clean Export.
