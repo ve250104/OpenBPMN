@@ -6,6 +6,8 @@ OpenBPMN is a lightweight, Local-First bridge between a Host Agent's process-con
 
 OpenBPMN is not a hosted assistant, document-ingestion platform, graphical editor, enterprise process repository, or workflow-execution platform.
 
+The primary product value is making operational evidence usable: Process Consultants and Process Operators can inspect responsibilities, decisions, exceptions, and handoffs, resolve conflicting accounts, and hand off a portable model. BPMN is the exchange format for this work. The concrete demonstration and quality priorities are recorded in [Product direction and demonstration brief](product-direction.md).
+
 ## Responsibility split
 
 | Responsibility | Owner | Boundary |
@@ -90,4 +92,4 @@ Existing BPMN may be validated or rendered when that can be done without promisi
 
 ## Deferred decisions
 
-This boundary deliberately does not choose the detailed canonical schema, module interfaces, Consulting Core element set, validation taxonomy, agent command contract, or exact compatibility fixtures. Those are resolved by their dedicated Wayfinder tickets within this product boundary.
+The [architecture decision](architecture.md) defines representation ownership and module interfaces. The Consulting Core Profile and Agent Workflow define the concept set and command contract. Exact diagnostic schemas, compatibility fixtures, prototype qualification, and release thresholds remain with their dedicated Wayfinder tickets.

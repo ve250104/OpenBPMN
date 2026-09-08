@@ -1,0 +1,3 @@
+# Own process meaning outside artifact libraries
+
+OpenBPMN owns a Canonical Process Model independently of its input evidence, BPMN serialization library, and diagram geometry. Using the `bpmn-moddle` object tree directly would save a representation mapping but would couple consulting semantics, evidence handling, and future layout or rendering changes to XML-library objects. The canonical model therefore stays close to the semantic input, while transient Evidence Links and diagram presentation remain separate; the [architecture contract](../architecture.md) defines the resulting interfaces and verification obligations.

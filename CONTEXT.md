@@ -1,6 +1,6 @@
 # OpenBPMN
 
-OpenBPMN is an open-source effort for conversational creation of BPMN 2.0 Process Models. It serves Agent Workflows while presenting process-consulting expertise as its primary professional identity.
+OpenBPMN is an open-source effort that turns operational evidence and conversation into reviewable BPMN 2.0 Process Models. It helps Process Consultants and Process Operators make process meaning explicit before documentation, redesign, or automation.
 
 ## Language
 
@@ -69,8 +69,12 @@ The product constraint that OpenBPMN remains a small local skill and determinist
 _Avoid_: Process platform, security platform, full-scale application
 
 **Process Consultant**:
-A practitioner who elicits, challenges, structures, and communicates business processes. Process consultants are OpenBPMN's primary professional audience.
+A practitioner who elicits, challenges, structures, and communicates business processes for discovery, analysis, and delivery.
 _Avoid_: End user
+
+**Process Operator**:
+A practitioner responsible for carrying out or improving a business process who contributes knowledge of its actual activities, decisions, exceptions, and handoffs.
+_Avoid_: Workflow engine, Host Agent
 
 **Consulting Modeling Practice**:
 The disciplined translation of incomplete, ambiguous, or contradictory stakeholder evidence into a scoped, appropriately abstracted, readable, and reviewable BPMN Process Model. It covers modeling judgment beyond notation correctness.
@@ -99,6 +103,14 @@ _Avoid_: OpenBPMN permission system, universal sandbox
 **Structured Process Evidence**:
 Agent-independent input that records the agreed process scope, participants, activities, events, decisions, exceptions, handoffs, assumptions, and relevant source references. A Host Agent derives it from natural language and source material before OpenBPMN compiles a model.
 _Avoid_: Prompt, raw document, BPMN XML
+
+**Canonical Process Model**:
+The normalized representation of the selected process meaning and stable element identities, independent of its diagram presentation and the conversation that established it.
+_Avoid_: Process Diagram, Session State, BPMN XML
+
+**Evidence Link**:
+A traceable association between a modeled assertion and the process evidence or Modeling Decision supporting it. An Evidence Link communicates support or uncertainty without becoming part of the process meaning itself.
+_Avoid_: Proof of truth, confidence score, BPMN Association
 
 **Untrusted Process Evidence**:
 Source material interpreted only as information about a process. Commands, prompts, scripts, links, and tool requests found inside it carry no authority to direct the Host Agent or OpenBPMN.
