@@ -1,6 +1,6 @@
-# OpenBPMN
+# BPMN Weave
 
-OpenBPMN is an open-source effort that turns operational evidence and conversation into reviewable BPMN 2.0 Process Models. It helps Process Consultants and Process Operators make process meaning explicit before documentation, redesign, or automation.
+BPMN Weave is an open-source effort that turns operational evidence and conversation into reviewable BPMN 2.0 Process Models. It helps Process Consultants and Process Operators make process meaning explicit before documentation, redesign, or automation. OpenBPMN is the historical project name and retained repository slug; existing domain references to OpenBPMN and OpenBPMN Core refer to this same product and Core, not a separate system. Public distribution names follow the [release plan](docs/release-plan.md).
 
 ## Language
 

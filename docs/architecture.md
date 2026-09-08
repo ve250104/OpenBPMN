@@ -14,9 +14,9 @@ This decision defines the interfaces for the lightweight OpenBPMN Core. The impl
 
 The Canonical Process Model is a normalized form of the semantic portion of the input, not a second, independently maintained business ontology. Input and canonical types share the supported concept vocabulary. Normalization validates explicit structure, preserves identities, resolves references, and applies documented meaning-neutral defaults. It does not interpret raw prose or guess missing business rules.
 
-The input schema is versioned independently of the Consulting Core Profile. Unknown schema versions and unrecognized semantic fields produce findings; they are never silently dropped. The input must identify the chosen Process or Collaboration and its complete selected semantic content. The exact field declarations follow from this contract during specification and implementation.
+The input schema is versioned independently of the Consulting Core Profile. Unknown schema versions and unrecognized semantic fields produce findings; they are never silently dropped. The input must identify the chosen Process or Collaboration and its complete selected semantic content. The [structured contract](contracts.md) defines the fields, closed discriminators, reference rules, and export behavior to encode in schemas and tests.
 
-The Host Agent sends the complete current input each time. There is no persistent model store, patch protocol, or second session manager. Any canonical model included in an optional Handoff File is reproducible from its structured input; disagreement is a finding requiring resolution, never an implicit choice of whichever copy is newer.
+The Host Agent sends the complete current input each time. There is no persistent model store, patch protocol, or second session manager. An optional Handoff File preserves that structured request, from which the Canonical Process Model is reproduced; it does not carry a second independently editable model copy.
 
 ## Identity and evidence
 
@@ -55,11 +55,11 @@ This is a logical ordering, not a requirement for one public operation per stage
 
 Expected input, semantic, profile, geometry, and external-document limitations return structured findings. Unexpected defects or unanticipated dependency failures become the established internal-failure result once at the Core interface. A dependency's raw stack or diagnostic payload never becomes a public finding schema. Failed prerequisites are reported as checks not run; skipped checks cannot contribute to a claim that validation passed.
 
-Artifact eligibility, finding taxonomy, and incomplete-model behavior belong to [Define Clean Export and Quality Report behavior](https://github.com/ve250104/OpenBPMN/issues/8). This architecture must preserve that ticket's distinction between a valid but incomplete snapshot, a Clean Export, and an explicitly requested Invalid Expert Export. It does not authorize bypassing a blocked validity check or publishing a partial normal bundle.
+Artifact eligibility, finding taxonomy, and incomplete-model behavior are defined in the [export contract](contracts.md). It distinguishes a valid incomplete snapshot, a Clean Export, and an explicitly requested Invalid Expert Export. Normal generation never bypasses a blocked validity check or publishes a partial bundle.
 
 ## Validation depth
 
-Parsing with `bpmn-moddle` is not XSD validation. Model assessment must distinguish input-schema checks, XML/BPMN schema validation, semantic-reference checks, profile checks, diagram checks, and consulting heuristics. Use the official BPMN 2.0.2 schemas shipped locally with an explicitly packaged validator. Qualify that validator's runtime, schema support, and distribution cost in the diagram prototype; no remote validator or system utility may be assumed present.
+Parsing with `bpmn-moddle` is not XSD validation. Model assessment distinguishes input-schema checks, XML/BPMN schema validation, semantic-reference checks, profile checks, diagram checks, and consulting heuristics. Use the official BPMN 2.0.2 schemas shipped locally with the selected `libxml2-wasm` validator. The [toolchain decision](runtime-toolchain.md) records executed feasibility and exact pins; the build completes its coverage and distribution checks.
 
 Checks include legal event placement, unresolved references, Sequence Flow scope including embedded subprocess containment, Message Flow participant relationships, and required DI. Policy-versus-practice conflicts and missing process evidence remain separate from BPMN validity. A quality finding can be accurate while the model is technically valid.
 
@@ -69,17 +69,17 @@ Checks include legal event placement, unresolved references, Sequence Flow scope
 
 ## Layout and rendering choices
 
-Layout and rendering are internal seams because the dependency and runtime tradeoffs are still material. Keep their interfaces explicit, with one selected production adapter for each in a release. Users should not have to choose an engine for ordinary generation.
+Layout and rendering are internal seams because their dependency and runtime behavior varies independently of process meaning. Use the selected [toolchain](runtime-toolchain.md): an owned adapter around pinned `bpmn-auto-layout` with geometry completion, and `bpmn-js` Viewer driven by `puppeteer-core` through an installed local Chrome/Edge. Users do not choose an engine during ordinary generation.
 
 The default presentation is left-to-right with deterministic participant/lane ordering, readable labels, explicit subprocess presentation, and orthogonal connections where feasible. Diagram choices live beside the semantic request. V0 does not accept freehand coordinate edits or infer that a visual ordering changes control flow. Internal prototypes qualify complex supported concepts and layouts with concrete fixtures; they provide development evidence and are not the release deliverable.
 
-Adopt `bpmn-moddle` for BPMN interchange behind the owned interface. Evaluate a specifically pinned published `bpmn-auto-layout` artifact behind the layout seam. Do not treat current repository documentation as proof of the published artifact's behavior, runtime floor, bundled files, or support for the full Consulting Core Profile. Adoption requires the actual artifact's positive and negative fixtures, notices, and footprint to be inspected.
+Use `bpmn-moddle` behind the owned interchange interface. The published layout alpha has been inspected and smoke-tested, including a confirmed Data Input/Output geometry gap. The owned adapter must complete and verify that geometry. The toolchain decision records actual package versions and observed limits; current upstream main is not the published artifact's contract.
 
-Prefer a renderer that can meet the supported notation and visual quality requirements with a lightweight local installation. A browser-free implementation is a desired property, not established feasibility. `bpmn-js` Viewer in a local headless browser is a concrete reference route for visual checks, but it adds a browser runtime. The diagram prototype must choose and demonstrate the production rendering route, its actual installation footprint, and complete SVG behavior before packaging is settled. No production invocation may install or download a browser implicitly.
+The renderer uses an installed browser to preserve upstream BPMN notation fidelity. This is a declared local prerequisite, avoiding an implicit browser download or a bespoke notation renderer. The toolchain smoke exercised XML-to-SVG and stable SVG identifier normalization; production work must render all declared diagram planes, provide deterministic fonts and geometry, and pass the full visual and platform matrix. No installation or invocation downloads a browser implicitly.
 
 `bpmn-js` remains outside canonical semantics. A `bpmn-js-headless` name is not evidence of SVG support. Likewise, a custom SVG renderer would own real notation, label, and geometry work across the supported profile; it is not a trivial formatter. If no candidate meets both the agreed footprint and quality bar, continue resolving the implementation constraint. The release remains unfinished until the agreed requirements are met; qualification work does not authorize a reduction to a demo or partial profile.
 
-See the [artifact pipeline research](research/artifact-pipeline-primary-sources.md) for the dependency observations that make this qualification necessary. Exact package versions, rendering runtime, and XSD validator are acceptance outcomes of the already-planned diagram prototype, not additional architecture frameworks to build.
+The [artifact pipeline research](research/artifact-pipeline-primary-sources.md) gives background; the [runtime toolchain decision](runtime-toolchain.md) supersedes candidate recommendations with exact selections and executed smoke evidence. Full profile qualification is explicitly assigned to implementation and release acceptance.
 
 ## Determinism and verification
 
@@ -98,4 +98,4 @@ The implementation evidence must exercise:
 - External BPMN validation retaining unsupported-feature findings.
 - An injected layout, render, or write failure preserving the prior Output Bundle.
 
-Exact corpus, visual tolerances, runtime budgets, and acceptance thresholds remain with their evaluation and prototype tickets. The finished v0 must satisfy the [release contract](product-direction.md) as well as notation checks. A single successful example cannot establish release readiness.
+The [acceptance contract](acceptance-and-compatibility.md) defines corpus, visual tolerances, runtime budgets, and release thresholds. The finished v0 must satisfy them and the [release contract](product-direction.md). A single successful example cannot establish release readiness.

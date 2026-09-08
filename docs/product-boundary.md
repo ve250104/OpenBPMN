@@ -90,6 +90,6 @@ Existing BPMN may be validated or rendered when that can be done without promisi
 8. OpenBPMN never silently overwrites a user artifact or performs undisclosed network activity.
 9. Safety remains a small set of fixed local invariants, not a security platform.
 
-## Deferred decisions
+## Implementation contracts
 
-The [architecture decision](architecture.md) defines representation ownership and module interfaces. The Consulting Core Profile and Agent Workflow define the concept set and command contract. Exact diagnostic schemas, compatibility fixtures, prototype qualification, and release thresholds remain with their dedicated Wayfinder tickets.
+The [architecture](architecture.md) defines representation ownership and module interfaces. The [structured contract](contracts.md), [runtime toolchain](runtime-toolchain.md), [acceptance and compatibility contract](acceptance-and-compatibility.md), and [release plan](release-plan.md) settle the remaining implementation and release choices. Actual qualification remains work to execute, not an unrecorded product decision.

@@ -150,7 +150,7 @@ Every generated artifact follows these profile rules:
 3. The file contains one primary `BPMNDiagram` and a `BPMNPlane` for its primary Process or Collaboration.
 4. Every intended visible semantic element has matching BPMN DI; every visible connector has useful waypoints.
 5. IDs are stable, unique XML identifiers. Every semantic and DI reference resolves.
-6. Sequence Flows remain within a Process. Message Flows cross participant boundaries.
+6. Sequence Flows remain within the same Process or embedded Subprocess flow scope. Message Flows cross participant boundaries.
 7. Processes are design-time models and carry no implied executability.
 8. BPMN standard documentation content is allowed only when intentionally approved as process meaning.
 9. OpenBPMN metadata, quality findings, assumptions, and Lifecycle Status remain in companion artifacts.
@@ -172,7 +172,7 @@ A human may request a Snapshot Export at any point for sharing or clarification.
 
 OpenBPMN makes the snapshot well-formed, schema-valid, and semantically valid whenever technically possible. Its Quality Report declares every limitation. “Snapshot” describes the artifact operation, not a forced draft or working status.
 
-If valid BPMN cannot be produced, OpenBPMN still returns the Quality Report and a Read-Only Preview where one can be rendered from the current Session State. The human may explicitly request a Handoff File. Invalid `.bpmn` output is available only through explicit expert override and is unmistakably reported as invalid; it is never called a Clean Export.
+If structurally valid BPMN cannot be produced, OpenBPMN returns the Quality Report through the result envelope and preserves the previous Output Bundle. The Host Agent may show the preserved preview and identify it as unchanged; no new partial normal bundle or preview-from-chat is implied. The human may explicitly request a Handoff File. Invalid `.bpmn` output requires the explicit expert option and distinct artifact names defined in the [export contract](contracts.md); it is never called a Clean Export.
 
 ### Clean Export
 
@@ -198,7 +198,7 @@ Blocking Model Validity findings and advisory consulting-quality findings are se
 | Consulting quality | Vague task names, unclear ownership, missing exception detail, avoidable complexity | Reported; does not block Clean Export by default |
 | Human governance | Draft, working version, reviewed, approved | Never inferred; does not determine technical export validity |
 
-The dedicated Quality Report decision may refine severity and override behavior but must preserve these category boundaries.
+The [export and Quality Report contract](contracts.md) defines severity, overrides, exact check requirements, and command outcomes within these category boundaries.
 
 ## Versioning and evidence
 
@@ -223,4 +223,4 @@ Every release publishes:
 - [BPMN and downstream interoperability baseline](https://github.com/ve250104/OpenBPMN/issues/6)
 - [OpenBPMN product boundary](product-boundary.md)
 
-The exact canonical schema, diagnostic codes, module interfaces, layout algorithm, and downstream fixture mechanics remain decisions for their dedicated Wayfinder tickets.
+The [structured contract](contracts.md), [architecture](architecture.md), [runtime toolchain](runtime-toolchain.md), and [acceptance and compatibility contract](acceptance-and-compatibility.md) supply the implementation decisions and required verification. Executing those checks belongs to the build and release work.

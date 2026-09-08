@@ -33,7 +33,8 @@ The CLI never searches for evidence. It reads only:
 - standard input;
 - an explicit Structured Process Evidence or Handoff File path;
 - an explicit `.bpmn` path supplied to `validate` or `render`; and
-- versioned schemas and profile data shipped inside the installed package.
+- versioned schemas, profile data, fonts, and fixed runtime assets shipped inside the installed package; and
+- the documented browser executable locations or explicit browser override needed by generation/rendering, using a fresh temporary profile and never the user's browsing profile.
 
 ## Write contract
 
@@ -59,6 +60,8 @@ Replacement is bundle-level:
 5. retain or restore the previous complete bundle if any replacement step fails.
 
 OpenBPMN does not add a second interactive confirmation after the human has given target-specific authority. It also does not retain automatic backups after a successful replacement.
+
+Atomic rename applies to each file; ordinary filesystems do not offer an atomic swap of three sibling files. The bundle guarantee covers preflight, staged generation, handled errors, and catchable termination: the command returns success only after all requested files are in place, and restores prior files before reporting a handled failure. Process kill or power loss can interrupt that sequence and is not advertised as a crash-proof multi-file transaction. Keep prior files in the staging area until all replacements finish; interruption tests must establish that those backups remain recoverable. The CLI reports an unfinished staging area for the named target on the next attempt and refuses to overwrite it, with explicit recovery instructions. It does not add a permanent workspace, journal service, or claim to have recovered files automatically. The optional sibling Handoff transaction is defined in the [protocol contract](contracts.md).
 
 Without replacement authority, a collision returns the filesystem-safety exit class and changes nothing. The Modeling Skill may select a new non-colliding filename and present it to the user.
 
@@ -89,7 +92,7 @@ The deterministic CLI:
 - treats unsupported namespaces and extensions as findings rather than executable behavior; and
 - fails closed on malformed input.
 
-Exact size and depth limits belong to implementation configuration shipped with the CLI, not a user security-policy system.
+The [protocol contract](contracts.md) fixes size and depth limits shipped with the CLI. They are implementation limits, not a user security-policy system.
 
 ## Data-minimized artifacts
 
@@ -134,7 +137,7 @@ A failed operation:
 - leaves the previous Output Bundle unchanged; and
 - creates no destination artifacts on a first-run failure.
 
-The CLI never leaves a partially replaced Output Bundle. Cleanup failures are reported as paths and codes without revealing content.
+For handled failures, the CLI restores the previous complete Output Bundle before returning. Cleanup failures are reported as paths and codes without revealing content. Abrupt interruption follows the recovery limitation described above and is not misreported as a successful or clean transaction.
 
 ## Invalid Expert Export
 

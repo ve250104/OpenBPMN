@@ -134,7 +134,7 @@ On explicit request, the skill creates `<process>.openbpmn.json`. It contains:
 - the complete Structured Process Evidence payload;
 - accepted Modeling Decisions and omissions;
 - unresolved questions and conflicts;
-- the current canonical semantic draft;
+- the semantic request from which the canonical model is reproduced, without a second authoritative model copy;
 - relevant quality findings; and
 - named review scenarios and feedback.
 
@@ -173,9 +173,9 @@ The stable exit-code classes are:
 | `3` | Invalid command usage or malformed structured input. |
 | `4` | A filesystem or overwrite safety rule refused the operation. |
 
-Exact finding codes and the full Quality Report schema belong to the dedicated quality-contract decision.
+The [structured input and export contract](contracts.md) defines finding codes, report shapes, flags, command-specific outcomes, and the complete export decision table.
 
-On failure, the CLI returns Quality Report content through the structured result envelope, removes staged and temporary files, and leaves the destination unchanged. A first-run failure creates no destination artifacts.
+On a handled failure, the CLI returns Quality Report content through the structured result envelope, removes staged and temporary files after rollback, and leaves the destination unchanged. A first-run handled failure creates no destination artifacts. Abrupt termination follows the recoverable-staging limitation in the [file-safety contract](local-trust-and-file-safety.md), not a claim of crash-proof multi-file atomicity.
 
 An Invalid Expert Export uses distinct `.invalid.bpmn` and `.invalid.quality.json` names and may add `.invalid.svg` only when rendering succeeds. It never replaces a valid Output Bundle and never yields `clean_export_ready`.
 
@@ -190,7 +190,7 @@ Every command returns a JSON envelope with at least:
 - stable finding references; and
 - whether any explicit override or omission affected the result.
 
-The Agent Workflow communicates four technical outcomes:
+The ordinary generation workflow communicates four technical outcomes:
 
 | Signal | Meaning |
 | --- | --- |
@@ -200,6 +200,8 @@ The Agent Workflow communicates four technical outcomes:
 | `generation_failed` | Deterministic tooling could not produce the requested artifacts; partial replacement files do not remain. |
 
 These signals describe technical workflow outcomes. They never mean draft, complete, reviewed, approved, or production-ready.
+
+The [protocol contract](contracts.md) also defines `invalid_exported` for explicit expert artifacts and separate completion signals for validation, rendering, and capability inspection. These do not imply that a new normal Output Bundle exists.
 
 ## Agent response contract
 
@@ -239,3 +241,5 @@ OpenBPMN does not promise identical language, identical follow-up questions, ide
 A later local stdio MCP adapter may expose the same four operations over the same core after the CLI contract is stable.
 
 The local trust and file rules are specified in [Local trust, consent, and file safety](local-trust-and-file-safety.md).
+
+The [release plan](release-plan.md) selects the exact supported Host Agent surfaces and installation paths. The [acceptance contract](acceptance-and-compatibility.md) defines workflow cases, cross-host Handoff checks, and the release evidence required; those checks run against the implemented product.

@@ -49,7 +49,7 @@ A narrow successful example, partial-profile implementation, proof of concept, o
 | Portability | Named downstream checks identify the artifact, product/version, operation, result, and any loss. Unavailable checks remain unverified. |
 | Honest evidence | Synthetic fixtures, human review, measured performance, and actual user experience are separately identified. |
 
-These are release requirements, not claims that the current repository already meets them. Remaining Wayfinder tickets define exact thresholds and qualification procedures. XML validity alone cannot establish evidence fidelity; topology alone cannot establish measured bottlenecks, savings, or automation feasibility.
+These are release requirements, not claims that the current repository already meets them. The [acceptance contract](acceptance-and-compatibility.md) defines exact thresholds and qualification procedures. XML validity alone cannot establish evidence fidelity; topology alone cannot establish measured bottlenecks, savings, or automation feasibility.
 
 ## Examples and evaluation
 
@@ -63,4 +63,4 @@ Synthetic inputs and authored clarifications must be identified. Do not describe
 
 The [primary-source research note](research/workflow-context-primary-sources.md) describes an adjacent operational-discovery workflow and the limits of that comparison. It establishes no integration, endorsement, customer requirement, or another company's internal use of BPMN.
 
-The Wayfinder destination is an implementation-ready specification for this finished v0. Completing the map alone does not complete the product. Public positioning, branding, licensing, packaging, and exact acceptance thresholds remain with their existing decision tickets and must uphold this contract.
+The Wayfinder destination is the [implementation-ready specification](v0-spec.md) for this finished v0. Completing the map alone does not complete the product. The [release plan](release-plan.md) settles public positioning, branding, licensing, and packaging; the [acceptance contract](acceptance-and-compatibility.md) settles qualification thresholds. Execution and release evidence remain build work.
