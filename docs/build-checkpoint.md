@@ -1,6 +1,6 @@
 # Paused build checkpoint
 
-Paused on 2026-09-08 at the user's usage-budget concern. The implementation is being saved on the local `wip/v0-implementation` checkpoint branch; public push awaits a decision on the documented schema-redistribution question. No finished release or package publication has occurred. Resume from this checkpoint and any subsequent working-tree changes, not from a new scaffold. The build parent is GitHub issue #19; none of the build tickets has been closed.
+Paused on 2026-09-08 at the user's usage-budget concern. The implementation is saved on the `wip/v0-implementation` checkpoint branch. The repository owner authorized publishing the full WIP branch with the documented schema-redistribution uncertainty retained; that authorization does not resolve the permission interpretation or satisfy the release gate. No finished release or package publication has occurred. Resume from this checkpoint and any subsequent working-tree changes, not from a new scaffold. The build parent is GitHub issue #19; none of the build tickets has been closed.
 
 ## Implemented and exercised
 
@@ -18,7 +18,7 @@ Paused on 2026-09-08 at the user's usage-budget concern. The implementation is b
 3. Fix the small remaining root audit finding in `src/core.ts`: omitted expert SVGs are still marked preserved from preflight intent. Retain a separate omitted-output plan and verify with `preservedOutputs` after commit (and on failure), rather than pushing an unobserved preservation claim.
 4. Run formatting/build/full tests/package checks from one stable checkpoint. Renderer-owned files may still need Biome formatting. Regenerate the public purchase example before placing it in README.
 5. Complete local Linux network-denied smoke if feasible, then native supported-platform qualification. Root started a local test image build from `.artifacts/linux-runtime.Dockerfile`, tag `bpmn-weave-linux-test:node24`; inspect its actual status before restarting. Existing Colima and unrelated containers must remain untouched. AMD64 emulation on the ARM VM is not native Ubuntu performance evidence. Never disable Chromium's sandbox to obtain a pass.
-6. Resolve the documented OMG XSD redistribution interpretation before public distribution. The layout dependency's formerly missing MIT notice is now preserved from an exact upstream correction. See `docs/research/distribution-provenance.md`.
+6. Resolve the documented OMG XSD redistribution interpretation before a packaged release. The owner-authorized public WIP checkpoint does not close this gate. The layout dependency's formerly missing MIT notice is now preserved from an exact upstream correction. See `docs/research/distribution-provenance.md`.
 7. Actual Codex CLI/Claude Code/Copilot workflows, three cross-host Handoff transfers, maintainer visual/new-user review and native Windows 11 observation remain required and unrun. Do not invent these or label this a finished v0.
 
 ## Working state
