@@ -71,13 +71,13 @@ Checks include legal event placement, unresolved references, Sequence Flow scope
 
 Layout and rendering are internal seams because the dependency and runtime tradeoffs are still material. Keep their interfaces explicit, with one selected production adapter for each in a release. Users should not have to choose an engine for ordinary generation.
 
-The default presentation is left-to-right with deterministic participant/lane ordering, readable labels, explicit subprocess presentation, and orthogonal connections where feasible. Diagram choices live beside the semantic request. The MVP does not accept freehand coordinate edits or infer that a visual ordering changes control flow. The prototype will qualify complex supported concepts and layouts with concrete fixtures.
+The default presentation is left-to-right with deterministic participant/lane ordering, readable labels, explicit subprocess presentation, and orthogonal connections where feasible. Diagram choices live beside the semantic request. V0 does not accept freehand coordinate edits or infer that a visual ordering changes control flow. Internal prototypes qualify complex supported concepts and layouts with concrete fixtures; they provide development evidence and are not the release deliverable.
 
 Adopt `bpmn-moddle` for BPMN interchange behind the owned interface. Evaluate a specifically pinned published `bpmn-auto-layout` artifact behind the layout seam. Do not treat current repository documentation as proof of the published artifact's behavior, runtime floor, bundled files, or support for the full Consulting Core Profile. Adoption requires the actual artifact's positive and negative fixtures, notices, and footprint to be inspected.
 
 Prefer a renderer that can meet the supported notation and visual quality requirements with a lightweight local installation. A browser-free implementation is a desired property, not established feasibility. `bpmn-js` Viewer in a local headless browser is a concrete reference route for visual checks, but it adds a browser runtime. The diagram prototype must choose and demonstrate the production rendering route, its actual installation footprint, and complete SVG behavior before packaging is settled. No production invocation may install or download a browser implicitly.
 
-`bpmn-js` remains outside canonical semantics. A `bpmn-js-headless` name is not evidence of SVG support. Likewise, a custom SVG renderer would own real notation, label, and geometry work across the supported profile; it is not a trivial formatter. If no candidate meets both the agreed footprint and quality bar, the prototype must explicitly revisit that tradeoff rather than silently weakening either claim.
+`bpmn-js` remains outside canonical semantics. A `bpmn-js-headless` name is not evidence of SVG support. Likewise, a custom SVG renderer would own real notation, label, and geometry work across the supported profile; it is not a trivial formatter. If no candidate meets both the agreed footprint and quality bar, continue resolving the implementation constraint. The release remains unfinished until the agreed requirements are met; qualification work does not authorize a reduction to a demo or partial profile.
 
 See the [artifact pipeline research](research/artifact-pipeline-primary-sources.md) for the dependency observations that make this qualification necessary. Exact package versions, rendering runtime, and XSD validator are acceptance outcomes of the already-planned diagram prototype, not additional architecture frameworks to build.
 
@@ -98,4 +98,4 @@ The implementation evidence must exercise:
 - External BPMN validation retaining unsupported-feature findings.
 - An injected layout, render, or write failure preserving the prior Output Bundle.
 
-Exact corpus, visual tolerances, runtime budgets, and acceptance thresholds remain with their evaluation and prototype tickets. The demonstrator must satisfy the concrete [product direction](product-direction.md) as well as notation checks.
+Exact corpus, visual tolerances, runtime budgets, and acceptance thresholds remain with their evaluation and prototype tickets. The finished v0 must satisfy the [release contract](product-direction.md) as well as notation checks. A single successful example cannot establish release readiness.

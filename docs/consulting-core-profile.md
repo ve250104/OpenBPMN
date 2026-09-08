@@ -18,6 +18,8 @@ The profile is informed by the OMG BPMN 2.0.2 Analytic subclass but is not prese
 
 The project's eventual public name may change without changing the profile's semantic contract.
 
+Consulting Core 1.0.0 is the support contract required for the finished v0 release. The profile version and product release version are separate. Every concept classified Supported below must meet the complete evidence bar before v0 is finished; the [v0 release contract](product-direction.md) does not allow a partial-profile demonstration to substitute for that release.
+
 ## Meaning of support
 
 A BPMN concept is **Supported** only when OpenBPMN can:

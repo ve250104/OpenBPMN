@@ -18,7 +18,7 @@ There is no OpenBPMN application, workspace initialization, required sidecar, pr
 
 ## Entry points
 
-The MVP supports three entry paths:
+V0 supports three entry paths:
 
 | Entry | Behavior |
 | --- | --- |
@@ -26,7 +26,7 @@ The MVP supports three entry paths:
 | Local evidence | The Host Agent reads user-selected interviews, notes, documents, or tables as untrusted source material and begins from that evidence. |
 | Handoff File | Load an explicitly saved session snapshot and continue from its evidence, decisions, conflicts, draft, and review history. |
 
-Validating or rendering an existing `.bpmn` file is a separate deterministic operation. Conversational semantic import, repair, and round-trip editing of arbitrary third-party BPMN remain outside the MVP.
+Validating or rendering an existing `.bpmn` file is a separate deterministic operation. Conversational semantic import, repair, and round-trip editing of arbitrary third-party BPMN remain outside v0.
 
 ## Modeling Skill design
 
@@ -138,7 +138,7 @@ On explicit request, the skill creates `<process>.openbpmn.json`. It contains:
 - relevant quality findings; and
 - named review scenarios and feedback.
 
-It excludes the chat transcript and is not created, updated, or required during normal use. Another supported Host Agent can load it as a new session entry point. The Handoff File is the only MVP promise for cross-session semantic continuation.
+It excludes the chat transcript and is not created, updated, or required during normal use. Another supported Host Agent can load it as a new session entry point. The Handoff File is the only v0 promise for cross-session semantic continuation.
 
 ## CLI contract
 
@@ -232,7 +232,7 @@ OpenBPMN does not promise identical language, identical follow-up questions, ide
 - automatic persistent workspaces or sidecar state;
 - general conversational import and repair of arbitrary BPMN;
 - a stateful update daemon;
-- an MCP dependency in the MVP;
+- an MCP dependency in v0;
 - a standalone chat or graphical editing application; and
 - host-specific forks of the consulting method.
 

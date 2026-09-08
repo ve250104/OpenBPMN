@@ -150,7 +150,7 @@ Invalid expert files never replace a valid Output Bundle, never emit `clean_expo
 
 ## Fixed safety surface
 
-The MVP exposes only the options needed to carry user intent into the deterministic boundary, including:
+V0 exposes only the options needed to carry user intent into the deterministic boundary, including:
 
 - input and output paths;
 - structured result output;

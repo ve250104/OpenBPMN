@@ -2,6 +2,8 @@
 
 Accessed: 2026-09-08. Scope: public descriptions of operational discovery and their relevance to a small, independent OpenBPMN capability. This note records evidence and design inferences; it does not change an approved product contract.
 
+The owner subsequently clarified the delivery requirement: a finished, usable v0. The demonstration suggestions below describe evaluation and explanatory examples only. They are superseded as a delivery recommendation by the [v0 release contract](../product-direction.md).
+
 ## Verified public facts
 
 Ontora is listed in Y Combinator's Spring 2026 cohort, also labelled P26. YC identifies Leon Iwanowitsch as Founder/CEO, Maximilian Arnold as Founder/COO, and David Korn as Founder/CTO. [YC company profile](https://www.ycombinator.com/companies/ontora)

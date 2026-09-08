@@ -6,7 +6,7 @@ OpenBPMN is a lightweight, Local-First bridge between a Host Agent's process-con
 
 OpenBPMN is not a hosted assistant, document-ingestion platform, graphical editor, enterprise process repository, or workflow-execution platform.
 
-The primary product value is making operational evidence usable: Process Consultants and Process Operators can inspect responsibilities, decisions, exceptions, and handoffs, resolve conflicting accounts, and hand off a portable model. BPMN is the exchange format for this work. The concrete demonstration and quality priorities are recorded in [Product direction and demonstration brief](product-direction.md).
+The primary product value is making operational evidence usable: Process Consultants and Process Operators can inspect responsibilities, decisions, exceptions, and handoffs, resolve conflicting accounts, and hand off a portable model. BPMN is the exchange format for this work. The completion and quality requirements are recorded in [Product direction and v0 release contract](product-direction.md).
 
 ## Responsibility split
 
@@ -23,7 +23,7 @@ The primary product value is making operational evidence usable: Process Consult
 | Generate diagram interchange and previews | OpenBPMN Core | Create deterministic layout and a Read-Only Preview without offering graphical editing. |
 | Export for downstream use | OpenBPMN Core | Produce a Clean Export at any time without OpenBPMN-specific notes, statuses, or tags. |
 | Provide enterprise governance and collaboration | Downstream Modeling Tool | Own repositories, access control, approvals, collaboration, and lifecycle management. |
-| Provide simulation, execution, and vendor-specific capabilities | Downstream Modeling Tool | Remain outside the MVP and the vendor-neutral core contract. |
+| Provide simulation, execution, and vendor-specific capabilities | Downstream Modeling Tool | Remain outside v0 and the vendor-neutral core contract. |
 | Apply optional visual polish | Downstream Modeling Tool | May modify presentation after import; OpenBPMN does not attempt to replace the tool. |
 
 ## Product flow
@@ -48,9 +48,9 @@ OpenBPMN Core: compile -> validate -> layout -> preview -> export
                          bpmn-js, CI, or another consumer
 ```
 
-## MVP capabilities
+## V0 capabilities
 
-The MVP must:
+The finished v0 must:
 
 - support iterative natural-language-to-BPMN creation through a portable agent skill;
 - expose a deterministic local CLI that remains useful without an AI agent;
@@ -64,7 +64,7 @@ The MVP must:
 - inherit Host-Native Authority instead of implementing a second permission or policy system; and
 - make no hidden network requests, telemetry calls, or package downloads.
 
-## Explicitly outside the MVP
+## Explicitly outside v0
 
 - a standalone graphical BPMN editor or OpenBPMN chat application;
 - a persistent OpenBPMN project workspace or automatic session sidecars;
