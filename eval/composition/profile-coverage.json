@@ -1,0 +1,2342 @@
+{
+  "version": 1,
+  "profileVersion": "1.0.0",
+  "source": "docs/consulting-core-profile.md",
+  "scope": "Requirement-to-test mapping, not a claim that the full release evidence has passed.",
+  "tests": {
+    "basic": {
+      "file": "test/compiler.test.ts",
+      "title": "a supplied basic Process compiles to the agreed design-time meaning"
+    },
+    "missingFlow": {
+      "file": "test/compiler.test.ts",
+      "title": "a dangling Sequence Flow is refused with its missing reference identified"
+    },
+    "flowDirection": {
+      "file": "test/compiler.test.ts",
+      "title": "an End Event cannot send a Sequence Flow back into a Start Event"
+    },
+    "unknownConcept": {
+      "file": "test/compiler.test.ts",
+      "title": "an unimplemented semantic feature is refused instead of silently omitted"
+    },
+    "flowScope": {
+      "file": "test/compiler.test.ts",
+      "title": "a Sequence Flow cannot cross its Process scope"
+    },
+    "duplicate": {
+      "file": "test/compiler.test.ts",
+      "title": "duplicate semantic keys never become ambiguous XML identities"
+    },
+    "xor": {
+      "file": "test/compiler.test.ts",
+      "title": "an Exclusive decision preserves a condition and its explicit default path"
+    },
+    "default": {
+      "file": "test/compiler.test.ts",
+      "title": "a default Sequence Flow belongs to its owner and never carries a condition"
+    },
+    "parallel": {
+      "file": "test/compiler.test.ts",
+      "title": "parallel work retains both branches and its explicit synchronization"
+    },
+    "inclusive": {
+      "file": "test/compiler.test.ts",
+      "title": "an Inclusive split preserves independently applicable branch conditions"
+    },
+    "illegalCondition": {
+      "file": "test/compiler.test.ts",
+      "title": "events and Parallel Gateways cannot acquire conditional Sequence Flows"
+    },
+    "decisionCondition": {
+      "file": "test/compiler.test.ts",
+      "title": "a decision split requires stated conditions or an explicit default"
+    },
+    "primary": {
+      "file": "test/compiler.test.ts",
+      "title": "the requested primary model must resolve before any XML is emitted"
+    },
+    "blackBox": {
+      "file": "test/compiler.test.ts",
+      "title": "a collaboration can preserve a message between two black-box participants"
+    },
+    "sendTask": {
+      "file": "test/compiler.test.ts",
+      "title": "a white-box participant sends a declared Message through a Send Task"
+    },
+    "receiveTask": {
+      "file": "test/compiler.test.ts",
+      "title": "a Receive Task preserves a declared incoming Message"
+    },
+    "missingMessage": {
+      "file": "test/compiler.test.ts",
+      "title": "a communication task cannot silently discard an unresolved Message reference"
+    },
+    "messageScope": {
+      "file": "test/compiler.test.ts",
+      "title": "Message Flows cross participant boundaries and never connect internal work"
+    },
+    "missingCollaborationRef": {
+      "file": "test/compiler.test.ts",
+      "title": "collaboration references never disappear during serialization"
+    },
+    "messageEndpoint": {
+      "file": "test/compiler.test.ts",
+      "title": "Message Flow endpoints must be interaction nodes, not control routing or None Events"
+    },
+    "nestedLanes": {
+      "file": "test/compiler.test.ts",
+      "title": "nested lanes retain responsibility with derived ancestor membership"
+    },
+    "laneMembership": {
+      "file": "test/compiler.test.ts",
+      "title": "lane membership has one leaf owner and cannot assert a competing ancestor assignment"
+    },
+    "laneParent": {
+      "file": "test/compiler.test.ts",
+      "title": "lane parent chains must resolve to an acyclic same-Process scope"
+    },
+    "ambiguousParticipant": {
+      "file": "test/compiler.test.ts",
+      "title": "a multiply instantiated Process never silently chooses its Message Flow participant"
+    },
+    "taskTypes": {
+      "file": "test/compiler.test.ts",
+      "title": "task classifications preserve design-time meaning without invented engine configuration"
+    },
+    "loops": {
+      "file": "test/compiler.test.ts",
+      "title": "standard and multi-instance repetition retain exactly the stated design-time loop semantics"
+    },
+    "subprocess": {
+      "file": "test/compiler.test.ts",
+      "title": "embedded Subprocess flow and responsibility remain nested independent of presentation"
+    },
+    "recursiveContainment": {
+      "file": "test/compiler.test.ts",
+      "title": "recursive Subprocess containment is refused without dropping a disconnected scope"
+    },
+    "nestedFlow": {
+      "file": "test/compiler.test.ts",
+      "title": "a Sequence Flow cannot shortcut from a parent into its Subprocess"
+    },
+    "call": {
+      "file": "test/compiler.test.ts",
+      "title": "a Call Activity references an explicit same-file Process QName without copying its contents"
+    },
+    "missingCall": {
+      "file": "test/compiler.test.ts",
+      "title": "a Call Activity cannot hide an unresolved external process reference"
+    },
+    "illegalLoop": {
+      "file": "test/compiler.test.ts",
+      "title": "loop markers cannot be silently accepted on non-Activity nodes"
+    },
+    "namespace": {
+      "file": "test/compiler.test.ts",
+      "title": "semantic projection treats a default BPMN namespace and its equivalent prefix identically"
+    },
+    "expertLane": {
+      "file": "test/compiler.test.ts",
+      "title": "expert invalid lane inspection preserves a resolvable foreign reference instead of omitting it"
+    },
+    "messageEvents": {
+      "file": "test/compiler.test.ts",
+      "title": "Message Events retain their named payload and boundary interruption in every supported position"
+    },
+    "signalEvents": {
+      "file": "test/compiler.test.ts",
+      "title": "Signal Events preserve named broadcast meaning in catching, throwing, and boundary positions"
+    },
+    "timerEvents": {
+      "file": "test/compiler.test.ts",
+      "title": "Timer Events retain exactly one inert timer expression in each legal placement"
+    },
+    "conditionalEvents": {
+      "file": "test/compiler.test.ts",
+      "title": "Conditional Events preserve the supplied business condition without an execution binding"
+    },
+    "illegalTrigger": {
+      "file": "test/compiler.test.ts",
+      "title": "event triggers cannot be moved into illegal throwing or embedded-start positions"
+    },
+    "eventRefs": {
+      "file": "test/compiler.test.ts",
+      "title": "boundary attachments and named Event references resolve without silent substitution"
+    },
+    "eventFlow": {
+      "file": "test/compiler.test.ts",
+      "title": "events and gateways cannot claim legal control flow when their required connections are absent"
+    },
+    "eventGateway": {
+      "file": "test/compiler.test.ts",
+      "title": "Event-Based Gateways preserve competition and explicit instantiating variants"
+    },
+    "illegalEventGateway": {
+      "file": "test/compiler.test.ts",
+      "title": "event-based configurations refuse illegal targets, instantiation, and receive-message mixing"
+    },
+    "nonePlacement": {
+      "file": "test/compiler.test.ts",
+      "title": "None Events stay within the profile Start and End positions"
+    },
+    "messageAgreement": {
+      "file": "test/compiler.test.ts",
+      "title": "named communication references agree and intermediate Message Events do not fan out messages"
+    },
+    "errorEvents": {
+      "file": "test/compiler.test.ts",
+      "title": "Error Events preserve named throws and interrupting named or catch-all boundaries"
+    },
+    "escalationEvents": {
+      "file": "test/compiler.test.ts",
+      "title": "Escalation Events preserve ordinary continuation and either explicit boundary interruption choice"
+    },
+    "terminateEvents": {
+      "file": "test/compiler.test.ts",
+      "title": "Terminate End Events retain their enclosing scope without converting the parent completion"
+    },
+    "illegalException": {
+      "file": "test/compiler.test.ts",
+      "title": "exception Events require legal positions, named throws, and interrupting Error catches"
+    },
+    "linkEvents": {
+      "file": "test/compiler.test.ts",
+      "title": "same-scope Link continuation derives stable definition references without inventing Sequence Flows"
+    },
+    "illegalLink": {
+      "file": "test/compiler.test.ts",
+      "title": "Link continuation refuses unmatched names, multiple catches, cross-scope matching, and flow shortcuts"
+    },
+    "entry": {
+      "file": "test/compiler.test.ts",
+      "title": "an explicit End Event requires explicit entry while entirely eventless scopes remain legal"
+    },
+    "dataRefs": {
+      "file": "test/compiler.test.ts",
+      "title": "Data Objects, States, and Data Stores retain distinct stable references and capacity semantics"
+    },
+    "dataScope": {
+      "file": "test/compiler.test.ts",
+      "title": "data artifact references and lifecycle scope cannot silently resolve to another kind or a child lifetime"
+    },
+    "processActivityIO": {
+      "file": "test/compiler.test.ts",
+      "title": "Process and Activity IO preserve declarations with complete derived input and output sets"
+    },
+    "eventIO": {
+      "file": "test/compiler.test.ts",
+      "title": "Events use direct catching outputs and throwing inputs instead of an Activity IO specification"
+    },
+    "illegalIO": {
+      "file": "test/compiler.test.ts",
+      "title": "IO declarations enforce legal owners, direction, and named communication cardinality"
+    },
+    "dataAssociations": {
+      "file": "test/compiler.test.ts",
+      "title": "Data Associations retain owner-specific input and output meaning with exact IO references"
+    },
+    "illegalDataAssociation": {
+      "file": "test/compiler.test.ts",
+      "title": "Data Associations require typed, accessible endpoints and the owning IO while expert mode retains multiple sources"
+    },
+    "associationRoles": {
+      "file": "test/compiler.test.ts",
+      "title": "Data Associations check each endpoint role even when the same key occurs twice"
+    },
+    "eventDataAssociations": {
+      "file": "test/compiler.test.ts",
+      "title": "catching and throwing Event Data Associations retain their real XML placement and direction"
+    },
+    "documentation": {
+      "file": "test/compiler.test.ts",
+      "title": "intentional annotations, groups, categories, and associations remain standard non-control-flow artifacts"
+    },
+    "illegalDocumentation": {
+      "file": "test/compiler.test.ts",
+      "title": "documentation artifacts refuse dangling references and unsafe owners without inventing category or labels"
+    },
+    "unnameable": {
+      "file": "test/compiler.test.ts",
+      "title": "the compiler never accepts nonstandard names on unnameable documentation or data association elements"
+    },
+    "input": {
+      "file": "test/input.test.ts",
+      "title": "the full Consulting Core record families travel through structured input without coercion or loss"
+    },
+    "badInput": {
+      "file": "test/input.test.ts",
+      "title": "malformed input, unsupported versions and unknown top-level fields are refused without payload disclosure"
+    },
+    "inputBounds": {
+      "file": "test/input.test.ts",
+      "title": "input budgets apply to the whole invocation before large or deeply nested content is accepted"
+    },
+    "history": {
+      "file": "test/input.test.ts",
+      "title": "identities and evidence references are unambiguous while deleted identities remain reserved"
+    },
+    "labels": {
+      "file": "test/input.test.ts",
+      "title": "empty optional text is omitted and conditional-flow labels reuse the supplied condition without replacing explicit names"
+    },
+    "deferredFamilies": {
+      "file": "test/inspect.test.ts",
+      "title": "XSD-valid Deferred BPMN families remain explicit limitations without a replacement model"
+    },
+    "deferredVisual": {
+      "file": "test/inspect.test.ts",
+      "title": "Deferred visual concepts refuse rendering while inert nonvisual extension data remains an explicit profile limitation"
+    },
+    "execution": {
+      "file": "test/inspect.test.ts",
+      "title": "execution payloads, formal resources, vendor attributes and multiple Event definitions remain explicit unsupported content"
+    },
+    "executionAttributes": {
+      "file": "test/inspect.test.ts",
+      "title": "unmapped standard execution attributes cannot silently pass the design-time profile"
+    },
+    "executionIO": {
+      "file": "test/inspect.test.ts",
+      "title": "optional and alternative IO-set execution configuration cannot disappear into simple design-time IO records"
+    },
+    "suppliedLink": {
+      "file": "test/inspect.test.ts",
+      "title": "explicit supplied Link references must agree with their same-scope continuation meaning"
+    },
+    "suppliedData": {
+      "file": "test/inspect.test.ts",
+      "title": "the generated data and intentional-documentation families retain valid semantics and supplied DI through external inspection"
+    },
+    "xsd": {
+      "file": "test/xml.test.mjs",
+      "title": "the official local XSD distinguishes legal Definitions from a missing required namespace"
+    },
+    "renderBasic": {
+      "file": "test/rendering.test.ts",
+      "title": "layout preserves a simple process and gives every visible element stable geometry"
+    },
+    "renderBlackBox": {
+      "file": "test/rendering.test.ts",
+      "title": "a black-box-only collaboration has truthful pool and message geometry"
+    },
+    "renderLanes": {
+      "file": "test/rendering.test.ts",
+      "title": "nested lanes keep their assigned activities visually contained"
+    },
+    "renderShared": {
+      "file": "test/rendering.test.ts",
+      "title": "two participants sharing one Process remain visible without cloned process meaning"
+    },
+    "renderCall": {
+      "file": "test/rendering.test.ts",
+      "title": "same-file call targets are rendered as complete additional panels"
+    },
+    "renderCollapsed": {
+      "file": "test/rendering.test.ts",
+      "title": "collapsed subprocess contents have a complete separate panel"
+    },
+    "renderExpanded": {
+      "file": "test/rendering.test.ts",
+      "title": "explicitly expanded subprocesses contain their contents on the parent panel"
+    },
+    "renderMessage": {
+      "file": "test/rendering.test.ts",
+      "title": "message events retain catching, throwing and non-interrupting boundary notation"
+    },
+    "renderIO": {
+      "file": "test/rendering.test.ts",
+      "title": "Process-level Data Input and Output receive native visible DI and labels"
+    },
+    "renderDataAssociation": {
+      "file": "test/rendering.test.ts",
+      "title": "Activity IO stays complete in XML while data associations dock on its visible owner"
+    },
+    "renderTimerConditionalSignal": {
+      "file": "test/rendering.test.ts",
+      "title": "timer forms, conditional waits and signal throws retain native event geometry"
+    }
+  },
+  "requirements": [
+    {
+      "id": "definitions",
+      "kind": "supported",
+      "description": "Definitions: target namespace, one self-contained document, stable IDs",
+      "positive": [
+        "basic",
+        "namespace"
+      ],
+      "negative": [
+        "primary",
+        "duplicate"
+      ],
+      "visual": [
+        "renderBasic"
+      ],
+      "composition": []
+    },
+    {
+      "id": "process",
+      "kind": "supported",
+      "description": "Process: explicit design-time nonexecution, same-file definitions",
+      "positive": [
+        "basic",
+        "call"
+      ],
+      "negative": [
+        "flowScope",
+        "missingCall"
+      ],
+      "visual": [
+        "renderBasic"
+      ],
+      "composition": [
+        "customer-nested-subprocess-call"
+      ]
+    },
+    {
+      "id": "collaboration",
+      "kind": "supported",
+      "description": "Collaboration: one primary subject with Participants and Message Flows",
+      "positive": [
+        "blackBox",
+        "sendTask"
+      ],
+      "negative": [
+        "primary",
+        "missingCollaborationRef"
+      ],
+      "visual": [
+        "renderBlackBox"
+      ],
+      "composition": [
+        "supplier-order-collaboration"
+      ]
+    },
+    {
+      "id": "pool.whiteBox",
+      "kind": "supported",
+      "description": "White-box Pool references a same-file Process",
+      "positive": [
+        "sendTask"
+      ],
+      "negative": [
+        "missingCollaborationRef"
+      ],
+      "visual": [
+        "renderShared"
+      ],
+      "composition": [
+        "supplier-order-collaboration"
+      ]
+    },
+    {
+      "id": "pool.blackBox",
+      "kind": "supported",
+      "description": "Black-box Pool retains absent internal work",
+      "positive": [
+        "blackBox"
+      ],
+      "negative": [
+        "messageScope"
+      ],
+      "visual": [
+        "renderBlackBox"
+      ],
+      "composition": []
+    },
+    {
+      "id": "lane",
+      "kind": "supported",
+      "description": "Lane and derived nested Lane responsibility",
+      "positive": [
+        "nestedLanes"
+      ],
+      "negative": [
+        "laneMembership",
+        "laneParent"
+      ],
+      "visual": [
+        "renderLanes"
+      ],
+      "composition": [
+        "purchase-approval-lane-ownership"
+      ]
+    },
+    {
+      "id": "activity.task",
+      "kind": "supported",
+      "description": "Generic Task",
+      "positive": [
+        "taskTypes"
+      ],
+      "negative": [
+        "flowScope"
+      ],
+      "visual": [],
+      "composition": [
+        "supplier-order-collaboration"
+      ]
+    },
+    {
+      "id": "activity.userTask",
+      "kind": "supported",
+      "description": "User Task",
+      "positive": [
+        "taskTypes"
+      ],
+      "negative": [
+        "flowScope"
+      ],
+      "visual": [],
+      "composition": [
+        "purchase-approval-lane-ownership"
+      ]
+    },
+    {
+      "id": "activity.manualTask",
+      "kind": "supported",
+      "description": "Manual Task",
+      "positive": [
+        "taskTypes"
+      ],
+      "negative": [
+        "flowScope"
+      ],
+      "visual": [],
+      "composition": [
+        "portfolio-loop-multi-instance"
+      ]
+    },
+    {
+      "id": "activity.serviceTask",
+      "kind": "supported",
+      "description": "Service Task",
+      "positive": [
+        "taskTypes"
+      ],
+      "negative": [
+        "flowScope"
+      ],
+      "visual": [],
+      "composition": [
+        "provisioning-timer-error-recovery"
+      ]
+    },
+    {
+      "id": "activity.businessRuleTask",
+      "kind": "supported",
+      "description": "Business Rule Task",
+      "positive": [
+        "taskTypes"
+      ],
+      "negative": [
+        "flowScope"
+      ],
+      "visual": [],
+      "composition": [
+        "order-inclusive-parallel-controls"
+      ]
+    },
+    {
+      "id": "activity.scriptTask",
+      "kind": "supported",
+      "description": "Script Task",
+      "positive": [
+        "taskTypes"
+      ],
+      "negative": [
+        "flowScope"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "activity.sendTask",
+      "kind": "supported",
+      "description": "Send Task",
+      "positive": [
+        "sendTask"
+      ],
+      "negative": [
+        "flowScope",
+        "missingMessage"
+      ],
+      "visual": [],
+      "composition": [
+        "trial-event-based-competition"
+      ]
+    },
+    {
+      "id": "activity.receiveTask",
+      "kind": "supported",
+      "description": "Receive Task",
+      "positive": [
+        "receiveTask"
+      ],
+      "negative": [
+        "flowScope",
+        "missingMessage"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "activity.subprocess.expanded",
+      "kind": "supported",
+      "description": "Embedded Subprocess, expanded presentation",
+      "positive": [
+        "subprocess"
+      ],
+      "negative": [
+        "recursiveContainment",
+        "nestedFlow"
+      ],
+      "visual": [
+        "renderExpanded"
+      ],
+      "composition": [
+        "customer-nested-subprocess-call"
+      ]
+    },
+    {
+      "id": "activity.subprocess.collapsed",
+      "kind": "supported",
+      "description": "Embedded Subprocess, collapsed with separate contents panel",
+      "positive": [
+        "subprocess"
+      ],
+      "negative": [
+        "recursiveContainment",
+        "nestedFlow"
+      ],
+      "visual": [
+        "renderCollapsed"
+      ],
+      "composition": [
+        "customer-nested-subprocess-call"
+      ]
+    },
+    {
+      "id": "activity.call",
+      "kind": "supported",
+      "description": "Call Activity same-file QName target without copied process",
+      "positive": [
+        "call",
+        "namespace"
+      ],
+      "negative": [
+        "missingCall"
+      ],
+      "visual": [
+        "renderCall"
+      ],
+      "composition": [
+        "customer-nested-subprocess-call"
+      ]
+    },
+    {
+      "id": "loop.standard.testBefore",
+      "kind": "supported",
+      "description": "standard.testBefore",
+      "positive": [
+        "loops"
+      ],
+      "negative": [
+        "illegalLoop"
+      ],
+      "visual": [
+        "renderCall"
+      ],
+      "composition": []
+    },
+    {
+      "id": "loop.standard.testAfter",
+      "kind": "supported",
+      "description": "standard.testAfter",
+      "positive": [
+        "loops"
+      ],
+      "negative": [
+        "illegalLoop"
+      ],
+      "visual": [],
+      "composition": [
+        "portfolio-loop-multi-instance"
+      ]
+    },
+    {
+      "id": "loop.multiInstance.sequential",
+      "kind": "supported",
+      "description": "multiInstance.sequential",
+      "positive": [
+        "loops"
+      ],
+      "negative": [
+        "illegalLoop"
+      ],
+      "visual": [],
+      "composition": [
+        "portfolio-loop-multi-instance"
+      ]
+    },
+    {
+      "id": "loop.multiInstance.parallel",
+      "kind": "supported",
+      "description": "multiInstance.parallel",
+      "positive": [
+        "loops"
+      ],
+      "negative": [
+        "illegalLoop"
+      ],
+      "visual": [],
+      "composition": [
+        "portfolio-loop-multi-instance"
+      ]
+    },
+    {
+      "id": "gateway.exclusive",
+      "kind": "supported",
+      "description": "Exclusive Gateway",
+      "positive": [
+        "xor"
+      ],
+      "negative": [
+        "decisionCondition"
+      ],
+      "visual": [],
+      "composition": [
+        "purchase-approval-lane-ownership"
+      ]
+    },
+    {
+      "id": "gateway.parallel",
+      "kind": "supported",
+      "description": "Parallel Gateway",
+      "positive": [
+        "parallel"
+      ],
+      "negative": [
+        "illegalCondition"
+      ],
+      "visual": [],
+      "composition": [
+        "order-inclusive-parallel-controls"
+      ]
+    },
+    {
+      "id": "gateway.inclusive",
+      "kind": "supported",
+      "description": "Inclusive Gateway",
+      "positive": [
+        "inclusive"
+      ],
+      "negative": [
+        "decisionCondition"
+      ],
+      "visual": [],
+      "composition": [
+        "order-inclusive-parallel-controls"
+      ]
+    },
+    {
+      "id": "gateway.eventBased.competition",
+      "kind": "supported",
+      "description": "Event-Based Gateway, Exclusive non-instantiating competition",
+      "positive": [
+        "eventGateway"
+      ],
+      "negative": [
+        "illegalEventGateway"
+      ],
+      "visual": [],
+      "composition": [
+        "trial-event-based-competition"
+      ]
+    },
+    {
+      "id": "gateway.eventBased.exclusiveInstantiation",
+      "kind": "supported",
+      "description": "Event-Based Gateway, Exclusive instantiate=true",
+      "positive": [
+        "eventGateway"
+      ],
+      "negative": [
+        "illegalEventGateway"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "gateway.eventBased.parallelInstantiation",
+      "kind": "supported",
+      "description": "Event-Based Gateway, Parallel instantiate=true",
+      "positive": [
+        "eventGateway"
+      ],
+      "negative": [
+        "illegalEventGateway"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "flow.sequence",
+      "kind": "supported",
+      "description": "Sequence Flow same-scope legal node references",
+      "positive": [
+        "basic"
+      ],
+      "negative": [
+        "missingFlow",
+        "flowScope",
+        "flowDirection"
+      ],
+      "visual": [
+        "renderBasic"
+      ],
+      "composition": []
+    },
+    {
+      "id": "flow.condition",
+      "kind": "supported",
+      "description": "Human-readable condition expression with preserved explicit label or normalized fallback",
+      "positive": [
+        "xor",
+        "inclusive",
+        "labels"
+      ],
+      "negative": [
+        "illegalCondition",
+        "decisionCondition"
+      ],
+      "visual": [],
+      "composition": [
+        "purchase-approval-lane-ownership",
+        "order-inclusive-parallel-controls"
+      ]
+    },
+    {
+      "id": "flow.default",
+      "kind": "supported",
+      "description": "Default belongs to its Activity/Gateway and never has a condition",
+      "positive": [
+        "xor",
+        "default"
+      ],
+      "negative": [
+        "default"
+      ],
+      "visual": [],
+      "composition": [
+        "purchase-approval-lane-ownership",
+        "order-inclusive-parallel-controls"
+      ]
+    },
+    {
+      "id": "event.none.start",
+      "kind": "supported",
+      "description": "none Event in start position",
+      "positive": [
+        "basic"
+      ],
+      "negative": [
+        "nonePlacement",
+        "eventFlow"
+      ],
+      "visual": [
+        "renderBasic"
+      ],
+      "composition": []
+    },
+    {
+      "id": "event.none.end",
+      "kind": "supported",
+      "description": "none Event in end position",
+      "positive": [
+        "basic"
+      ],
+      "negative": [
+        "nonePlacement",
+        "eventFlow"
+      ],
+      "visual": [
+        "renderBasic"
+      ],
+      "composition": []
+    },
+    {
+      "id": "event.message.start",
+      "kind": "supported",
+      "description": "message Event in start position",
+      "positive": [
+        "messageEvents"
+      ],
+      "negative": [
+        "eventRefs",
+        "illegalTrigger"
+      ],
+      "visual": [
+        "renderMessage"
+      ],
+      "composition": []
+    },
+    {
+      "id": "event.message.catch",
+      "kind": "supported",
+      "description": "message Event in catch position",
+      "positive": [
+        "messageEvents"
+      ],
+      "negative": [
+        "eventRefs",
+        "illegalTrigger"
+      ],
+      "visual": [
+        "renderMessage"
+      ],
+      "composition": []
+    },
+    {
+      "id": "event.message.throw",
+      "kind": "supported",
+      "description": "message Event in throw position",
+      "positive": [
+        "messageEvents"
+      ],
+      "negative": [
+        "eventRefs",
+        "illegalTrigger"
+      ],
+      "visual": [
+        "renderMessage"
+      ],
+      "composition": []
+    },
+    {
+      "id": "event.message.boundary.interrupting",
+      "kind": "supported",
+      "description": "message Event in boundary.interrupting position",
+      "positive": [
+        "messageEvents"
+      ],
+      "negative": [
+        "eventRefs",
+        "illegalTrigger"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "event.message.boundary.nonInterrupting",
+      "kind": "supported",
+      "description": "message Event in boundary.nonInterrupting position",
+      "positive": [
+        "messageEvents"
+      ],
+      "negative": [
+        "eventRefs",
+        "illegalTrigger"
+      ],
+      "visual": [
+        "renderMessage"
+      ],
+      "composition": []
+    },
+    {
+      "id": "event.message.end",
+      "kind": "supported",
+      "description": "message Event in end position",
+      "positive": [
+        "messageEvents"
+      ],
+      "negative": [
+        "eventRefs",
+        "illegalTrigger"
+      ],
+      "visual": [
+        "renderMessage"
+      ],
+      "composition": []
+    },
+    {
+      "id": "event.timer.start",
+      "kind": "supported",
+      "description": "timer Event in start position",
+      "positive": [
+        "timerEvents"
+      ],
+      "negative": [
+        "eventRefs",
+        "illegalTrigger"
+      ],
+      "visual": [
+        "renderTimerConditionalSignal"
+      ],
+      "composition": []
+    },
+    {
+      "id": "event.timer.catch",
+      "kind": "supported",
+      "description": "timer Event in catch position",
+      "positive": [
+        "timerEvents"
+      ],
+      "negative": [
+        "eventRefs",
+        "illegalTrigger"
+      ],
+      "visual": [],
+      "composition": [
+        "trial-event-based-competition"
+      ]
+    },
+    {
+      "id": "event.timer.boundary.interrupting",
+      "kind": "supported",
+      "description": "timer Event in boundary.interrupting position",
+      "positive": [
+        "timerEvents"
+      ],
+      "negative": [
+        "eventRefs",
+        "illegalTrigger"
+      ],
+      "visual": [
+        "renderTimerConditionalSignal"
+      ],
+      "composition": []
+    },
+    {
+      "id": "event.timer.boundary.nonInterrupting",
+      "kind": "supported",
+      "description": "timer Event in boundary.nonInterrupting position",
+      "positive": [
+        "timerEvents"
+      ],
+      "negative": [
+        "eventRefs",
+        "illegalTrigger"
+      ],
+      "visual": [
+        "renderTimerConditionalSignal"
+      ],
+      "composition": []
+    },
+    {
+      "id": "event.conditional.start",
+      "kind": "supported",
+      "description": "conditional Event in start position",
+      "positive": [
+        "conditionalEvents"
+      ],
+      "negative": [
+        "eventRefs",
+        "illegalTrigger"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "event.conditional.catch",
+      "kind": "supported",
+      "description": "conditional Event in catch position",
+      "positive": [
+        "conditionalEvents"
+      ],
+      "negative": [
+        "eventRefs",
+        "illegalTrigger"
+      ],
+      "visual": [
+        "renderTimerConditionalSignal"
+      ],
+      "composition": []
+    },
+    {
+      "id": "event.conditional.boundary.interrupting",
+      "kind": "supported",
+      "description": "conditional Event in boundary.interrupting position",
+      "positive": [
+        "conditionalEvents"
+      ],
+      "negative": [
+        "eventRefs",
+        "illegalTrigger"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "event.conditional.boundary.nonInterrupting",
+      "kind": "supported",
+      "description": "conditional Event in boundary.nonInterrupting position",
+      "positive": [
+        "conditionalEvents"
+      ],
+      "negative": [
+        "eventRefs",
+        "illegalTrigger"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "event.signal.start",
+      "kind": "supported",
+      "description": "signal Event in start position",
+      "positive": [
+        "signalEvents"
+      ],
+      "negative": [
+        "eventRefs",
+        "illegalTrigger"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "event.signal.catch",
+      "kind": "supported",
+      "description": "signal Event in catch position",
+      "positive": [
+        "signalEvents"
+      ],
+      "negative": [
+        "eventRefs",
+        "illegalTrigger"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "event.signal.throw",
+      "kind": "supported",
+      "description": "signal Event in throw position",
+      "positive": [
+        "signalEvents"
+      ],
+      "negative": [
+        "eventRefs",
+        "illegalTrigger"
+      ],
+      "visual": [
+        "renderTimerConditionalSignal"
+      ],
+      "composition": []
+    },
+    {
+      "id": "event.signal.boundary.interrupting",
+      "kind": "supported",
+      "description": "signal Event in boundary.interrupting position",
+      "positive": [
+        "signalEvents"
+      ],
+      "negative": [
+        "eventRefs",
+        "illegalTrigger"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "event.signal.boundary.nonInterrupting",
+      "kind": "supported",
+      "description": "signal Event in boundary.nonInterrupting position",
+      "positive": [
+        "signalEvents"
+      ],
+      "negative": [
+        "eventRefs",
+        "illegalTrigger"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "event.signal.end",
+      "kind": "supported",
+      "description": "signal Event in end position",
+      "positive": [
+        "signalEvents"
+      ],
+      "negative": [
+        "eventRefs",
+        "illegalTrigger"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "event.error.boundary.interrupting.named",
+      "kind": "supported",
+      "description": "error Event in boundary.interrupting.named position",
+      "positive": [
+        "errorEvents"
+      ],
+      "negative": [
+        "eventRefs",
+        "illegalException"
+      ],
+      "visual": [],
+      "composition": [
+        "provisioning-timer-error-recovery"
+      ]
+    },
+    {
+      "id": "event.error.boundary.interrupting.catchAll",
+      "kind": "supported",
+      "description": "error Event in boundary.interrupting.catchAll position",
+      "positive": [
+        "errorEvents"
+      ],
+      "negative": [
+        "eventRefs",
+        "illegalException"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "event.error.end",
+      "kind": "supported",
+      "description": "error Event in end position",
+      "positive": [
+        "errorEvents"
+      ],
+      "negative": [
+        "eventRefs",
+        "illegalException"
+      ],
+      "visual": [],
+      "composition": [
+        "provisioning-timer-error-recovery"
+      ]
+    },
+    {
+      "id": "event.escalation.throw",
+      "kind": "supported",
+      "description": "escalation Event in throw position",
+      "positive": [
+        "escalationEvents"
+      ],
+      "negative": [
+        "eventRefs",
+        "illegalException"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "event.escalation.boundary.interrupting.named",
+      "kind": "supported",
+      "description": "escalation Event in boundary.interrupting.named position",
+      "positive": [
+        "escalationEvents"
+      ],
+      "negative": [
+        "eventRefs",
+        "illegalException"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "event.escalation.boundary.nonInterrupting.named",
+      "kind": "supported",
+      "description": "escalation Event in boundary.nonInterrupting.named position",
+      "positive": [
+        "escalationEvents"
+      ],
+      "negative": [
+        "eventRefs",
+        "illegalException"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "event.escalation.boundary.interrupting.catchAll",
+      "kind": "supported",
+      "description": "escalation Event in boundary.interrupting.catchAll position",
+      "positive": [
+        "escalationEvents"
+      ],
+      "negative": [
+        "eventRefs",
+        "illegalException"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "event.escalation.boundary.nonInterrupting.catchAll",
+      "kind": "supported",
+      "description": "escalation Event in boundary.nonInterrupting.catchAll position",
+      "positive": [
+        "escalationEvents"
+      ],
+      "negative": [
+        "eventRefs",
+        "illegalException"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "event.escalation.end",
+      "kind": "supported",
+      "description": "escalation Event in end position",
+      "positive": [
+        "escalationEvents"
+      ],
+      "negative": [
+        "eventRefs",
+        "illegalException"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "event.terminate.end",
+      "kind": "supported",
+      "description": "terminate Event in end position",
+      "positive": [
+        "terminateEvents"
+      ],
+      "negative": [
+        "eventRefs",
+        "illegalException"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "event.link.catch",
+      "kind": "supported",
+      "description": "link Event in catch position",
+      "positive": [
+        "linkEvents"
+      ],
+      "negative": [
+        "illegalLink"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "event.link.throw",
+      "kind": "supported",
+      "description": "link Event in throw position",
+      "positive": [
+        "linkEvents"
+      ],
+      "negative": [
+        "illegalLink"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "attribute.timer.timeDate",
+      "kind": "attribute",
+      "description": "Exactly one inert Timer expression: timeDate",
+      "positive": [
+        "timerEvents"
+      ],
+      "negative": [
+        "badInput",
+        "illegalTrigger"
+      ],
+      "visual": [
+        "renderTimerConditionalSignal"
+      ],
+      "composition": []
+    },
+    {
+      "id": "attribute.timer.timeDuration",
+      "kind": "attribute",
+      "description": "Exactly one inert Timer expression: timeDuration",
+      "positive": [
+        "timerEvents"
+      ],
+      "negative": [
+        "badInput",
+        "illegalTrigger"
+      ],
+      "visual": [
+        "renderTimerConditionalSignal"
+      ],
+      "composition": []
+    },
+    {
+      "id": "attribute.timer.timeCycle",
+      "kind": "attribute",
+      "description": "Exactly one inert Timer expression: timeCycle",
+      "positive": [
+        "timerEvents"
+      ],
+      "negative": [
+        "badInput",
+        "illegalTrigger"
+      ],
+      "visual": [
+        "renderTimerConditionalSignal"
+      ],
+      "composition": []
+    },
+    {
+      "id": "messageFlow",
+      "kind": "supported",
+      "description": "Inter-participant named Message Flow without implicit participant selection",
+      "positive": [
+        "sendTask",
+        "blackBox"
+      ],
+      "negative": [
+        "messageScope",
+        "messageEndpoint",
+        "ambiguousParticipant",
+        "messageAgreement"
+      ],
+      "visual": [
+        "renderBlackBox",
+        "renderShared"
+      ],
+      "composition": [
+        "supplier-order-collaboration"
+      ]
+    },
+    {
+      "id": "message",
+      "kind": "supported",
+      "description": "Named Message declaration references in Tasks, Events and Flows",
+      "positive": [
+        "sendTask",
+        "receiveTask",
+        "messageEvents"
+      ],
+      "negative": [
+        "missingMessage",
+        "messageAgreement"
+      ],
+      "visual": [
+        "renderMessage"
+      ],
+      "composition": [
+        "supplier-order-collaboration"
+      ]
+    },
+    {
+      "id": "data.object",
+      "kind": "supported",
+      "description": "Data Object with stable Data Object Reference and State",
+      "positive": [
+        "dataRefs"
+      ],
+      "negative": [
+        "dataScope"
+      ],
+      "visual": [
+        "renderDataAssociation"
+      ],
+      "composition": [
+        "invoice-data-and-documentation"
+      ]
+    },
+    {
+      "id": "data.inputOutput.process",
+      "kind": "supported",
+      "description": "Visible Process IO with derived input/output sets",
+      "positive": [
+        "processActivityIO"
+      ],
+      "negative": [
+        "illegalIO"
+      ],
+      "visual": [
+        "renderIO"
+      ],
+      "composition": [
+        "invoice-data-and-documentation"
+      ]
+    },
+    {
+      "id": "data.inputOutput.activity",
+      "kind": "supported",
+      "description": "Activity IO supporting semantic substructure",
+      "positive": [
+        "processActivityIO"
+      ],
+      "negative": [
+        "illegalIO"
+      ],
+      "visual": [
+        "renderDataAssociation"
+      ],
+      "composition": [
+        "invoice-data-and-documentation"
+      ]
+    },
+    {
+      "id": "data.inputOutput.event",
+      "kind": "supported",
+      "description": "Catching outputs and throwing inputs directly under Events",
+      "positive": [
+        "eventIO"
+      ],
+      "negative": [
+        "illegalIO"
+      ],
+      "visual": [],
+      "composition": [
+        "invoice-data-and-documentation"
+      ]
+    },
+    {
+      "id": "data.store",
+      "kind": "supported",
+      "description": "Global persistent Data Store, capacity/unlimited and named state references",
+      "positive": [
+        "dataRefs"
+      ],
+      "negative": [
+        "dataScope"
+      ],
+      "visual": [
+        "suppliedData"
+      ],
+      "composition": [
+        "invoice-data-and-documentation"
+      ]
+    },
+    {
+      "id": "data.association.activity",
+      "kind": "supported",
+      "description": "Activity Data Association, exact owner/input/output/source/target semantics",
+      "positive": [
+        "dataAssociations"
+      ],
+      "negative": [
+        "illegalDataAssociation",
+        "associationRoles"
+      ],
+      "visual": [
+        "renderDataAssociation"
+      ],
+      "composition": [
+        "invoice-data-and-documentation"
+      ]
+    },
+    {
+      "id": "data.association.event",
+      "kind": "supported",
+      "description": "Event Data Association with catching/throwing direction",
+      "positive": [
+        "eventDataAssociations"
+      ],
+      "negative": [
+        "eventDataAssociations"
+      ],
+      "visual": [],
+      "composition": [
+        "invoice-data-and-documentation"
+      ]
+    },
+    {
+      "id": "documentation.annotation",
+      "kind": "supported",
+      "description": "Intentional standard Text Annotation text",
+      "positive": [
+        "documentation"
+      ],
+      "negative": [
+        "unnameable",
+        "illegalDocumentation"
+      ],
+      "visual": [
+        "suppliedData"
+      ],
+      "composition": [
+        "invoice-data-and-documentation"
+      ]
+    },
+    {
+      "id": "documentation.group",
+      "kind": "supported",
+      "description": "Category-backed Group; geometry-only memberRefs, cross-pool grouping",
+      "positive": [
+        "documentation"
+      ],
+      "negative": [
+        "illegalDocumentation",
+        "unnameable"
+      ],
+      "visual": [
+        "suppliedData"
+      ],
+      "composition": [
+        "invoice-data-and-documentation"
+      ]
+    },
+    {
+      "id": "documentation.association",
+      "kind": "supported",
+      "description": "Standard Association with None/One/Both direction, never Data Association substitution",
+      "positive": [
+        "documentation"
+      ],
+      "negative": [
+        "illegalDocumentation",
+        "unnameable"
+      ],
+      "visual": [
+        "suppliedData"
+      ],
+      "composition": [
+        "invoice-data-and-documentation"
+      ]
+    },
+    {
+      "id": "invalid.ARTIFACT_SCOPE",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal ARTIFACT_SCOPE",
+      "positive": [],
+      "negative": [
+        "illegalDocumentation",
+        "dataScope"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "invalid.ATTRIBUTE_UNSUPPORTED",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal ATTRIBUTE_UNSUPPORTED",
+      "positive": [],
+      "negative": [
+        "unnameable"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "invalid.BOUNDARY_ATTACHMENT",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal BOUNDARY_ATTACHMENT",
+      "positive": [],
+      "negative": [
+        "eventRefs"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "invalid.CAPABILITY_UNAVAILABLE",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal CAPABILITY_UNAVAILABLE",
+      "positive": [],
+      "negative": [
+        "unknownConcept"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "invalid.CONCEPT_DEFERRED",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal CONCEPT_DEFERRED",
+      "positive": [],
+      "negative": [
+        "nonePlacement"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "invalid.CONTAINMENT_CYCLE",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal CONTAINMENT_CYCLE",
+      "positive": [],
+      "negative": [
+        "recursiveContainment",
+        "laneParent"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "invalid.DATA_ASSOCIATION_DIRECTION",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal DATA_ASSOCIATION_DIRECTION",
+      "positive": [],
+      "negative": [
+        "eventDataAssociations"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "invalid.DATA_ASSOCIATION_OWNER",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal DATA_ASSOCIATION_OWNER",
+      "positive": [],
+      "negative": [
+        "illegalDataAssociation"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "invalid.DATA_ASSOCIATION_SOURCE_COUNT",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal DATA_ASSOCIATION_SOURCE_COUNT",
+      "positive": [],
+      "negative": [
+        "illegalDataAssociation"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "invalid.DATA_RELATION",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal DATA_RELATION",
+      "positive": [],
+      "negative": [
+        "illegalDataAssociation",
+        "associationRoles"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "invalid.DATA_SCOPE",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal DATA_SCOPE",
+      "positive": [],
+      "negative": [
+        "dataScope"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "invalid.DEFAULT_FLOW",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal DEFAULT_FLOW",
+      "positive": [],
+      "negative": [
+        "default"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "invalid.EVENT_BASED_FLOW",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal EVENT_BASED_FLOW",
+      "positive": [],
+      "negative": [
+        "illegalEventGateway"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "invalid.EVENT_BASED_MIX",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal EVENT_BASED_MIX",
+      "positive": [],
+      "negative": [
+        "illegalEventGateway"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "invalid.EVENT_BASED_TARGET",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal EVENT_BASED_TARGET",
+      "positive": [],
+      "negative": [
+        "illegalEventGateway"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "invalid.EVENT_FLOW",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal EVENT_FLOW",
+      "positive": [],
+      "negative": [
+        "eventFlow"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "invalid.EVENT_INTERRUPTION",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal EVENT_INTERRUPTION",
+      "positive": [],
+      "negative": [
+        "illegalException"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "invalid.EVENT_PLACEMENT",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal EVENT_PLACEMENT",
+      "positive": [],
+      "negative": [
+        "illegalTrigger",
+        "illegalException",
+        "flowDirection"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "invalid.EVENT_SCOPE",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal EVENT_SCOPE",
+      "positive": [],
+      "negative": [
+        "entry"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "invalid.FLOW_CONDITION",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal FLOW_CONDITION",
+      "positive": [],
+      "negative": [
+        "illegalCondition",
+        "decisionCondition"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "invalid.FLOW_SCOPE",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal FLOW_SCOPE",
+      "positive": [],
+      "negative": [
+        "flowScope",
+        "nestedFlow"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "invalid.GATEWAY_FLOW",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal GATEWAY_FLOW",
+      "positive": [],
+      "negative": [
+        "eventFlow"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "invalid.IO_CARDINALITY",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal IO_CARDINALITY",
+      "positive": [],
+      "negative": [
+        "illegalIO"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "invalid.IO_DIRECTION",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal IO_DIRECTION",
+      "positive": [],
+      "negative": [
+        "illegalIO"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "invalid.IO_OWNER",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal IO_OWNER",
+      "positive": [],
+      "negative": [
+        "illegalIO"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "invalid.IO_PLACEMENT",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal IO_PLACEMENT",
+      "positive": [],
+      "negative": [
+        "illegalIO"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "invalid.KEY_DUPLICATE",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal KEY_DUPLICATE",
+      "positive": [],
+      "negative": [
+        "duplicate"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "invalid.LANE_MEMBERSHIP",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal LANE_MEMBERSHIP",
+      "positive": [],
+      "negative": [
+        "laneMembership"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "invalid.LINK_MATCHING",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal LINK_MATCHING",
+      "positive": [],
+      "negative": [
+        "illegalLink",
+        "suppliedLink"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "invalid.LOOP_PLACEMENT",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal LOOP_PLACEMENT",
+      "positive": [],
+      "negative": [
+        "illegalLoop"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "invalid.MESSAGE_CARDINALITY",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal MESSAGE_CARDINALITY",
+      "positive": [],
+      "negative": [
+        "messageAgreement"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "invalid.MESSAGE_ENDPOINT",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal MESSAGE_ENDPOINT",
+      "positive": [],
+      "negative": [
+        "messageEndpoint"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "invalid.MESSAGE_MISMATCH",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal MESSAGE_MISMATCH",
+      "positive": [],
+      "negative": [
+        "messageAgreement"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "invalid.MESSAGE_SCOPE",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal MESSAGE_SCOPE",
+      "positive": [],
+      "negative": [
+        "messageScope"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "invalid.MODEL_AMBIGUOUS",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal MODEL_AMBIGUOUS",
+      "positive": [],
+      "negative": [
+        "ambiguousParticipant"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "invalid.REF_MISSING",
+      "kind": "invalid",
+      "description": "Enforced semantic refusal REF_MISSING",
+      "positive": [],
+      "negative": [
+        "missingFlow",
+        "missingMessage",
+        "missingCall",
+        "eventRefs",
+        "dataScope",
+        "illegalDocumentation"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "deferred.eventSubprocess",
+      "kind": "deferred",
+      "description": "Event Subprocesses",
+      "positive": [],
+      "negative": [
+        "deferredFamilies"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "deferred.adHoc",
+      "kind": "deferred",
+      "description": "Ad Hoc Subprocesses",
+      "positive": [],
+      "negative": [
+        "deferredFamilies"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "deferred.transaction",
+      "kind": "deferred",
+      "description": "Transactions",
+      "positive": [],
+      "negative": [
+        "deferredFamilies"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "deferred.compensation",
+      "kind": "deferred",
+      "description": "Compensation activities and Events",
+      "positive": [],
+      "negative": [
+        "deferredFamilies"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "deferred.cancel",
+      "kind": "deferred",
+      "description": "Cancel Events",
+      "positive": [],
+      "negative": [
+        "deferredFamilies"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "deferred.multiple",
+      "kind": "deferred",
+      "description": "Multiple Events",
+      "positive": [],
+      "negative": [
+        "execution"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "deferred.parallelMultiple",
+      "kind": "deferred",
+      "description": "Parallel Multiple Events",
+      "positive": [],
+      "negative": [
+        "deferredFamilies"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "deferred.complexGateway",
+      "kind": "deferred",
+      "description": "Complex Gateways",
+      "positive": [],
+      "negative": [
+        "deferredVisual"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "deferred.choreography",
+      "kind": "deferred",
+      "description": "Choreography models",
+      "positive": [],
+      "negative": [
+        "deferredFamilies"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "deferred.conversation",
+      "kind": "deferred",
+      "description": "Conversation models",
+      "positive": [],
+      "negative": [
+        "deferredFamilies"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "deferred.choreographyTask",
+      "kind": "deferred",
+      "description": "Choreography Tasks",
+      "positive": [],
+      "negative": [
+        "deferredFamilies"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "deferred.callChoreography",
+      "kind": "deferred",
+      "description": "Call Choreographies",
+      "positive": [],
+      "negative": [
+        "deferredFamilies"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "deferred.resource",
+      "kind": "deferred",
+      "description": "Formal Resources",
+      "positive": [],
+      "negative": [
+        "deferredFamilies"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "deferred.resourceRoles",
+      "kind": "deferred",
+      "description": "Resource-role assignment",
+      "positive": [],
+      "negative": [
+        "execution"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "deferred.correlation",
+      "kind": "deferred",
+      "description": "Correlations and subscriptions",
+      "positive": [],
+      "negative": [
+        "deferredFamilies"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "deferred.interfaceOperation",
+      "kind": "deferred",
+      "description": "Interfaces and Operations",
+      "positive": [],
+      "negative": [
+        "deferredFamilies"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "deferred.itemDefinition",
+      "kind": "deferred",
+      "description": "Item definitions and external data schemas",
+      "positive": [],
+      "negative": [
+        "deferredFamilies"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "deferred.engineConfiguration",
+      "kind": "deferred",
+      "description": "Engine-specific task configuration/expressions/scripts",
+      "positive": [],
+      "negative": [
+        "execution"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "deferred.engineAttributes",
+      "kind": "deferred",
+      "description": "Unmapped execution attributes",
+      "positive": [],
+      "negative": [
+        "executionAttributes"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "deferred.ioMappings",
+      "kind": "deferred",
+      "description": "Formal input/output execution mappings",
+      "positive": [],
+      "negative": [
+        "executionIO"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "deferred.vendorExtension",
+      "kind": "deferred",
+      "description": "Vendor namespaces, metadata, listeners and eBPMN",
+      "positive": [],
+      "negative": [
+        "deferredVisual"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "contract.identity",
+      "kind": "attribute",
+      "description": "Retained semantic identities, reserved historical identities and bounded closed input",
+      "positive": [
+        "basic",
+        "history"
+      ],
+      "negative": [
+        "duplicate",
+        "inputBounds",
+        "badInput"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "contract.primary",
+      "kind": "attribute",
+      "description": "One explicit primary Process or Collaboration with same-file references",
+      "positive": [
+        "basic",
+        "blackBox",
+        "call"
+      ],
+      "negative": [
+        "primary",
+        "missingCall"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "contract.designTime",
+      "kind": "attribute",
+      "description": "isExecutable=false and no invented engine behavior",
+      "positive": [
+        "basic",
+        "taskTypes",
+        "loops"
+      ],
+      "negative": [
+        "execution",
+        "executionAttributes"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "contract.documentation",
+      "kind": "attribute",
+      "description": "Intentional standard documentation only; no automatic statuses or metadata",
+      "positive": [
+        "documentation"
+      ],
+      "negative": [
+        "unnameable"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "contract.referenceIntegrity",
+      "kind": "attribute",
+      "description": "Reference kinds, same-file QName namespace equivalence and safe scope",
+      "positive": [
+        "namespace",
+        "call",
+        "dataRefs"
+      ],
+      "negative": [
+        "missingFlow",
+        "missingMessage",
+        "missingCall"
+      ],
+      "visual": [],
+      "composition": []
+    },
+    {
+      "id": "contract.expert",
+      "kind": "attribute",
+      "description": "Recoverable invalid meaning retained without unsafe reference omission",
+      "positive": [
+        "expertLane"
+      ],
+      "negative": [
+        "missingFlow",
+        "dataScope"
+      ],
+      "visual": [],
+      "composition": []
+    }
+  ],
+  "remainingEvidence": [
+    "Run ten fresh notation executions for every applicable feature-slice case, not only composition fixtures.",
+    "Bind full CORE-01 through CORE-07 evidence to the exact clean candidate and package hashes.",
+    "Fill empty visual mappings for supported placements/variants; semantic tests alone cannot qualify them.",
+    "Run cross-platform semantic/identity/DI comparison and full clean-install checks.",
+    "Record all eight composition human reviews; source/expected rows are authored synthetic facts, not human review evidence.",
+    "Complete host, handoff, offline runtime, safety, scale and performance gates in their separate acceptance runners."
+  ]
+}

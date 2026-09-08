@@ -1,0 +1,493 @@
+{
+  "title": "Data lifecycle, Process and Event IO, and intentional documentation",
+  "facts": [
+    [
+      "M_invoice-data-model",
+      "bpmn:Definitions",
+      null,
+      {
+        "name": "Invoice evidence and booking records",
+        "targetNamespace": "urn:process-model:invoice-data-model"
+      }
+    ],
+    [
+      "M_invoice-message",
+      "bpmn:Message",
+      "M_invoice-data-model.rootElements",
+      {
+        "name": "Supplier invoice"
+      }
+    ],
+    [
+      "M_receipt-message",
+      "bpmn:Message",
+      "M_invoice-data-model.rootElements",
+      {
+        "name": "Booking confirmation"
+      }
+    ],
+    [
+      "M_ledger",
+      "bpmn:DataStore",
+      "M_invoice-data-model.rootElements",
+      {
+        "name": "Accounting ledger",
+        "capacity": 100000,
+        "isUnlimited": false
+      }
+    ],
+    [
+      "M_controls-category",
+      "bpmn:Category",
+      "M_invoice-data-model.rootElements",
+      {
+        "name": "Control"
+      }
+    ],
+    [
+      "G_categoryValue_controls-category",
+      "bpmn:CategoryValue",
+      "M_controls-category.categoryValue",
+      {
+        "value": "Invoice evidence"
+      }
+    ],
+    [
+      "M_invoice-review",
+      "bpmn:Process",
+      "M_invoice-data-model.rootElements",
+      {
+        "name": "Review and record a supplier invoice",
+        "isExecutable": false,
+        "documentation": [
+          {
+            "$type": "bpmn:Documentation",
+            "text": "Preserve the invoice and the stated review policy."
+          }
+        ]
+      }
+    ],
+    [
+      "M_received",
+      "bpmn:StartEvent",
+      "M_invoice-review.flowElements",
+      {
+        "name": "Invoice received"
+      }
+    ],
+    [
+      "G_event_received",
+      "bpmn:MessageEventDefinition",
+      "M_received.eventDefinitions",
+      {
+        "messageRef": "M_invoice-message"
+      }
+    ],
+    [
+      "M_review",
+      "bpmn:UserTask",
+      "M_invoice-review.flowElements",
+      {
+        "name": "Review and book invoice"
+      }
+    ],
+    [
+      "M_confirmed",
+      "bpmn:EndEvent",
+      "M_invoice-review.flowElements",
+      {
+        "name": "Booking confirmed"
+      }
+    ],
+    [
+      "G_event_confirmed",
+      "bpmn:MessageEventDefinition",
+      "M_confirmed.eventDefinitions",
+      {
+        "messageRef": "M_receipt-message"
+      }
+    ],
+    [
+      "M_d1",
+      "bpmn:SequenceFlow",
+      "M_invoice-review.flowElements",
+      {
+        "sourceRef": "M_received",
+        "targetRef": "M_review"
+      }
+    ],
+    [
+      "M_d2",
+      "bpmn:SequenceFlow",
+      "M_invoice-review.flowElements",
+      {
+        "sourceRef": "M_review",
+        "targetRef": "M_confirmed"
+      }
+    ],
+    [
+      "M_invoice-data",
+      "bpmn:DataObject",
+      "M_invoice-review.flowElements",
+      {
+        "name": "Invoice"
+      }
+    ],
+    [
+      "M_booking-data",
+      "bpmn:DataObject",
+      "M_invoice-review.flowElements",
+      {
+        "name": "Booking"
+      }
+    ],
+    [
+      "M_invoice-ref",
+      "bpmn:DataObjectReference",
+      "M_invoice-review.flowElements",
+      {
+        "name": "Supplier invoice",
+        "dataObjectRef": "M_invoice-data"
+      }
+    ],
+    [
+      "G_state_invoice-ref",
+      "bpmn:DataState",
+      "M_invoice-ref.dataState",
+      {
+        "name": "received"
+      }
+    ],
+    [
+      "M_booking-ref",
+      "bpmn:DataObjectReference",
+      "M_invoice-review.flowElements",
+      {
+        "name": "Booking record",
+        "dataObjectRef": "M_booking-data"
+      }
+    ],
+    [
+      "G_state_booking-ref",
+      "bpmn:DataState",
+      "M_booking-ref.dataState",
+      {
+        "name": "reviewed"
+      }
+    ],
+    [
+      "M_ledger-ref",
+      "bpmn:DataStoreReference",
+      "M_invoice-review.flowElements",
+      {
+        "name": "Accounting ledger",
+        "dataStoreRef": "M_ledger"
+      }
+    ],
+    [
+      "G_io_invoice-review",
+      "bpmn:InputOutputSpecification",
+      "M_invoice-review.ioSpecification",
+      {}
+    ],
+    [
+      "M_policy",
+      "bpmn:DataInput",
+      "G_io_invoice-review.dataInputs",
+      {
+        "name": "Review policy"
+      }
+    ],
+    [
+      "M_result",
+      "bpmn:DataOutput",
+      "G_io_invoice-review.dataOutputs",
+      {
+        "name": "Recorded booking"
+      }
+    ],
+    [
+      "G_inputSet_invoice-review",
+      "bpmn:InputSet",
+      "G_io_invoice-review.inputSets",
+      {
+        "dataInputRefs": [
+          "M_policy"
+        ]
+      }
+    ],
+    [
+      "G_outputSet_invoice-review",
+      "bpmn:OutputSet",
+      "G_io_invoice-review.outputSets",
+      {
+        "dataOutputRefs": [
+          "M_result"
+        ]
+      }
+    ],
+    [
+      "M_event-payload",
+      "bpmn:DataOutput",
+      "M_received.dataOutputs",
+      {
+        "name": "Invoice payload"
+      }
+    ],
+    [
+      "G_outputSet_received",
+      "bpmn:OutputSet",
+      "M_received.outputSet",
+      {
+        "dataOutputRefs": [
+          "M_event-payload"
+        ]
+      }
+    ],
+    [
+      "G_io_review",
+      "bpmn:InputOutputSpecification",
+      "M_review.ioSpecification",
+      {}
+    ],
+    [
+      "M_invoice-input",
+      "bpmn:DataInput",
+      "G_io_review.dataInputs",
+      {
+        "name": "Invoice for review"
+      }
+    ],
+    [
+      "M_policy-input",
+      "bpmn:DataInput",
+      "G_io_review.dataInputs",
+      {
+        "name": "Applicable policy"
+      }
+    ],
+    [
+      "M_booking-output",
+      "bpmn:DataOutput",
+      "G_io_review.dataOutputs",
+      {
+        "name": "Approved booking"
+      }
+    ],
+    [
+      "G_inputSet_review",
+      "bpmn:InputSet",
+      "G_io_review.inputSets",
+      {
+        "dataInputRefs": [
+          "M_invoice-input",
+          "M_policy-input"
+        ]
+      }
+    ],
+    [
+      "G_outputSet_review",
+      "bpmn:OutputSet",
+      "G_io_review.outputSets",
+      {
+        "dataOutputRefs": [
+          "M_booking-output"
+        ]
+      }
+    ],
+    [
+      "M_confirmation-input",
+      "bpmn:DataInput",
+      "M_confirmed.dataInputs",
+      {
+        "name": "Confirmation payload"
+      }
+    ],
+    [
+      "G_inputSet_confirmed",
+      "bpmn:InputSet",
+      "M_confirmed.inputSet",
+      {
+        "dataInputRefs": [
+          "M_confirmation-input"
+        ]
+      }
+    ],
+    [
+      "M_note",
+      "bpmn:TextAnnotation",
+      "M_invoice-review.artifacts",
+      {
+        "text": "Retain the original invoice with its booking evidence."
+      }
+    ],
+    [
+      "M_evidence-group",
+      "bpmn:Group",
+      "M_invoice-review.artifacts",
+      {
+        "categoryValueRef": "G_categoryValue_controls-category"
+      }
+    ],
+    [
+      "M_explains",
+      "bpmn:Association",
+      "M_invoice-review.artifacts",
+      {
+        "associationDirection": "None",
+        "sourceRef": "M_note",
+        "targetRef": "M_review"
+      }
+    ],
+    [
+      "M_capture",
+      "bpmn:DataOutputAssociation",
+      "M_received.dataOutputAssociations",
+      {
+        "sourceRef": [
+          "M_event-payload"
+        ],
+        "targetRef": "M_invoice-ref"
+      }
+    ],
+    [
+      "M_consume",
+      "bpmn:DataInputAssociation",
+      "M_review.dataInputAssociations",
+      {
+        "sourceRef": [
+          "M_invoice-ref"
+        ],
+        "targetRef": "M_invoice-input"
+      }
+    ],
+    [
+      "M_apply-policy",
+      "bpmn:DataInputAssociation",
+      "M_review.dataInputAssociations",
+      {
+        "sourceRef": [
+          "M_policy"
+        ],
+        "targetRef": "M_policy-input"
+      }
+    ],
+    [
+      "M_produce",
+      "bpmn:DataOutputAssociation",
+      "M_review.dataOutputAssociations",
+      {
+        "sourceRef": [
+          "M_booking-output"
+        ],
+        "targetRef": "M_booking-ref"
+      }
+    ],
+    [
+      "M_persist",
+      "bpmn:DataOutputAssociation",
+      "M_review.dataOutputAssociations",
+      {
+        "sourceRef": [
+          "M_booking-output"
+        ],
+        "targetRef": "M_ledger-ref"
+      }
+    ],
+    [
+      "M_emit",
+      "bpmn:DataInputAssociation",
+      "M_confirmed.dataInputAssociations",
+      {
+        "sourceRef": [
+          "M_booking-ref"
+        ],
+        "targetRef": "M_confirmation-input"
+      }
+    ],
+    [
+      "M_return-result",
+      "bpmn:DataOutputAssociation",
+      "M_review.dataOutputAssociations",
+      {
+        "sourceRef": [
+          "M_booking-output"
+        ],
+        "targetRef": "M_result"
+      }
+    ]
+  ],
+  "visible": [
+    {
+      "plane": "M_invoice-review",
+      "shapes": [
+        "M_received",
+        "M_review",
+        "M_confirmed",
+        "M_invoice-ref",
+        "M_booking-ref",
+        "M_ledger-ref",
+        "M_policy",
+        "M_result",
+        "M_note",
+        "M_evidence-group"
+      ],
+      "edges": [
+        "M_d1",
+        "M_d2",
+        "M_explains",
+        "M_capture",
+        "M_consume",
+        "M_apply-policy",
+        "M_produce",
+        "M_persist",
+        "M_emit",
+        "M_return-result"
+      ]
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "Invoice to recorded result",
+      "path": [
+        "M_received",
+        "M_capture",
+        "M_invoice-ref",
+        "M_consume",
+        "M_review",
+        "M_produce",
+        "M_booking-ref",
+        "M_emit",
+        "M_confirmed"
+      ],
+      "expected": "Catching output and throwing input associations retain actual IO references while visibly docking on their Events."
+    },
+    {
+      "name": "Policy control",
+      "path": [
+        "M_policy",
+        "M_apply-policy",
+        "M_review"
+      ],
+      "expected": "Process-level policy input is visible; Activity IO stays semantic substructure, with no invented payload icons."
+    },
+    {
+      "name": "Persistence and documented evidence",
+      "path": [
+        "M_review",
+        "M_persist",
+        "M_ledger-ref",
+        "M_return-result",
+        "M_result",
+        "M_note",
+        "M_evidence-group"
+      ],
+      "expected": "The ledger is persistent store information; the output, data-state labels and intentional note remain visible, not converted into control flow."
+    }
+  ],
+  "review": {
+    "reference": "Native input/output arrows, state labels [received] and [reviewed], store cylinder, dotted Data Associations, category-backed Group, and the exact intentional annotation. Backing Data Objects and Activity/Event IO have no invented glyphs.",
+    "intentionalCrossings": [],
+    "status": "not_run"
+  }
+}

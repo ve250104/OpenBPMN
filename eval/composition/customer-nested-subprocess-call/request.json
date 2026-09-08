@@ -1,0 +1,407 @@
+{
+  "evidence": [
+    {
+      "key": "synthetic-specification",
+      "source": "Authored synthetic composition specification",
+      "summary": "Nested expanded and collapsed Subprocesses with a same-file Call Activity — an artificial acceptance case, not a deployment or interview.",
+      "locator": "eval/composition/customer-nested-subprocess-call/expected.json"
+    }
+  ],
+  "links": [
+    {
+      "elementRef": "onboarding-model",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:Definitions in the definitions document: {\"name\":\"Customer qualification and activation\",\"targetNamespace\":\"urn:process-model:onboarding-model\"}"
+    },
+    {
+      "elementRef": "onboarding",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:Process in M_onboarding-model.rootElements: {\"name\":\"Onboard a business customer\",\"isExecutable\":false}"
+    },
+    {
+      "elementRef": "intake",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:StartEvent in M_onboarding.flowElements: {\"name\":\"Customer accepted\"}"
+    },
+    {
+      "elementRef": "qualify",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SubProcess in M_onboarding.flowElements: {\"name\":\"Qualify customer\"}"
+    },
+    {
+      "elementRef": "activate",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:CallActivity in M_onboarding.flowElements: {\"name\":\"Activate customer account\",\"calledElement\":{\"namespace\":\"urn:process-model:onboarding-model\",\"localName\":\"M_activation\"}}"
+    },
+    {
+      "elementRef": "done",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:EndEvent in M_onboarding.flowElements: {\"name\":\"Customer onboarded\"}"
+    },
+    {
+      "elementRef": "qstart",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:StartEvent in M_qualify.flowElements: {\"name\":\"Qualification started\"}"
+    },
+    {
+      "elementRef": "verify",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SubProcess in M_qualify.flowElements: {\"name\":\"Verify company identity\"}"
+    },
+    {
+      "elementRef": "qend",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:EndEvent in M_qualify.flowElements: {\"name\":\"Customer qualified\"}"
+    },
+    {
+      "elementRef": "vstart",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:StartEvent in M_verify.flowElements: {\"name\":\"Verification started\"}"
+    },
+    {
+      "elementRef": "review",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:UserTask in M_verify.flowElements: {\"name\":\"Review company evidence\"}"
+    },
+    {
+      "elementRef": "vend",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:EndEvent in M_verify.flowElements: {\"name\":\"Identity verified\"}"
+    },
+    {
+      "elementRef": "n1",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_onboarding.flowElements: {\"sourceRef\":\"M_intake\",\"targetRef\":\"M_qualify\"}"
+    },
+    {
+      "elementRef": "n2",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_onboarding.flowElements: {\"sourceRef\":\"M_qualify\",\"targetRef\":\"M_activate\"}"
+    },
+    {
+      "elementRef": "n3",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_onboarding.flowElements: {\"sourceRef\":\"M_activate\",\"targetRef\":\"M_done\"}"
+    },
+    {
+      "elementRef": "q1",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_qualify.flowElements: {\"sourceRef\":\"M_qstart\",\"targetRef\":\"M_verify\"}"
+    },
+    {
+      "elementRef": "q2",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_qualify.flowElements: {\"sourceRef\":\"M_verify\",\"targetRef\":\"M_qend\"}"
+    },
+    {
+      "elementRef": "v1",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_verify.flowElements: {\"sourceRef\":\"M_vstart\",\"targetRef\":\"M_review\"}"
+    },
+    {
+      "elementRef": "v2",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_verify.flowElements: {\"sourceRef\":\"M_review\",\"targetRef\":\"M_vend\"}"
+    },
+    {
+      "elementRef": "activation",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:Process in M_onboarding-model.rootElements: {\"name\":\"Activate a verified account\",\"isExecutable\":false}"
+    },
+    {
+      "elementRef": "astart",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:StartEvent in M_activation.flowElements: {\"name\":\"Activation requested\"}"
+    },
+    {
+      "elementRef": "enable",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:ServiceTask in M_activation.flowElements: {\"name\":\"Enable account access\"}"
+    },
+    {
+      "elementRef": "aend",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:EndEvent in M_activation.flowElements: {\"name\":\"Account activated\"}"
+    },
+    {
+      "elementRef": "a1",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_activation.flowElements: {\"sourceRef\":\"M_astart\",\"targetRef\":\"M_enable\"}"
+    },
+    {
+      "elementRef": "a2",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_activation.flowElements: {\"sourceRef\":\"M_enable\",\"targetRef\":\"M_aend\"}"
+    }
+  ],
+  "schemaVersion": "1.0.0",
+  "profileVersion": "1.0.0",
+  "model": {
+    "key": "onboarding-model",
+    "name": "Customer qualification and activation",
+    "primaryRef": "onboarding",
+    "processes": [
+      {
+        "key": "onboarding",
+        "name": "Onboard a business customer",
+        "nodes": [
+          {
+            "key": "intake",
+            "type": "startEvent",
+            "containerRef": "onboarding",
+            "name": "Customer accepted",
+            "event": {
+              "kind": "none"
+            }
+          },
+          {
+            "key": "qualify",
+            "type": "subProcess",
+            "containerRef": "onboarding",
+            "name": "Qualify customer"
+          },
+          {
+            "key": "activate",
+            "type": "callActivity",
+            "containerRef": "onboarding",
+            "name": "Activate customer account",
+            "calledProcessRef": "activation"
+          },
+          {
+            "key": "done",
+            "type": "endEvent",
+            "containerRef": "onboarding",
+            "name": "Customer onboarded",
+            "event": {
+              "kind": "none"
+            }
+          },
+          {
+            "key": "qstart",
+            "type": "startEvent",
+            "containerRef": "qualify",
+            "name": "Qualification started",
+            "event": {
+              "kind": "none"
+            }
+          },
+          {
+            "key": "verify",
+            "type": "subProcess",
+            "containerRef": "qualify",
+            "name": "Verify company identity"
+          },
+          {
+            "key": "qend",
+            "type": "endEvent",
+            "containerRef": "qualify",
+            "name": "Customer qualified",
+            "event": {
+              "kind": "none"
+            }
+          },
+          {
+            "key": "vstart",
+            "type": "startEvent",
+            "containerRef": "verify",
+            "name": "Verification started",
+            "event": {
+              "kind": "none"
+            }
+          },
+          {
+            "key": "review",
+            "type": "userTask",
+            "containerRef": "verify",
+            "name": "Review company evidence"
+          },
+          {
+            "key": "vend",
+            "type": "endEvent",
+            "containerRef": "verify",
+            "name": "Identity verified",
+            "event": {
+              "kind": "none"
+            }
+          }
+        ],
+        "flows": [
+          {
+            "key": "n1",
+            "containerRef": "onboarding",
+            "sourceRef": "intake",
+            "targetRef": "qualify"
+          },
+          {
+            "key": "n2",
+            "containerRef": "onboarding",
+            "sourceRef": "qualify",
+            "targetRef": "activate"
+          },
+          {
+            "key": "n3",
+            "containerRef": "onboarding",
+            "sourceRef": "activate",
+            "targetRef": "done"
+          },
+          {
+            "key": "q1",
+            "containerRef": "qualify",
+            "sourceRef": "qstart",
+            "targetRef": "verify"
+          },
+          {
+            "key": "q2",
+            "containerRef": "qualify",
+            "sourceRef": "verify",
+            "targetRef": "qend"
+          },
+          {
+            "key": "v1",
+            "containerRef": "verify",
+            "sourceRef": "vstart",
+            "targetRef": "review"
+          },
+          {
+            "key": "v2",
+            "containerRef": "verify",
+            "sourceRef": "review",
+            "targetRef": "vend"
+          }
+        ]
+      },
+      {
+        "key": "activation",
+        "name": "Activate a verified account",
+        "nodes": [
+          {
+            "key": "astart",
+            "type": "startEvent",
+            "containerRef": "activation",
+            "name": "Activation requested",
+            "event": {
+              "kind": "none"
+            }
+          },
+          {
+            "key": "enable",
+            "type": "serviceTask",
+            "containerRef": "activation",
+            "name": "Enable account access"
+          },
+          {
+            "key": "aend",
+            "type": "endEvent",
+            "containerRef": "activation",
+            "name": "Account activated",
+            "event": {
+              "kind": "none"
+            }
+          }
+        ],
+        "flows": [
+          {
+            "key": "a1",
+            "containerRef": "activation",
+            "sourceRef": "astart",
+            "targetRef": "enable"
+          },
+          {
+            "key": "a2",
+            "containerRef": "activation",
+            "sourceRef": "enable",
+            "targetRef": "aend"
+          }
+        ]
+      }
+    ]
+  },
+  "presentation": {
+    "direction": "leftToRight",
+    "subprocesses": [
+      {
+        "elementRef": "qualify",
+        "expanded": true
+      },
+      {
+        "elementRef": "verify",
+        "expanded": false
+      }
+    ]
+  }
+}

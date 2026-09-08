@@ -1,0 +1,293 @@
+{
+  "title": "Provisioning timer and error recovery",
+  "facts": [
+    [
+      "M_recovery-model",
+      "bpmn:Definitions",
+      null,
+      {
+        "name": "Account provisioning with bounded recovery",
+        "targetNamespace": "urn:process-model:recovery-model"
+      }
+    ],
+    [
+      "M_provisioning-error",
+      "bpmn:Error",
+      "M_recovery-model.rootElements",
+      {
+        "name": "Provisioning failure",
+        "errorCode": "PROVISIONING_FAILED"
+      }
+    ],
+    [
+      "M_provisioning",
+      "bpmn:Process",
+      "M_recovery-model.rootElements",
+      {
+        "name": "Provision a customer account",
+        "isExecutable": false
+      }
+    ],
+    [
+      "M_requested",
+      "bpmn:StartEvent",
+      "M_provisioning.flowElements",
+      {
+        "name": "Account requested"
+      }
+    ],
+    [
+      "M_provision",
+      "bpmn:ServiceTask",
+      "M_provisioning.flowElements",
+      {
+        "name": "Provision account"
+      }
+    ],
+    [
+      "M_ready",
+      "bpmn:EndEvent",
+      "M_provisioning.flowElements",
+      {
+        "name": "Account ready"
+      }
+    ],
+    [
+      "M_late",
+      "bpmn:BoundaryEvent",
+      "M_provisioning.flowElements",
+      {
+        "name": "Two days elapsed",
+        "attachedToRef": "M_provision",
+        "cancelActivity": false
+      }
+    ],
+    [
+      "G_event_late",
+      "bpmn:TimerEventDefinition",
+      "M_late.eventDefinitions",
+      {
+        "timeDuration": {
+          "$type": "bpmn:FormalExpression",
+          "body": "P2D"
+        }
+      }
+    ],
+    [
+      "M_remind",
+      "bpmn:SendTask",
+      "M_provisioning.flowElements",
+      {
+        "name": "Send progress update"
+      }
+    ],
+    [
+      "M_reminded",
+      "bpmn:EndEvent",
+      "M_provisioning.flowElements",
+      {
+        "name": "Customer updated"
+      }
+    ],
+    [
+      "M_failed",
+      "bpmn:BoundaryEvent",
+      "M_provisioning.flowElements",
+      {
+        "name": "Provisioning failed",
+        "attachedToRef": "M_provision"
+      }
+    ],
+    [
+      "G_event_failed",
+      "bpmn:ErrorEventDefinition",
+      "M_failed.eventDefinitions",
+      {
+        "errorRef": "M_provisioning-error"
+      }
+    ],
+    [
+      "M_investigate",
+      "bpmn:ManualTask",
+      "M_provisioning.flowElements",
+      {
+        "name": "Investigate provisioning failure"
+      }
+    ],
+    [
+      "M_recoverable",
+      "bpmn:ExclusiveGateway",
+      "M_provisioning.flowElements",
+      {
+        "name": "Safe to retry?",
+        "default": "M_abandon"
+      }
+    ],
+    [
+      "M_unable",
+      "bpmn:EndEvent",
+      "M_provisioning.flowElements",
+      {
+        "name": "Provisioning unsuccessful"
+      }
+    ],
+    [
+      "G_event_unable",
+      "bpmn:ErrorEventDefinition",
+      "M_unable.eventDefinitions",
+      {
+        "errorRef": "M_provisioning-error"
+      }
+    ],
+    [
+      "M_r1",
+      "bpmn:SequenceFlow",
+      "M_provisioning.flowElements",
+      {
+        "sourceRef": "M_requested",
+        "targetRef": "M_provision"
+      }
+    ],
+    [
+      "M_r2",
+      "bpmn:SequenceFlow",
+      "M_provisioning.flowElements",
+      {
+        "sourceRef": "M_provision",
+        "targetRef": "M_ready"
+      }
+    ],
+    [
+      "M_r3",
+      "bpmn:SequenceFlow",
+      "M_provisioning.flowElements",
+      {
+        "sourceRef": "M_late",
+        "targetRef": "M_remind"
+      }
+    ],
+    [
+      "M_r4",
+      "bpmn:SequenceFlow",
+      "M_provisioning.flowElements",
+      {
+        "sourceRef": "M_remind",
+        "targetRef": "M_reminded"
+      }
+    ],
+    [
+      "M_r5",
+      "bpmn:SequenceFlow",
+      "M_provisioning.flowElements",
+      {
+        "sourceRef": "M_failed",
+        "targetRef": "M_investigate"
+      }
+    ],
+    [
+      "M_r6",
+      "bpmn:SequenceFlow",
+      "M_provisioning.flowElements",
+      {
+        "sourceRef": "M_investigate",
+        "targetRef": "M_recoverable"
+      }
+    ],
+    [
+      "M_retry",
+      "bpmn:SequenceFlow",
+      "M_provisioning.flowElements",
+      {
+        "sourceRef": "M_recoverable",
+        "targetRef": "M_provision",
+        "name": "Retry safe",
+        "conditionExpression": {
+          "$type": "bpmn:FormalExpression",
+          "body": "The cause is resolved and retry is safe"
+        }
+      }
+    ],
+    [
+      "M_abandon",
+      "bpmn:SequenceFlow",
+      "M_provisioning.flowElements",
+      {
+        "sourceRef": "M_recoverable",
+        "targetRef": "M_unable",
+        "name": "Otherwise"
+      }
+    ]
+  ],
+  "visible": [
+    {
+      "plane": "M_provisioning",
+      "shapes": [
+        "M_requested",
+        "M_provision",
+        "M_ready",
+        "M_late",
+        "M_remind",
+        "M_reminded",
+        "M_failed",
+        "M_investigate",
+        "M_recoverable",
+        "M_unable"
+      ],
+      "edges": [
+        "M_r1",
+        "M_r2",
+        "M_r3",
+        "M_r4",
+        "M_r5",
+        "M_r6",
+        "M_retry",
+        "M_abandon"
+      ]
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "Normal provisioning",
+      "path": [
+        "M_requested",
+        "M_provision",
+        "M_ready"
+      ],
+      "expected": "Successful completion does not traverse recovery."
+    },
+    {
+      "name": "Slow provisioning",
+      "path": [
+        "M_late",
+        "M_remind",
+        "M_reminded"
+      ],
+      "expected": "The dashed timer boundary launches an update without cancelling provisioning."
+    },
+    {
+      "name": "Repair and retry",
+      "path": [
+        "M_failed",
+        "M_investigate",
+        "M_recoverable",
+        "M_provision"
+      ],
+      "expected": "The error interrupts provisioning; only an explicit safe-retry decision retries."
+    },
+    {
+      "name": "Unrecoverable failure",
+      "path": [
+        "M_failed",
+        "M_investigate",
+        "M_recoverable",
+        "M_unable"
+      ],
+      "expected": "The default exit throws the named provisioning error."
+    }
+  ],
+  "review": {
+    "reference": "Both boundaries touch only the provisioning task; the timer is dashed, the error solid, and the retry return remains distinguishable.",
+    "intentionalCrossings": [],
+    "status": "not_run"
+  }
+}

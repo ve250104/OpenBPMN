@@ -1,0 +1,192 @@
+{
+  "schemaVersion": "1.0.0",
+  "profileVersion": "1.0.0",
+  "model": {
+    "key": "purchaseApproval",
+    "name": "Purchase approval",
+    "primaryRef": "purchase",
+    "processes": [
+      {
+        "key": "purchase",
+        "name": "Purchase approval",
+        "nodes": [
+          {
+            "key": "submitted",
+            "type": "startEvent",
+            "containerRef": "purchase",
+            "name": "Request submitted",
+            "event": { "kind": "none" }
+          },
+          { "key": "check", "type": "userTask", "containerRef": "purchase", "name": "Check request details" },
+          {
+            "key": "complete",
+            "type": "exclusiveGateway",
+            "containerRef": "purchase",
+            "name": "Request complete?",
+            "defaultFlowRef": "missing"
+          },
+          { "key": "correct", "type": "userTask", "containerRef": "purchase", "name": "Correct request" },
+          { "key": "review", "type": "userTask", "containerRef": "purchase", "name": "Review purchase" },
+          {
+            "key": "approved",
+            "type": "exclusiveGateway",
+            "containerRef": "purchase",
+            "name": "Approved?",
+            "defaultFlowRef": "rejection"
+          },
+          { "key": "order", "type": "userTask", "containerRef": "purchase", "name": "Prepare purchase order" },
+          { "key": "send", "type": "sendTask", "containerRef": "purchase", "name": "Send purchase order" },
+          {
+            "key": "sent",
+            "type": "endEvent",
+            "containerRef": "purchase",
+            "name": "Purchase order sent",
+            "event": { "kind": "none" }
+          },
+          {
+            "key": "rejected",
+            "type": "endEvent",
+            "containerRef": "purchase",
+            "name": "Request rejected",
+            "event": { "kind": "none" }
+          }
+        ],
+        "flows": [
+          { "key": "startCheck", "containerRef": "purchase", "sourceRef": "submitted", "targetRef": "check" },
+          { "key": "checkResult", "containerRef": "purchase", "sourceRef": "check", "targetRef": "complete" },
+          {
+            "key": "ready",
+            "containerRef": "purchase",
+            "sourceRef": "complete",
+            "targetRef": "review",
+            "name": "Complete",
+            "condition": "All required details supplied"
+          },
+          {
+            "key": "missing",
+            "containerRef": "purchase",
+            "sourceRef": "complete",
+            "targetRef": "correct",
+            "name": "Missing details"
+          },
+          { "key": "retry", "containerRef": "purchase", "sourceRef": "correct", "targetRef": "check" },
+          { "key": "reviewResult", "containerRef": "purchase", "sourceRef": "review", "targetRef": "approved" },
+          {
+            "key": "approval",
+            "containerRef": "purchase",
+            "sourceRef": "approved",
+            "targetRef": "order",
+            "name": "Yes",
+            "condition": "Budget owner approves"
+          },
+          {
+            "key": "rejection",
+            "containerRef": "purchase",
+            "sourceRef": "approved",
+            "targetRef": "rejected",
+            "name": "No"
+          },
+          { "key": "orderPrepared", "containerRef": "purchase", "sourceRef": "order", "targetRef": "send" },
+          { "key": "orderSent", "containerRef": "purchase", "sourceRef": "send", "targetRef": "sent" }
+        ],
+        "lanes": [
+          {
+            "key": "requester",
+            "name": "Requester",
+            "parentRef": "purchase",
+            "flowNodeRefs": ["submitted", "correct"]
+          },
+          {
+            "key": "operations",
+            "name": "Operations",
+            "parentRef": "purchase",
+            "flowNodeRefs": ["check", "complete", "order", "send", "sent"]
+          },
+          {
+            "key": "budgetOwner",
+            "name": "Budget owner",
+            "parentRef": "purchase",
+            "flowNodeRefs": ["review", "approved", "rejected"]
+          }
+        ]
+      }
+    ]
+  },
+  "evidence": [
+    {
+      "key": "synthetic",
+      "source": "Synthetic purchase example (MIT)",
+      "summary": "For the selected low-value scope, Operations checks details; the requester corrects omissions; the budget owner approves or rejects; Operations prepares and sends approved purchase orders."
+    }
+  ],
+  "decisions": [
+    {
+      "key": "scope",
+      "description": "This authored example deliberately covers only low-value requests requiring one budget approval; it does not represent the richer evaluation case or a real organization.",
+      "elementRefs": ["purchase"],
+      "evidenceRefs": ["synthetic"]
+    }
+  ],
+  "links": [
+    {
+      "elementRef": "check",
+      "assertion": "Operations checks details.",
+      "basis": "evidence",
+      "supportRefs": ["synthetic"]
+    },
+    {
+      "elementRef": "correct",
+      "assertion": "The requester supplies missing details.",
+      "basis": "evidence",
+      "supportRefs": ["synthetic"]
+    },
+    {
+      "elementRef": "review",
+      "assertion": "The budget owner decides approval.",
+      "basis": "evidence",
+      "supportRefs": ["synthetic"]
+    },
+    {
+      "elementRef": "order",
+      "assertion": "Operations prepares approved orders.",
+      "basis": "evidence",
+      "supportRefs": ["synthetic"]
+    },
+    {
+      "elementRef": "send",
+      "assertion": "Operations sends orders.",
+      "basis": "evidence",
+      "supportRefs": ["synthetic"]
+    },
+    {
+      "elementRef": "ready",
+      "assertion": "Only complete requests proceed.",
+      "basis": "evidence",
+      "supportRefs": ["synthetic"]
+    },
+    {
+      "elementRef": "approval",
+      "assertion": "Only approved requests become orders.",
+      "basis": "evidence",
+      "supportRefs": ["synthetic"]
+    },
+    {
+      "elementRef": "requester",
+      "assertion": "Requester owns submission and correction.",
+      "basis": "evidence",
+      "supportRefs": ["synthetic"]
+    },
+    {
+      "elementRef": "operations",
+      "assertion": "Operations owns checks and order handling.",
+      "basis": "evidence",
+      "supportRefs": ["synthetic"]
+    },
+    {
+      "elementRef": "budgetOwner",
+      "assertion": "Budget owner owns approval and rejection.",
+      "basis": "evidence",
+      "supportRefs": ["synthetic"]
+    }
+  ]
+}

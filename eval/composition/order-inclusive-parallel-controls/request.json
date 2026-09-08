@@ -1,0 +1,393 @@
+{
+  "evidence": [
+    {
+      "key": "synthetic-specification",
+      "source": "Authored synthetic composition specification",
+      "summary": "Inclusive applicable checks followed by parallel mandatory controls — an artificial acceptance case, not a deployment or interview.",
+      "locator": "eval/composition/order-inclusive-parallel-controls/expected.json"
+    }
+  ],
+  "links": [
+    {
+      "elementRef": "controls-model",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:Definitions in the definitions document: {\"name\":\"Order controls and parallel completion\",\"targetNamespace\":\"urn:process-model:controls-model\"}"
+    },
+    {
+      "elementRef": "controls",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:Process in M_controls-model.rootElements: {\"name\":\"Check and complete an order\",\"isExecutable\":false}"
+    },
+    {
+      "elementRef": "received",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:StartEvent in M_controls.flowElements: {\"name\":\"Order received\"}"
+    },
+    {
+      "elementRef": "checks",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:InclusiveGateway in M_controls.flowElements: {\"name\":\"Which checks apply?\",\"default\":\"M_baseline-route\"}"
+    },
+    {
+      "elementRef": "tax",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:BusinessRuleTask in M_controls.flowElements: {\"name\":\"Check tax treatment\"}"
+    },
+    {
+      "elementRef": "fraud",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:UserTask in M_controls.flowElements: {\"name\":\"Review fraud indicators\"}"
+    },
+    {
+      "elementRef": "baseline",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:Task in M_controls.flowElements: {\"name\":\"Record baseline check\"}"
+    },
+    {
+      "elementRef": "checks-complete",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:InclusiveGateway in M_controls.flowElements: {\"name\":\"Applicable checks complete\"}"
+    },
+    {
+      "elementRef": "finish",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:ParallelGateway in M_controls.flowElements: {\"name\":\"Complete both controls\"}"
+    },
+    {
+      "elementRef": "notify",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SendTask in M_controls.flowElements: {\"name\":\"Send order confirmation\"}"
+    },
+    {
+      "elementRef": "archive",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:ServiceTask in M_controls.flowElements: {\"name\":\"Archive control evidence\"}"
+    },
+    {
+      "elementRef": "finished",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:ParallelGateway in M_controls.flowElements: {\"name\":\"Both controls complete\"}"
+    },
+    {
+      "elementRef": "done",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:EndEvent in M_controls.flowElements: {\"name\":\"Order controlled\"}"
+    },
+    {
+      "elementRef": "j1",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_controls.flowElements: {\"sourceRef\":\"M_received\",\"targetRef\":\"M_checks\"}"
+    },
+    {
+      "elementRef": "tax-route",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_controls.flowElements: {\"sourceRef\":\"M_checks\",\"targetRef\":\"M_tax\",\"name\":\"Tax review required\",\"conditionExpression\":{\"$type\":\"bpmn:FormalExpression\",\"body\":\"Order has cross-border tax exposure\"}}"
+    },
+    {
+      "elementRef": "fraud-route",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_controls.flowElements: {\"sourceRef\":\"M_checks\",\"targetRef\":\"M_fraud\",\"name\":\"Fraud review required\",\"conditionExpression\":{\"$type\":\"bpmn:FormalExpression\",\"body\":\"Order triggers fraud indicators\"}}"
+    },
+    {
+      "elementRef": "baseline-route",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_controls.flowElements: {\"sourceRef\":\"M_checks\",\"targetRef\":\"M_baseline\",\"name\":\"Otherwise\"}"
+    },
+    {
+      "elementRef": "j2",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_controls.flowElements: {\"sourceRef\":\"M_tax\",\"targetRef\":\"M_checks-complete\"}"
+    },
+    {
+      "elementRef": "j3",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_controls.flowElements: {\"sourceRef\":\"M_fraud\",\"targetRef\":\"M_checks-complete\"}"
+    },
+    {
+      "elementRef": "j4",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_controls.flowElements: {\"sourceRef\":\"M_baseline\",\"targetRef\":\"M_checks-complete\"}"
+    },
+    {
+      "elementRef": "j5",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_controls.flowElements: {\"sourceRef\":\"M_checks-complete\",\"targetRef\":\"M_finish\"}"
+    },
+    {
+      "elementRef": "j6",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_controls.flowElements: {\"sourceRef\":\"M_finish\",\"targetRef\":\"M_notify\"}"
+    },
+    {
+      "elementRef": "j7",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_controls.flowElements: {\"sourceRef\":\"M_finish\",\"targetRef\":\"M_archive\"}"
+    },
+    {
+      "elementRef": "j8",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_controls.flowElements: {\"sourceRef\":\"M_notify\",\"targetRef\":\"M_finished\"}"
+    },
+    {
+      "elementRef": "j9",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_controls.flowElements: {\"sourceRef\":\"M_archive\",\"targetRef\":\"M_finished\"}"
+    },
+    {
+      "elementRef": "j10",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_controls.flowElements: {\"sourceRef\":\"M_finished\",\"targetRef\":\"M_done\"}"
+    }
+  ],
+  "schemaVersion": "1.0.0",
+  "profileVersion": "1.0.0",
+  "model": {
+    "key": "controls-model",
+    "name": "Order controls and parallel completion",
+    "primaryRef": "controls",
+    "processes": [
+      {
+        "key": "controls",
+        "name": "Check and complete an order",
+        "nodes": [
+          {
+            "key": "received",
+            "type": "startEvent",
+            "name": "Order received",
+            "containerRef": "controls",
+            "event": {
+              "kind": "none"
+            }
+          },
+          {
+            "key": "checks",
+            "type": "inclusiveGateway",
+            "name": "Which checks apply?",
+            "containerRef": "controls",
+            "defaultFlowRef": "baseline-route"
+          },
+          {
+            "key": "tax",
+            "type": "businessRuleTask",
+            "name": "Check tax treatment",
+            "containerRef": "controls"
+          },
+          {
+            "key": "fraud",
+            "type": "userTask",
+            "name": "Review fraud indicators",
+            "containerRef": "controls"
+          },
+          {
+            "key": "baseline",
+            "type": "task",
+            "name": "Record baseline check",
+            "containerRef": "controls"
+          },
+          {
+            "key": "checks-complete",
+            "type": "inclusiveGateway",
+            "name": "Applicable checks complete",
+            "containerRef": "controls"
+          },
+          {
+            "key": "finish",
+            "type": "parallelGateway",
+            "name": "Complete both controls",
+            "containerRef": "controls"
+          },
+          {
+            "key": "notify",
+            "type": "sendTask",
+            "name": "Send order confirmation",
+            "containerRef": "controls"
+          },
+          {
+            "key": "archive",
+            "type": "serviceTask",
+            "name": "Archive control evidence",
+            "containerRef": "controls"
+          },
+          {
+            "key": "finished",
+            "type": "parallelGateway",
+            "name": "Both controls complete",
+            "containerRef": "controls"
+          },
+          {
+            "key": "done",
+            "type": "endEvent",
+            "name": "Order controlled",
+            "containerRef": "controls",
+            "event": {
+              "kind": "none"
+            }
+          }
+        ],
+        "flows": [
+          {
+            "key": "j1",
+            "containerRef": "controls",
+            "sourceRef": "received",
+            "targetRef": "checks"
+          },
+          {
+            "key": "tax-route",
+            "containerRef": "controls",
+            "sourceRef": "checks",
+            "targetRef": "tax",
+            "name": "Tax review required",
+            "condition": "Order has cross-border tax exposure"
+          },
+          {
+            "key": "fraud-route",
+            "containerRef": "controls",
+            "sourceRef": "checks",
+            "targetRef": "fraud",
+            "name": "Fraud review required",
+            "condition": "Order triggers fraud indicators"
+          },
+          {
+            "key": "baseline-route",
+            "containerRef": "controls",
+            "sourceRef": "checks",
+            "targetRef": "baseline",
+            "name": "Otherwise"
+          },
+          {
+            "key": "j2",
+            "containerRef": "controls",
+            "sourceRef": "tax",
+            "targetRef": "checks-complete"
+          },
+          {
+            "key": "j3",
+            "containerRef": "controls",
+            "sourceRef": "fraud",
+            "targetRef": "checks-complete"
+          },
+          {
+            "key": "j4",
+            "containerRef": "controls",
+            "sourceRef": "baseline",
+            "targetRef": "checks-complete"
+          },
+          {
+            "key": "j5",
+            "containerRef": "controls",
+            "sourceRef": "checks-complete",
+            "targetRef": "finish"
+          },
+          {
+            "key": "j6",
+            "containerRef": "controls",
+            "sourceRef": "finish",
+            "targetRef": "notify"
+          },
+          {
+            "key": "j7",
+            "containerRef": "controls",
+            "sourceRef": "finish",
+            "targetRef": "archive"
+          },
+          {
+            "key": "j8",
+            "containerRef": "controls",
+            "sourceRef": "notify",
+            "targetRef": "finished"
+          },
+          {
+            "key": "j9",
+            "containerRef": "controls",
+            "sourceRef": "archive",
+            "targetRef": "finished"
+          },
+          {
+            "key": "j10",
+            "containerRef": "controls",
+            "sourceRef": "finished",
+            "targetRef": "done"
+          }
+        ]
+      }
+    ]
+  }
+}

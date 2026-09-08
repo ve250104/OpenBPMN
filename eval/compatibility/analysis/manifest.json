@@ -1,0 +1,143 @@
+{
+  "manifestVersion": "1.0.0",
+  "license": "MIT",
+  "source": "Authored synthetic cases; no private interviews or event data.",
+  "profile": "celonis-analysis-conformance",
+  "ruleVersion": "1.0.0",
+  "tenantVerification": "unverified",
+  "fixtures": [
+    {
+      "id": "straight-through",
+      "input": "straight-through.json",
+      "expectedActivityNames": [
+        "Register request",
+        "Review request"
+      ],
+      "expectedEdges": [
+        [
+          "start",
+          "register"
+        ],
+        [
+          "register",
+          "review"
+        ],
+        [
+          "review",
+          "end"
+        ]
+      ],
+      "expectedLocalFit": "passed",
+      "tenantImport": "not_run",
+      "tenantRoundTrip": "not_run"
+    },
+    {
+      "id": "xor",
+      "input": "xor.json",
+      "expectedActivityNames": [
+        "Review request",
+        "Release approved request",
+        "Notify rejection"
+      ],
+      "expectedEdges": [
+        [
+          "start",
+          "review"
+        ],
+        [
+          "review",
+          "decision"
+        ],
+        [
+          "decision",
+          "approve"
+        ],
+        [
+          "decision",
+          "decline"
+        ],
+        [
+          "approve",
+          "approved"
+        ],
+        [
+          "decline",
+          "rejected"
+        ]
+      ],
+      "expectedLocalFit": "passed",
+      "tenantImport": "not_run",
+      "tenantRoundTrip": "not_run"
+    },
+    {
+      "id": "and",
+      "input": "and.json",
+      "expectedActivityNames": [
+        "Check identity",
+        "Check access"
+      ],
+      "expectedEdges": [
+        [
+          "start",
+          "split"
+        ],
+        [
+          "split",
+          "identity"
+        ],
+        [
+          "split",
+          "access"
+        ],
+        [
+          "identity",
+          "join"
+        ],
+        [
+          "access",
+          "join"
+        ],
+        [
+          "join",
+          "end"
+        ]
+      ],
+      "expectedLocalFit": "passed",
+      "tenantImport": "not_run",
+      "tenantRoundTrip": "not_run"
+    },
+    {
+      "id": "rework",
+      "input": "rework.json",
+      "expectedActivityNames": [
+        "Review request",
+        "Request clarification"
+      ],
+      "expectedEdges": [
+        [
+          "start",
+          "review"
+        ],
+        [
+          "review",
+          "decision"
+        ],
+        [
+          "decision",
+          "end"
+        ],
+        [
+          "decision",
+          "clarify"
+        ],
+        [
+          "clarify",
+          "review"
+        ]
+      ],
+      "expectedLocalFit": "passed",
+      "tenantImport": "not_run",
+      "tenantRoundTrip": "not_run"
+    }
+  ]
+}

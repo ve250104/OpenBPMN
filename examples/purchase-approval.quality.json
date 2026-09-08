@@ -1,0 +1,164 @@
+{
+  "reportVersion": "1.0.0",
+  "toolVersion": "0.1.0-dev.0",
+  "profileVersion": "1.0.0",
+  "export": {
+    "requested": "auto",
+    "outcome": "clean",
+    "cleanEligible": true,
+    "expertOverride": false
+  },
+  "checks": [
+    {
+      "id": "input",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "xml",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "xsd",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "semantics",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "profile",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "di",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "render",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "evidence",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "consulting",
+      "status": "passed",
+      "findingRefs": []
+    }
+  ],
+  "findings": [],
+  "context": {
+    "evidence": [
+      {
+        "key": "synthetic",
+        "source": "Synthetic purchase example (MIT)",
+        "summary": "For the selected low-value scope, Operations checks details; the requester corrects omissions; the budget owner approves or rejects; Operations prepares and sends approved purchase orders."
+      }
+    ],
+    "decisions": [
+      {
+        "key": "scope",
+        "description": "This authored example deliberately covers only low-value requests requiring one budget approval; it does not represent the richer evaluation case or a real organization.",
+        "elementRefs": [
+          "purchase"
+        ],
+        "evidenceRefs": [
+          "synthetic"
+        ]
+      }
+    ],
+    "issues": [],
+    "links": [
+      {
+        "elementRef": "check",
+        "assertion": "Operations checks details.",
+        "basis": "evidence",
+        "supportRefs": [
+          "synthetic"
+        ]
+      },
+      {
+        "elementRef": "correct",
+        "assertion": "The requester supplies missing details.",
+        "basis": "evidence",
+        "supportRefs": [
+          "synthetic"
+        ]
+      },
+      {
+        "elementRef": "review",
+        "assertion": "The budget owner decides approval.",
+        "basis": "evidence",
+        "supportRefs": [
+          "synthetic"
+        ]
+      },
+      {
+        "elementRef": "order",
+        "assertion": "Operations prepares approved orders.",
+        "basis": "evidence",
+        "supportRefs": [
+          "synthetic"
+        ]
+      },
+      {
+        "elementRef": "send",
+        "assertion": "Operations sends orders.",
+        "basis": "evidence",
+        "supportRefs": [
+          "synthetic"
+        ]
+      },
+      {
+        "elementRef": "ready",
+        "assertion": "Only complete requests proceed.",
+        "basis": "evidence",
+        "supportRefs": [
+          "synthetic"
+        ]
+      },
+      {
+        "elementRef": "approval",
+        "assertion": "Only approved requests become orders.",
+        "basis": "evidence",
+        "supportRefs": [
+          "synthetic"
+        ]
+      },
+      {
+        "elementRef": "requester",
+        "assertion": "Requester owns submission and correction.",
+        "basis": "evidence",
+        "supportRefs": [
+          "synthetic"
+        ]
+      },
+      {
+        "elementRef": "operations",
+        "assertion": "Operations owns checks and order handling.",
+        "basis": "evidence",
+        "supportRefs": [
+          "synthetic"
+        ]
+      },
+      {
+        "elementRef": "budgetOwner",
+        "assertion": "Budget owner owns approval and rejection.",
+        "basis": "evidence",
+        "supportRefs": [
+          "synthetic"
+        ]
+      }
+    ]
+  },
+  "modelKey": "purchaseApproval"
+}

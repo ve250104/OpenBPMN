@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "license": "MIT",
+  "dataClass": "authored synthetic fiction; no real client data",
+  "cases": [
+    { "id": "automotive-ar-discovery", "heldOut": false, "source": "../fixtures/automotive-ar-discovery/source-pack.md", "reviewer": "reviewer-expectations.json" },
+    { "id": "purchase-approval", "heldOut": false, "source": "purchase-approval.md", "reviewer": "reviewer-expectations.json" },
+    { "id": "customer-onboarding", "heldOut": false, "source": "customer-onboarding.md", "reviewer": "reviewer-expectations.json" },
+    { "id": "support-escalation", "heldOut": false, "source": "support-escalation.md", "reviewer": "reviewer-expectations.json" },
+    { "id": "employee-offboarding", "heldOut": true, "source": "employee-offboarding.md", "reviewer": "reviewer-expectations.json" },
+    { "id": "service-incident", "heldOut": true, "source": "service-incident.md", "reviewer": "reviewer-expectations.json" }
+  ],
+  "executionStatus": "not_run",
+  "instructions": "Give a modeling agent only its case source and applicable human answers. Do not expose this manifest, other cases, or reviewer-expectations.json. Authored expectations are not an observed model result."
+}

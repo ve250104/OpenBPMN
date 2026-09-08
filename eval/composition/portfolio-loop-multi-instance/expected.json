@@ -1,0 +1,199 @@
+{
+  "title": "Standard loop and both multi-instance modes",
+  "facts": [
+    [
+      "M_portfolio-model",
+      "bpmn:Definitions",
+      null,
+      {
+        "name": "Portfolio review and distribution",
+        "targetNamespace": "urn:process-model:portfolio-model"
+      }
+    ],
+    [
+      "M_portfolio",
+      "bpmn:Process",
+      "M_portfolio-model.rootElements",
+      {
+        "name": "Review and distribute a portfolio update",
+        "isExecutable": false
+      }
+    ],
+    [
+      "M_requested",
+      "bpmn:StartEvent",
+      "M_portfolio.flowElements",
+      {
+        "name": "Portfolio update requested"
+      }
+    ],
+    [
+      "M_refine",
+      "bpmn:UserTask",
+      "M_portfolio.flowElements",
+      {
+        "name": "Refine investment narrative",
+        "loopCharacteristics": {
+          "$type": "bpmn:StandardLoopCharacteristics",
+          "loopCondition": {
+            "$type": "bpmn:FormalExpression",
+            "body": "Material review comments remain"
+          }
+        }
+      }
+    ],
+    [
+      "M_signoff",
+      "bpmn:ManualTask",
+      "M_portfolio.flowElements",
+      {
+        "name": "Collect partner sign-offs",
+        "loopCharacteristics": {
+          "$type": "bpmn:MultiInstanceLoopCharacteristics",
+          "isSequential": true
+        }
+      }
+    ],
+    [
+      "M_distribute",
+      "bpmn:ServiceTask",
+      "M_portfolio.flowElements",
+      {
+        "name": "Distribute investor updates",
+        "loopCharacteristics": {
+          "$type": "bpmn:MultiInstanceLoopCharacteristics"
+        }
+      }
+    ],
+    [
+      "M_complete",
+      "bpmn:EndEvent",
+      "M_portfolio.flowElements",
+      {
+        "name": "Portfolio update distributed"
+      }
+    ],
+    [
+      "M_l1",
+      "bpmn:SequenceFlow",
+      "M_portfolio.flowElements",
+      {
+        "sourceRef": "M_requested",
+        "targetRef": "M_refine"
+      }
+    ],
+    [
+      "M_l2",
+      "bpmn:SequenceFlow",
+      "M_portfolio.flowElements",
+      {
+        "sourceRef": "M_refine",
+        "targetRef": "M_signoff"
+      }
+    ],
+    [
+      "M_l3",
+      "bpmn:SequenceFlow",
+      "M_portfolio.flowElements",
+      {
+        "sourceRef": "M_signoff",
+        "targetRef": "M_distribute"
+      }
+    ],
+    [
+      "M_l4",
+      "bpmn:SequenceFlow",
+      "M_portfolio.flowElements",
+      {
+        "sourceRef": "M_distribute",
+        "targetRef": "M_complete"
+      }
+    ],
+    [
+      "G_lanes_portfolio",
+      "bpmn:LaneSet",
+      "M_portfolio.laneSets",
+      {}
+    ],
+    [
+      "M_investment-team",
+      "bpmn:Lane",
+      "G_lanes_portfolio.lanes",
+      {
+        "name": "Investment team",
+        "flowNodeRef": [
+          "M_refine",
+          "M_requested",
+          "M_signoff"
+        ]
+      }
+    ],
+    [
+      "M_operations",
+      "bpmn:Lane",
+      "G_lanes_portfolio.lanes",
+      {
+        "name": "Investor operations",
+        "flowNodeRef": [
+          "M_complete",
+          "M_distribute"
+        ]
+      }
+    ]
+  ],
+  "visible": [
+    {
+      "plane": "M_portfolio",
+      "shapes": [
+        "M_requested",
+        "M_refine",
+        "M_signoff",
+        "M_distribute",
+        "M_complete",
+        "M_investment-team",
+        "M_operations"
+      ],
+      "edges": [
+        "M_l1",
+        "M_l2",
+        "M_l3",
+        "M_l4"
+      ]
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "Review complete first time",
+      "path": [
+        "M_requested",
+        "M_refine",
+        "M_signoff",
+        "M_distribute",
+        "M_complete"
+      ],
+      "expected": "Narrative executes once before its loop condition is evaluated; there is no invented precondition."
+    },
+    {
+      "name": "Narrative rework",
+      "path": [
+        "M_refine",
+        "M_refine",
+        "M_signoff"
+      ],
+      "expected": "The standard loop repeats while material comments remain."
+    },
+    {
+      "name": "Different iteration modes",
+      "path": [
+        "M_signoff",
+        "M_distribute"
+      ],
+      "expected": "Partner sign-offs are sequential instances; investor distributions are parallel instances. No executable collection or recipient count is invented."
+    }
+  ],
+  "review": {
+    "reference": "User/manual/service task markers plus circular standard-loop, horizontal sequential-MI, and vertical parallel-MI markers; each within its responsible lane.",
+    "intentionalCrossings": [],
+    "status": "not_run"
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "schemaVersion": "1.0.0",
+  "profileVersion": "1.0.0",
+  "model": {
+    "key": "invoiceReview",
+    "name": "Invoice review",
+    "primaryRef": "reviewProcess",
+    "processes": [
+      {
+        "key": "reviewProcess",
+        "name": "Invoice review",
+        "nodes": [
+          {
+            "key": "received",
+            "type": "startEvent",
+            "containerRef": "reviewProcess",
+            "name": "Invoice received",
+            "event": { "kind": "none" }
+          },
+          { "key": "review", "type": "task", "containerRef": "reviewProcess", "name": "Review invoice" },
+          {
+            "key": "completed",
+            "type": "endEvent",
+            "containerRef": "reviewProcess",
+            "name": "Invoice reviewed",
+            "event": { "kind": "none" }
+          }
+        ],
+        "flows": [
+          { "key": "toReview", "containerRef": "reviewProcess", "sourceRef": "received", "targetRef": "review" },
+          { "key": "toCompletion", "containerRef": "reviewProcess", "sourceRef": "review", "targetRef": "completed" }
+        ]
+      }
+    ]
+  },
+  "evidence": [
+    {
+      "key": "description",
+      "source": "Synthetic example",
+      "summary": "An invoice is received, reviewed, and then the review is complete."
+    }
+  ],
+  "links": [
+    {
+      "elementRef": "received",
+      "assertion": "Receipt starts the review.",
+      "basis": "evidence",
+      "supportRefs": ["description"]
+    },
+    {
+      "elementRef": "review",
+      "assertion": "The invoice is reviewed.",
+      "basis": "evidence",
+      "supportRefs": ["description"]
+    },
+    {
+      "elementRef": "completed",
+      "assertion": "The review then completes.",
+      "basis": "evidence",
+      "supportRefs": ["description"]
+    },
+    {
+      "elementRef": "toReview",
+      "assertion": "Receipt precedes review.",
+      "basis": "evidence",
+      "supportRefs": ["description"]
+    },
+    {
+      "elementRef": "toCompletion",
+      "assertion": "Review precedes completion.",
+      "basis": "evidence",
+      "supportRefs": ["description"]
+    }
+  ]
+}

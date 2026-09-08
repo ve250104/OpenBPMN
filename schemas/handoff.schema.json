@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:openbpmn:schema:handoff:1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "handoffVersion": {
+      "const": "1.0.0"
+    },
+    "request": {
+      "$ref": "urn:openbpmn:schema:request:1.0.0"
+    },
+    "lifecycleStatus": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+    },
+    "reviewNotes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+      },
+      "minItems": 0,
+      "maxItems": 5000
+    },
+    "lastReport": {
+      "$ref": "urn:openbpmn:schema:quality-report:1.0.0"
+    }
+  },
+  "required": ["handoffVersion", "request"]
+}

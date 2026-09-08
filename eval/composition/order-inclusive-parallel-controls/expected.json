@@ -1,0 +1,315 @@
+{
+  "title": "Inclusive applicable checks followed by parallel mandatory controls",
+  "facts": [
+    [
+      "M_controls-model",
+      "bpmn:Definitions",
+      null,
+      {
+        "name": "Order controls and parallel completion",
+        "targetNamespace": "urn:process-model:controls-model"
+      }
+    ],
+    [
+      "M_controls",
+      "bpmn:Process",
+      "M_controls-model.rootElements",
+      {
+        "name": "Check and complete an order",
+        "isExecutable": false
+      }
+    ],
+    [
+      "M_received",
+      "bpmn:StartEvent",
+      "M_controls.flowElements",
+      {
+        "name": "Order received"
+      }
+    ],
+    [
+      "M_checks",
+      "bpmn:InclusiveGateway",
+      "M_controls.flowElements",
+      {
+        "name": "Which checks apply?",
+        "default": "M_baseline-route"
+      }
+    ],
+    [
+      "M_tax",
+      "bpmn:BusinessRuleTask",
+      "M_controls.flowElements",
+      {
+        "name": "Check tax treatment"
+      }
+    ],
+    [
+      "M_fraud",
+      "bpmn:UserTask",
+      "M_controls.flowElements",
+      {
+        "name": "Review fraud indicators"
+      }
+    ],
+    [
+      "M_baseline",
+      "bpmn:Task",
+      "M_controls.flowElements",
+      {
+        "name": "Record baseline check"
+      }
+    ],
+    [
+      "M_checks-complete",
+      "bpmn:InclusiveGateway",
+      "M_controls.flowElements",
+      {
+        "name": "Applicable checks complete"
+      }
+    ],
+    [
+      "M_finish",
+      "bpmn:ParallelGateway",
+      "M_controls.flowElements",
+      {
+        "name": "Complete both controls"
+      }
+    ],
+    [
+      "M_notify",
+      "bpmn:SendTask",
+      "M_controls.flowElements",
+      {
+        "name": "Send order confirmation"
+      }
+    ],
+    [
+      "M_archive",
+      "bpmn:ServiceTask",
+      "M_controls.flowElements",
+      {
+        "name": "Archive control evidence"
+      }
+    ],
+    [
+      "M_finished",
+      "bpmn:ParallelGateway",
+      "M_controls.flowElements",
+      {
+        "name": "Both controls complete"
+      }
+    ],
+    [
+      "M_done",
+      "bpmn:EndEvent",
+      "M_controls.flowElements",
+      {
+        "name": "Order controlled"
+      }
+    ],
+    [
+      "M_j1",
+      "bpmn:SequenceFlow",
+      "M_controls.flowElements",
+      {
+        "sourceRef": "M_received",
+        "targetRef": "M_checks"
+      }
+    ],
+    [
+      "M_tax-route",
+      "bpmn:SequenceFlow",
+      "M_controls.flowElements",
+      {
+        "sourceRef": "M_checks",
+        "targetRef": "M_tax",
+        "name": "Tax review required",
+        "conditionExpression": {
+          "$type": "bpmn:FormalExpression",
+          "body": "Order has cross-border tax exposure"
+        }
+      }
+    ],
+    [
+      "M_fraud-route",
+      "bpmn:SequenceFlow",
+      "M_controls.flowElements",
+      {
+        "sourceRef": "M_checks",
+        "targetRef": "M_fraud",
+        "name": "Fraud review required",
+        "conditionExpression": {
+          "$type": "bpmn:FormalExpression",
+          "body": "Order triggers fraud indicators"
+        }
+      }
+    ],
+    [
+      "M_baseline-route",
+      "bpmn:SequenceFlow",
+      "M_controls.flowElements",
+      {
+        "sourceRef": "M_checks",
+        "targetRef": "M_baseline",
+        "name": "Otherwise"
+      }
+    ],
+    [
+      "M_j2",
+      "bpmn:SequenceFlow",
+      "M_controls.flowElements",
+      {
+        "sourceRef": "M_tax",
+        "targetRef": "M_checks-complete"
+      }
+    ],
+    [
+      "M_j3",
+      "bpmn:SequenceFlow",
+      "M_controls.flowElements",
+      {
+        "sourceRef": "M_fraud",
+        "targetRef": "M_checks-complete"
+      }
+    ],
+    [
+      "M_j4",
+      "bpmn:SequenceFlow",
+      "M_controls.flowElements",
+      {
+        "sourceRef": "M_baseline",
+        "targetRef": "M_checks-complete"
+      }
+    ],
+    [
+      "M_j5",
+      "bpmn:SequenceFlow",
+      "M_controls.flowElements",
+      {
+        "sourceRef": "M_checks-complete",
+        "targetRef": "M_finish"
+      }
+    ],
+    [
+      "M_j6",
+      "bpmn:SequenceFlow",
+      "M_controls.flowElements",
+      {
+        "sourceRef": "M_finish",
+        "targetRef": "M_notify"
+      }
+    ],
+    [
+      "M_j7",
+      "bpmn:SequenceFlow",
+      "M_controls.flowElements",
+      {
+        "sourceRef": "M_finish",
+        "targetRef": "M_archive"
+      }
+    ],
+    [
+      "M_j8",
+      "bpmn:SequenceFlow",
+      "M_controls.flowElements",
+      {
+        "sourceRef": "M_notify",
+        "targetRef": "M_finished"
+      }
+    ],
+    [
+      "M_j9",
+      "bpmn:SequenceFlow",
+      "M_controls.flowElements",
+      {
+        "sourceRef": "M_archive",
+        "targetRef": "M_finished"
+      }
+    ],
+    [
+      "M_j10",
+      "bpmn:SequenceFlow",
+      "M_controls.flowElements",
+      {
+        "sourceRef": "M_finished",
+        "targetRef": "M_done"
+      }
+    ]
+  ],
+  "visible": [
+    {
+      "plane": "M_controls",
+      "shapes": [
+        "M_received",
+        "M_checks",
+        "M_tax",
+        "M_fraud",
+        "M_baseline",
+        "M_checks-complete",
+        "M_finish",
+        "M_notify",
+        "M_archive",
+        "M_finished",
+        "M_done"
+      ],
+      "edges": [
+        "M_j1",
+        "M_tax-route",
+        "M_fraud-route",
+        "M_baseline-route",
+        "M_j2",
+        "M_j3",
+        "M_j4",
+        "M_j5",
+        "M_j6",
+        "M_j7",
+        "M_j8",
+        "M_j9",
+        "M_j10"
+      ]
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "Both risk checks",
+      "path": [
+        "M_checks",
+        "M_tax",
+        "M_fraud",
+        "M_checks-complete",
+        "M_finish",
+        "M_notify",
+        "M_archive",
+        "M_finished",
+        "M_done"
+      ],
+      "expected": "Inclusive routing selects both applicable checks; both mandatory completion controls then run. Listed parallel nodes are not a claimed sequential execution."
+    },
+    {
+      "name": "Tax only",
+      "path": [
+        "M_checks",
+        "M_tax",
+        "M_checks-complete",
+        "M_finish"
+      ],
+      "expected": "The inclusive join does not wait for an unselected fraud check."
+    },
+    {
+      "name": "No extra check",
+      "path": [
+        "M_checks",
+        "M_baseline",
+        "M_checks-complete",
+        "M_finish"
+      ],
+      "expected": "The condition-free default runs only when no explicit condition holds; completion still requires both parallel branches."
+    }
+  ],
+  "review": {
+    "reference": "Different OR-circle and AND-plus gateway pairs; both conditional route labels and the default marker are readable.",
+    "intentionalCrossings": [],
+    "status": "not_run"
+  }
+}

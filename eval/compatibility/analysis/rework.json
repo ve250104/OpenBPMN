@@ -1,0 +1,114 @@
+{
+  "schemaVersion": "1.0.0",
+  "profileVersion": "1.0.0",
+  "model": {
+    "key": "analysis-rework",
+    "name": "Clarify an incomplete request",
+    "primaryRef": "process",
+    "processes": [
+      {
+        "key": "process",
+        "name": "Clarify an incomplete request",
+        "nodes": [
+          {
+            "key": "start",
+            "type": "startEvent",
+            "containerRef": "process",
+            "name": "Request received",
+            "event": {
+              "kind": "none"
+            }
+          },
+          {
+            "key": "review",
+            "type": "task",
+            "containerRef": "process",
+            "name": "Review request"
+          },
+          {
+            "key": "decision",
+            "type": "exclusiveGateway",
+            "containerRef": "process",
+            "name": "Information complete?"
+          },
+          {
+            "key": "clarify",
+            "type": "task",
+            "containerRef": "process",
+            "name": "Request clarification"
+          },
+          {
+            "key": "end",
+            "type": "endEvent",
+            "containerRef": "process",
+            "name": "Request complete",
+            "event": {
+              "kind": "none"
+            }
+          }
+        ],
+        "flows": [
+          {
+            "key": "flow1",
+            "containerRef": "process",
+            "sourceRef": "start",
+            "targetRef": "review"
+          },
+          {
+            "key": "flow2",
+            "containerRef": "process",
+            "sourceRef": "review",
+            "targetRef": "decision"
+          },
+          {
+            "key": "flow3",
+            "containerRef": "process",
+            "sourceRef": "decision",
+            "targetRef": "end",
+            "condition": "Information complete",
+            "name": "Information complete"
+          },
+          {
+            "key": "flow4",
+            "containerRef": "process",
+            "sourceRef": "decision",
+            "targetRef": "clarify",
+            "condition": "Information missing",
+            "name": "Information missing"
+          },
+          {
+            "key": "flow5",
+            "containerRef": "process",
+            "sourceRef": "clarify",
+            "targetRef": "review"
+          }
+        ]
+      }
+    ]
+  },
+  "evidence": [
+    {
+      "key": "synthetic-specification",
+      "source": "Authored synthetic qualification case (MIT)",
+      "summary": "The reviewer checks the request. Complete requests finish. Missing information prompts clarification and another review."
+    }
+  ],
+  "links": [
+    {
+      "elementRef": "review",
+      "assertion": "Review request",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ]
+    },
+    {
+      "elementRef": "clarify",
+      "assertion": "Request clarification",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ]
+    }
+  ]
+}

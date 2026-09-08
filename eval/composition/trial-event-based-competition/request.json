@@ -1,0 +1,312 @@
+{
+  "evidence": [
+    {
+      "key": "synthetic-specification",
+      "source": "Authored synthetic composition specification",
+      "summary": "Event-based competition between acceptance and timeout — an artificial acceptance case, not a deployment or interview.",
+      "locator": "eval/composition/trial-event-based-competition/expected.json"
+    }
+  ],
+  "links": [
+    {
+      "elementRef": "competition-model",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:Definitions in the definitions document: {\"name\":\"Trial offer response race\",\"targetNamespace\":\"urn:process-model:competition-model\"}"
+    },
+    {
+      "elementRef": "invitation",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:Message in M_competition-model.rootElements: {\"name\":\"Trial invitation\"}"
+    },
+    {
+      "elementRef": "acceptance",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:Message in M_competition-model.rootElements: {\"name\":\"Trial acceptance\"}"
+    },
+    {
+      "elementRef": "offer",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:Process in M_competition-model.rootElements: {\"name\":\"Resolve a time-limited trial offer\",\"isExecutable\":false}"
+    },
+    {
+      "elementRef": "qualified",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:StartEvent in M_offer.flowElements: {\"name\":\"Lead qualified\"}"
+    },
+    {
+      "elementRef": "invite",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SendTask in M_offer.flowElements: {\"name\":\"Send trial invitation\",\"messageRef\":\"M_invitation\"}"
+    },
+    {
+      "elementRef": "wait",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:EventBasedGateway in M_offer.flowElements: {\"name\":\"Acceptance or expiry?\"}"
+    },
+    {
+      "elementRef": "accepted",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:IntermediateCatchEvent in M_offer.flowElements: {\"name\":\"Acceptance received\"}"
+    },
+    {
+      "elementRef": "expired",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:IntermediateCatchEvent in M_offer.flowElements: {\"name\":\"Seven days elapsed\"}"
+    },
+    {
+      "elementRef": "activate",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:ServiceTask in M_offer.flowElements: {\"name\":\"Activate trial\"}"
+    },
+    {
+      "elementRef": "close",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:UserTask in M_offer.flowElements: {\"name\":\"Close expired offer\"}"
+    },
+    {
+      "elementRef": "resolved",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:EndEvent in M_offer.flowElements: {\"name\":\"Offer resolved\"}"
+    },
+    {
+      "elementRef": "c1",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_offer.flowElements: {\"sourceRef\":\"M_qualified\",\"targetRef\":\"M_invite\"}"
+    },
+    {
+      "elementRef": "c2",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_offer.flowElements: {\"sourceRef\":\"M_invite\",\"targetRef\":\"M_wait\"}"
+    },
+    {
+      "elementRef": "c3",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_offer.flowElements: {\"sourceRef\":\"M_wait\",\"targetRef\":\"M_accepted\"}"
+    },
+    {
+      "elementRef": "c4",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_offer.flowElements: {\"sourceRef\":\"M_wait\",\"targetRef\":\"M_expired\"}"
+    },
+    {
+      "elementRef": "c5",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_offer.flowElements: {\"sourceRef\":\"M_accepted\",\"targetRef\":\"M_activate\"}"
+    },
+    {
+      "elementRef": "c6",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_offer.flowElements: {\"sourceRef\":\"M_expired\",\"targetRef\":\"M_close\"}"
+    },
+    {
+      "elementRef": "c7",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_offer.flowElements: {\"sourceRef\":\"M_activate\",\"targetRef\":\"M_resolved\"}"
+    },
+    {
+      "elementRef": "c8",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_offer.flowElements: {\"sourceRef\":\"M_close\",\"targetRef\":\"M_resolved\"}"
+    }
+  ],
+  "schemaVersion": "1.0.0",
+  "profileVersion": "1.0.0",
+  "model": {
+    "key": "competition-model",
+    "name": "Trial offer response race",
+    "primaryRef": "offer",
+    "declarations": [
+      {
+        "key": "invitation",
+        "type": "message",
+        "name": "Trial invitation"
+      },
+      {
+        "key": "acceptance",
+        "type": "message",
+        "name": "Trial acceptance"
+      }
+    ],
+    "processes": [
+      {
+        "key": "offer",
+        "name": "Resolve a time-limited trial offer",
+        "nodes": [
+          {
+            "key": "qualified",
+            "type": "startEvent",
+            "containerRef": "offer",
+            "name": "Lead qualified",
+            "event": {
+              "kind": "none"
+            }
+          },
+          {
+            "key": "invite",
+            "type": "sendTask",
+            "containerRef": "offer",
+            "name": "Send trial invitation",
+            "messageRef": "invitation"
+          },
+          {
+            "key": "wait",
+            "type": "eventBasedGateway",
+            "containerRef": "offer",
+            "name": "Acceptance or expiry?"
+          },
+          {
+            "key": "accepted",
+            "type": "intermediateCatchEvent",
+            "containerRef": "offer",
+            "name": "Acceptance received",
+            "event": {
+              "kind": "message",
+              "ref": "acceptance"
+            }
+          },
+          {
+            "key": "expired",
+            "type": "intermediateCatchEvent",
+            "containerRef": "offer",
+            "name": "Seven days elapsed",
+            "event": {
+              "kind": "timer",
+              "timeDuration": "P7D"
+            }
+          },
+          {
+            "key": "activate",
+            "type": "serviceTask",
+            "containerRef": "offer",
+            "name": "Activate trial"
+          },
+          {
+            "key": "close",
+            "type": "userTask",
+            "containerRef": "offer",
+            "name": "Close expired offer"
+          },
+          {
+            "key": "resolved",
+            "type": "endEvent",
+            "containerRef": "offer",
+            "name": "Offer resolved",
+            "event": {
+              "kind": "none"
+            }
+          }
+        ],
+        "flows": [
+          {
+            "key": "c1",
+            "containerRef": "offer",
+            "sourceRef": "qualified",
+            "targetRef": "invite"
+          },
+          {
+            "key": "c2",
+            "containerRef": "offer",
+            "sourceRef": "invite",
+            "targetRef": "wait"
+          },
+          {
+            "key": "c3",
+            "containerRef": "offer",
+            "sourceRef": "wait",
+            "targetRef": "accepted"
+          },
+          {
+            "key": "c4",
+            "containerRef": "offer",
+            "sourceRef": "wait",
+            "targetRef": "expired"
+          },
+          {
+            "key": "c5",
+            "containerRef": "offer",
+            "sourceRef": "accepted",
+            "targetRef": "activate"
+          },
+          {
+            "key": "c6",
+            "containerRef": "offer",
+            "sourceRef": "expired",
+            "targetRef": "close"
+          },
+          {
+            "key": "c7",
+            "containerRef": "offer",
+            "sourceRef": "activate",
+            "targetRef": "resolved"
+          },
+          {
+            "key": "c8",
+            "containerRef": "offer",
+            "sourceRef": "close",
+            "targetRef": "resolved"
+          }
+        ]
+      }
+    ]
+  }
+}

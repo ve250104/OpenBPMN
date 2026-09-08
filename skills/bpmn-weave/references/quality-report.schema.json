@@ -1,0 +1,309 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:openbpmn:schema:quality-report:1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "reportVersion": {
+      "const": "1.0.0"
+    },
+    "toolVersion": {
+      "$ref": "urn:openbpmn:schema:request:1.0.0#/$defs/name"
+    },
+    "profileVersion": {
+      "const": "1.0.0"
+    },
+    "modelKey": {
+      "$ref": "urn:openbpmn:schema:request:1.0.0#/$defs/key"
+    },
+    "export": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "requested": {
+          "enum": ["auto", "clean", "snapshot", "none"]
+        },
+        "outcome": {
+          "enum": ["clean", "snapshot", "invalid", "none"]
+        },
+        "cleanEligible": {
+          "type": "boolean"
+        },
+        "expertOverride": {
+          "type": "boolean"
+        }
+      },
+      "required": ["requested", "outcome", "cleanEligible", "expertOverride"]
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "enum": [
+              "input",
+              "xml",
+              "xsd",
+              "semantics",
+              "profile",
+              "di",
+              "render",
+              "evidence",
+              "consulting",
+              "compatibility:sap-signavio-process-manager",
+              "compatibility:celonis-analysis-conformance",
+              "compatibility:celonis-process-management"
+            ]
+          },
+          "status": {
+            "enum": ["passed", "failed", "not_run", "not_applicable"]
+          },
+          "findingRefs": {
+            "type": "array",
+            "items": {
+              "$ref": "urn:openbpmn:schema:request:1.0.0#/$defs/key"
+            },
+            "minItems": 0,
+            "maxItems": 5000,
+            "uniqueItems": true
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000
+          }
+        },
+        "required": ["id", "status", "findingRefs"],
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "enum": ["not_run", "not_applicable"]
+                }
+              }
+            },
+            "then": {
+              "required": ["reason"],
+              "properties": {
+                "reason": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4000
+                }
+              }
+            }
+          }
+        ]
+      },
+      "minItems": 9,
+      "maxItems": 10,
+      "allOf": [
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "const": "input"
+              }
+            },
+            "required": ["id"]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "const": "xml"
+              }
+            },
+            "required": ["id"]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "const": "xsd"
+              }
+            },
+            "required": ["id"]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "const": "semantics"
+              }
+            },
+            "required": ["id"]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "const": "profile"
+              }
+            },
+            "required": ["id"]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "const": "di"
+              }
+            },
+            "required": ["id"]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "const": "render"
+              }
+            },
+            "required": ["id"]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "const": "evidence"
+              }
+            },
+            "required": ["id"]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "const": "consulting"
+              }
+            },
+            "required": ["id"]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        }
+      ]
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "$ref": "urn:openbpmn:schema:request:1.0.0#/$defs/key"
+          },
+          "code": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9_]{0,127}$"
+          },
+          "category": {
+            "enum": [
+              "input",
+              "xml",
+              "semantic",
+              "profile",
+              "diagram",
+              "evidence",
+              "consulting",
+              "runtime",
+              "filesystem"
+            ]
+          },
+          "severity": {
+            "enum": ["error", "warning", "info"]
+          },
+          "blocksClean": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000
+          },
+          "remediation": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000
+          },
+          "elementRefs": {
+            "type": "array",
+            "items": {
+              "$ref": "urn:openbpmn:schema:request:1.0.0#/$defs/key"
+            },
+            "minItems": 0,
+            "maxItems": 5000,
+            "uniqueItems": true
+          },
+          "evidenceRefs": {
+            "type": "array",
+            "items": {
+              "$ref": "urn:openbpmn:schema:request:1.0.0#/$defs/key"
+            },
+            "minItems": 0,
+            "maxItems": 5000,
+            "uniqueItems": true
+          },
+          "inputPointer": {
+            "type": "string",
+            "pattern": "^(?:/(?:[^~/]|~0|~1)*)*$",
+            "maxLength": 4096
+          }
+        },
+        "required": [
+          "id",
+          "code",
+          "category",
+          "severity",
+          "blocksClean",
+          "message",
+          "remediation",
+          "elementRefs",
+          "evidenceRefs"
+        ]
+      },
+      "minItems": 0,
+      "maxItems": 5000
+    },
+    "context": {
+      "$ref": "urn:openbpmn:schema:request:1.0.0#/$defs/context"
+    }
+  },
+  "required": ["reportVersion", "toolVersion", "profileVersion", "export", "checks", "findings", "context"]
+}

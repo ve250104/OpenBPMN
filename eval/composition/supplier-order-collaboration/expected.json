@@ -1,0 +1,1323 @@
+{
+  "title": "Buyer supplier and carrier coordination — 40 nodes and 60 connectors",
+  "facts": [
+    [
+      "M_order-model",
+      "bpmn:Definitions",
+      null,
+      {
+        "name": "Buyer supplier and carrier coordination",
+        "targetNamespace": "urn:process-model:order-model"
+      }
+    ],
+    [
+      "M_coordination",
+      "bpmn:Message",
+      "M_order-model.rootElements",
+      {
+        "name": "Order coordination message"
+      }
+    ],
+    [
+      "M_buyer",
+      "bpmn:Process",
+      "M_order-model.rootElements",
+      {
+        "name": "Purchase and accept goods",
+        "isExecutable": false
+      }
+    ],
+    [
+      "M_supplier",
+      "bpmn:Process",
+      "M_order-model.rootElements",
+      {
+        "name": "Quote and fulfil an order",
+        "isExecutable": false
+      }
+    ],
+    [
+      "M_carrier",
+      "bpmn:Process",
+      "M_order-model.rootElements",
+      {
+        "name": "Collect and deliver goods",
+        "isExecutable": false
+      }
+    ],
+    [
+      "M_order-parties",
+      "bpmn:Collaboration",
+      "M_order-model.rootElements",
+      {
+        "name": "Order fulfilment collaboration"
+      }
+    ],
+    [
+      "M_buyer-pool",
+      "bpmn:Participant",
+      "M_order-parties.participants",
+      {
+        "name": "Buyer",
+        "processRef": "M_buyer"
+      }
+    ],
+    [
+      "M_supplier-pool",
+      "bpmn:Participant",
+      "M_order-parties.participants",
+      {
+        "name": "Supplier",
+        "processRef": "M_supplier"
+      }
+    ],
+    [
+      "M_carrier-pool",
+      "bpmn:Participant",
+      "M_order-parties.participants",
+      {
+        "name": "Carrier",
+        "processRef": "M_carrier"
+      }
+    ],
+    [
+      "M_b0",
+      "bpmn:StartEvent",
+      "M_buyer.flowElements",
+      {
+        "name": "Purchase needed"
+      }
+    ],
+    [
+      "M_b1",
+      "bpmn:Task",
+      "M_buyer.flowElements",
+      {
+        "name": "Specify purchase"
+      }
+    ],
+    [
+      "M_b2",
+      "bpmn:Task",
+      "M_buyer.flowElements",
+      {
+        "name": "Submit inquiry"
+      }
+    ],
+    [
+      "M_b3",
+      "bpmn:Task",
+      "M_buyer.flowElements",
+      {
+        "name": "Clarify purchase requirements"
+      }
+    ],
+    [
+      "M_b4",
+      "bpmn:Task",
+      "M_buyer.flowElements",
+      {
+        "name": "Review supplier quote"
+      }
+    ],
+    [
+      "M_b5",
+      "bpmn:ExclusiveGateway",
+      "M_buyer.flowElements",
+      {
+        "name": "Quote acceptable?",
+        "default": "M_b-rework"
+      }
+    ],
+    [
+      "M_b6",
+      "bpmn:Task",
+      "M_buyer.flowElements",
+      {
+        "name": "Issue purchase order"
+      }
+    ],
+    [
+      "M_b7",
+      "bpmn:Task",
+      "M_buyer.flowElements",
+      {
+        "name": "Confirm delivery window"
+      }
+    ],
+    [
+      "M_b8",
+      "bpmn:Task",
+      "M_buyer.flowElements",
+      {
+        "name": "Review dispatch notice"
+      }
+    ],
+    [
+      "M_b9",
+      "bpmn:Task",
+      "M_buyer.flowElements",
+      {
+        "name": "Accept delivered goods"
+      }
+    ],
+    [
+      "M_b10",
+      "bpmn:Task",
+      "M_buyer.flowElements",
+      {
+        "name": "Confirm delivery conformity"
+      }
+    ],
+    [
+      "M_b11",
+      "bpmn:Task",
+      "M_buyer.flowElements",
+      {
+        "name": "Approve supplier invoice"
+      }
+    ],
+    [
+      "M_b12",
+      "bpmn:Task",
+      "M_buyer.flowElements",
+      {
+        "name": "Release payment"
+      }
+    ],
+    [
+      "M_b13",
+      "bpmn:EndEvent",
+      "M_buyer.flowElements",
+      {
+        "name": "Purchase settled"
+      }
+    ],
+    [
+      "M_s0",
+      "bpmn:StartEvent",
+      "M_supplier.flowElements",
+      {
+        "name": "Inquiry received"
+      }
+    ],
+    [
+      "M_s1",
+      "bpmn:Task",
+      "M_supplier.flowElements",
+      {
+        "name": "Review inquiry"
+      }
+    ],
+    [
+      "M_s2",
+      "bpmn:Task",
+      "M_supplier.flowElements",
+      {
+        "name": "Request requirements clarification"
+      }
+    ],
+    [
+      "M_s3",
+      "bpmn:Task",
+      "M_supplier.flowElements",
+      {
+        "name": "Revise quotation"
+      }
+    ],
+    [
+      "M_s4",
+      "bpmn:Task",
+      "M_supplier.flowElements",
+      {
+        "name": "Send quotation"
+      }
+    ],
+    [
+      "M_s5",
+      "bpmn:Task",
+      "M_supplier.flowElements",
+      {
+        "name": "Review purchase order"
+      }
+    ],
+    [
+      "M_s6",
+      "bpmn:ExclusiveGateway",
+      "M_supplier.flowElements",
+      {
+        "name": "Order ready?",
+        "default": "M_s-rework"
+      }
+    ],
+    [
+      "M_s7",
+      "bpmn:Task",
+      "M_supplier.flowElements",
+      {
+        "name": "Confirm order"
+      }
+    ],
+    [
+      "M_s8",
+      "bpmn:Task",
+      "M_supplier.flowElements",
+      {
+        "name": "Prepare shipment"
+      }
+    ],
+    [
+      "M_s9",
+      "bpmn:Task",
+      "M_supplier.flowElements",
+      {
+        "name": "Book carrier"
+      }
+    ],
+    [
+      "M_s10",
+      "bpmn:Task",
+      "M_supplier.flowElements",
+      {
+        "name": "Issue dispatch notice"
+      }
+    ],
+    [
+      "M_s11",
+      "bpmn:Task",
+      "M_supplier.flowElements",
+      {
+        "name": "Issue and settle invoice"
+      }
+    ],
+    [
+      "M_s12",
+      "bpmn:EndEvent",
+      "M_supplier.flowElements",
+      {
+        "name": "Order settled"
+      }
+    ],
+    [
+      "M_c0",
+      "bpmn:StartEvent",
+      "M_carrier.flowElements",
+      {
+        "name": "Transport requested"
+      }
+    ],
+    [
+      "M_c1",
+      "bpmn:Task",
+      "M_carrier.flowElements",
+      {
+        "name": "Review shipment request"
+      }
+    ],
+    [
+      "M_c2",
+      "bpmn:Task",
+      "M_carrier.flowElements",
+      {
+        "name": "Request transport details"
+      }
+    ],
+    [
+      "M_c3",
+      "bpmn:Task",
+      "M_carrier.flowElements",
+      {
+        "name": "Confirm pickup slot"
+      }
+    ],
+    [
+      "M_c4",
+      "bpmn:Task",
+      "M_carrier.flowElements",
+      {
+        "name": "Arrange driver"
+      }
+    ],
+    [
+      "M_c5",
+      "bpmn:Task",
+      "M_carrier.flowElements",
+      {
+        "name": "Collect shipment"
+      }
+    ],
+    [
+      "M_c6",
+      "bpmn:Task",
+      "M_carrier.flowElements",
+      {
+        "name": "Report pickup"
+      }
+    ],
+    [
+      "M_c7",
+      "bpmn:Task",
+      "M_carrier.flowElements",
+      {
+        "name": "Transport goods"
+      }
+    ],
+    [
+      "M_c8",
+      "bpmn:Task",
+      "M_carrier.flowElements",
+      {
+        "name": "Send arrival notice"
+      }
+    ],
+    [
+      "M_c9",
+      "bpmn:Task",
+      "M_carrier.flowElements",
+      {
+        "name": "Deliver goods"
+      }
+    ],
+    [
+      "M_c10",
+      "bpmn:Task",
+      "M_carrier.flowElements",
+      {
+        "name": "Confirm delivery"
+      }
+    ],
+    [
+      "M_c11",
+      "bpmn:Task",
+      "M_carrier.flowElements",
+      {
+        "name": "Submit delivery evidence"
+      }
+    ],
+    [
+      "M_c12",
+      "bpmn:EndEvent",
+      "M_carrier.flowElements",
+      {
+        "name": "Transport completed"
+      }
+    ],
+    [
+      "M_bf0",
+      "bpmn:SequenceFlow",
+      "M_buyer.flowElements",
+      {
+        "sourceRef": "M_b0",
+        "targetRef": "M_b1"
+      }
+    ],
+    [
+      "M_bf1",
+      "bpmn:SequenceFlow",
+      "M_buyer.flowElements",
+      {
+        "sourceRef": "M_b1",
+        "targetRef": "M_b2"
+      }
+    ],
+    [
+      "M_bf2",
+      "bpmn:SequenceFlow",
+      "M_buyer.flowElements",
+      {
+        "sourceRef": "M_b2",
+        "targetRef": "M_b3"
+      }
+    ],
+    [
+      "M_bf3",
+      "bpmn:SequenceFlow",
+      "M_buyer.flowElements",
+      {
+        "sourceRef": "M_b3",
+        "targetRef": "M_b4"
+      }
+    ],
+    [
+      "M_bf4",
+      "bpmn:SequenceFlow",
+      "M_buyer.flowElements",
+      {
+        "sourceRef": "M_b4",
+        "targetRef": "M_b5"
+      }
+    ],
+    [
+      "M_bf5",
+      "bpmn:SequenceFlow",
+      "M_buyer.flowElements",
+      {
+        "sourceRef": "M_b5",
+        "targetRef": "M_b6",
+        "name": "Quote approved",
+        "conditionExpression": {
+          "$type": "bpmn:FormalExpression",
+          "body": "The buyer approves the quote"
+        }
+      }
+    ],
+    [
+      "M_bf6",
+      "bpmn:SequenceFlow",
+      "M_buyer.flowElements",
+      {
+        "sourceRef": "M_b6",
+        "targetRef": "M_b7"
+      }
+    ],
+    [
+      "M_bf7",
+      "bpmn:SequenceFlow",
+      "M_buyer.flowElements",
+      {
+        "sourceRef": "M_b7",
+        "targetRef": "M_b8"
+      }
+    ],
+    [
+      "M_bf8",
+      "bpmn:SequenceFlow",
+      "M_buyer.flowElements",
+      {
+        "sourceRef": "M_b8",
+        "targetRef": "M_b9"
+      }
+    ],
+    [
+      "M_bf9",
+      "bpmn:SequenceFlow",
+      "M_buyer.flowElements",
+      {
+        "sourceRef": "M_b9",
+        "targetRef": "M_b10"
+      }
+    ],
+    [
+      "M_bf10",
+      "bpmn:SequenceFlow",
+      "M_buyer.flowElements",
+      {
+        "sourceRef": "M_b10",
+        "targetRef": "M_b11"
+      }
+    ],
+    [
+      "M_bf11",
+      "bpmn:SequenceFlow",
+      "M_buyer.flowElements",
+      {
+        "sourceRef": "M_b11",
+        "targetRef": "M_b12"
+      }
+    ],
+    [
+      "M_bf12",
+      "bpmn:SequenceFlow",
+      "M_buyer.flowElements",
+      {
+        "sourceRef": "M_b12",
+        "targetRef": "M_b13"
+      }
+    ],
+    [
+      "M_b-rework",
+      "bpmn:SequenceFlow",
+      "M_buyer.flowElements",
+      {
+        "sourceRef": "M_b5",
+        "targetRef": "M_b3",
+        "name": "Otherwise: clarify terms"
+      }
+    ],
+    [
+      "M_sf0",
+      "bpmn:SequenceFlow",
+      "M_supplier.flowElements",
+      {
+        "sourceRef": "M_s0",
+        "targetRef": "M_s1"
+      }
+    ],
+    [
+      "M_sf1",
+      "bpmn:SequenceFlow",
+      "M_supplier.flowElements",
+      {
+        "sourceRef": "M_s1",
+        "targetRef": "M_s2"
+      }
+    ],
+    [
+      "M_sf2",
+      "bpmn:SequenceFlow",
+      "M_supplier.flowElements",
+      {
+        "sourceRef": "M_s2",
+        "targetRef": "M_s3"
+      }
+    ],
+    [
+      "M_sf3",
+      "bpmn:SequenceFlow",
+      "M_supplier.flowElements",
+      {
+        "sourceRef": "M_s3",
+        "targetRef": "M_s4"
+      }
+    ],
+    [
+      "M_sf4",
+      "bpmn:SequenceFlow",
+      "M_supplier.flowElements",
+      {
+        "sourceRef": "M_s4",
+        "targetRef": "M_s5"
+      }
+    ],
+    [
+      "M_sf5",
+      "bpmn:SequenceFlow",
+      "M_supplier.flowElements",
+      {
+        "sourceRef": "M_s5",
+        "targetRef": "M_s6"
+      }
+    ],
+    [
+      "M_sf6",
+      "bpmn:SequenceFlow",
+      "M_supplier.flowElements",
+      {
+        "sourceRef": "M_s6",
+        "targetRef": "M_s7",
+        "name": "Order agreed",
+        "conditionExpression": {
+          "$type": "bpmn:FormalExpression",
+          "body": "Supplier and buyer agree the order terms"
+        }
+      }
+    ],
+    [
+      "M_sf7",
+      "bpmn:SequenceFlow",
+      "M_supplier.flowElements",
+      {
+        "sourceRef": "M_s7",
+        "targetRef": "M_s8"
+      }
+    ],
+    [
+      "M_sf8",
+      "bpmn:SequenceFlow",
+      "M_supplier.flowElements",
+      {
+        "sourceRef": "M_s8",
+        "targetRef": "M_s9"
+      }
+    ],
+    [
+      "M_sf9",
+      "bpmn:SequenceFlow",
+      "M_supplier.flowElements",
+      {
+        "sourceRef": "M_s9",
+        "targetRef": "M_s10"
+      }
+    ],
+    [
+      "M_sf10",
+      "bpmn:SequenceFlow",
+      "M_supplier.flowElements",
+      {
+        "sourceRef": "M_s10",
+        "targetRef": "M_s11"
+      }
+    ],
+    [
+      "M_sf11",
+      "bpmn:SequenceFlow",
+      "M_supplier.flowElements",
+      {
+        "sourceRef": "M_s11",
+        "targetRef": "M_s12"
+      }
+    ],
+    [
+      "M_s-rework",
+      "bpmn:SequenceFlow",
+      "M_supplier.flowElements",
+      {
+        "sourceRef": "M_s6",
+        "targetRef": "M_s3",
+        "name": "Otherwise: clarify terms"
+      }
+    ],
+    [
+      "M_cf0",
+      "bpmn:SequenceFlow",
+      "M_carrier.flowElements",
+      {
+        "sourceRef": "M_c0",
+        "targetRef": "M_c1"
+      }
+    ],
+    [
+      "M_cf1",
+      "bpmn:SequenceFlow",
+      "M_carrier.flowElements",
+      {
+        "sourceRef": "M_c1",
+        "targetRef": "M_c2"
+      }
+    ],
+    [
+      "M_cf2",
+      "bpmn:SequenceFlow",
+      "M_carrier.flowElements",
+      {
+        "sourceRef": "M_c2",
+        "targetRef": "M_c3"
+      }
+    ],
+    [
+      "M_cf3",
+      "bpmn:SequenceFlow",
+      "M_carrier.flowElements",
+      {
+        "sourceRef": "M_c3",
+        "targetRef": "M_c4"
+      }
+    ],
+    [
+      "M_cf4",
+      "bpmn:SequenceFlow",
+      "M_carrier.flowElements",
+      {
+        "sourceRef": "M_c4",
+        "targetRef": "M_c5"
+      }
+    ],
+    [
+      "M_cf5",
+      "bpmn:SequenceFlow",
+      "M_carrier.flowElements",
+      {
+        "sourceRef": "M_c5",
+        "targetRef": "M_c6"
+      }
+    ],
+    [
+      "M_cf6",
+      "bpmn:SequenceFlow",
+      "M_carrier.flowElements",
+      {
+        "sourceRef": "M_c6",
+        "targetRef": "M_c7"
+      }
+    ],
+    [
+      "M_cf7",
+      "bpmn:SequenceFlow",
+      "M_carrier.flowElements",
+      {
+        "sourceRef": "M_c7",
+        "targetRef": "M_c8"
+      }
+    ],
+    [
+      "M_cf8",
+      "bpmn:SequenceFlow",
+      "M_carrier.flowElements",
+      {
+        "sourceRef": "M_c8",
+        "targetRef": "M_c9"
+      }
+    ],
+    [
+      "M_cf9",
+      "bpmn:SequenceFlow",
+      "M_carrier.flowElements",
+      {
+        "sourceRef": "M_c9",
+        "targetRef": "M_c10"
+      }
+    ],
+    [
+      "M_cf10",
+      "bpmn:SequenceFlow",
+      "M_carrier.flowElements",
+      {
+        "sourceRef": "M_c10",
+        "targetRef": "M_c11"
+      }
+    ],
+    [
+      "M_cf11",
+      "bpmn:SequenceFlow",
+      "M_carrier.flowElements",
+      {
+        "sourceRef": "M_c11",
+        "targetRef": "M_c12"
+      }
+    ],
+    [
+      "M_m01",
+      "bpmn:MessageFlow",
+      "M_order-parties.messageFlows",
+      {
+        "sourceRef": "M_b2",
+        "targetRef": "M_s1",
+        "name": "Purchase inquiry",
+        "messageRef": "M_coordination"
+      }
+    ],
+    [
+      "M_m02",
+      "bpmn:MessageFlow",
+      "M_order-parties.messageFlows",
+      {
+        "sourceRef": "M_s2",
+        "targetRef": "M_b3",
+        "name": "Clarification request",
+        "messageRef": "M_coordination"
+      }
+    ],
+    [
+      "M_m03",
+      "bpmn:MessageFlow",
+      "M_order-parties.messageFlows",
+      {
+        "sourceRef": "M_b3",
+        "targetRef": "M_s3",
+        "name": "Clarified requirements",
+        "messageRef": "M_coordination"
+      }
+    ],
+    [
+      "M_m04",
+      "bpmn:MessageFlow",
+      "M_order-parties.messageFlows",
+      {
+        "sourceRef": "M_s4",
+        "targetRef": "M_b4",
+        "name": "Supplier quotation",
+        "messageRef": "M_coordination"
+      }
+    ],
+    [
+      "M_m05",
+      "bpmn:MessageFlow",
+      "M_order-parties.messageFlows",
+      {
+        "sourceRef": "M_b6",
+        "targetRef": "M_s5",
+        "name": "Purchase order",
+        "messageRef": "M_coordination"
+      }
+    ],
+    [
+      "M_m06",
+      "bpmn:MessageFlow",
+      "M_order-parties.messageFlows",
+      {
+        "sourceRef": "M_s7",
+        "targetRef": "M_b7",
+        "name": "Order confirmation",
+        "messageRef": "M_coordination"
+      }
+    ],
+    [
+      "M_m07",
+      "bpmn:MessageFlow",
+      "M_order-parties.messageFlows",
+      {
+        "sourceRef": "M_b7",
+        "targetRef": "M_s8",
+        "name": "Delivery window",
+        "messageRef": "M_coordination"
+      }
+    ],
+    [
+      "M_m08",
+      "bpmn:MessageFlow",
+      "M_order-parties.messageFlows",
+      {
+        "sourceRef": "M_s9",
+        "targetRef": "M_c1",
+        "name": "Shipment request",
+        "messageRef": "M_coordination"
+      }
+    ],
+    [
+      "M_m09",
+      "bpmn:MessageFlow",
+      "M_order-parties.messageFlows",
+      {
+        "sourceRef": "M_c2",
+        "targetRef": "M_s9",
+        "name": "Transport detail request",
+        "messageRef": "M_coordination"
+      }
+    ],
+    [
+      "M_m10",
+      "bpmn:MessageFlow",
+      "M_order-parties.messageFlows",
+      {
+        "sourceRef": "M_s9",
+        "targetRef": "M_c3",
+        "name": "Transport details",
+        "messageRef": "M_coordination"
+      }
+    ],
+    [
+      "M_m11",
+      "bpmn:MessageFlow",
+      "M_order-parties.messageFlows",
+      {
+        "sourceRef": "M_c3",
+        "targetRef": "M_s8",
+        "name": "Pickup slot",
+        "messageRef": "M_coordination"
+      }
+    ],
+    [
+      "M_m12",
+      "bpmn:MessageFlow",
+      "M_order-parties.messageFlows",
+      {
+        "sourceRef": "M_s8",
+        "targetRef": "M_c5",
+        "name": "Collection ready notice",
+        "messageRef": "M_coordination"
+      }
+    ],
+    [
+      "M_m13",
+      "bpmn:MessageFlow",
+      "M_order-parties.messageFlows",
+      {
+        "sourceRef": "M_c6",
+        "targetRef": "M_s10",
+        "name": "Pickup confirmation",
+        "messageRef": "M_coordination"
+      }
+    ],
+    [
+      "M_m14",
+      "bpmn:MessageFlow",
+      "M_order-parties.messageFlows",
+      {
+        "sourceRef": "M_s10",
+        "targetRef": "M_b8",
+        "name": "Dispatch notice",
+        "messageRef": "M_coordination"
+      }
+    ],
+    [
+      "M_m15",
+      "bpmn:MessageFlow",
+      "M_order-parties.messageFlows",
+      {
+        "sourceRef": "M_c8",
+        "targetRef": "M_b7",
+        "name": "Arrival notice",
+        "messageRef": "M_coordination"
+      }
+    ],
+    [
+      "M_m16",
+      "bpmn:MessageFlow",
+      "M_order-parties.messageFlows",
+      {
+        "sourceRef": "M_c9",
+        "targetRef": "M_b9",
+        "name": "Delivery handoff notice",
+        "messageRef": "M_coordination"
+      }
+    ],
+    [
+      "M_m17",
+      "bpmn:MessageFlow",
+      "M_order-parties.messageFlows",
+      {
+        "sourceRef": "M_b9",
+        "targetRef": "M_c10",
+        "name": "Receipt confirmation",
+        "messageRef": "M_coordination"
+      }
+    ],
+    [
+      "M_m18",
+      "bpmn:MessageFlow",
+      "M_order-parties.messageFlows",
+      {
+        "sourceRef": "M_b10",
+        "targetRef": "M_s11",
+        "name": "Delivery conformity",
+        "messageRef": "M_coordination"
+      }
+    ],
+    [
+      "M_m19",
+      "bpmn:MessageFlow",
+      "M_order-parties.messageFlows",
+      {
+        "sourceRef": "M_s11",
+        "targetRef": "M_b11",
+        "name": "Supplier invoice",
+        "messageRef": "M_coordination"
+      }
+    ],
+    [
+      "M_m20",
+      "bpmn:MessageFlow",
+      "M_order-parties.messageFlows",
+      {
+        "sourceRef": "M_b12",
+        "targetRef": "M_s11",
+        "name": "Payment advice",
+        "messageRef": "M_coordination"
+      }
+    ],
+    [
+      "M_m21",
+      "bpmn:MessageFlow",
+      "M_order-parties.messageFlows",
+      {
+        "sourceRef": "M_c11",
+        "targetRef": "M_b11",
+        "name": "Delivery evidence",
+        "messageRef": "M_coordination"
+      }
+    ],
+    [
+      "G_lanes_buyer",
+      "bpmn:LaneSet",
+      "M_buyer.laneSets",
+      {}
+    ],
+    [
+      "G_lanes_buyer-team",
+      "bpmn:LaneSet",
+      "M_buyer-team.childLaneSet",
+      {}
+    ],
+    [
+      "G_lanes_supplier",
+      "bpmn:LaneSet",
+      "M_supplier.laneSets",
+      {}
+    ],
+    [
+      "G_lanes_carrier",
+      "bpmn:LaneSet",
+      "M_carrier.laneSets",
+      {}
+    ],
+    [
+      "M_buyer-team",
+      "bpmn:Lane",
+      "G_lanes_buyer.lanes",
+      {
+        "name": "Buyer team",
+        "flowNodeRef": [
+          "M_b0",
+          "M_b1",
+          "M_b10",
+          "M_b11",
+          "M_b12",
+          "M_b13",
+          "M_b2",
+          "M_b3",
+          "M_b4",
+          "M_b5",
+          "M_b6",
+          "M_b7",
+          "M_b8",
+          "M_b9"
+        ]
+      }
+    ],
+    [
+      "M_commercial",
+      "bpmn:Lane",
+      "G_lanes_buyer-team.lanes",
+      {
+        "name": "Commercial",
+        "flowNodeRef": [
+          "M_b0",
+          "M_b1",
+          "M_b2",
+          "M_b3",
+          "M_b4",
+          "M_b5",
+          "M_b6"
+        ]
+      }
+    ],
+    [
+      "M_buyer-operations",
+      "bpmn:Lane",
+      "G_lanes_buyer-team.lanes",
+      {
+        "name": "Buyer operations",
+        "flowNodeRef": [
+          "M_b10",
+          "M_b11",
+          "M_b12",
+          "M_b13",
+          "M_b7",
+          "M_b8",
+          "M_b9"
+        ]
+      }
+    ],
+    [
+      "M_sales",
+      "bpmn:Lane",
+      "G_lanes_supplier.lanes",
+      {
+        "name": "Sales",
+        "flowNodeRef": [
+          "M_s0",
+          "M_s1",
+          "M_s2",
+          "M_s3",
+          "M_s4",
+          "M_s5",
+          "M_s6",
+          "M_s7"
+        ]
+      }
+    ],
+    [
+      "M_fulfilment",
+      "bpmn:Lane",
+      "G_lanes_supplier.lanes",
+      {
+        "name": "Fulfilment",
+        "flowNodeRef": [
+          "M_s10",
+          "M_s11",
+          "M_s12",
+          "M_s8",
+          "M_s9"
+        ]
+      }
+    ],
+    [
+      "M_transport",
+      "bpmn:Lane",
+      "G_lanes_carrier.lanes",
+      {
+        "name": "Transport operations",
+        "flowNodeRef": [
+          "M_c0",
+          "M_c1",
+          "M_c10",
+          "M_c11",
+          "M_c12",
+          "M_c2",
+          "M_c3",
+          "M_c4",
+          "M_c5",
+          "M_c6",
+          "M_c7",
+          "M_c8",
+          "M_c9"
+        ]
+      }
+    ]
+  ],
+  "visible": [
+    {
+      "plane": "M_order-parties",
+      "shapes": [
+        "M_buyer-pool",
+        "M_supplier-pool",
+        "M_carrier-pool",
+        "M_buyer-team",
+        "M_commercial",
+        "M_buyer-operations",
+        "M_sales",
+        "M_fulfilment",
+        "M_transport",
+        "M_b0",
+        "M_b1",
+        "M_b2",
+        "M_b3",
+        "M_b4",
+        "M_b5",
+        "M_b6",
+        "M_b7",
+        "M_b8",
+        "M_b9",
+        "M_b10",
+        "M_b11",
+        "M_b12",
+        "M_b13",
+        "M_s0",
+        "M_s1",
+        "M_s2",
+        "M_s3",
+        "M_s4",
+        "M_s5",
+        "M_s6",
+        "M_s7",
+        "M_s8",
+        "M_s9",
+        "M_s10",
+        "M_s11",
+        "M_s12",
+        "M_c0",
+        "M_c1",
+        "M_c2",
+        "M_c3",
+        "M_c4",
+        "M_c5",
+        "M_c6",
+        "M_c7",
+        "M_c8",
+        "M_c9",
+        "M_c10",
+        "M_c11",
+        "M_c12"
+      ],
+      "edges": [
+        "M_bf0",
+        "M_bf1",
+        "M_bf2",
+        "M_bf3",
+        "M_bf4",
+        "M_bf5",
+        "M_bf6",
+        "M_bf7",
+        "M_bf8",
+        "M_bf9",
+        "M_bf10",
+        "M_bf11",
+        "M_bf12",
+        "M_b-rework",
+        "M_sf0",
+        "M_sf1",
+        "M_sf2",
+        "M_sf3",
+        "M_sf4",
+        "M_sf5",
+        "M_sf6",
+        "M_sf7",
+        "M_sf8",
+        "M_sf9",
+        "M_sf10",
+        "M_sf11",
+        "M_s-rework",
+        "M_cf0",
+        "M_cf1",
+        "M_cf2",
+        "M_cf3",
+        "M_cf4",
+        "M_cf5",
+        "M_cf6",
+        "M_cf7",
+        "M_cf8",
+        "M_cf9",
+        "M_cf10",
+        "M_cf11",
+        "M_m01",
+        "M_m02",
+        "M_m03",
+        "M_m04",
+        "M_m05",
+        "M_m06",
+        "M_m07",
+        "M_m08",
+        "M_m09",
+        "M_m10",
+        "M_m11",
+        "M_m12",
+        "M_m13",
+        "M_m14",
+        "M_m15",
+        "M_m16",
+        "M_m17",
+        "M_m18",
+        "M_m19",
+        "M_m20",
+        "M_m21"
+      ]
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "Order through settlement",
+      "path": [
+        "M_b2",
+        "M_m01",
+        "M_s1",
+        "M_s4",
+        "M_m04",
+        "M_b4",
+        "M_b5",
+        "M_b6",
+        "M_m05",
+        "M_s5",
+        "M_s6",
+        "M_s7",
+        "M_s9",
+        "M_m08",
+        "M_c1",
+        "M_c9",
+        "M_m16",
+        "M_b9",
+        "M_b11",
+        "M_b12",
+        "M_b13"
+      ],
+      "expected": "The three separately owned processes coordinate via named Message Flows; none is replaced by cross-pool Sequence Flow. Generic activities express handling of the communications, not an executable wait promise."
+    },
+    {
+      "name": "Buyer quote rework",
+      "path": [
+        "M_b5",
+        "M_b-rework",
+        "M_b3",
+        "M_m03",
+        "M_s3",
+        "M_s4",
+        "M_m04",
+        "M_b4",
+        "M_b5"
+      ],
+      "expected": "The explicit default returns to clarification; a new quotation is reviewed before approval."
+    },
+    {
+      "name": "Supplier terms rework",
+      "path": [
+        "M_s6",
+        "M_s-rework",
+        "M_s3",
+        "M_s4",
+        "M_m04",
+        "M_b4"
+      ],
+      "expected": "The supplier reworks quotation when order terms are not agreed; it does not proceed straight to shipment."
+    }
+  ],
+  "review": {
+    "reference": "Three ordered white-box pools; nested Buyer-team ownership; all 39 internal Sequence Flows and 21 inter-party Message Flows readable. Long return paths and inter-party edge crossings require review; they cannot pass merely because XML is valid.",
+    "intentionalCrossings": [],
+    "status": "not_run"
+  },
+  "minimums": {
+    "participants": 3,
+    "flowNodes": 40,
+    "connectors": 60,
+    "nestedLanes": true
+  }
+}

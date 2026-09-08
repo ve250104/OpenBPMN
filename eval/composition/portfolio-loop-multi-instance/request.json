@@ -1,0 +1,227 @@
+{
+  "evidence": [
+    {
+      "key": "synthetic-specification",
+      "source": "Authored synthetic composition specification",
+      "summary": "Standard loop and both multi-instance modes — an artificial acceptance case, not a deployment or interview.",
+      "locator": "eval/composition/portfolio-loop-multi-instance/expected.json"
+    }
+  ],
+  "links": [
+    {
+      "elementRef": "portfolio-model",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:Definitions in the definitions document: {\"name\":\"Portfolio review and distribution\",\"targetNamespace\":\"urn:process-model:portfolio-model\"}"
+    },
+    {
+      "elementRef": "portfolio",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:Process in M_portfolio-model.rootElements: {\"name\":\"Review and distribute a portfolio update\",\"isExecutable\":false}"
+    },
+    {
+      "elementRef": "requested",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:StartEvent in M_portfolio.flowElements: {\"name\":\"Portfolio update requested\"}"
+    },
+    {
+      "elementRef": "refine",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:UserTask in M_portfolio.flowElements: {\"name\":\"Refine investment narrative\",\"loopCharacteristics\":{\"$type\":\"bpmn:StandardLoopCharacteristics\",\"loopCondition\":{\"$type\":\"bpmn:FormalExpression\",\"body\":\"Material review comments remain\"}}}"
+    },
+    {
+      "elementRef": "signoff",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:ManualTask in M_portfolio.flowElements: {\"name\":\"Collect partner sign-offs\",\"loopCharacteristics\":{\"$type\":\"bpmn:MultiInstanceLoopCharacteristics\",\"isSequential\":true}}"
+    },
+    {
+      "elementRef": "distribute",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:ServiceTask in M_portfolio.flowElements: {\"name\":\"Distribute investor updates\",\"loopCharacteristics\":{\"$type\":\"bpmn:MultiInstanceLoopCharacteristics\"}}"
+    },
+    {
+      "elementRef": "complete",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:EndEvent in M_portfolio.flowElements: {\"name\":\"Portfolio update distributed\"}"
+    },
+    {
+      "elementRef": "l1",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_portfolio.flowElements: {\"sourceRef\":\"M_requested\",\"targetRef\":\"M_refine\"}"
+    },
+    {
+      "elementRef": "l2",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_portfolio.flowElements: {\"sourceRef\":\"M_refine\",\"targetRef\":\"M_signoff\"}"
+    },
+    {
+      "elementRef": "l3",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_portfolio.flowElements: {\"sourceRef\":\"M_signoff\",\"targetRef\":\"M_distribute\"}"
+    },
+    {
+      "elementRef": "l4",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_portfolio.flowElements: {\"sourceRef\":\"M_distribute\",\"targetRef\":\"M_complete\"}"
+    },
+    {
+      "elementRef": "investment-team",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:Lane in G_lanes_portfolio.lanes: {\"name\":\"Investment team\",\"flowNodeRef\":[\"M_refine\",\"M_requested\",\"M_signoff\"]}"
+    },
+    {
+      "elementRef": "operations",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:Lane in G_lanes_portfolio.lanes: {\"name\":\"Investor operations\",\"flowNodeRef\":[\"M_complete\",\"M_distribute\"]}"
+    }
+  ],
+  "schemaVersion": "1.0.0",
+  "profileVersion": "1.0.0",
+  "model": {
+    "key": "portfolio-model",
+    "name": "Portfolio review and distribution",
+    "primaryRef": "portfolio",
+    "processes": [
+      {
+        "key": "portfolio",
+        "name": "Review and distribute a portfolio update",
+        "nodes": [
+          {
+            "key": "requested",
+            "type": "startEvent",
+            "containerRef": "portfolio",
+            "name": "Portfolio update requested",
+            "event": {
+              "kind": "none"
+            }
+          },
+          {
+            "key": "refine",
+            "type": "userTask",
+            "containerRef": "portfolio",
+            "name": "Refine investment narrative",
+            "loop": {
+              "kind": "standard",
+              "condition": "Material review comments remain",
+              "testBefore": false
+            }
+          },
+          {
+            "key": "signoff",
+            "type": "manualTask",
+            "containerRef": "portfolio",
+            "name": "Collect partner sign-offs",
+            "loop": {
+              "kind": "multiInstance",
+              "sequential": true
+            }
+          },
+          {
+            "key": "distribute",
+            "type": "serviceTask",
+            "containerRef": "portfolio",
+            "name": "Distribute investor updates",
+            "loop": {
+              "kind": "multiInstance",
+              "sequential": false
+            }
+          },
+          {
+            "key": "complete",
+            "type": "endEvent",
+            "containerRef": "portfolio",
+            "name": "Portfolio update distributed",
+            "event": {
+              "kind": "none"
+            }
+          }
+        ],
+        "flows": [
+          {
+            "key": "l1",
+            "containerRef": "portfolio",
+            "sourceRef": "requested",
+            "targetRef": "refine"
+          },
+          {
+            "key": "l2",
+            "containerRef": "portfolio",
+            "sourceRef": "refine",
+            "targetRef": "signoff"
+          },
+          {
+            "key": "l3",
+            "containerRef": "portfolio",
+            "sourceRef": "signoff",
+            "targetRef": "distribute"
+          },
+          {
+            "key": "l4",
+            "containerRef": "portfolio",
+            "sourceRef": "distribute",
+            "targetRef": "complete"
+          }
+        ],
+        "lanes": [
+          {
+            "key": "investment-team",
+            "name": "Investment team",
+            "parentRef": "portfolio",
+            "flowNodeRefs": [
+              "requested",
+              "refine",
+              "signoff"
+            ]
+          },
+          {
+            "key": "operations",
+            "name": "Investor operations",
+            "parentRef": "portfolio",
+            "flowNodeRefs": [
+              "distribute",
+              "complete"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

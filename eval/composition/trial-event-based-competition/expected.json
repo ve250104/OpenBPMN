@@ -1,0 +1,258 @@
+{
+  "title": "Event-based competition between acceptance and timeout",
+  "facts": [
+    [
+      "M_competition-model",
+      "bpmn:Definitions",
+      null,
+      {
+        "name": "Trial offer response race",
+        "targetNamespace": "urn:process-model:competition-model"
+      }
+    ],
+    [
+      "M_invitation",
+      "bpmn:Message",
+      "M_competition-model.rootElements",
+      {
+        "name": "Trial invitation"
+      }
+    ],
+    [
+      "M_acceptance",
+      "bpmn:Message",
+      "M_competition-model.rootElements",
+      {
+        "name": "Trial acceptance"
+      }
+    ],
+    [
+      "M_offer",
+      "bpmn:Process",
+      "M_competition-model.rootElements",
+      {
+        "name": "Resolve a time-limited trial offer",
+        "isExecutable": false
+      }
+    ],
+    [
+      "M_qualified",
+      "bpmn:StartEvent",
+      "M_offer.flowElements",
+      {
+        "name": "Lead qualified"
+      }
+    ],
+    [
+      "M_invite",
+      "bpmn:SendTask",
+      "M_offer.flowElements",
+      {
+        "name": "Send trial invitation",
+        "messageRef": "M_invitation"
+      }
+    ],
+    [
+      "M_wait",
+      "bpmn:EventBasedGateway",
+      "M_offer.flowElements",
+      {
+        "name": "Acceptance or expiry?"
+      }
+    ],
+    [
+      "M_accepted",
+      "bpmn:IntermediateCatchEvent",
+      "M_offer.flowElements",
+      {
+        "name": "Acceptance received"
+      }
+    ],
+    [
+      "G_event_accepted",
+      "bpmn:MessageEventDefinition",
+      "M_accepted.eventDefinitions",
+      {
+        "messageRef": "M_acceptance"
+      }
+    ],
+    [
+      "M_expired",
+      "bpmn:IntermediateCatchEvent",
+      "M_offer.flowElements",
+      {
+        "name": "Seven days elapsed"
+      }
+    ],
+    [
+      "G_event_expired",
+      "bpmn:TimerEventDefinition",
+      "M_expired.eventDefinitions",
+      {
+        "timeDuration": {
+          "$type": "bpmn:FormalExpression",
+          "body": "P7D"
+        }
+      }
+    ],
+    [
+      "M_activate",
+      "bpmn:ServiceTask",
+      "M_offer.flowElements",
+      {
+        "name": "Activate trial"
+      }
+    ],
+    [
+      "M_close",
+      "bpmn:UserTask",
+      "M_offer.flowElements",
+      {
+        "name": "Close expired offer"
+      }
+    ],
+    [
+      "M_resolved",
+      "bpmn:EndEvent",
+      "M_offer.flowElements",
+      {
+        "name": "Offer resolved"
+      }
+    ],
+    [
+      "M_c1",
+      "bpmn:SequenceFlow",
+      "M_offer.flowElements",
+      {
+        "sourceRef": "M_qualified",
+        "targetRef": "M_invite"
+      }
+    ],
+    [
+      "M_c2",
+      "bpmn:SequenceFlow",
+      "M_offer.flowElements",
+      {
+        "sourceRef": "M_invite",
+        "targetRef": "M_wait"
+      }
+    ],
+    [
+      "M_c3",
+      "bpmn:SequenceFlow",
+      "M_offer.flowElements",
+      {
+        "sourceRef": "M_wait",
+        "targetRef": "M_accepted"
+      }
+    ],
+    [
+      "M_c4",
+      "bpmn:SequenceFlow",
+      "M_offer.flowElements",
+      {
+        "sourceRef": "M_wait",
+        "targetRef": "M_expired"
+      }
+    ],
+    [
+      "M_c5",
+      "bpmn:SequenceFlow",
+      "M_offer.flowElements",
+      {
+        "sourceRef": "M_accepted",
+        "targetRef": "M_activate"
+      }
+    ],
+    [
+      "M_c6",
+      "bpmn:SequenceFlow",
+      "M_offer.flowElements",
+      {
+        "sourceRef": "M_expired",
+        "targetRef": "M_close"
+      }
+    ],
+    [
+      "M_c7",
+      "bpmn:SequenceFlow",
+      "M_offer.flowElements",
+      {
+        "sourceRef": "M_activate",
+        "targetRef": "M_resolved"
+      }
+    ],
+    [
+      "M_c8",
+      "bpmn:SequenceFlow",
+      "M_offer.flowElements",
+      {
+        "sourceRef": "M_close",
+        "targetRef": "M_resolved"
+      }
+    ]
+  ],
+  "visible": [
+    {
+      "plane": "M_offer",
+      "shapes": [
+        "M_qualified",
+        "M_invite",
+        "M_wait",
+        "M_accepted",
+        "M_expired",
+        "M_activate",
+        "M_close",
+        "M_resolved"
+      ],
+      "edges": [
+        "M_c1",
+        "M_c2",
+        "M_c3",
+        "M_c4",
+        "M_c5",
+        "M_c6",
+        "M_c7",
+        "M_c8"
+      ]
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "Acceptance wins",
+      "path": [
+        "M_qualified",
+        "M_invite",
+        "M_wait",
+        "M_accepted",
+        "M_activate",
+        "M_resolved"
+      ],
+      "expected": "The Message Catch wins the race and the trial is activated."
+    },
+    {
+      "name": "Timeout wins",
+      "path": [
+        "M_wait",
+        "M_expired",
+        "M_close",
+        "M_resolved"
+      ],
+      "expected": "The Timer Catch wins; no activation occurs."
+    },
+    {
+      "name": "Late acceptance",
+      "path": [
+        "M_wait",
+        "M_expired",
+        "M_close"
+      ],
+      "expected": "The competing acceptance catch is no longer active after expiry wins; no second branch is invented."
+    }
+  ],
+  "review": {
+    "reference": "Native event-based gateway branches to distinct Message and Timer Catch Events; neither branch is a condition/default flow.",
+    "intentionalCrossings": [],
+    "status": "not_run"
+  }
+}

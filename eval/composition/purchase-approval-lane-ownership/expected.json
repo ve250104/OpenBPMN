@@ -1,0 +1,303 @@
+{
+  "title": "Purchase approval with explicit lane ownership",
+  "facts": [
+    [
+      "M_approval-model",
+      "bpmn:Definitions",
+      null,
+      {
+        "name": "Purchase approval and correction",
+        "targetNamespace": "urn:process-model:approval-model"
+      }
+    ],
+    [
+      "M_approval",
+      "bpmn:Process",
+      "M_approval-model.rootElements",
+      {
+        "name": "Approve a purchase",
+        "isExecutable": false
+      }
+    ],
+    [
+      "M_raised",
+      "bpmn:StartEvent",
+      "M_approval.flowElements",
+      {
+        "name": "Purchase requested"
+      }
+    ],
+    [
+      "M_prepare",
+      "bpmn:UserTask",
+      "M_approval.flowElements",
+      {
+        "name": "Prepare business case"
+      }
+    ],
+    [
+      "M_review",
+      "bpmn:UserTask",
+      "M_approval.flowElements",
+      {
+        "name": "Review budget and rationale"
+      }
+    ],
+    [
+      "M_decision",
+      "bpmn:ExclusiveGateway",
+      "M_approval.flowElements",
+      {
+        "name": "Request acceptable?",
+        "default": "M_decline"
+      }
+    ],
+    [
+      "M_revise",
+      "bpmn:UserTask",
+      "M_approval.flowElements",
+      {
+        "name": "Revise business case"
+      }
+    ],
+    [
+      "M_place",
+      "bpmn:ServiceTask",
+      "M_approval.flowElements",
+      {
+        "name": "Place approved order"
+      }
+    ],
+    [
+      "M_ordered",
+      "bpmn:EndEvent",
+      "M_approval.flowElements",
+      {
+        "name": "Order placed"
+      }
+    ],
+    [
+      "M_rejected",
+      "bpmn:EndEvent",
+      "M_approval.flowElements",
+      {
+        "name": "Purchase declined"
+      }
+    ],
+    [
+      "M_a1",
+      "bpmn:SequenceFlow",
+      "M_approval.flowElements",
+      {
+        "sourceRef": "M_raised",
+        "targetRef": "M_prepare"
+      }
+    ],
+    [
+      "M_a2",
+      "bpmn:SequenceFlow",
+      "M_approval.flowElements",
+      {
+        "sourceRef": "M_prepare",
+        "targetRef": "M_review"
+      }
+    ],
+    [
+      "M_a3",
+      "bpmn:SequenceFlow",
+      "M_approval.flowElements",
+      {
+        "sourceRef": "M_review",
+        "targetRef": "M_decision"
+      }
+    ],
+    [
+      "M_approve",
+      "bpmn:SequenceFlow",
+      "M_approval.flowElements",
+      {
+        "sourceRef": "M_decision",
+        "targetRef": "M_place",
+        "name": "Approved",
+        "conditionExpression": {
+          "$type": "bpmn:FormalExpression",
+          "body": "Budget and business case approved"
+        }
+      }
+    ],
+    [
+      "M_clarify",
+      "bpmn:SequenceFlow",
+      "M_approval.flowElements",
+      {
+        "sourceRef": "M_decision",
+        "targetRef": "M_revise",
+        "name": "Clarification required",
+        "conditionExpression": {
+          "$type": "bpmn:FormalExpression",
+          "body": "Reviewer requests clarification"
+        }
+      }
+    ],
+    [
+      "M_decline",
+      "bpmn:SequenceFlow",
+      "M_approval.flowElements",
+      {
+        "sourceRef": "M_decision",
+        "targetRef": "M_rejected",
+        "name": "Otherwise"
+      }
+    ],
+    [
+      "M_resubmit",
+      "bpmn:SequenceFlow",
+      "M_approval.flowElements",
+      {
+        "sourceRef": "M_revise",
+        "targetRef": "M_review"
+      }
+    ],
+    [
+      "M_a4",
+      "bpmn:SequenceFlow",
+      "M_approval.flowElements",
+      {
+        "sourceRef": "M_place",
+        "targetRef": "M_ordered"
+      }
+    ],
+    [
+      "G_lanes_approval",
+      "bpmn:LaneSet",
+      "M_approval.laneSets",
+      {}
+    ],
+    [
+      "G_lanes_finance",
+      "bpmn:LaneSet",
+      "M_finance.childLaneSet",
+      {}
+    ],
+    [
+      "M_requester",
+      "bpmn:Lane",
+      "G_lanes_approval.lanes",
+      {
+        "name": "Requester",
+        "flowNodeRef": [
+          "M_prepare",
+          "M_raised",
+          "M_revise"
+        ]
+      }
+    ],
+    [
+      "M_finance",
+      "bpmn:Lane",
+      "G_lanes_approval.lanes",
+      {
+        "name": "Finance",
+        "flowNodeRef": [
+          "M_decision",
+          "M_ordered",
+          "M_place",
+          "M_rejected",
+          "M_review"
+        ]
+      }
+    ],
+    [
+      "M_approver",
+      "bpmn:Lane",
+      "G_lanes_finance.lanes",
+      {
+        "name": "Budget owner",
+        "flowNodeRef": [
+          "M_decision",
+          "M_rejected",
+          "M_review"
+        ]
+      }
+    ],
+    [
+      "M_purchasing",
+      "bpmn:Lane",
+      "G_lanes_finance.lanes",
+      {
+        "name": "Purchasing",
+        "flowNodeRef": [
+          "M_ordered",
+          "M_place"
+        ]
+      }
+    ]
+  ],
+  "visible": [
+    {
+      "plane": "M_approval",
+      "shapes": [
+        "M_raised",
+        "M_prepare",
+        "M_review",
+        "M_decision",
+        "M_revise",
+        "M_place",
+        "M_ordered",
+        "M_rejected",
+        "M_requester",
+        "M_finance",
+        "M_approver",
+        "M_purchasing"
+      ],
+      "edges": [
+        "M_a1",
+        "M_a2",
+        "M_a3",
+        "M_approve",
+        "M_clarify",
+        "M_decline",
+        "M_resubmit",
+        "M_a4"
+      ]
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "Approved purchase",
+      "path": [
+        "M_raised",
+        "M_prepare",
+        "M_review",
+        "M_decision",
+        "M_place",
+        "M_ordered"
+      ],
+      "expected": "Only the budget owner decides approval; purchasing places the order."
+    },
+    {
+      "name": "Clarify and resubmit",
+      "path": [
+        "M_decision",
+        "M_revise",
+        "M_review",
+        "M_decision",
+        "M_place"
+      ],
+      "expected": "The requester revises; the reviewer performs the review again."
+    },
+    {
+      "name": "Declined",
+      "path": [
+        "M_decision",
+        "M_rejected"
+      ],
+      "expected": "The default route ends without ordering."
+    }
+  ],
+  "review": {
+    "reference": "Left-to-right approval with a visible rework return, separate requester and Finance lanes, and two nested Finance lanes.",
+    "intentionalCrossings": [],
+    "status": "not_run"
+  }
+}

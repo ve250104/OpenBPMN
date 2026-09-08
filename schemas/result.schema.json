@@ -1,0 +1,551 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:openbpmn:schema:result:1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "resultVersion": {
+      "const": "1.0.0"
+    },
+    "command": {
+      "enum": ["generate", "validate", "render", "capabilities"]
+    },
+    "toolVersion": {
+      "$ref": "urn:openbpmn:schema:request:1.0.0#/$defs/name"
+    },
+    "profileVersion": {
+      "const": "1.0.0"
+    },
+    "status": {
+      "enum": ["completed", "refused", "failed"]
+    },
+    "signal": {
+      "enum": [
+        "clean_export_ready",
+        "snapshot_ready",
+        "clarification_needed",
+        "generation_failed",
+        "invalid_exported",
+        "validation_completed",
+        "render_completed",
+        "capabilities_reported",
+        "operation_failed"
+      ]
+    },
+    "exitCode": {
+      "type": "integer",
+      "enum": [0, 1, 2, 3, 4]
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "enum": ["bpmn", "svg", "quality", "handoff"]
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          },
+          "state": {
+            "enum": ["produced", "preserved"]
+          }
+        },
+        "required": ["kind", "path", "state"]
+      },
+      "maxItems": 4
+    },
+    "report": {
+      "$ref": "urn:openbpmn:schema:quality-report:1.0.0"
+    },
+    "capabilities": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "request": {
+              "const": "1.0.0"
+            },
+            "handoff": {
+              "const": "1.0.0"
+            },
+            "report": {
+              "const": "1.0.0"
+            },
+            "result": {
+              "const": "1.0.0"
+            }
+          },
+          "required": ["request", "handoff", "report", "result"]
+        },
+        "profile": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "const": "OpenBPMN Consulting Core"
+            },
+            "version": {
+              "const": "1.0.0"
+            },
+            "bpmnVersion": {
+              "const": "2.0.2"
+            },
+            "implementedConcepts": {
+              "type": "array",
+              "items": {
+                "$ref": "urn:openbpmn:schema:request:1.0.0#/$defs/name"
+              },
+              "maxItems": 5000,
+              "uniqueItems": true
+            },
+            "complete": {
+              "type": "boolean"
+            }
+          },
+          "required": ["name", "version", "bpmnVersion", "implementedConcepts", "complete"]
+        },
+        "runtime": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "nodeVersion": {
+              "$ref": "urn:openbpmn:schema:request:1.0.0#/$defs/name"
+            },
+            "supported": {
+              "type": "boolean"
+            },
+            "browser": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "available": {
+                  "type": "boolean"
+                },
+                "executable": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4096
+                },
+                "version": {
+                  "$ref": "urn:openbpmn:schema:request:1.0.0#/$defs/name"
+                },
+                "reason": {
+                  "$ref": "urn:openbpmn:schema:request:1.0.0#/$defs/text"
+                }
+              },
+              "required": ["available"]
+            }
+          },
+          "required": ["nodeVersion", "supported", "browser"]
+        },
+        "bounds": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "inputBytes": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "semanticElements": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "nestingDepth": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "contextRecords": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": ["inputBytes", "semanticElements", "nestingDepth", "contextRecords"]
+        },
+        "compatibilityProfiles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "enum": ["sap-signavio-process-manager", "celonis-analysis-conformance", "celonis-process-management"]
+              },
+              "verification": {
+                "enum": ["unverified", "verified", "verified_with_limitations", "failed"]
+              }
+            },
+            "required": ["id", "verification"]
+          },
+          "maxItems": 3
+        }
+      },
+      "required": ["schemaVersions", "profile", "runtime", "bounds", "compatibilityProfiles"]
+    }
+  },
+  "required": [
+    "resultVersion",
+    "command",
+    "toolVersion",
+    "profileVersion",
+    "status",
+    "signal",
+    "exitCode",
+    "artifacts",
+    "report"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "signal": {
+            "const": "clean_export_ready"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "command": {
+            "const": "generate"
+          },
+          "status": {
+            "const": "completed"
+          },
+          "exitCode": {
+            "const": 0
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "signal": {
+            "const": "snapshot_ready"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "command": {
+            "const": "generate"
+          },
+          "status": {
+            "const": "completed"
+          },
+          "exitCode": {
+            "const": 0
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "signal": {
+            "const": "clarification_needed"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "command": {
+            "const": "generate"
+          },
+          "status": {
+            "const": "refused"
+          },
+          "exitCode": {
+            "const": 2
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "signal": {
+            "const": "generation_failed"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "command": {
+            "const": "generate"
+          },
+          "status": {
+            "enum": ["refused", "failed"]
+          },
+          "exitCode": {
+            "enum": [1, 2, 3, 4]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "signal": {
+            "const": "invalid_exported"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "command": {
+            "const": "generate"
+          },
+          "status": {
+            "const": "completed"
+          },
+          "exitCode": {
+            "const": 2
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "signal": {
+            "const": "validation_completed"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "command": {
+            "const": "validate"
+          },
+          "status": {
+            "const": "completed"
+          },
+          "exitCode": {
+            "enum": [0, 2]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "signal": {
+            "const": "render_completed"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "command": {
+            "const": "render"
+          },
+          "status": {
+            "const": "completed"
+          },
+          "exitCode": {
+            "const": 0
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "signal": {
+            "const": "capabilities_reported"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "command": {
+            "const": "capabilities"
+          },
+          "status": {
+            "const": "completed"
+          },
+          "exitCode": {
+            "const": 0
+          },
+          "capabilities": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "schemaVersions": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "request": {
+                    "const": "1.0.0"
+                  },
+                  "handoff": {
+                    "const": "1.0.0"
+                  },
+                  "report": {
+                    "const": "1.0.0"
+                  },
+                  "result": {
+                    "const": "1.0.0"
+                  }
+                },
+                "required": ["request", "handoff", "report", "result"]
+              },
+              "profile": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "const": "OpenBPMN Consulting Core"
+                  },
+                  "version": {
+                    "const": "1.0.0"
+                  },
+                  "bpmnVersion": {
+                    "const": "2.0.2"
+                  },
+                  "implementedConcepts": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "urn:openbpmn:schema:request:1.0.0#/$defs/name"
+                    },
+                    "maxItems": 5000,
+                    "uniqueItems": true
+                  },
+                  "complete": {
+                    "type": "boolean"
+                  }
+                },
+                "required": ["name", "version", "bpmnVersion", "implementedConcepts", "complete"]
+              },
+              "runtime": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "nodeVersion": {
+                    "$ref": "urn:openbpmn:schema:request:1.0.0#/$defs/name"
+                  },
+                  "supported": {
+                    "type": "boolean"
+                  },
+                  "browser": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "available": {
+                        "type": "boolean"
+                      },
+                      "executable": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 4096
+                      },
+                      "version": {
+                        "$ref": "urn:openbpmn:schema:request:1.0.0#/$defs/name"
+                      },
+                      "reason": {
+                        "$ref": "urn:openbpmn:schema:request:1.0.0#/$defs/text"
+                      }
+                    },
+                    "required": ["available"]
+                  }
+                },
+                "required": ["nodeVersion", "supported", "browser"]
+              },
+              "bounds": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "inputBytes": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "semanticElements": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "nestingDepth": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "contextRecords": {
+                    "type": "integer",
+                    "minimum": 0
+                  }
+                },
+                "required": ["inputBytes", "semanticElements", "nestingDepth", "contextRecords"]
+              },
+              "compatibilityProfiles": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "enum": [
+                        "sap-signavio-process-manager",
+                        "celonis-analysis-conformance",
+                        "celonis-process-management"
+                      ]
+                    },
+                    "verification": {
+                      "enum": ["unverified", "verified", "verified_with_limitations", "failed"]
+                    }
+                  },
+                  "required": ["id", "verification"]
+                },
+                "maxItems": 3
+              }
+            },
+            "required": ["schemaVersions", "profile", "runtime", "bounds", "compatibilityProfiles"]
+          }
+        },
+        "required": ["capabilities"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "signal": {
+            "const": "operation_failed"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "command": {
+            "enum": ["validate", "render", "capabilities"]
+          },
+          "status": {
+            "enum": ["refused", "failed"]
+          },
+          "exitCode": {
+            "enum": [1, 2, 3, 4]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "command": {
+            "not": {
+              "const": "capabilities"
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "capabilities": false
+        }
+      }
+    }
+  ]
+}

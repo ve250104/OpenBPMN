@@ -38,6 +38,8 @@ All semantic records have `key`, optional `name`, and optional intentional `docu
 
 All Process elements remain in flat lists; `containerRef` expresses nesting. A Subprocess does not duplicate its children in another payload. Containment must be acyclic. Sequence Flow endpoints have the same flow scope, including embedded subprocess scope; no cross-scope shortcuts are invented. Boundary Event and attached Activity share a containing flow scope. Lane membership must resolve to the same flow scope; a Flow Node belongs to at most one leaf Lane, and ancestor membership is derived. The default Flow must be an outgoing Flow of its owner with no competing condition. IDs remain stable when a node moves or is renamed; an illegal move fails semantic validation.
 
+For a conditional Sequence Flow with no explicit `name`, input normalization uses the supplied condition as its visible name. This meaning-neutral display default keeps the same label in canonical semantics, exported BPMN, and SVG; explicit names are preserved. If the condition exceeds the 500-character name bound, require an explicit short name instead of truncating the condition or leaving the decision invisible.
+
 ### Data and intentional documentation
 
 | Artifact type | Required or conditional fields |
@@ -51,6 +53,12 @@ All Process elements remain in flat lists; `containerRef` expresses nesting. A S
 | `association` | `containerRef`, `sourceRef`, `targetRef`, optional `direction` = `none` (default), `one`, or `both` |
 
 A Data Association has `key`, `direction: "input" | "output"`, `ownerRef`, nonempty `sourceRefs[]`, and `targetRef`. Its legal owner, sources, and target are checked separately from its JSON shape. The compiler emits standard Activity/Process `ioSpecification` and deterministic input/output sets as required for the supplied IO declarations; Events use their BPMN-defined input/output placement. It does not serialize a generic Association where a Data Association is required. No transformation, assignment expression, or vendor data mapping is inferred.
+
+Group, Association, and Data Association do not accept a `name`: their normative BPMN types have no such attribute. Group’s visible text comes from its referenced Category `value`; all three may retain intentional standard `documentation`. Input rejects unsupported names instead of dropping them or converting them into another semantic field. This pre-release clarification follows `tGroup`, `tAssociation`, and `tDataAssociation` in the packaged official `Semantic.xsd`.
+
+Within this profile, `sourceRefs[]` must contain exactly one source: BPMN requires a single source when no transformation is defined or referenced, and transformations/assignments are outside the profile. Multiple sources are a semantic refusal, never silently truncated or split into different associations. Explicit expert serialization retains every supplied source in the distinctly marked invalid XML; it does not make the model valid. See [OMG BPMN 2.0.2, §10.3.1, Data Association, printed page 221](https://www.omg.org/spec/BPMN/2.0.2/PDF#page=251).
+
+Complete DI means complete **intended visible notation**, not a shape for every serialized object. Process-level Data Inputs/Outputs receive visible native IO glyphs and labels. Activity/Event-owned IO supporting Data Associations remains semantic substructure; those associations visibly connect the data reference to the owning Activity/Event, without invented payload icons. Explicit valid supplied IO geometry is preserved by rendering. Embedded Subprocesses cannot declare IO directly. These rules follow [BPMN 2.0.2 conformance-table footnote, printed page 4; IO rules, pages 210–215](https://www.omg.org/spec/BPMN/2.0.2/PDF#page=34).
 
 Explicit declaration records are preserved in XML even when unused; the report may identify redundant input as advisory. No declaration is silently pruned. Process meaning and evidence must never be altered merely to please a renderer.
 
@@ -69,6 +77,8 @@ An issue's typed `resolution` is the only resolution direction. It names the exp
 Evidence, decision, issue, and scenario keys are unique within each collection; reference fields determine the target collection and never use ambiguous name lookup. All current `elementRefs`, link `elementRef`, scenario steps, and semantic references resolve to current model keys. When an element is removed, retained decisions and resolved issues may move its reference to `historicalElementRefs`; those keys need not resolve now and are reserved against reuse in the current request. Active issues cannot point only at deleted elements: resolve them through a decision or attach them to the current scope. This preserves relevant review history without retaining a second model. The Core validates links and reports missing support. A Host Agent evaluates sources; the deterministic Core cannot authenticate claims or infer human approval from source text.
 
 `presentation` accepts only `direction: "leftToRight"`, optional `participantOrder[]`, optional `laneOrder[]`, and optional `subprocesses[]` records `{elementRef, expanded}`. Every provided ordering is a duplicate-free subset of matching keys; omitted members follow input order. Subprocesses default collapsed; expansion is a presentation choice and never deletes contained semantics. The primary plane matches `primaryRef`; secondary planes cover hidden subprocess contents and called Processes. The SVG output is one self-contained sheet with clearly labelled separate panels for the primary and secondary diagrams, not an omission of hidden semantics. Standards DI in the BPMN retains the distinct planes.
+
+When multiple Participants reference the same contained Process, the Collaboration overview shows those pools collapsed while a separate Process plane shows the shared contents once. All original `processRef` values remain intact; geometry generation never clones the Process or invents participant-specific node identities. An internal Message Flow endpoint whose Participant cannot be determined uniquely requires clarification; explicit Participant endpoints remain expressible.
 
 ### Handoff File
 
@@ -119,7 +129,11 @@ The complete `signal` enum is `clean_export_ready`, `snapshot_ready`, `clarifica
 
 ## Result envelope and Quality Report
 
+Read-only inspection does not project away facts it cannot represent. Multiple supplied Collaborations and optional/alternative/while-executing IO-set configurations leave complete semantic assessment `not_run` with a profile limitation. Explicit Link Event references, when present, must agree with opposite catch/throw definitions of the same name in the same scope. These checks neither rewrite supplied XML nor add required XML attributes absent from the standard.
+
 Every JSON result has `resultVersion: "1.0.0"`, `command`, `toolVersion`, `profileVersion`, `status: completed|refused|failed`, `signal`, `exitCode`, `artifacts[]`, and `report`. Artifact records have `kind: bpmn|svg|quality|handoff`, `path`, and `state: produced|preserved`. Capability results additionally have `capabilities`; other commands omit that field. When an input cannot be inspected, produce a minimal report with checks not run rather than echoing the payload. `status` describes command execution, while report checks describe validity; validation can complete and exit 2 because it found defects.
+
+The `capabilities` payload is required for `capabilities_reported`. A refused or failed capability command may omit it when inspection did not run; it must not fabricate runtime observations to satisfy the schema.
 
 A Quality Report has `reportVersion: "1.0.0"`, `toolVersion`, `profileVersion`, optional `modelKey`, `export: {requested, outcome, cleanEligible, expertOverride}`, `checks[]`, `findings[]`, and `context`. `requested` is `auto|clean|snapshot|none`; `outcome` is `clean|snapshot|invalid|none`. `cleanEligible` is boolean and follows the required-check rules below. `expertOverride` is boolean and identifies an applied override, not a refused option. `context` contains data-minimized `evidence`, `decisions`, `issues`, and `links` using the above shapes, not the semantic model or chat history. It is evidence for interpreting this assessment, not persistent Session State.
 
@@ -133,8 +147,19 @@ A finding has `id`, `code`, `category`, `severity: error|warning|info`, `blocksC
 | --- | --- |
 | `INPUT_SCHEMA`, `INPUT_VERSION`, `INPUT_LIMIT`, `KEY_DUPLICATE` | Structured contract failures |
 | `XML_PARSE`, `XML_UNSAFE`, `BPMN_XSD`, `REF_MISSING` | XML, schema, and reference failures |
+| `XML_INVALID`, `MODEL_INVALID` | Rendering-parser refusal or compilation refusal; accompanying findings identify the failed rule |
 | `FLOW_SCOPE`, `EVENT_PLACEMENT`, `DEFAULT_FLOW`, `DATA_RELATION` | Normative relationship/placement failures |
+| `FLOW_CONDITION`, `GATEWAY_FLOW`, `EVENT_FLOW` | Conditional-flow eligibility and required routing connectivity |
+| `CONTAINMENT_CYCLE`, `EVENT_SCOPE`, `LOOP_PLACEMENT` | Invalid containment, event scope or repetition owner |
+| `BOUNDARY_ATTACHMENT`, `EVENT_INTERRUPTION`, `LINK_MATCHING` | Boundary owner/interruption or same-scope Link continuation failures |
+| `EVENT_BASED_FLOW`, `EVENT_BASED_MIX`, `EVENT_BASED_TARGET` | Invalid event-based gateway routing, mixed target kinds or instantiation |
+| `MESSAGE_SCOPE`, `MESSAGE_ENDPOINT`, `MESSAGE_MISMATCH`, `MESSAGE_CARDINALITY` | Participant-boundary, endpoint, named payload or message-count failures |
+| `LANE_MEMBERSHIP`, `MODEL_AMBIGUOUS` | Inconsistent responsibility membership or a reference whose participant cannot be chosen faithfully |
+| `DATA_SCOPE`, `ARTIFACT_SCOPE`, `IO_OWNER`, `IO_DIRECTION`, `IO_PLACEMENT`, `IO_CARDINALITY` | Data lifetime/ownership, artifact containment, or legal input/output configuration |
+| `DATA_ASSOCIATION_OWNER`, `DATA_ASSOCIATION_DIRECTION`, `DATA_ASSOCIATION_SOURCE_COUNT` | Data Association owner, direction or source cardinality failures |
 | `PROFILE_DEFERRED`, `PROFILE_EXTENSION` | Unsupported concepts or namespaces |
+| `CONCEPT_DEFERRED`, `ATTRIBUTE_UNSUPPORTED`, `CAPABILITY_UNAVAILABLE` | A deferred structured concept, unrepresentable attribute, or not-yet-implemented development capability |
+| `COMPATIBILITY_UNVERIFIED`, `COMPATIBILITY_LIMITATION`, `COMPATIBILITY_ACTIVITY_NAME` | Separate tenant-verification status, named consumer-envelope limits or absent Analysis activity names; never core Clean blockers |
 | `DI_MISSING`, `DI_INVALID`, `RENDER_UNSUPPORTED` | Diagram coverage, geometry, or rendering gaps |
 | `EVIDENCE_CONFLICT`, `EVIDENCE_GAP`, `DECLARED_OMISSION` | Evidence limitations and explicitly accepted omissions |
 | `QUALITY_NAMING`, `QUALITY_OWNERSHIP`, `QUALITY_OUTCOME`, `QUALITY_COMPLEXITY` | Advisory consulting checks |

@@ -1,0 +1,304 @@
+{
+  "title": "Nested expanded and collapsed Subprocesses with a same-file Call Activity",
+  "facts": [
+    [
+      "M_onboarding-model",
+      "bpmn:Definitions",
+      null,
+      {
+        "name": "Customer qualification and activation",
+        "targetNamespace": "urn:process-model:onboarding-model"
+      }
+    ],
+    [
+      "M_onboarding",
+      "bpmn:Process",
+      "M_onboarding-model.rootElements",
+      {
+        "name": "Onboard a business customer",
+        "isExecutable": false
+      }
+    ],
+    [
+      "M_intake",
+      "bpmn:StartEvent",
+      "M_onboarding.flowElements",
+      {
+        "name": "Customer accepted"
+      }
+    ],
+    [
+      "M_qualify",
+      "bpmn:SubProcess",
+      "M_onboarding.flowElements",
+      {
+        "name": "Qualify customer"
+      }
+    ],
+    [
+      "M_activate",
+      "bpmn:CallActivity",
+      "M_onboarding.flowElements",
+      {
+        "name": "Activate customer account",
+        "calledElement": {
+          "namespace": "urn:process-model:onboarding-model",
+          "localName": "M_activation"
+        }
+      }
+    ],
+    [
+      "M_done",
+      "bpmn:EndEvent",
+      "M_onboarding.flowElements",
+      {
+        "name": "Customer onboarded"
+      }
+    ],
+    [
+      "M_qstart",
+      "bpmn:StartEvent",
+      "M_qualify.flowElements",
+      {
+        "name": "Qualification started"
+      }
+    ],
+    [
+      "M_verify",
+      "bpmn:SubProcess",
+      "M_qualify.flowElements",
+      {
+        "name": "Verify company identity"
+      }
+    ],
+    [
+      "M_qend",
+      "bpmn:EndEvent",
+      "M_qualify.flowElements",
+      {
+        "name": "Customer qualified"
+      }
+    ],
+    [
+      "M_vstart",
+      "bpmn:StartEvent",
+      "M_verify.flowElements",
+      {
+        "name": "Verification started"
+      }
+    ],
+    [
+      "M_review",
+      "bpmn:UserTask",
+      "M_verify.flowElements",
+      {
+        "name": "Review company evidence"
+      }
+    ],
+    [
+      "M_vend",
+      "bpmn:EndEvent",
+      "M_verify.flowElements",
+      {
+        "name": "Identity verified"
+      }
+    ],
+    [
+      "M_n1",
+      "bpmn:SequenceFlow",
+      "M_onboarding.flowElements",
+      {
+        "sourceRef": "M_intake",
+        "targetRef": "M_qualify"
+      }
+    ],
+    [
+      "M_n2",
+      "bpmn:SequenceFlow",
+      "M_onboarding.flowElements",
+      {
+        "sourceRef": "M_qualify",
+        "targetRef": "M_activate"
+      }
+    ],
+    [
+      "M_n3",
+      "bpmn:SequenceFlow",
+      "M_onboarding.flowElements",
+      {
+        "sourceRef": "M_activate",
+        "targetRef": "M_done"
+      }
+    ],
+    [
+      "M_q1",
+      "bpmn:SequenceFlow",
+      "M_qualify.flowElements",
+      {
+        "sourceRef": "M_qstart",
+        "targetRef": "M_verify"
+      }
+    ],
+    [
+      "M_q2",
+      "bpmn:SequenceFlow",
+      "M_qualify.flowElements",
+      {
+        "sourceRef": "M_verify",
+        "targetRef": "M_qend"
+      }
+    ],
+    [
+      "M_v1",
+      "bpmn:SequenceFlow",
+      "M_verify.flowElements",
+      {
+        "sourceRef": "M_vstart",
+        "targetRef": "M_review"
+      }
+    ],
+    [
+      "M_v2",
+      "bpmn:SequenceFlow",
+      "M_verify.flowElements",
+      {
+        "sourceRef": "M_review",
+        "targetRef": "M_vend"
+      }
+    ],
+    [
+      "M_activation",
+      "bpmn:Process",
+      "M_onboarding-model.rootElements",
+      {
+        "name": "Activate a verified account",
+        "isExecutable": false
+      }
+    ],
+    [
+      "M_astart",
+      "bpmn:StartEvent",
+      "M_activation.flowElements",
+      {
+        "name": "Activation requested"
+      }
+    ],
+    [
+      "M_enable",
+      "bpmn:ServiceTask",
+      "M_activation.flowElements",
+      {
+        "name": "Enable account access"
+      }
+    ],
+    [
+      "M_aend",
+      "bpmn:EndEvent",
+      "M_activation.flowElements",
+      {
+        "name": "Account activated"
+      }
+    ],
+    [
+      "M_a1",
+      "bpmn:SequenceFlow",
+      "M_activation.flowElements",
+      {
+        "sourceRef": "M_astart",
+        "targetRef": "M_enable"
+      }
+    ],
+    [
+      "M_a2",
+      "bpmn:SequenceFlow",
+      "M_activation.flowElements",
+      {
+        "sourceRef": "M_enable",
+        "targetRef": "M_aend"
+      }
+    ]
+  ],
+  "visible": [
+    {
+      "plane": "M_onboarding",
+      "shapes": [
+        "M_intake",
+        "M_qualify",
+        "M_activate",
+        "M_done",
+        "M_qstart",
+        "M_verify",
+        "M_qend"
+      ],
+      "edges": [
+        "M_n1",
+        "M_n2",
+        "M_n3",
+        "M_q1",
+        "M_q2"
+      ]
+    },
+    {
+      "plane": "M_verify",
+      "shapes": [
+        "M_vstart",
+        "M_review",
+        "M_vend"
+      ],
+      "edges": [
+        "M_v1",
+        "M_v2"
+      ]
+    },
+    {
+      "plane": "M_activation",
+      "shapes": [
+        "M_astart",
+        "M_enable",
+        "M_aend"
+      ],
+      "edges": [
+        "M_a1",
+        "M_a2"
+      ]
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "Full onboarding",
+      "path": [
+        "M_intake",
+        "M_qualify",
+        "M_activate",
+        "M_done"
+      ],
+      "expected": "Qualification completes before the separate callable activation process."
+    },
+    {
+      "name": "Inspect qualification",
+      "path": [
+        "M_qstart",
+        "M_verify",
+        "M_qend"
+      ],
+      "expected": "Expanded qualification exposes its own scope while identity verification remains collapsed."
+    },
+    {
+      "name": "Inspect identity and activation details",
+      "path": [
+        "M_vstart",
+        "M_review",
+        "M_vend",
+        "M_astart",
+        "M_enable",
+        "M_aend"
+      ],
+      "expected": "Two separate detail panels retain their complete flows. This is a review sequence, not a cross-scope Sequence Flow."
+    }
+  ],
+  "review": {
+    "reference": "Overview shows expanded qualification containing collapsed verification with a plus marker; verification and activation each have a named detail panel. The Call Activity has a thick border and resolves to the same-file activation Process.",
+    "intentionalCrossings": [],
+    "status": "not_run"
+  }
+}

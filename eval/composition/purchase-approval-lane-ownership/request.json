@@ -1,0 +1,352 @@
+{
+  "evidence": [
+    {
+      "key": "synthetic-specification",
+      "source": "Authored synthetic composition specification",
+      "summary": "Purchase approval with explicit lane ownership — an artificial acceptance case, not a deployment or interview.",
+      "locator": "eval/composition/purchase-approval-lane-ownership/expected.json"
+    }
+  ],
+  "links": [
+    {
+      "elementRef": "approval-model",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:Definitions in the definitions document: {\"name\":\"Purchase approval and correction\",\"targetNamespace\":\"urn:process-model:approval-model\"}"
+    },
+    {
+      "elementRef": "approval",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:Process in M_approval-model.rootElements: {\"name\":\"Approve a purchase\",\"isExecutable\":false}"
+    },
+    {
+      "elementRef": "raised",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:StartEvent in M_approval.flowElements: {\"name\":\"Purchase requested\"}"
+    },
+    {
+      "elementRef": "prepare",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:UserTask in M_approval.flowElements: {\"name\":\"Prepare business case\"}"
+    },
+    {
+      "elementRef": "review",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:UserTask in M_approval.flowElements: {\"name\":\"Review budget and rationale\"}"
+    },
+    {
+      "elementRef": "decision",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:ExclusiveGateway in M_approval.flowElements: {\"name\":\"Request acceptable?\",\"default\":\"M_decline\"}"
+    },
+    {
+      "elementRef": "revise",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:UserTask in M_approval.flowElements: {\"name\":\"Revise business case\"}"
+    },
+    {
+      "elementRef": "place",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:ServiceTask in M_approval.flowElements: {\"name\":\"Place approved order\"}"
+    },
+    {
+      "elementRef": "ordered",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:EndEvent in M_approval.flowElements: {\"name\":\"Order placed\"}"
+    },
+    {
+      "elementRef": "rejected",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:EndEvent in M_approval.flowElements: {\"name\":\"Purchase declined\"}"
+    },
+    {
+      "elementRef": "a1",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_approval.flowElements: {\"sourceRef\":\"M_raised\",\"targetRef\":\"M_prepare\"}"
+    },
+    {
+      "elementRef": "a2",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_approval.flowElements: {\"sourceRef\":\"M_prepare\",\"targetRef\":\"M_review\"}"
+    },
+    {
+      "elementRef": "a3",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_approval.flowElements: {\"sourceRef\":\"M_review\",\"targetRef\":\"M_decision\"}"
+    },
+    {
+      "elementRef": "approve",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_approval.flowElements: {\"sourceRef\":\"M_decision\",\"targetRef\":\"M_place\",\"name\":\"Approved\",\"conditionExpression\":{\"$type\":\"bpmn:FormalExpression\",\"body\":\"Budget and business case approved\"}}"
+    },
+    {
+      "elementRef": "clarify",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_approval.flowElements: {\"sourceRef\":\"M_decision\",\"targetRef\":\"M_revise\",\"name\":\"Clarification required\",\"conditionExpression\":{\"$type\":\"bpmn:FormalExpression\",\"body\":\"Reviewer requests clarification\"}}"
+    },
+    {
+      "elementRef": "decline",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_approval.flowElements: {\"sourceRef\":\"M_decision\",\"targetRef\":\"M_rejected\",\"name\":\"Otherwise\"}"
+    },
+    {
+      "elementRef": "resubmit",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_approval.flowElements: {\"sourceRef\":\"M_revise\",\"targetRef\":\"M_review\"}"
+    },
+    {
+      "elementRef": "a4",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_approval.flowElements: {\"sourceRef\":\"M_place\",\"targetRef\":\"M_ordered\"}"
+    },
+    {
+      "elementRef": "requester",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:Lane in G_lanes_approval.lanes: {\"name\":\"Requester\",\"flowNodeRef\":[\"M_prepare\",\"M_raised\",\"M_revise\"]}"
+    },
+    {
+      "elementRef": "finance",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:Lane in G_lanes_approval.lanes: {\"name\":\"Finance\",\"flowNodeRef\":[\"M_decision\",\"M_ordered\",\"M_place\",\"M_rejected\",\"M_review\"]}"
+    },
+    {
+      "elementRef": "approver",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:Lane in G_lanes_finance.lanes: {\"name\":\"Budget owner\",\"flowNodeRef\":[\"M_decision\",\"M_rejected\",\"M_review\"]}"
+    },
+    {
+      "elementRef": "purchasing",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:Lane in G_lanes_finance.lanes: {\"name\":\"Purchasing\",\"flowNodeRef\":[\"M_ordered\",\"M_place\"]}"
+    }
+  ],
+  "schemaVersion": "1.0.0",
+  "profileVersion": "1.0.0",
+  "model": {
+    "key": "approval-model",
+    "name": "Purchase approval and correction",
+    "primaryRef": "approval",
+    "processes": [
+      {
+        "key": "approval",
+        "name": "Approve a purchase",
+        "nodes": [
+          {
+            "key": "raised",
+            "type": "startEvent",
+            "containerRef": "approval",
+            "name": "Purchase requested",
+            "event": {
+              "kind": "none"
+            }
+          },
+          {
+            "key": "prepare",
+            "type": "userTask",
+            "containerRef": "approval",
+            "name": "Prepare business case"
+          },
+          {
+            "key": "review",
+            "type": "userTask",
+            "containerRef": "approval",
+            "name": "Review budget and rationale"
+          },
+          {
+            "key": "decision",
+            "type": "exclusiveGateway",
+            "containerRef": "approval",
+            "name": "Request acceptable?",
+            "defaultFlowRef": "decline"
+          },
+          {
+            "key": "revise",
+            "type": "userTask",
+            "containerRef": "approval",
+            "name": "Revise business case"
+          },
+          {
+            "key": "place",
+            "type": "serviceTask",
+            "containerRef": "approval",
+            "name": "Place approved order"
+          },
+          {
+            "key": "ordered",
+            "type": "endEvent",
+            "containerRef": "approval",
+            "name": "Order placed",
+            "event": {
+              "kind": "none"
+            }
+          },
+          {
+            "key": "rejected",
+            "type": "endEvent",
+            "containerRef": "approval",
+            "name": "Purchase declined",
+            "event": {
+              "kind": "none"
+            }
+          }
+        ],
+        "flows": [
+          {
+            "key": "a1",
+            "containerRef": "approval",
+            "sourceRef": "raised",
+            "targetRef": "prepare"
+          },
+          {
+            "key": "a2",
+            "containerRef": "approval",
+            "sourceRef": "prepare",
+            "targetRef": "review"
+          },
+          {
+            "key": "a3",
+            "containerRef": "approval",
+            "sourceRef": "review",
+            "targetRef": "decision"
+          },
+          {
+            "key": "approve",
+            "containerRef": "approval",
+            "sourceRef": "decision",
+            "targetRef": "place",
+            "name": "Approved",
+            "condition": "Budget and business case approved"
+          },
+          {
+            "key": "clarify",
+            "containerRef": "approval",
+            "sourceRef": "decision",
+            "targetRef": "revise",
+            "name": "Clarification required",
+            "condition": "Reviewer requests clarification"
+          },
+          {
+            "key": "decline",
+            "containerRef": "approval",
+            "sourceRef": "decision",
+            "targetRef": "rejected",
+            "name": "Otherwise"
+          },
+          {
+            "key": "resubmit",
+            "containerRef": "approval",
+            "sourceRef": "revise",
+            "targetRef": "review"
+          },
+          {
+            "key": "a4",
+            "containerRef": "approval",
+            "sourceRef": "place",
+            "targetRef": "ordered"
+          }
+        ],
+        "lanes": [
+          {
+            "key": "requester",
+            "name": "Requester",
+            "parentRef": "approval",
+            "flowNodeRefs": [
+              "raised",
+              "prepare",
+              "revise"
+            ]
+          },
+          {
+            "key": "finance",
+            "name": "Finance",
+            "parentRef": "approval"
+          },
+          {
+            "key": "approver",
+            "name": "Budget owner",
+            "parentRef": "finance",
+            "flowNodeRefs": [
+              "review",
+              "decision",
+              "rejected"
+            ]
+          },
+          {
+            "key": "purchasing",
+            "name": "Purchasing",
+            "parentRef": "finance",
+            "flowNodeRefs": [
+              "place",
+              "ordered"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

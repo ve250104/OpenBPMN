@@ -1,0 +1,672 @@
+{
+  "schemaVersion": "1.0.0",
+  "profileVersion": "1.0.0",
+  "model": {
+    "key": "scale-25",
+    "name": "25-node deterministic qualification",
+    "primaryRef": "collaboration",
+    "processes": [
+      {
+        "key": "process-0",
+        "name": "Operational process 1",
+        "nodes": [
+          {
+            "key": "node-0-0",
+            "type": "startEvent",
+            "containerRef": "process-0",
+            "name": "Request received 0.0",
+            "event": {
+              "kind": "none"
+            }
+          },
+          {
+            "key": "node-0-1",
+            "type": "task",
+            "containerRef": "process-0",
+            "name": "Review item 0.1"
+          },
+          {
+            "key": "node-0-2",
+            "type": "task",
+            "containerRef": "process-0",
+            "name": "Review item 0.2"
+          },
+          {
+            "key": "node-0-3",
+            "type": "task",
+            "containerRef": "process-0",
+            "name": "Review item 0.3"
+          },
+          {
+            "key": "node-0-4",
+            "type": "endEvent",
+            "containerRef": "process-0",
+            "name": "Request completed 0.4",
+            "event": {
+              "kind": "none"
+            }
+          }
+        ],
+        "flows": [
+          {
+            "key": "sequence-0-0",
+            "containerRef": "process-0",
+            "sourceRef": "node-0-0",
+            "targetRef": "node-0-1"
+          },
+          {
+            "key": "sequence-0-1",
+            "containerRef": "process-0",
+            "sourceRef": "node-0-1",
+            "targetRef": "node-0-2"
+          },
+          {
+            "key": "sequence-0-2",
+            "containerRef": "process-0",
+            "sourceRef": "node-0-2",
+            "targetRef": "node-0-3"
+          },
+          {
+            "key": "sequence-0-3",
+            "containerRef": "process-0",
+            "sourceRef": "node-0-3",
+            "targetRef": "node-0-4"
+          }
+        ],
+        "lanes": [
+          {
+            "key": "lane-0-0",
+            "parentRef": "process-0",
+            "name": "Intake and evidence",
+            "flowNodeRefs": [
+              "node-0-0",
+              "node-0-1",
+              "node-0-2"
+            ]
+          },
+          {
+            "key": "lane-0-1",
+            "parentRef": "process-0",
+            "name": "Operations review",
+            "flowNodeRefs": [
+              "node-0-3",
+              "node-0-4"
+            ]
+          }
+        ]
+      },
+      {
+        "key": "process-1",
+        "name": "Operational process 2",
+        "nodes": [
+          {
+            "key": "node-1-0",
+            "type": "startEvent",
+            "containerRef": "process-1",
+            "name": "Request received 1.0",
+            "event": {
+              "kind": "none"
+            }
+          },
+          {
+            "key": "node-1-1",
+            "type": "task",
+            "containerRef": "process-1",
+            "name": "Review item 1.1"
+          },
+          {
+            "key": "node-1-2",
+            "type": "task",
+            "containerRef": "process-1",
+            "name": "Review item 1.2"
+          },
+          {
+            "key": "node-1-3",
+            "type": "task",
+            "containerRef": "process-1",
+            "name": "Review item 1.3"
+          },
+          {
+            "key": "node-1-4",
+            "type": "endEvent",
+            "containerRef": "process-1",
+            "name": "Request completed 1.4",
+            "event": {
+              "kind": "none"
+            }
+          }
+        ],
+        "flows": [
+          {
+            "key": "sequence-1-0",
+            "containerRef": "process-1",
+            "sourceRef": "node-1-0",
+            "targetRef": "node-1-1"
+          },
+          {
+            "key": "sequence-1-1",
+            "containerRef": "process-1",
+            "sourceRef": "node-1-1",
+            "targetRef": "node-1-2"
+          },
+          {
+            "key": "sequence-1-2",
+            "containerRef": "process-1",
+            "sourceRef": "node-1-2",
+            "targetRef": "node-1-3"
+          },
+          {
+            "key": "sequence-1-3",
+            "containerRef": "process-1",
+            "sourceRef": "node-1-3",
+            "targetRef": "node-1-4"
+          }
+        ],
+        "lanes": [
+          {
+            "key": "lane-1-0",
+            "parentRef": "process-1",
+            "name": "Intake and evidence",
+            "flowNodeRefs": [
+              "node-1-0",
+              "node-1-1",
+              "node-1-2"
+            ]
+          },
+          {
+            "key": "lane-1-1",
+            "parentRef": "process-1",
+            "name": "Operations review",
+            "flowNodeRefs": [
+              "node-1-3",
+              "node-1-4"
+            ]
+          }
+        ]
+      },
+      {
+        "key": "process-2",
+        "name": "Operational process 3",
+        "nodes": [
+          {
+            "key": "node-2-0",
+            "type": "startEvent",
+            "containerRef": "process-2",
+            "name": "Request received 2.0",
+            "event": {
+              "kind": "none"
+            }
+          },
+          {
+            "key": "node-2-1",
+            "type": "task",
+            "containerRef": "process-2",
+            "name": "Review item 2.1"
+          },
+          {
+            "key": "node-2-2",
+            "type": "task",
+            "containerRef": "process-2",
+            "name": "Review item 2.2"
+          },
+          {
+            "key": "node-2-3",
+            "type": "task",
+            "containerRef": "process-2",
+            "name": "Review item 2.3"
+          },
+          {
+            "key": "node-2-4",
+            "type": "endEvent",
+            "containerRef": "process-2",
+            "name": "Request completed 2.4",
+            "event": {
+              "kind": "none"
+            }
+          }
+        ],
+        "flows": [
+          {
+            "key": "sequence-2-0",
+            "containerRef": "process-2",
+            "sourceRef": "node-2-0",
+            "targetRef": "node-2-1"
+          },
+          {
+            "key": "sequence-2-1",
+            "containerRef": "process-2",
+            "sourceRef": "node-2-1",
+            "targetRef": "node-2-2"
+          },
+          {
+            "key": "sequence-2-2",
+            "containerRef": "process-2",
+            "sourceRef": "node-2-2",
+            "targetRef": "node-2-3"
+          },
+          {
+            "key": "sequence-2-3",
+            "containerRef": "process-2",
+            "sourceRef": "node-2-3",
+            "targetRef": "node-2-4"
+          }
+        ],
+        "lanes": [
+          {
+            "key": "lane-2-0",
+            "parentRef": "process-2",
+            "name": "Intake and evidence",
+            "flowNodeRefs": [
+              "node-2-0",
+              "node-2-1",
+              "node-2-2"
+            ]
+          },
+          {
+            "key": "lane-2-1",
+            "parentRef": "process-2",
+            "name": "Operations review",
+            "flowNodeRefs": [
+              "node-2-3",
+              "node-2-4"
+            ]
+          }
+        ]
+      },
+      {
+        "key": "process-3",
+        "name": "Operational process 4",
+        "nodes": [
+          {
+            "key": "node-3-0",
+            "type": "startEvent",
+            "containerRef": "process-3",
+            "name": "Request received 3.0",
+            "event": {
+              "kind": "none"
+            }
+          },
+          {
+            "key": "node-3-1",
+            "type": "task",
+            "containerRef": "process-3",
+            "name": "Review item 3.1"
+          },
+          {
+            "key": "node-3-2",
+            "type": "task",
+            "containerRef": "process-3",
+            "name": "Review item 3.2"
+          },
+          {
+            "key": "node-3-3",
+            "type": "task",
+            "containerRef": "process-3",
+            "name": "Review item 3.3"
+          },
+          {
+            "key": "node-3-4",
+            "type": "endEvent",
+            "containerRef": "process-3",
+            "name": "Request completed 3.4",
+            "event": {
+              "kind": "none"
+            }
+          }
+        ],
+        "flows": [
+          {
+            "key": "sequence-3-0",
+            "containerRef": "process-3",
+            "sourceRef": "node-3-0",
+            "targetRef": "node-3-1"
+          },
+          {
+            "key": "sequence-3-1",
+            "containerRef": "process-3",
+            "sourceRef": "node-3-1",
+            "targetRef": "node-3-2"
+          },
+          {
+            "key": "sequence-3-2",
+            "containerRef": "process-3",
+            "sourceRef": "node-3-2",
+            "targetRef": "node-3-3"
+          },
+          {
+            "key": "sequence-3-3",
+            "containerRef": "process-3",
+            "sourceRef": "node-3-3",
+            "targetRef": "node-3-4"
+          }
+        ],
+        "lanes": [
+          {
+            "key": "lane-3-0",
+            "parentRef": "process-3",
+            "name": "Intake and evidence",
+            "flowNodeRefs": [
+              "node-3-0",
+              "node-3-1",
+              "node-3-2"
+            ]
+          },
+          {
+            "key": "lane-3-1",
+            "parentRef": "process-3",
+            "name": "Operations review",
+            "flowNodeRefs": [
+              "node-3-3",
+              "node-3-4"
+            ]
+          }
+        ]
+      },
+      {
+        "key": "process-4",
+        "name": "Operational process 5",
+        "nodes": [
+          {
+            "key": "node-4-0",
+            "type": "startEvent",
+            "containerRef": "process-4",
+            "name": "Request received 4.0",
+            "event": {
+              "kind": "none"
+            }
+          },
+          {
+            "key": "node-4-1",
+            "type": "task",
+            "containerRef": "process-4",
+            "name": "Review item 4.1"
+          },
+          {
+            "key": "node-4-2",
+            "type": "task",
+            "containerRef": "process-4",
+            "name": "Review item 4.2"
+          },
+          {
+            "key": "node-4-3",
+            "type": "task",
+            "containerRef": "process-4",
+            "name": "Review item 4.3"
+          },
+          {
+            "key": "node-4-4",
+            "type": "endEvent",
+            "containerRef": "process-4",
+            "name": "Request completed 4.4",
+            "event": {
+              "kind": "none"
+            }
+          }
+        ],
+        "flows": [
+          {
+            "key": "sequence-4-0",
+            "containerRef": "process-4",
+            "sourceRef": "node-4-0",
+            "targetRef": "node-4-1"
+          },
+          {
+            "key": "sequence-4-1",
+            "containerRef": "process-4",
+            "sourceRef": "node-4-1",
+            "targetRef": "node-4-2"
+          },
+          {
+            "key": "sequence-4-2",
+            "containerRef": "process-4",
+            "sourceRef": "node-4-2",
+            "targetRef": "node-4-3"
+          },
+          {
+            "key": "sequence-4-3",
+            "containerRef": "process-4",
+            "sourceRef": "node-4-3",
+            "targetRef": "node-4-4"
+          }
+        ],
+        "lanes": [
+          {
+            "key": "lane-4-0",
+            "parentRef": "process-4",
+            "name": "Intake and evidence",
+            "flowNodeRefs": [
+              "node-4-0",
+              "node-4-1",
+              "node-4-2"
+            ]
+          },
+          {
+            "key": "lane-4-1",
+            "parentRef": "process-4",
+            "name": "Operations review",
+            "flowNodeRefs": [
+              "node-4-3",
+              "node-4-4"
+            ]
+          }
+        ]
+      }
+    ],
+    "collaboration": {
+      "key": "collaboration",
+      "name": "Operational evidence coordination",
+      "participants": [
+        {
+          "key": "participant-0",
+          "name": "Business participant 1",
+          "processRef": "process-0"
+        },
+        {
+          "key": "participant-1",
+          "name": "Business participant 2",
+          "processRef": "process-1"
+        },
+        {
+          "key": "participant-2",
+          "name": "Business participant 3",
+          "processRef": "process-2"
+        },
+        {
+          "key": "participant-3",
+          "name": "Business participant 4",
+          "processRef": "process-3"
+        },
+        {
+          "key": "participant-4",
+          "name": "Business participant 5",
+          "processRef": "process-4"
+        }
+      ],
+      "messageFlows": [
+        {
+          "key": "message-0",
+          "name": "Evidence handoff 1",
+          "sourceRef": "node-0-1",
+          "targetRef": "node-1-2"
+        },
+        {
+          "key": "message-1",
+          "name": "Evidence handoff 2",
+          "sourceRef": "node-1-1",
+          "targetRef": "node-2-2"
+        },
+        {
+          "key": "message-2",
+          "name": "Evidence handoff 3",
+          "sourceRef": "node-2-1",
+          "targetRef": "node-3-2"
+        },
+        {
+          "key": "message-3",
+          "name": "Evidence handoff 4",
+          "sourceRef": "node-3-1",
+          "targetRef": "node-4-2"
+        },
+        {
+          "key": "message-4",
+          "name": "Evidence handoff 5",
+          "sourceRef": "node-4-1",
+          "targetRef": "node-0-2"
+        },
+        {
+          "key": "message-5",
+          "name": "Evidence handoff 6",
+          "sourceRef": "node-0-2",
+          "targetRef": "node-1-3"
+        },
+        {
+          "key": "message-6",
+          "name": "Evidence handoff 7",
+          "sourceRef": "node-1-2",
+          "targetRef": "node-2-3"
+        },
+        {
+          "key": "message-7",
+          "name": "Evidence handoff 8",
+          "sourceRef": "node-2-2",
+          "targetRef": "node-3-3"
+        },
+        {
+          "key": "message-8",
+          "name": "Evidence handoff 9",
+          "sourceRef": "node-3-2",
+          "targetRef": "node-4-3"
+        },
+        {
+          "key": "message-9",
+          "name": "Evidence handoff 10",
+          "sourceRef": "node-4-2",
+          "targetRef": "node-0-3"
+        },
+        {
+          "key": "message-10",
+          "name": "Evidence handoff 11",
+          "sourceRef": "node-0-3",
+          "targetRef": "node-1-1"
+        },
+        {
+          "key": "message-11",
+          "name": "Evidence handoff 12",
+          "sourceRef": "node-1-3",
+          "targetRef": "node-2-1"
+        },
+        {
+          "key": "message-12",
+          "name": "Evidence handoff 13",
+          "sourceRef": "node-2-3",
+          "targetRef": "node-3-1"
+        },
+        {
+          "key": "message-13",
+          "name": "Evidence handoff 14",
+          "sourceRef": "node-3-3",
+          "targetRef": "node-4-1"
+        },
+        {
+          "key": "message-14",
+          "name": "Evidence handoff 15",
+          "sourceRef": "node-4-3",
+          "targetRef": "node-0-1"
+        },
+        {
+          "key": "message-15",
+          "name": "Evidence handoff 16",
+          "sourceRef": "node-0-1",
+          "targetRef": "node-2-2"
+        },
+        {
+          "key": "message-16",
+          "name": "Evidence handoff 17",
+          "sourceRef": "node-1-1",
+          "targetRef": "node-3-2"
+        },
+        {
+          "key": "message-17",
+          "name": "Evidence handoff 18",
+          "sourceRef": "node-2-1",
+          "targetRef": "node-4-2"
+        },
+        {
+          "key": "message-18",
+          "name": "Evidence handoff 19",
+          "sourceRef": "node-3-1",
+          "targetRef": "node-0-2"
+        },
+        {
+          "key": "message-19",
+          "name": "Evidence handoff 20",
+          "sourceRef": "node-4-1",
+          "targetRef": "node-1-2"
+        },
+        {
+          "key": "message-20",
+          "name": "Evidence handoff 21",
+          "sourceRef": "node-0-2",
+          "targetRef": "node-2-3"
+        },
+        {
+          "key": "message-21",
+          "name": "Evidence handoff 22",
+          "sourceRef": "node-1-2",
+          "targetRef": "node-3-3"
+        },
+        {
+          "key": "message-22",
+          "name": "Evidence handoff 23",
+          "sourceRef": "node-2-2",
+          "targetRef": "node-4-3"
+        },
+        {
+          "key": "message-23",
+          "name": "Evidence handoff 24",
+          "sourceRef": "node-3-2",
+          "targetRef": "node-0-3"
+        },
+        {
+          "key": "message-24",
+          "name": "Evidence handoff 25",
+          "sourceRef": "node-4-2",
+          "targetRef": "node-1-3"
+        },
+        {
+          "key": "message-25",
+          "name": "Evidence handoff 26",
+          "sourceRef": "node-0-3",
+          "targetRef": "node-2-1"
+        },
+        {
+          "key": "message-26",
+          "name": "Evidence handoff 27",
+          "sourceRef": "node-1-3",
+          "targetRef": "node-3-1"
+        },
+        {
+          "key": "message-27",
+          "name": "Evidence handoff 28",
+          "sourceRef": "node-2-3",
+          "targetRef": "node-4-1"
+        },
+        {
+          "key": "message-28",
+          "name": "Evidence handoff 29",
+          "sourceRef": "node-3-3",
+          "targetRef": "node-0-1"
+        },
+        {
+          "key": "message-29",
+          "name": "Evidence handoff 30",
+          "sourceRef": "node-4-3",
+          "targetRef": "node-1-1"
+        }
+      ]
+    }
+  },
+  "presentation": {
+    "direction": "leftToRight"
+  }
+}

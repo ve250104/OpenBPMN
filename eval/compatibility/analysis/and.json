@@ -1,0 +1,120 @@
+{
+  "schemaVersion": "1.0.0",
+  "profileVersion": "1.0.0",
+  "model": {
+    "key": "analysis-and",
+    "name": "Complete parallel access checks",
+    "primaryRef": "process",
+    "processes": [
+      {
+        "key": "process",
+        "name": "Complete parallel access checks",
+        "nodes": [
+          {
+            "key": "start",
+            "type": "startEvent",
+            "containerRef": "process",
+            "name": "Review triggered",
+            "event": {
+              "kind": "none"
+            }
+          },
+          {
+            "key": "split",
+            "type": "parallelGateway",
+            "containerRef": "process"
+          },
+          {
+            "key": "identity",
+            "type": "task",
+            "containerRef": "process",
+            "name": "Check identity"
+          },
+          {
+            "key": "access",
+            "type": "task",
+            "containerRef": "process",
+            "name": "Check access"
+          },
+          {
+            "key": "join",
+            "type": "parallelGateway",
+            "containerRef": "process"
+          },
+          {
+            "key": "end",
+            "type": "endEvent",
+            "containerRef": "process",
+            "name": "Checks completed",
+            "event": {
+              "kind": "none"
+            }
+          }
+        ],
+        "flows": [
+          {
+            "key": "flow1",
+            "containerRef": "process",
+            "sourceRef": "start",
+            "targetRef": "split"
+          },
+          {
+            "key": "flow2",
+            "containerRef": "process",
+            "sourceRef": "split",
+            "targetRef": "identity"
+          },
+          {
+            "key": "flow3",
+            "containerRef": "process",
+            "sourceRef": "split",
+            "targetRef": "access"
+          },
+          {
+            "key": "flow4",
+            "containerRef": "process",
+            "sourceRef": "identity",
+            "targetRef": "join"
+          },
+          {
+            "key": "flow5",
+            "containerRef": "process",
+            "sourceRef": "access",
+            "targetRef": "join"
+          },
+          {
+            "key": "flow6",
+            "containerRef": "process",
+            "sourceRef": "join",
+            "targetRef": "end"
+          }
+        ]
+      }
+    ]
+  },
+  "evidence": [
+    {
+      "key": "synthetic-specification",
+      "source": "Authored synthetic qualification case (MIT)",
+      "summary": "Identity and access checks proceed independently. Both must finish before the process ends."
+    }
+  ],
+  "links": [
+    {
+      "elementRef": "identity",
+      "assertion": "Check identity",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ]
+    },
+    {
+      "elementRef": "access",
+      "assertion": "Check access",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ]
+    }
+  ]
+}

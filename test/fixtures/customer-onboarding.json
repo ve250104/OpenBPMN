@@ -1,0 +1,409 @@
+{
+  "schemaVersion": "1.0.0",
+  "profileVersion": "1.0.0",
+  "model": {
+    "key": "customerOnboarding",
+    "name": "Current customer onboarding",
+    "primaryRef": "onboardingCollaboration",
+    "processes": [
+      {
+        "key": "onboardingProcess",
+        "name": "Customer onboarding",
+        "nodes": [
+          {
+            "key": "agreementRecorded",
+            "type": "startEvent",
+            "containerRef": "onboardingProcess",
+            "name": "Signed agreement recorded",
+            "event": {
+              "kind": "none"
+            }
+          },
+          {
+            "key": "openCase",
+            "type": "task",
+            "containerRef": "onboardingProcess",
+            "name": "Open onboarding case"
+          },
+          {
+            "key": "requestDetails",
+            "type": "sendTask",
+            "containerRef": "onboardingProcess",
+            "name": "Request setup details",
+            "messageRef": "detailsRequestMessage"
+          },
+          {
+            "key": "receiveDetails",
+            "type": "receiveTask",
+            "containerRef": "onboardingProcess",
+            "name": "Receive setup details",
+            "messageRef": "setupDetailsMessage"
+          },
+          {
+            "key": "checkDetails",
+            "type": "task",
+            "containerRef": "onboardingProcess",
+            "name": "Check setup details"
+          },
+          {
+            "key": "detailsComplete",
+            "type": "exclusiveGateway",
+            "containerRef": "onboardingProcess",
+            "name": "Details complete?"
+          },
+          {
+            "key": "requestCorrections",
+            "type": "sendTask",
+            "containerRef": "onboardingProcess",
+            "name": "Request corrected details",
+            "messageRef": "correctionRequestMessage"
+          },
+          {
+            "key": "requestVerification",
+            "type": "sendTask",
+            "containerRef": "onboardingProcess",
+            "name": "Request identity verification",
+            "messageRef": "verificationRequestMessage"
+          },
+          {
+            "key": "receiveVerification",
+            "type": "receiveTask",
+            "containerRef": "onboardingProcess",
+            "name": "Receive verification result",
+            "messageRef": "verificationResultMessage"
+          },
+          {
+            "key": "verificationOutcome",
+            "type": "exclusiveGateway",
+            "containerRef": "onboardingProcess",
+            "name": "Verification result?"
+          },
+          {
+            "key": "provisionAccount",
+            "type": "task",
+            "containerRef": "onboardingProcess",
+            "name": "Provision account"
+          },
+          {
+            "key": "reviewRejection",
+            "type": "task",
+            "containerRef": "onboardingProcess",
+            "name": "Review verification rejection"
+          },
+          {
+            "key": "discussAlternatives",
+            "type": "task",
+            "containerRef": "onboardingProcess",
+            "name": "Discuss alternatives with customer"
+          },
+          {
+            "key": "customerChoice",
+            "type": "exclusiveGateway",
+            "containerRef": "onboardingProcess",
+            "name": "Customer choice?"
+          },
+          {
+            "key": "closeDeclined",
+            "type": "task",
+            "containerRef": "onboardingProcess",
+            "name": "Close case as declined"
+          },
+          {
+            "key": "customerDeclined",
+            "type": "endEvent",
+            "containerRef": "onboardingProcess",
+            "name": "Customer declined",
+            "event": {
+              "kind": "none"
+            }
+          },
+          {
+            "key": "arrangeKickoff",
+            "type": "task",
+            "containerRef": "onboardingProcess",
+            "name": "Arrange customer kickoff"
+          },
+          {
+            "key": "markLive",
+            "type": "task",
+            "containerRef": "onboardingProcess",
+            "name": "Mark customer live"
+          },
+          {
+            "key": "customerLive",
+            "type": "endEvent",
+            "containerRef": "onboardingProcess",
+            "name": "Customer live",
+            "event": {
+              "kind": "none"
+            }
+          }
+        ],
+        "flows": [
+          {
+            "key": "startToOpen",
+            "containerRef": "onboardingProcess",
+            "sourceRef": "agreementRecorded",
+            "targetRef": "openCase"
+          },
+          {
+            "key": "openToRequest",
+            "containerRef": "onboardingProcess",
+            "sourceRef": "openCase",
+            "targetRef": "requestDetails"
+          },
+          {
+            "key": "requestToReceive",
+            "containerRef": "onboardingProcess",
+            "sourceRef": "requestDetails",
+            "targetRef": "receiveDetails"
+          },
+          {
+            "key": "receiveToCheck",
+            "containerRef": "onboardingProcess",
+            "sourceRef": "receiveDetails",
+            "targetRef": "checkDetails"
+          },
+          {
+            "key": "checkToCompleteness",
+            "containerRef": "onboardingProcess",
+            "sourceRef": "checkDetails",
+            "targetRef": "detailsComplete"
+          },
+          {
+            "key": "incompleteToCorrections",
+            "containerRef": "onboardingProcess",
+            "sourceRef": "detailsComplete",
+            "targetRef": "requestCorrections",
+            "name": "Missing information",
+            "condition": "Setup details contain missing information"
+          },
+          {
+            "key": "correctionsToReceive",
+            "containerRef": "onboardingProcess",
+            "sourceRef": "requestCorrections",
+            "targetRef": "receiveDetails"
+          },
+          {
+            "key": "completeToVerification",
+            "containerRef": "onboardingProcess",
+            "sourceRef": "detailsComplete",
+            "targetRef": "requestVerification",
+            "name": "Complete",
+            "condition": "Setup details are complete"
+          },
+          {
+            "key": "verificationToResult",
+            "containerRef": "onboardingProcess",
+            "sourceRef": "requestVerification",
+            "targetRef": "receiveVerification"
+          },
+          {
+            "key": "resultToOutcome",
+            "containerRef": "onboardingProcess",
+            "sourceRef": "receiveVerification",
+            "targetRef": "verificationOutcome"
+          },
+          {
+            "key": "approvedToProvision",
+            "containerRef": "onboardingProcess",
+            "sourceRef": "verificationOutcome",
+            "targetRef": "provisionAccount",
+            "name": "Approved",
+            "condition": "Provider result is approved"
+          },
+          {
+            "key": "rejectedToReview",
+            "containerRef": "onboardingProcess",
+            "sourceRef": "verificationOutcome",
+            "targetRef": "reviewRejection",
+            "name": "Rejected",
+            "condition": "Provider result is rejected"
+          },
+          {
+            "key": "reviewToDiscussion",
+            "containerRef": "onboardingProcess",
+            "sourceRef": "reviewRejection",
+            "targetRef": "discussAlternatives"
+          },
+          {
+            "key": "discussionToChoice",
+            "containerRef": "onboardingProcess",
+            "sourceRef": "discussAlternatives",
+            "targetRef": "customerChoice"
+          },
+          {
+            "key": "choiceToCorrection",
+            "containerRef": "onboardingProcess",
+            "sourceRef": "customerChoice",
+            "targetRef": "receiveDetails",
+            "name": "Correct details",
+            "condition": "Customer chooses to correct its details"
+          },
+          {
+            "key": "choiceToDecline",
+            "containerRef": "onboardingProcess",
+            "sourceRef": "customerChoice",
+            "targetRef": "closeDeclined",
+            "name": "Decline",
+            "condition": "Customer declines to continue"
+          },
+          {
+            "key": "closeToDeclined",
+            "containerRef": "onboardingProcess",
+            "sourceRef": "closeDeclined",
+            "targetRef": "customerDeclined"
+          },
+          {
+            "key": "provisionToKickoff",
+            "containerRef": "onboardingProcess",
+            "sourceRef": "provisionAccount",
+            "targetRef": "arrangeKickoff"
+          },
+          {
+            "key": "kickoffToMarkLive",
+            "containerRef": "onboardingProcess",
+            "sourceRef": "arrangeKickoff",
+            "targetRef": "markLive"
+          },
+          {
+            "key": "markToLive",
+            "containerRef": "onboardingProcess",
+            "sourceRef": "markLive",
+            "targetRef": "customerLive"
+          }
+        ],
+        "lanes": [
+          {
+            "key": "customerSuccessLane",
+            "name": "Customer Success",
+            "parentRef": "onboardingProcess",
+            "flowNodeRefs": [
+              "agreementRecorded",
+              "openCase",
+              "requestDetails",
+              "receiveDetails",
+              "checkDetails",
+              "detailsComplete",
+              "requestCorrections",
+              "reviewRejection",
+              "discussAlternatives",
+              "customerChoice",
+              "closeDeclined",
+              "customerDeclined",
+              "arrangeKickoff",
+              "markLive",
+              "customerLive"
+            ]
+          },
+          {
+            "key": "operationsLane",
+            "name": "Operations",
+            "parentRef": "onboardingProcess",
+            "flowNodeRefs": [
+              "requestVerification",
+              "receiveVerification",
+              "verificationOutcome",
+              "provisionAccount"
+            ]
+          }
+        ]
+      }
+    ],
+    "collaboration": {
+      "key": "onboardingCollaboration",
+      "name": "Customer onboarding participants",
+      "participants": [
+        {
+          "key": "companyParticipant",
+          "name": "Our company",
+          "processRef": "onboardingProcess"
+        },
+        {
+          "key": "customerParticipant",
+          "name": "Customer"
+        },
+        {
+          "key": "verificationProvider",
+          "name": "External identity-verification provider"
+        }
+      ],
+      "messageFlows": [
+        {
+          "key": "detailsRequested",
+          "name": "Setup details request",
+          "sourceRef": "requestDetails",
+          "targetRef": "customerParticipant",
+          "messageRef": "detailsRequestMessage"
+        },
+        {
+          "key": "detailsSupplied",
+          "name": "Setup details / corrections",
+          "sourceRef": "customerParticipant",
+          "targetRef": "receiveDetails",
+          "messageRef": "setupDetailsMessage"
+        },
+        {
+          "key": "correctionsRequested",
+          "name": "Missing details request",
+          "sourceRef": "requestCorrections",
+          "targetRef": "customerParticipant",
+          "messageRef": "correctionRequestMessage"
+        },
+        {
+          "key": "verificationRequested",
+          "name": "Verification request",
+          "sourceRef": "requestVerification",
+          "targetRef": "verificationProvider",
+          "messageRef": "verificationRequestMessage"
+        },
+        {
+          "key": "verificationResultReturned",
+          "name": "Approved / rejected result",
+          "sourceRef": "verificationProvider",
+          "targetRef": "receiveVerification",
+          "messageRef": "verificationResultMessage"
+        }
+      ]
+    },
+    "declarations": [
+      {
+        "key": "detailsRequestMessage",
+        "type": "message",
+        "name": "Setup details request"
+      },
+      {
+        "key": "setupDetailsMessage",
+        "type": "message",
+        "name": "Setup details or corrections"
+      },
+      {
+        "key": "correctionRequestMessage",
+        "type": "message",
+        "name": "Missing details request"
+      },
+      {
+        "key": "verificationRequestMessage",
+        "type": "message",
+        "name": "Identity-verification request"
+      },
+      {
+        "key": "verificationResultMessage",
+        "type": "message",
+        "name": "Approved or rejected verification result"
+      }
+    ]
+  },
+  "presentation": {
+    "direction": "leftToRight",
+    "participantOrder": [
+      "companyParticipant",
+      "customerParticipant",
+      "verificationProvider"
+    ],
+    "laneOrder": [
+      "customerSuccessLane",
+      "operationsLane"
+    ]
+  }
+}

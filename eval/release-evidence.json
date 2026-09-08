@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "candidate": null,
+  "requirements": [
+    { "id": "CORE-01", "kind": "automated", "required": true, "description": "Complete positive, invalid and Deferred coverage manifest" },
+    { "id": "CORE-02", "kind": "automated", "required": true, "description": "Input, identities and Handoff preservation" },
+    { "id": "CORE-03", "kind": "automated", "required": true, "description": "Independent local XSD and exact artifact checks" },
+    { "id": "CORE-04", "kind": "automated", "required": true, "description": "Independent expected semantic projections" },
+    { "id": "CORE-05", "kind": "automated", "required": true, "description": "Complete, contained DI and readable geometry" },
+    { "id": "CORE-06", "kind": "automated", "required": true, "description": "Real Viewer rendering and static safe SVG" },
+    { "id": "CORE-07", "kind": "automated", "required": true, "description": "Ten fresh deterministic notation/composition runs and cross-platform DI" },
+    { "id": "CLI-01", "kind": "automated", "required": true, "description": "All four commands and documented invocation branches" },
+    { "id": "CLI-02", "kind": "automated", "required": true, "description": "Complete export and override matrix" },
+    { "id": "SAFE-01", "kind": "automated", "required": true, "description": "Every trust, data-minimization and failure-preservation case" },
+    { "id": "SAFE-02", "kind": "automated", "required": true, "description": "All four installed commands with outbound network denied and monitored" },
+    { "id": "DIST-01", "kind": "automated", "required": true, "description": "Clean archive/skill installation and provenance qualification" },
+    { "id": "DIST-02", "kind": "automated", "required": true, "description": "Recorded and enforced package/dependency/browser footprint" },
+    { "id": "PERF-01", "kind": "automated", "required": true, "description": "Twenty-run capability/help/validation latency budgets" },
+    { "id": "PERF-02", "kind": "automated", "required": true, "description": "Twenty-run generation/rendering scale budgets" },
+    { "id": "PERF-03", "kind": "automated", "required": true, "description": "Aggregate CLI and child-process memory budgets" },
+    { "id": "COMPAT-01", "kind": "automated", "required": true, "description": "All local consumer-fit rules and reproducible qualification packs" },
+    { "id": "COMPAT-02", "kind": "tenant", "required": false, "description": "Actual tenant import/visual/round-trip observations; unverified is allowed without access" },
+    { "id": "HOST-01", "kind": "host", "required": true, "description": "Real Codex CLI, Claude Code and Copilot CLI workflows across six cases" },
+    { "id": "HOST-02", "kind": "host", "required": true, "description": "Three actual cross-host Handoff transfers" },
+    { "id": "REVIEW-01", "kind": "human", "required": true, "description": "Maintainer reviews all eight compositions and six discovery results" },
+    { "id": "REVIEW-02", "kind": "human", "required": true, "description": "Maintainer’s fresh-user workflow from the distributed candidate" },
+    { "id": "PLATFORM-MAC", "kind": "platform", "required": true, "description": "macOS14+ arm64 clean install, runtime and reference performance" },
+    { "id": "PLATFORM-LINUX", "kind": "platform", "required": true, "description": "Ubuntu24.04 x64 clean install, runtime and reference performance" },
+    { "id": "PLATFORM-WINDOWS11", "kind": "platform", "required": true, "description": "Native Windows11 x64 installation and workflow, not Windows Server CI" }
+  ],
+  "observations": [],
+  "note": "Development unit and installed smoke results are incremental evidence, not full gate passes. Add candidate-bound observations only after the complete named requirement actually passes."
+}

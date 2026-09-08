@@ -1,0 +1,143 @@
+{
+  "schemaVersion": "1.0.0",
+  "profileVersion": "1.0.0",
+  "model": {
+    "key": "analysis-xor",
+    "name": "Decide a request",
+    "primaryRef": "process",
+    "processes": [
+      {
+        "key": "process",
+        "name": "Decide a request",
+        "nodes": [
+          {
+            "key": "start",
+            "type": "startEvent",
+            "containerRef": "process",
+            "name": "Request received",
+            "event": {
+              "kind": "none"
+            }
+          },
+          {
+            "key": "review",
+            "type": "task",
+            "containerRef": "process",
+            "name": "Review request"
+          },
+          {
+            "key": "decision",
+            "type": "exclusiveGateway",
+            "containerRef": "process",
+            "name": "Request approved?"
+          },
+          {
+            "key": "approve",
+            "type": "task",
+            "containerRef": "process",
+            "name": "Release approved request"
+          },
+          {
+            "key": "decline",
+            "type": "task",
+            "containerRef": "process",
+            "name": "Notify rejection"
+          },
+          {
+            "key": "approved",
+            "type": "endEvent",
+            "containerRef": "process",
+            "name": "Request released",
+            "event": {
+              "kind": "none"
+            }
+          },
+          {
+            "key": "rejected",
+            "type": "endEvent",
+            "containerRef": "process",
+            "name": "Request rejected",
+            "event": {
+              "kind": "none"
+            }
+          }
+        ],
+        "flows": [
+          {
+            "key": "flow1",
+            "containerRef": "process",
+            "sourceRef": "start",
+            "targetRef": "review"
+          },
+          {
+            "key": "flow2",
+            "containerRef": "process",
+            "sourceRef": "review",
+            "targetRef": "decision"
+          },
+          {
+            "key": "flow3",
+            "containerRef": "process",
+            "sourceRef": "decision",
+            "targetRef": "approve",
+            "condition": "Request approved",
+            "name": "Request approved"
+          },
+          {
+            "key": "flow4",
+            "containerRef": "process",
+            "sourceRef": "decision",
+            "targetRef": "decline",
+            "condition": "Request rejected",
+            "name": "Request rejected"
+          },
+          {
+            "key": "flow5",
+            "containerRef": "process",
+            "sourceRef": "approve",
+            "targetRef": "approved"
+          },
+          {
+            "key": "flow6",
+            "containerRef": "process",
+            "sourceRef": "decline",
+            "targetRef": "rejected"
+          }
+        ]
+      }
+    ]
+  },
+  "evidence": [
+    {
+      "key": "synthetic-specification",
+      "source": "Authored synthetic qualification case (MIT)",
+      "summary": "After review, an approved request is released; a rejected request receives a rejection notice. These alternatives are exclusive."
+    }
+  ],
+  "links": [
+    {
+      "elementRef": "review",
+      "assertion": "Review request",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ]
+    },
+    {
+      "elementRef": "approve",
+      "assertion": "Release approved request",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ]
+    },
+    {
+      "elementRef": "decline",
+      "assertion": "Notify rejection",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ]
+    }
+  ]
+}

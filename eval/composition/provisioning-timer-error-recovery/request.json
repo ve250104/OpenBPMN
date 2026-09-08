@@ -1,0 +1,342 @@
+{
+  "evidence": [
+    {
+      "key": "synthetic-specification",
+      "source": "Authored synthetic composition specification",
+      "summary": "Provisioning timer and error recovery — an artificial acceptance case, not a deployment or interview.",
+      "locator": "eval/composition/provisioning-timer-error-recovery/expected.json"
+    }
+  ],
+  "links": [
+    {
+      "elementRef": "recovery-model",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:Definitions in the definitions document: {\"name\":\"Account provisioning with bounded recovery\",\"targetNamespace\":\"urn:process-model:recovery-model\"}"
+    },
+    {
+      "elementRef": "provisioning-error",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:Error in M_recovery-model.rootElements: {\"name\":\"Provisioning failure\",\"errorCode\":\"PROVISIONING_FAILED\"}"
+    },
+    {
+      "elementRef": "provisioning",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:Process in M_recovery-model.rootElements: {\"name\":\"Provision a customer account\",\"isExecutable\":false}"
+    },
+    {
+      "elementRef": "requested",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:StartEvent in M_provisioning.flowElements: {\"name\":\"Account requested\"}"
+    },
+    {
+      "elementRef": "provision",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:ServiceTask in M_provisioning.flowElements: {\"name\":\"Provision account\"}"
+    },
+    {
+      "elementRef": "ready",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:EndEvent in M_provisioning.flowElements: {\"name\":\"Account ready\"}"
+    },
+    {
+      "elementRef": "late",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:BoundaryEvent in M_provisioning.flowElements: {\"name\":\"Two days elapsed\",\"attachedToRef\":\"M_provision\",\"cancelActivity\":false}"
+    },
+    {
+      "elementRef": "remind",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SendTask in M_provisioning.flowElements: {\"name\":\"Send progress update\"}"
+    },
+    {
+      "elementRef": "reminded",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:EndEvent in M_provisioning.flowElements: {\"name\":\"Customer updated\"}"
+    },
+    {
+      "elementRef": "failed",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:BoundaryEvent in M_provisioning.flowElements: {\"name\":\"Provisioning failed\",\"attachedToRef\":\"M_provision\"}"
+    },
+    {
+      "elementRef": "investigate",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:ManualTask in M_provisioning.flowElements: {\"name\":\"Investigate provisioning failure\"}"
+    },
+    {
+      "elementRef": "recoverable",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:ExclusiveGateway in M_provisioning.flowElements: {\"name\":\"Safe to retry?\",\"default\":\"M_abandon\"}"
+    },
+    {
+      "elementRef": "unable",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:EndEvent in M_provisioning.flowElements: {\"name\":\"Provisioning unsuccessful\"}"
+    },
+    {
+      "elementRef": "r1",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_provisioning.flowElements: {\"sourceRef\":\"M_requested\",\"targetRef\":\"M_provision\"}"
+    },
+    {
+      "elementRef": "r2",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_provisioning.flowElements: {\"sourceRef\":\"M_provision\",\"targetRef\":\"M_ready\"}"
+    },
+    {
+      "elementRef": "r3",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_provisioning.flowElements: {\"sourceRef\":\"M_late\",\"targetRef\":\"M_remind\"}"
+    },
+    {
+      "elementRef": "r4",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_provisioning.flowElements: {\"sourceRef\":\"M_remind\",\"targetRef\":\"M_reminded\"}"
+    },
+    {
+      "elementRef": "r5",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_provisioning.flowElements: {\"sourceRef\":\"M_failed\",\"targetRef\":\"M_investigate\"}"
+    },
+    {
+      "elementRef": "r6",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_provisioning.flowElements: {\"sourceRef\":\"M_investigate\",\"targetRef\":\"M_recoverable\"}"
+    },
+    {
+      "elementRef": "retry",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_provisioning.flowElements: {\"sourceRef\":\"M_recoverable\",\"targetRef\":\"M_provision\",\"name\":\"Retry safe\",\"conditionExpression\":{\"$type\":\"bpmn:FormalExpression\",\"body\":\"The cause is resolved and retry is safe\"}}"
+    },
+    {
+      "elementRef": "abandon",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_provisioning.flowElements: {\"sourceRef\":\"M_recoverable\",\"targetRef\":\"M_unable\",\"name\":\"Otherwise\"}"
+    }
+  ],
+  "schemaVersion": "1.0.0",
+  "profileVersion": "1.0.0",
+  "model": {
+    "key": "recovery-model",
+    "name": "Account provisioning with bounded recovery",
+    "primaryRef": "provisioning",
+    "declarations": [
+      {
+        "key": "provisioning-error",
+        "type": "error",
+        "name": "Provisioning failure",
+        "code": "PROVISIONING_FAILED"
+      }
+    ],
+    "processes": [
+      {
+        "key": "provisioning",
+        "name": "Provision a customer account",
+        "nodes": [
+          {
+            "key": "requested",
+            "type": "startEvent",
+            "containerRef": "provisioning",
+            "name": "Account requested",
+            "event": {
+              "kind": "none"
+            }
+          },
+          {
+            "key": "provision",
+            "type": "serviceTask",
+            "containerRef": "provisioning",
+            "name": "Provision account"
+          },
+          {
+            "key": "ready",
+            "type": "endEvent",
+            "containerRef": "provisioning",
+            "name": "Account ready",
+            "event": {
+              "kind": "none"
+            }
+          },
+          {
+            "key": "late",
+            "type": "boundaryEvent",
+            "containerRef": "provisioning",
+            "name": "Two days elapsed",
+            "attachedToRef": "provision",
+            "interrupting": false,
+            "event": {
+              "kind": "timer",
+              "timeDuration": "P2D"
+            }
+          },
+          {
+            "key": "remind",
+            "type": "sendTask",
+            "containerRef": "provisioning",
+            "name": "Send progress update"
+          },
+          {
+            "key": "reminded",
+            "type": "endEvent",
+            "containerRef": "provisioning",
+            "name": "Customer updated",
+            "event": {
+              "kind": "none"
+            }
+          },
+          {
+            "key": "failed",
+            "type": "boundaryEvent",
+            "containerRef": "provisioning",
+            "name": "Provisioning failed",
+            "attachedToRef": "provision",
+            "interrupting": true,
+            "event": {
+              "kind": "error",
+              "ref": "provisioning-error"
+            }
+          },
+          {
+            "key": "investigate",
+            "type": "manualTask",
+            "containerRef": "provisioning",
+            "name": "Investigate provisioning failure"
+          },
+          {
+            "key": "recoverable",
+            "type": "exclusiveGateway",
+            "containerRef": "provisioning",
+            "name": "Safe to retry?",
+            "defaultFlowRef": "abandon"
+          },
+          {
+            "key": "unable",
+            "type": "endEvent",
+            "containerRef": "provisioning",
+            "name": "Provisioning unsuccessful",
+            "event": {
+              "kind": "error",
+              "ref": "provisioning-error"
+            }
+          }
+        ],
+        "flows": [
+          {
+            "key": "r1",
+            "containerRef": "provisioning",
+            "sourceRef": "requested",
+            "targetRef": "provision"
+          },
+          {
+            "key": "r2",
+            "containerRef": "provisioning",
+            "sourceRef": "provision",
+            "targetRef": "ready"
+          },
+          {
+            "key": "r3",
+            "containerRef": "provisioning",
+            "sourceRef": "late",
+            "targetRef": "remind"
+          },
+          {
+            "key": "r4",
+            "containerRef": "provisioning",
+            "sourceRef": "remind",
+            "targetRef": "reminded"
+          },
+          {
+            "key": "r5",
+            "containerRef": "provisioning",
+            "sourceRef": "failed",
+            "targetRef": "investigate"
+          },
+          {
+            "key": "r6",
+            "containerRef": "provisioning",
+            "sourceRef": "investigate",
+            "targetRef": "recoverable"
+          },
+          {
+            "key": "retry",
+            "containerRef": "provisioning",
+            "sourceRef": "recoverable",
+            "targetRef": "provision",
+            "name": "Retry safe",
+            "condition": "The cause is resolved and retry is safe"
+          },
+          {
+            "key": "abandon",
+            "containerRef": "provisioning",
+            "sourceRef": "recoverable",
+            "targetRef": "unable",
+            "name": "Otherwise"
+          }
+        ]
+      }
+    ]
+  }
+}

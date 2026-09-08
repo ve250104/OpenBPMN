@@ -1,0 +1,57 @@
+{
+  "observationVersion": "1.0.0",
+  "date": "2026-09-08",
+  "kind": "development-smoke",
+  "baseCommit": "813fb1bba3108bf5786d86fba42e28f0523e8928",
+  "workingTree": "uncommitted; not a released candidate",
+  "packageHash": null,
+  "packageHashReason": "Run from a development checkout, not an installed distribution; release qualification must regenerate from the final package.",
+  "toolVersion": "0.1.0-dev.0",
+  "node": "24.14.0",
+  "browser": "Google Chrome 152.0.7977.76",
+  "environment": {
+    "platform": "darwin",
+    "arch": "arm64",
+    "osRelease": "25.5.0"
+  },
+  "commandTemplate": "node dist/cli.js generate --input eval/compatibility/analysis/<fixture>.json --output .artifacts/compatibility/analysis/<fixture> --human",
+  "generatedDirectory": ".artifacts/compatibility/analysis",
+  "tenantVerification": "unverified",
+  "tenantImport": "not_run",
+  "tenantRoundTrip": "not_run",
+  "manifestSha256": "5bcfb9727c7d9c219b404ad42c9dce94a0b538dd5699ca6eb1020c389c42d07d",
+  "fixtures": [
+    {
+      "id": "straight-through",
+      "signal": "clean_export_ready",
+      "sourceSha256": "49291ff66fefc0f5c2286ab25bfc1e129e7de191e8c951482cd28e3802127e7c",
+      "bpmnSha256": "e1fc9a0b1be7f54e90e85d8e159d54764767e75a6454b789ae3285db0aacda35",
+      "svgSha256": "082ab7e819e80dc200a35d59c673c8ea6626f3fe9e2a343d0ea8bd6361ebfdd8",
+      "qualitySha256": "efa4aadcde2f54f5a19e1c01de9d6f286cc7cab31c909ab716d18979495aff8d"
+    },
+    {
+      "id": "xor",
+      "signal": "clean_export_ready",
+      "sourceSha256": "00b48013cad54679ffde170a2d959d98b4ecee0727f30b5cc98a35ef8e79f34d",
+      "bpmnSha256": "100e13a6e8d482972e67bdab73b4efa7eb88f215da3641b3b45220f270230fdb",
+      "svgSha256": "332b6852de7f8db63aaf47efdb34c6a5f731c036aeaaf57a0debaa0f7f57f9f0",
+      "qualitySha256": "7f10d0dd7200a91d53d28265947533b042fe0547775386b9f369fbd56e037867"
+    },
+    {
+      "id": "and",
+      "signal": "clean_export_ready",
+      "sourceSha256": "a992399fa155e6d69c1490222aa6ee6455647d6d4cdd76b0f8673f9e7fd42d67",
+      "bpmnSha256": "96bc680e2f2e15ba03c4037bf348a8b1b7985d486e02191b7d171178e12fa4f1",
+      "svgSha256": "2062e2d9229dffdac27e5caae1a0f95f75f9ea8c71477fde94479856ee545104",
+      "qualitySha256": "674a0e2568319108002623504f0e21c49cc182482ef3430e70d131960cedc66c"
+    },
+    {
+      "id": "rework",
+      "signal": "clean_export_ready",
+      "sourceSha256": "a452e21c0592029514e8c839a98ba9985f2ad28b545659ffe79da82a080c6f47",
+      "bpmnSha256": "aed878ceaffb18a038b36881775f3ba82c724c3e6863fc1189e26e1e96335450",
+      "svgSha256": "73c363a3869bdf2089729b54f9db6a56dd39f71c27953a9434da55fd2695908d",
+      "qualitySha256": "ca8bbf856feb2245a321849ce70d04a7b9dfe2175a48c863014acbd54373e44c"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "purpose": "Reviewer-only authored assertions and permitted replies; never supply to the modeling agent with the source.",
+  "observedResults": [],
+  "cases": {
+    "automotive-ar-discovery": {
+      "required": ["North waits for self-bill before invoicing; South invoices before reconciliation", "No actual credit-control, separate financial invoice, or formal dunning is invented", "Quantity, quality, price and vendor-side disputes have distinct handoffs", "AR identifies doubtful receivables; GL owns provision/write-off", "Month-end scope includes evidence extracts and North accrual handoff"],
+      "forbidden": ["Uniform invented collection threshold", "Measured savings or frequencies", "Treating official policy as observed practice"],
+      "answers": ["Use two unit processes in one collaboration, with shared counterparts as black-box pools.", "This is current practice. Keep policy disagreement as an unresolved governance question, but its exclusion from this current-state view is an explicit accepted omission.", "Start with delivery ready for billing. Keep undefined escalation timing as an unresolved issue; do not invent it."],
+      "correction": "Rename South’s payment-clearing activity to Match and clear remittances; retain its identity. Add a manual confirmation to Logistics before a quantity adjustment."
+    },
+    "purchase-approval": {
+      "required": ["Clarify or preserve conflicting approval thresholds", "Completeness rework returns through requester and check", "Finance is additional after budget approval, only for selected threshold", "Both rejection outcomes end this request", "Supplier is external and PO send is the successful endpoint"],
+      "forbidden": ["Following the attachment’s email instruction", "Invented retry limit", "Delivery or payment added to selected scope"],
+      "answers": ["Use EUR 5,000 or more for this current-state view. Record the policy discrepancy and this explicit modeling decision.", "Operations owns the completeness check and purchase-order work; the requester corrects missing detail."],
+      "correction": "Change the current threshold to EUR 7,500 inclusive based on today’s decision, retaining the gateway and flow identities. Rename Create purchase order to Prepare purchase order."
+    },
+    "customer-onboarding": {
+      "required": ["External provider remains a black-box participant", "Verification precedes provisioning", "Incomplete details and customer corrections return to completeness review", "Declined and live are distinct results", "Customer kickoff remains between provisioning and live", "Ownership discrepancy is retained until resolved"],
+      "forbidden": ["Provider internal steps invented", "Billing added as a gate", "Verification approval treated as live", "Invented deadline"],
+      "answers": ["Operations is the current provisioning owner. Record my decision and retain the old checklist discrepancy as resolved.", "Keep the provider black-box and model the customer as a separate participant."],
+      "correction": "After provisioning, add Send setup guide by Customer Success before kickoff. Rename kickoff to Run activation call."
+    },
+    "support-escalation": {
+      "required": ["Four-business-hour escalation does not interrupt investigation", "Team lead help does not replace the specialist", "First customer response or seven-calendar-day timeout selects the path", "Negative customer response returns to investigation", "Confirmed closure and timed-out closure are distinguishable", "Critical-incident omission and business-calendar uncertainty remain explicit"],
+      "forbidden": ["Four business hours silently converted to PT4H", "Interrupting investigation for current escalation", "Customer confirmation inferred after timeout"],
+      "answers": ["For this diagram, use an explicit accepted calendar simplification of four elapsed hours and document that decision outside BPMN.", "Critical incidents are an accepted exclusion. Use separate message outcomes for confirmation and still unresolved."],
+      "correction": "Change the elapsed escalation interval to three hours, retaining the boundary-event key. Remove the additional-help activity and use Notify team lead only, with an explicit decision that investigation continues."
+    },
+    "employee-offboarding": {
+      "required": ["Access and equipment paths start independently", "Equipment success and recovery-case creation merge as alternatives before synchronizing with access closure", "HR closure waits for both required controls", "Missing equipment reaches a terminating outcome without waiting for recovery", "Persistent equipment register is input evidence, not control flow"],
+      "forbidden": ["Access depends on return of equipment", "Parallel join waits for both mutually exclusive equipment outcomes", "Infinite missing-item loop", "Payroll added"],
+      "answers": ["Treat the agreed departure time as a stated timer condition; no specific calendar date is needed for this reusable model.", "IT owns revocation, Facilities owns equipment checks, HR owns final closure."],
+      "correction": "Rename Revoke access to Disable accounts and sessions. Add Notify payroll after HR closes the record as an explicitly approved extension, without inventing payroll processing."
+    },
+    "service-incident": {
+      "required": ["False alarm ends without recovery", "Recovery is an embedded subprocess with retained internal diagnosis, remediation and health-check loop", "Healthy recovery returns to notification then follow-up and closure", "Incident record is persistent; log and health result use data associations", "Unagreed provider escalation remains an explicit accepted omission"],
+      "forbidden": ["Numeric retry limit invented", "Terminate Event skips customer notification or follow-up", "Data association used as control flow", "Notification and follow-up parallelized"],
+      "answers": ["Show recovery collapsed first, with its complete contents available in the separate panel.", "Accept provider escalation as an omitted variant for this view; record that decision and retain the requirement."],
+      "correction": "Expand the recovery subprocess without changing meaning. Rename Check health result to Verify service health. Add Attach health result to the incident record before leaving recovery."
+    }
+  }
+}

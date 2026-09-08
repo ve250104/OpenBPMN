@@ -1,0 +1,92 @@
+{
+  "schemaVersion": "1.0.0",
+  "profileVersion": "1.0.0",
+  "model": {
+    "key": "analysis-straight-through",
+    "name": "Review an incoming request",
+    "primaryRef": "process",
+    "processes": [
+      {
+        "key": "process",
+        "name": "Review an incoming request",
+        "nodes": [
+          {
+            "key": "start",
+            "type": "startEvent",
+            "containerRef": "process",
+            "name": "Request received",
+            "event": {
+              "kind": "none"
+            }
+          },
+          {
+            "key": "register",
+            "type": "task",
+            "containerRef": "process",
+            "name": "Register request"
+          },
+          {
+            "key": "review",
+            "type": "task",
+            "containerRef": "process",
+            "name": "Review request"
+          },
+          {
+            "key": "end",
+            "type": "endEvent",
+            "containerRef": "process",
+            "name": "Request reviewed",
+            "event": {
+              "kind": "none"
+            }
+          }
+        ],
+        "flows": [
+          {
+            "key": "flow1",
+            "containerRef": "process",
+            "sourceRef": "start",
+            "targetRef": "register"
+          },
+          {
+            "key": "flow2",
+            "containerRef": "process",
+            "sourceRef": "register",
+            "targetRef": "review"
+          },
+          {
+            "key": "flow3",
+            "containerRef": "process",
+            "sourceRef": "review",
+            "targetRef": "end"
+          }
+        ]
+      }
+    ]
+  },
+  "evidence": [
+    {
+      "key": "synthetic-specification",
+      "source": "Authored synthetic qualification case (MIT)",
+      "summary": "A clerk registers each incoming request. A reviewer reviews it and the process ends."
+    }
+  ],
+  "links": [
+    {
+      "elementRef": "register",
+      "assertion": "Register request",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ]
+    },
+    {
+      "elementRef": "review",
+      "assertion": "Review request",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ]
+    }
+  ]
+}

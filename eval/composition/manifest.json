@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "license": "MIT",
+  "authorship": "Synthetic acceptance cases authored for this project; not deployments or private interview data.",
+  "fixtures": [
+    { "id": "purchase-approval-lane-ownership", "family": "lane ownership" },
+    { "id": "supplier-order-collaboration", "family": "multi-participant messaging", "minimums": { "participants": 3, "flowNodes": 40, "connectors": 60, "nestedLanes": true } },
+    { "id": "provisioning-timer-error-recovery", "family": "timer/error recovery" },
+    { "id": "trial-event-based-competition", "family": "event-based competition" },
+    { "id": "order-inclusive-parallel-controls", "family": "inclusive/parallel joins" },
+    { "id": "customer-nested-subprocess-call", "family": "nested expanded/collapsed subprocesses with same-file Call Activity" },
+    { "id": "portfolio-loop-multi-instance", "family": "loop/multi-instance" },
+    { "id": "invoice-data-and-documentation", "family": "data and intentional documentation" }
+  ],
+  "qualification": {
+    "semanticOracle": "Independently authored literal fact rows, never generated from production compiler output.",
+    "automatedVisual": "Run eval/composition/run.mjs; this manifest does not assert a pass.",
+    "maintainerReview": "not_run",
+    "hostSessions": "not_run",
+    "tenantImport": "not_run"
+  }
+}

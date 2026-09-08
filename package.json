@@ -1,0 +1,52 @@
+{
+  "name": "@ve250104/bpmn-weave",
+  "version": "0.1.0-dev.0",
+  "description": "Evidence-led conversational BPMN modeling with a deterministic local CLI.",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ve250104/OpenBPMN.git"
+  },
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "bin": {
+    "bpmn-weave": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "assets",
+    "schemas",
+    "skills/bpmn-weave",
+    "examples",
+    "README.md",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json && node scripts/package-assets.mjs && node scripts/package-skill.mjs && node scripts/package-notices.mjs",
+    "check": "biome check && tsc -p tsconfig.json --noEmit && node scripts/check.mjs",
+    "format": "biome format --write",
+    "test": "node --test test/*.test.*",
+    "test:integration": "node --test test/*.integration.test.*",
+    "test:acceptance": "node scripts/acceptance.mjs",
+    "test:package": "node scripts/package-archives.mjs && node scripts/test-package.mjs"
+  },
+  "dependencies": {
+    "ajv": "8.17.1",
+    "bpmn-auto-layout": "2.0.0-alpha.2",
+    "bpmn-moddle": "10.2.0",
+    "libxml2-wasm": "0.7.2",
+    "puppeteer-core": "25.10.0",
+    "saxen": "11.1.1"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.12",
+    "@fontsource/noto-sans": "5.3.0",
+    "@types/node": "24.10.0",
+    "bpmn-js": "18.28.0",
+    "fflate": "0.8.3",
+    "typescript": "5.9.3"
+  }
+}

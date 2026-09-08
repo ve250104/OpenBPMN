@@ -1,0 +1,526 @@
+{
+  "evidence": [
+    {
+      "key": "synthetic-specification",
+      "source": "Authored synthetic composition specification",
+      "summary": "Data lifecycle, Process and Event IO, and intentional documentation — an artificial acceptance case, not a deployment or interview.",
+      "locator": "eval/composition/invoice-data-and-documentation/expected.json"
+    }
+  ],
+  "links": [
+    {
+      "elementRef": "invoice-data-model",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:Definitions in the definitions document: {\"name\":\"Invoice evidence and booking records\",\"targetNamespace\":\"urn:process-model:invoice-data-model\"}"
+    },
+    {
+      "elementRef": "invoice-message",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:Message in M_invoice-data-model.rootElements: {\"name\":\"Supplier invoice\"}"
+    },
+    {
+      "elementRef": "receipt-message",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:Message in M_invoice-data-model.rootElements: {\"name\":\"Booking confirmation\"}"
+    },
+    {
+      "elementRef": "ledger",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:DataStore in M_invoice-data-model.rootElements: {\"name\":\"Accounting ledger\",\"capacity\":100000,\"isUnlimited\":false}"
+    },
+    {
+      "elementRef": "controls-category",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:Category in M_invoice-data-model.rootElements: {\"name\":\"Control\"}"
+    },
+    {
+      "elementRef": "invoice-review",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:Process in M_invoice-data-model.rootElements: {\"name\":\"Review and record a supplier invoice\",\"isExecutable\":false,\"documentation\":[{\"$type\":\"bpmn:Documentation\",\"text\":\"Preserve the invoice and the stated review policy.\"}]}"
+    },
+    {
+      "elementRef": "received",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:StartEvent in M_invoice-review.flowElements: {\"name\":\"Invoice received\"}"
+    },
+    {
+      "elementRef": "review",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:UserTask in M_invoice-review.flowElements: {\"name\":\"Review and book invoice\"}"
+    },
+    {
+      "elementRef": "confirmed",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:EndEvent in M_invoice-review.flowElements: {\"name\":\"Booking confirmed\"}"
+    },
+    {
+      "elementRef": "d1",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_invoice-review.flowElements: {\"sourceRef\":\"M_received\",\"targetRef\":\"M_review\"}"
+    },
+    {
+      "elementRef": "d2",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:SequenceFlow in M_invoice-review.flowElements: {\"sourceRef\":\"M_review\",\"targetRef\":\"M_confirmed\"}"
+    },
+    {
+      "elementRef": "invoice-data",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:DataObject in M_invoice-review.flowElements: {\"name\":\"Invoice\"}"
+    },
+    {
+      "elementRef": "booking-data",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:DataObject in M_invoice-review.flowElements: {\"name\":\"Booking\"}"
+    },
+    {
+      "elementRef": "invoice-ref",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:DataObjectReference in M_invoice-review.flowElements: {\"name\":\"Supplier invoice\",\"dataObjectRef\":\"M_invoice-data\"}"
+    },
+    {
+      "elementRef": "booking-ref",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:DataObjectReference in M_invoice-review.flowElements: {\"name\":\"Booking record\",\"dataObjectRef\":\"M_booking-data\"}"
+    },
+    {
+      "elementRef": "ledger-ref",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:DataStoreReference in M_invoice-review.flowElements: {\"name\":\"Accounting ledger\",\"dataStoreRef\":\"M_ledger\"}"
+    },
+    {
+      "elementRef": "policy",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:DataInput in G_io_invoice-review.dataInputs: {\"name\":\"Review policy\"}"
+    },
+    {
+      "elementRef": "result",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:DataOutput in G_io_invoice-review.dataOutputs: {\"name\":\"Recorded booking\"}"
+    },
+    {
+      "elementRef": "event-payload",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:DataOutput in M_received.dataOutputs: {\"name\":\"Invoice payload\"}"
+    },
+    {
+      "elementRef": "invoice-input",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:DataInput in G_io_review.dataInputs: {\"name\":\"Invoice for review\"}"
+    },
+    {
+      "elementRef": "policy-input",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:DataInput in G_io_review.dataInputs: {\"name\":\"Applicable policy\"}"
+    },
+    {
+      "elementRef": "booking-output",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:DataOutput in G_io_review.dataOutputs: {\"name\":\"Approved booking\"}"
+    },
+    {
+      "elementRef": "confirmation-input",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:DataInput in M_confirmed.dataInputs: {\"name\":\"Confirmation payload\"}"
+    },
+    {
+      "elementRef": "note",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:TextAnnotation in M_invoice-review.artifacts: {\"text\":\"Retain the original invoice with its booking evidence.\"}"
+    },
+    {
+      "elementRef": "evidence-group",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:Group in M_invoice-review.artifacts: {\"categoryValueRef\":\"G_categoryValue_controls-category\"}"
+    },
+    {
+      "elementRef": "explains",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:Association in M_invoice-review.artifacts: {\"associationDirection\":\"None\",\"sourceRef\":\"M_note\",\"targetRef\":\"M_review\"}"
+    },
+    {
+      "elementRef": "capture",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:DataOutputAssociation in M_received.dataOutputAssociations: {\"sourceRef\":[\"M_event-payload\"],\"targetRef\":\"M_invoice-ref\"}"
+    },
+    {
+      "elementRef": "consume",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:DataInputAssociation in M_review.dataInputAssociations: {\"sourceRef\":[\"M_invoice-ref\"],\"targetRef\":\"M_invoice-input\"}"
+    },
+    {
+      "elementRef": "apply-policy",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:DataInputAssociation in M_review.dataInputAssociations: {\"sourceRef\":[\"M_policy\"],\"targetRef\":\"M_policy-input\"}"
+    },
+    {
+      "elementRef": "produce",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:DataOutputAssociation in M_review.dataOutputAssociations: {\"sourceRef\":[\"M_booking-output\"],\"targetRef\":\"M_booking-ref\"}"
+    },
+    {
+      "elementRef": "persist",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:DataOutputAssociation in M_review.dataOutputAssociations: {\"sourceRef\":[\"M_booking-output\"],\"targetRef\":\"M_ledger-ref\"}"
+    },
+    {
+      "elementRef": "emit",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:DataInputAssociation in M_confirmed.dataInputAssociations: {\"sourceRef\":[\"M_booking-ref\"],\"targetRef\":\"M_confirmation-input\"}"
+    },
+    {
+      "elementRef": "return-result",
+      "basis": "evidence",
+      "supportRefs": [
+        "synthetic-specification"
+      ],
+      "assertion": "bpmn:DataOutputAssociation in M_review.dataOutputAssociations: {\"sourceRef\":[\"M_booking-output\"],\"targetRef\":\"M_result\"}"
+    }
+  ],
+  "schemaVersion": "1.0.0",
+  "profileVersion": "1.0.0",
+  "model": {
+    "key": "invoice-data-model",
+    "name": "Invoice evidence and booking records",
+    "primaryRef": "invoice-review",
+    "declarations": [
+      {
+        "key": "invoice-message",
+        "type": "message",
+        "name": "Supplier invoice"
+      },
+      {
+        "key": "receipt-message",
+        "type": "message",
+        "name": "Booking confirmation"
+      },
+      {
+        "key": "ledger",
+        "type": "dataStore",
+        "name": "Accounting ledger",
+        "capacity": 100000,
+        "unlimited": false
+      },
+      {
+        "key": "controls-category",
+        "type": "category",
+        "name": "Control",
+        "value": "Invoice evidence"
+      }
+    ],
+    "processes": [
+      {
+        "key": "invoice-review",
+        "name": "Review and record a supplier invoice",
+        "documentation": "Preserve the invoice and the stated review policy.",
+        "nodes": [
+          {
+            "key": "received",
+            "type": "startEvent",
+            "containerRef": "invoice-review",
+            "name": "Invoice received",
+            "event": {
+              "kind": "message",
+              "ref": "invoice-message"
+            }
+          },
+          {
+            "key": "review",
+            "type": "userTask",
+            "containerRef": "invoice-review",
+            "name": "Review and book invoice"
+          },
+          {
+            "key": "confirmed",
+            "type": "endEvent",
+            "containerRef": "invoice-review",
+            "name": "Booking confirmed",
+            "event": {
+              "kind": "message",
+              "ref": "receipt-message"
+            }
+          }
+        ],
+        "flows": [
+          {
+            "key": "d1",
+            "containerRef": "invoice-review",
+            "sourceRef": "received",
+            "targetRef": "review"
+          },
+          {
+            "key": "d2",
+            "containerRef": "invoice-review",
+            "sourceRef": "review",
+            "targetRef": "confirmed"
+          }
+        ],
+        "artifacts": [
+          {
+            "key": "invoice-data",
+            "type": "dataObject",
+            "containerRef": "invoice-review",
+            "name": "Invoice"
+          },
+          {
+            "key": "booking-data",
+            "type": "dataObject",
+            "containerRef": "invoice-review",
+            "name": "Booking"
+          },
+          {
+            "key": "invoice-ref",
+            "type": "dataObjectReference",
+            "containerRef": "invoice-review",
+            "dataObjectRef": "invoice-data",
+            "name": "Supplier invoice",
+            "state": "received"
+          },
+          {
+            "key": "booking-ref",
+            "type": "dataObjectReference",
+            "containerRef": "invoice-review",
+            "dataObjectRef": "booking-data",
+            "name": "Booking record",
+            "state": "reviewed"
+          },
+          {
+            "key": "ledger-ref",
+            "type": "dataStoreReference",
+            "containerRef": "invoice-review",
+            "dataStoreRef": "ledger",
+            "name": "Accounting ledger"
+          },
+          {
+            "key": "policy",
+            "type": "dataInput",
+            "ownerRef": "invoice-review",
+            "name": "Review policy"
+          },
+          {
+            "key": "result",
+            "type": "dataOutput",
+            "ownerRef": "invoice-review",
+            "name": "Recorded booking"
+          },
+          {
+            "key": "event-payload",
+            "type": "dataOutput",
+            "ownerRef": "received",
+            "name": "Invoice payload"
+          },
+          {
+            "key": "invoice-input",
+            "type": "dataInput",
+            "ownerRef": "review",
+            "name": "Invoice for review"
+          },
+          {
+            "key": "policy-input",
+            "type": "dataInput",
+            "ownerRef": "review",
+            "name": "Applicable policy"
+          },
+          {
+            "key": "booking-output",
+            "type": "dataOutput",
+            "ownerRef": "review",
+            "name": "Approved booking"
+          },
+          {
+            "key": "confirmation-input",
+            "type": "dataInput",
+            "ownerRef": "confirmed",
+            "name": "Confirmation payload"
+          },
+          {
+            "key": "note",
+            "type": "textAnnotation",
+            "containerRef": "invoice-review",
+            "text": "Retain the original invoice with its booking evidence."
+          },
+          {
+            "key": "evidence-group",
+            "type": "group",
+            "containerRef": "invoice-review",
+            "categoryRef": "controls-category",
+            "memberRefs": [
+              "review",
+              "invoice-ref",
+              "booking-ref"
+            ]
+          },
+          {
+            "key": "explains",
+            "type": "association",
+            "containerRef": "invoice-review",
+            "sourceRef": "note",
+            "targetRef": "review",
+            "direction": "none"
+          }
+        ],
+        "dataAssociations": [
+          {
+            "key": "capture",
+            "direction": "output",
+            "ownerRef": "received",
+            "sourceRefs": [
+              "event-payload"
+            ],
+            "targetRef": "invoice-ref"
+          },
+          {
+            "key": "consume",
+            "direction": "input",
+            "ownerRef": "review",
+            "sourceRefs": [
+              "invoice-ref"
+            ],
+            "targetRef": "invoice-input"
+          },
+          {
+            "key": "apply-policy",
+            "direction": "input",
+            "ownerRef": "review",
+            "sourceRefs": [
+              "policy"
+            ],
+            "targetRef": "policy-input"
+          },
+          {
+            "key": "produce",
+            "direction": "output",
+            "ownerRef": "review",
+            "sourceRefs": [
+              "booking-output"
+            ],
+            "targetRef": "booking-ref"
+          },
+          {
+            "key": "persist",
+            "direction": "output",
+            "ownerRef": "review",
+            "sourceRefs": [
+              "booking-output"
+            ],
+            "targetRef": "ledger-ref"
+          },
+          {
+            "key": "emit",
+            "direction": "input",
+            "ownerRef": "confirmed",
+            "sourceRefs": [
+              "booking-ref"
+            ],
+            "targetRef": "confirmation-input"
+          },
+          {
+            "key": "return-result",
+            "direction": "output",
+            "ownerRef": "review",
+            "sourceRefs": [
+              "booking-output"
+            ],
+            "targetRef": "result"
+          }
+        ]
+      }
+    ]
+  }
+}
