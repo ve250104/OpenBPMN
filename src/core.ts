@@ -77,6 +77,7 @@ export async function runCommand(
   const report = createReport(requested);
   const result = resultFor(command, report);
   let plan: OutputPlan | undefined;
+  let omittedPreview: OutputPlan | undefined;
   let kinds: ArtifactResult['kind'][] = ['bpmn', 'svg', 'quality'];
   try {
     if (command === 'capabilities') {
@@ -381,7 +382,6 @@ export async function runCommand(
       );
     }
     let svg: string | undefined;
-    const omitted: ArtifactResult[] = [];
     try {
       svg = await renderSvg(xml, { browserExecutable: values['browser-executable'], signal: runtime.signal });
       setCheck(report, 'render', 'passed');
@@ -393,7 +393,7 @@ export async function runCommand(
         'failed',
         addFindings(report, [{ code: error.code, category: error.category, message: error.message }]),
       );
-      if (plan.originals[1]) omitted.push({ kind: 'svg', path: plan.paths[1]!, state: 'preserved' });
+      omittedPreview = { ...plan, paths: [plan.paths[1]!], originals: [plan.originals[1]] };
       plan = {
         ...plan,
         paths: plan.paths.filter((_, index) => index !== 1),
@@ -429,10 +429,7 @@ export async function runCommand(
       contents.push(handoffText);
     }
     runtime.signal?.throwIfAborted();
-    result.artifacts = [
-      ...plan.paths.map((path, index) => ({ kind: kinds[index]!, path, state: 'produced' as const })),
-      ...omitted,
-    ];
+    result.artifacts = plan.paths.map((path, index) => ({ kind: kinds[index]!, path, state: 'produced' as const }));
     result.signal = expert ? 'invalid_exported' : requested === 'snapshot' ? 'snapshot_ready' : 'clean_export_ready';
     result.status = 'completed';
     result.exitCode = expert ? 2 : 0;
@@ -444,6 +441,7 @@ export async function runCommand(
       );
     }
     await commitOutputs(plan, contents, undefined, { signal: runtime.signal });
+    result.artifacts.push(...(await preserved(omittedPreview, ['svg'])));
     return result;
   } catch (error) {
     const known =
@@ -470,7 +468,7 @@ export async function runCommand(
     result.status = known.status;
     result.signal = command === 'generate' ? 'generation_failed' : 'operation_failed';
     result.exitCode = known.exitCode as 1 | 2 | 3 | 4;
-    result.artifacts = await preserved(plan, kinds);
+    result.artifacts = [...(await preserved(plan, kinds)), ...(await preserved(omittedPreview, ['svg']))];
     report.export.outcome = 'none';
     report.export.expertOverride = false;
     return result;
