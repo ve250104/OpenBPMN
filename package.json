@@ -53,6 +53,6 @@
     "@types/node": "24.10.0",
     "bpmn-js": "18.28.0",
     "fflate": "0.8.3",
-    "typescript": "5.9.3"
+    "typescript": "7.0.2"
   }
 }
