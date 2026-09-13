@@ -4,6 +4,8 @@ Find the result’s stable code and remediation first. A `cleanEligible` value d
 
 Missing runtime: use Node 24.x, check `capabilities`, and explicitly point to an installed Chrome/Edge executable when discovery fails. The CLI never installs a browser or attaches to your personal browser session.
 
+Wrong Node version inside an agent: run `node --version` in the same command shell as the failing CLI. A login shell may override the PATH inherited from your terminal. Select an already-installed Node 24 for that invocation as shown in [installation](installation.md); do not change global settings or download another runtime without authorization.
+
 Input refusal: check the JSON pointer and versioned schema. Unknown versions, keys, fields, references, overlarge input, and unsafe semantic credentials are refused rather than guessed or silently changed.
 
 Output refusal: choose a new filename or explicitly authorize replacement of the named files. Use an existing canonical directory without symlink redirection. The input and all outputs must be distinct; the optional Handoff must be a sibling.

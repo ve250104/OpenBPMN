@@ -24,6 +24,22 @@ function run(args) {
   });
 }
 
+test('the published purchase example reproduces from its authored request without stale artifacts', async (t) => {
+  const dir = await realpath(await mkdtemp(join(tmpdir(), 'bpmn-weave-published-example-')));
+  t.after(() => rm(dir, { recursive: true, force: true }));
+  const input = fileURLToPath(new URL('../examples/purchase-approval.json', import.meta.url));
+  const stem = join(dir, 'purchase');
+  const result = await run(['generate', '--input', input, '--output', stem]);
+  assert.equal(result.code, 0, result.stdout + result.stderr);
+  for (const suffix of ['bpmn', 'svg', 'quality.json']) {
+    assert.equal(
+      await readFile(`${stem}.${suffix}`, 'utf8'),
+      await readFile(new URL(`../examples/purchase-approval.${suffix}`, import.meta.url), 'utf8'),
+      `Regenerate the published ${suffix} when the authored request or output pipeline changes.`,
+    );
+  }
+});
+
 test('a user generates and inspects a complete, valid three-file Output Bundle', async (t) => {
   const dir = await realpath(await mkdtemp(join(tmpdir(), 'bpmn-weave-generate-')));
   t.after(() => rm(dir, { recursive: true, force: true }));

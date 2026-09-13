@@ -11,7 +11,7 @@ bpmn-weave validate --input purchase.bpmn
 bpmn-weave render --input purchase.bpmn --output purchase-preview.svg
 ```
 
-Generation input is complete Structured Process Evidence or a Handoff; `--input -` reads UTF-8 JSON from stdin. Output is a stem, and the directory must already exist. A requested Handoff joins the bundle transaction at a distinct sibling path. The [schemas](../schemas/) and [structured contract](contracts.md) define every accepted field, limit, signal, check, and export outcome.
+Generation input is complete Structured Process Evidence or a Handoff; `--input -` reads UTF-8 JSON from stdin. Output is a stem, and the directory must already exist. A requested Handoff joins the bundle transaction at a distinct sibling path. The packaged [schemas](../schemas/) and repository [structured contract](https://github.com/ve250104/OpenBPMN/blob/wip/v0-implementation/docs/contracts.md) define every accepted field, limit, signal, check, and export outcome.
 
 Validation changes nothing. Rendering reads the supplied DI and writes only the named SVG; it does not lay out, repair, or rewrite XML. Optional consumer-fit rules on validation are separate from core validity and actual tenant observations.
 

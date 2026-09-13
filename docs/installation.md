@@ -23,6 +23,14 @@ bpmn-weave capabilities --json
 
 For a project-local installation, omit `--global` and run `./node_modules/.bin/bpmn-weave` (Windows: `node_modules\.bin\bpmn-weave.cmd`). Ordinary modeling does not run `npx` or fetch a tool implicitly. Explicit npm installation may download runtime dependencies; runtime commands are separately qualified for offline use.
 
+Verify `node --version` and `bpmn-weave capabilities` inside the agent's command shell, not just the terminal that started it. A login shell can reorder PATH and select another installed Node version. On macOS/Linux, an invocation-local override can select your existing Node 24 installation without changing global settings:
+
+```sh
+env PATH="/absolute/path/to/node-24/bin:$PATH" bpmn-weave capabilities
+```
+
+Replace the placeholder with the directory containing your actual Node 24 executable; use the same prefix for subsequent CLI commands if needed. This does not install Node or qualify an unsupported version.
+
 `--browser-executable` accepts an absolute local executable path and takes precedence over discovery. macOS discovery checks Chrome/Edge applications; Linux checks documented executables on PATH; Windows checks local installed Chrome/Edge locations. Use `capabilities` to inspect the resolved path before modeling. A browser failure leaves the previous bundle intact.
 
 ## Portable modeling skill
@@ -53,4 +61,4 @@ Copy-Item -Recurse -LiteralPath 'skills/bpmn-weave' -Destination $skillTarget
 
 Select the corresponding directory for another host; the skill bytes are identical. Copying the skill is setup, not a new process workspace. Upgrade the matching CLI and named skill together, with explicit replacement authority. The package never rewrites unrelated host instructions or grants itself permissions.
 
-These are the [selected host discovery routes](release-plan.md#portable-modeling-skill-and-supported-host-agents), not a claim that every host/platform has passed acceptance. See [support status](support.md) before relying on a surface.
+These are the [selected host discovery routes](https://github.com/ve250104/OpenBPMN/blob/wip/v0-implementation/docs/release-plan.md#portable-modeling-skill-and-supported-host-agents), not a claim that every host/platform has passed acceptance. See [support status](support.md) before relying on a surface.

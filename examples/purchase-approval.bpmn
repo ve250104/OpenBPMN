@@ -88,7 +88,7 @@
       <bpmndi:BPMNShape id="D_shape_M_purchase_M_submitted" bpmnElement="M_submitted">
         <dc:Bounds x="120" y="160" width="36" height="36" />
         <bpmndi:BPMNLabel id="D_label_M_purchase_M_submitted">
-          <dc:Bounds x="103" y="201" width="70" height="28" />
+          <dc:Bounds x="116" y="204" width="128" height="23" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="D_shape_M_purchase_M_check" bpmnElement="M_check">
@@ -97,7 +97,7 @@
       <bpmndi:BPMNShape id="D_shape_M_purchase_M_complete" bpmnElement="M_complete" isMarkerVisible="true">
         <dc:Bounds x="456" y="531" width="50" height="50" />
         <bpmndi:BPMNLabel id="D_label_M_purchase_M_complete">
-          <dc:Bounds x="446" y="626" width="70" height="28" />
+          <dc:Bounds x="417" y="589" width="128" height="23" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="D_shape_M_purchase_M_correct" bpmnElement="M_correct">
@@ -109,7 +109,7 @@
       <bpmndi:BPMNShape id="D_shape_M_purchase_M_approved" bpmnElement="M_approved" isMarkerVisible="true">
         <dc:Bounds x="806" y="931" width="50" height="50" />
         <bpmndi:BPMNLabel id="D_label_M_purchase_M_approved">
-          <dc:Bounds x="797" y="986" width="69" height="14" />
+          <dc:Bounds x="786" y="989" width="90" height="23" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="D_shape_M_purchase_M_order" bpmnElement="M_order">
@@ -121,13 +121,13 @@
       <bpmndi:BPMNShape id="D_shape_M_purchase_M_sent" bpmnElement="M_sent">
         <dc:Bounds x="1356" y="698" width="36" height="36" />
         <bpmndi:BPMNLabel id="D_label_M_purchase_M_sent">
-          <dc:Bounds x="1339" y="739" width="71" height="28" />
+          <dc:Bounds x="1289" y="742" width="135" height="23" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="D_shape_M_purchase_M_rejected" bpmnElement="M_rejected">
         <dc:Bounds x="988" y="938" width="36" height="36" />
         <bpmndi:BPMNLabel id="D_label_M_purchase_M_rejected">
-          <dc:Bounds x="976" y="979" width="60" height="28" />
+          <dc:Bounds x="948.5" y="982" width="115" height="23" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="D_edge_M_purchase_M_startCheck" bpmnElement="M_startCheck">
@@ -141,10 +141,12 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="D_edge_M_purchase_M_ready" bpmnElement="M_ready">
         <di:waypoint x="506" y="556" />
-        <di:waypoint x="656" y="556" />
+        <di:waypoint x="582" y="556" />
+        <di:waypoint x="582" y="900" />
+        <di:waypoint x="656" y="900" />
         <di:waypoint x="656" y="916" />
         <bpmndi:BPMNLabel id="D_label_M_purchase_M_ready">
-          <dc:Bounds x="549" y="534" width="65" height="14" />
+          <dc:Bounds x="518" y="525" width="90" height="23" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="D_edge_M_purchase_M_reviewResult" bpmnElement="M_reviewResult">
@@ -155,7 +157,7 @@
         <di:waypoint x="856" y="956" />
         <di:waypoint x="988" y="956" />
         <bpmndi:BPMNLabel id="D_label_M_purchase_M_rejection">
-          <dc:Bounds x="912" y="934" width="20" height="14" />
+          <dc:Bounds x="877" y="925" width="90" height="23" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="D_edge_M_purchase_M_missing" bpmnElement="M_missing">
@@ -163,7 +165,7 @@
         <di:waypoint x="481" y="316" />
         <di:waypoint x="606" y="316" />
         <bpmndi:BPMNLabel id="D_label_M_purchase_M_missing">
-          <dc:Bounds x="486" y="390" width="57" height="28" />
+          <dc:Bounds x="489" y="400.05555555555554" width="103" height="23" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="D_edge_M_purchase_M_approval" bpmnElement="M_approval">
@@ -171,7 +173,7 @@
         <di:waypoint x="831" y="716" />
         <di:waypoint x="956" y="716" />
         <bpmndi:BPMNLabel id="D_label_M_purchase_M_approval">
-          <dc:Bounds x="836" y="817" width="27" height="14" />
+          <dc:Bounds x="839" y="800.0555555555555" width="90" height="23" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="D_edge_M_purchase_M_orderPrepared" bpmnElement="M_orderPrepared">

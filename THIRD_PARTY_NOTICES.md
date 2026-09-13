@@ -15,6 +15,6 @@ Project-authored code, documentation, and synthetic examples use the root MIT [L
 
 The lockfile fixes the development/tested dependency resolution; each installed transitive dependency keeps its own package license. Build-time copies and hashes are reproducible without downloads. Runtime asset manifests identify the copied Viewer/fonts; this index does not assert that an unrun license/redistribution gate passed.
 
-The [distribution provenance record](https://github.com/ve250104/OpenBPMN/blob/main/docs/research/distribution-provenance.md) separates verified origin and available notices from the still-open OMG machine-readable-schema redistribution question. No permission was inferred solely from public download availability or from another library’s copies.
+The [distribution provenance record](https://github.com/ve250104/OpenBPMN/blob/wip/v0-implementation/docs/research/distribution-provenance.md) separates verified origin and available notices from the still-open OMG machine-readable-schema redistribution question. No permission was inferred solely from public download availability or from another library’s copies.
 
 Sources: [bpmn-js license](https://github.com/bpmn-io/bpmn-js/blob/v18.28.0/LICENSE), [layout alpha metadata and declaration](https://github.com/bpmn-io/bpmn-auto-layout/tree/v2.0.0-alpha.2), [OMG machine-readable documents](https://www.omg.org/spec/BPMN/2.0.2/About-BPMN).

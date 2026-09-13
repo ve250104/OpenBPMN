@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { mkdtemp, realpath, rm, readFile, readdir, mkdir, writeFile, stat } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
-import { join, dirname } from 'node:path';
+import { join, dirname, resolve, sep } from 'node:path';
 import { tmpdir } from 'node:os';
 import { createHash } from 'node:crypto';
 import { offlineSmoke } from './test-offline.mjs';
@@ -57,7 +57,7 @@ try {
   const pack = JSON.parse(packed.stdout)[0];
   assert.ok(
     pack.files.every((file) =>
-      /^(?:dist\/|assets\/|schemas\/|skills\/bpmn-weave\/|examples\/|package\.json$|README\.md$|LICENSE$|THIRD_PARTY_NOTICES\.md$)/.test(
+      /^(?:dist\/|assets\/|schemas\/|skills\/bpmn-weave\/|examples\/|docs\/(?:installation|modeling|commands|support|troubleshooting)\.md$|package\.json$|README\.md$|LICENSE$|THIRD_PARTY_NOTICES\.md$)/.test(
         file.path,
       ),
     ),
@@ -71,6 +71,11 @@ try {
     'assets/runtime/manifest.json',
     'assets/xsd/BPMN20.xsd',
     'examples/invoice-review.json',
+    'docs/installation.md',
+    'docs/modeling.md',
+    'docs/commands.md',
+    'docs/support.md',
+    'docs/troubleshooting.md',
     'skills/bpmn-weave/SKILL.md',
     'skills/bpmn-weave/version.json',
     'THIRD_PARTY_NOTICES.md',
@@ -96,6 +101,18 @@ try {
   assert.equal(installation.status, 0, installation.stderr);
   const installedInMs = Math.round(performance.now() - started);
   const packageRoot = join(prefix, 'node_modules', '@ve250104', 'bpmn-weave');
+  for (const file of pack.files.filter((file) => /^(?:docs\/.*|README|THIRD_PARTY_NOTICES)\.md$/.test(file.path))) {
+    const path = join(packageRoot, file.path);
+    for (const match of (await readFile(path, 'utf8')).matchAll(/\[[^\]]*\]\(([^)]+)\)/g)) {
+      const link = match[1].split('#')[0];
+      if (!link || /^[a-z][a-z0-9+.-]*:/i.test(link)) continue;
+      const target = resolve(dirname(path), decodeURIComponent(link));
+      assert.ok(target.startsWith(packageRoot + sep), 'User documentation must not depend on the source checkout.');
+      await stat(target).catch(() => {
+        throw new Error('Missing installed documentation link in ' + file.path + ': ' + link);
+      });
+    }
+  }
   const cli = join(packageRoot, 'dist', 'cli.js');
   assert.equal(await realpath(cli), cli, 'Installed CLI must not link back to the checkout.');
   const binary = join(prefix, 'node_modules', '.bin', 'bpmn-weave' + (process.platform === 'win32' ? '.cmd' : ''));
@@ -231,6 +248,7 @@ try {
     installedInMs,
     commandsExercised: ['generate', 'validate', 'render', 'capabilities'],
     installedBinaryShim: 'passed',
+    installedDocumentationLinks: 'passed',
     skillArchiveEquality: 'passed',
     refinementAndHandoff: 'passed',
     skillArchiveSha256: skillArchive.sha256,

@@ -16,7 +16,7 @@ Development build: `0.1.0-dev.0`. The CLI and portable skill are being implement
 Prerequisites: Node.js **24.x**, npm, and an installed Google Chrome or Microsoft Edge. Validation and capability inspection do not require a browser. The CLI does not download one.
 
 ```sh
-git clone https://github.com/ve250104/OpenBPMN.git
+git clone --branch wip/v0-implementation https://github.com/ve250104/OpenBPMN.git
 cd OpenBPMN
 npm ci --ignore-scripts
 npm run build
@@ -32,6 +32,10 @@ For conversational use, install the matching [portable skill](skills/bpmn-weave/
 
 The skill uses the CLI, keeps source evidence and unresolved questions separate, and asks about consequential gaps. It does not require a process workspace or a fixed interview questionnaire.
 
+![Synthetic purchase approval model with three responsibility lanes and a correction loop](examples/purchase-approval.svg)
+
+[Example BPMN](examples/purchase-approval.bpmn) · [Authored request](examples/purchase-approval.json) · [Quality Report](examples/purchase-approval.quality.json)
+
 [Installation](docs/installation.md) · [Modeling guide](docs/modeling.md) · [Command reference](docs/commands.md) · [Troubleshooting](docs/troubleshooting.md)
 
 ## Product boundary
@@ -44,6 +48,6 @@ The required agent surfaces are Codex CLI, Claude Code, and GitHub Copilot CLI. 
 
 ## Project
 
-The repository keeps its original OpenBPMN URL; the public product name is BPMN Weave. [Contributing](CONTRIBUTING.md) covers development; the [architecture](docs/architecture.md) and [build plan](docs/build-plan.md) explain the implementation contracts.
+The repository keeps its original OpenBPMN URL; the public product name is BPMN Weave. [Contributing](https://github.com/ve250104/OpenBPMN/blob/wip/v0-implementation/CONTRIBUTING.md) covers development; the [architecture](https://github.com/ve250104/OpenBPMN/blob/wip/v0-implementation/docs/architecture.md) and [build plan](https://github.com/ve250104/OpenBPMN/blob/wip/v0-implementation/docs/build-plan.md) explain the implementation contracts.
 
 Inspired by [bpmn-js](https://github.com/bpmn-io/bpmn-js) and the agent-first workflow of [diagram-design](https://github.com/cathrynlavery/diagram-design). Project-authored material uses the [MIT license](LICENSE); [third-party notices](THIRD_PARTY_NOTICES.md) retain dependency terms and identify unresolved redistribution gates.
