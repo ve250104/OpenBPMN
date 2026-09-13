@@ -84,7 +84,9 @@ function minimize(request: ProcessRequest, handoff: Handoff | undefined, finding
   ): unknown {
     if (typeof value === 'string') {
       const identity =
-        ['key', 'modelKey', 'id', 'code'].includes(field) || /Refs?$/.test(field) || (linkIdentity && field === 'name');
+        ['key', 'modelKey', 'id', 'code', 'concept'].includes(field) ||
+        /Refs?$/.test(field) ||
+        (linkIdentity && field === 'name');
       const meaning = identity || (model && meaningFields.has(field));
       if (!displayFields.has(field) && !meaning) return value;
       const redacted = redact(value);

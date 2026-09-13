@@ -290,7 +290,12 @@ test('credentials in semantic conditions, declaration codes, and identities refu
 
 test('historical Handoff report identities cannot carry credentials into companion artifacts', () => {
   const token = 'AKIA' + 'B'.repeat(16);
-  for (const report of [{ modelKey: token }, { findings: [{ id: token }] }, { checks: [{ findingRefs: [token] }] }]) {
+  for (const report of [
+    { modelKey: token },
+    { findings: [{ id: token }] },
+    { checks: [{ findingRefs: [token] }] },
+    { context: { issues: [{ concept: `https://example.invalid/?api_key=${token}#Extension` }] } },
+  ]) {
     const input = request();
     const result = assessReview(input, { handoffVersion: '1.0.0', request: input, lastReport: report });
     assert.ok(result.findings.some((finding) => finding.code === 'INPUT_SCHEMA' && finding.blocksClean));

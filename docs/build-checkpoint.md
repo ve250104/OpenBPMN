@@ -1,6 +1,6 @@
 # Build checkpoint
 
-Updated 2026-09-13 after resuming the September 8 checkpoint. Work continues on `wip/v0-implementation`; main remains the planning handoff. This is a development build, not a finished release or package publication. Build parent: GitHub issue #19; no build ticket has been closed.
+Updated 2026-09-13. The implementation has been merged to `main`; the earlier WIP branch is no longer the public entry point. This is a development build, not a finished release or package publication. Build parent: GitHub issue #19; no build ticket has been closed by this hardening pass. The observations below retain their original archive/run boundaries; the [review follow-up](research/review-remediation-2026-09-13.md) records subsequent fixes and verification separately.
 
 The owner authorized the earlier public WIP checkpoint with the documented OMG schema-redistribution uncertainty retained. That does not resolve the permission interpretation or satisfy the release gate.
 

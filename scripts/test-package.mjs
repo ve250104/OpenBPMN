@@ -6,6 +6,7 @@ import { join, dirname, resolve, sep } from 'node:path';
 import { tmpdir } from 'node:os';
 import { createHash } from 'node:crypto';
 import { offlineSmoke } from './test-offline.mjs';
+import { assertInstalledDependencyLock } from './package-dependencies.mjs';
 import { unzipSync } from 'fflate';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
@@ -57,13 +58,14 @@ try {
   const pack = JSON.parse(packed.stdout)[0];
   assert.ok(
     pack.files.every((file) =>
-      /^(?:dist\/|assets\/|schemas\/|skills\/bpmn-weave\/|examples\/|docs\/(?:installation|modeling|commands|support|troubleshooting)\.md$|package\.json$|README\.md$|LICENSE$|THIRD_PARTY_NOTICES\.md$)/.test(
+      /^(?:dist\/|assets\/|schemas\/|skills\/bpmn-weave\/|examples\/|docs\/(?:installation|modeling|commands|support|troubleshooting)\.md$|package\.json$|npm-shrinkwrap\.json$|README\.md$|LICENSE$|THIRD_PARTY_NOTICES\.md$)/.test(
         file.path,
       ),
     ),
     'Tarball contains a file outside the runtime allowlist.',
   );
   for (const required of [
+    'npm-shrinkwrap.json',
     'dist/cli.js',
     'dist/xml-worker.js',
     'dist/layout-worker.js',
@@ -101,6 +103,30 @@ try {
   assert.equal(installation.status, 0, installation.stderr);
   const installedInMs = Math.round(performance.now() - started);
   const packageRoot = join(prefix, 'node_modules', '@ve250104', 'bpmn-weave');
+  const shrinkwrap = await readFile(join(root, 'npm-shrinkwrap.json'));
+  assert.deepEqual(
+    await readFile(join(packageRoot, 'npm-shrinkwrap.json')),
+    shrinkwrap,
+    'The installed package must carry the exact qualified dependency lock.',
+  );
+  const dependencyLockQualification = await assertInstalledDependencyLock(JSON.parse(shrinkwrap), packageRoot, prefix);
+  const treeResult = execute(npm, ['ls', '--prefix', prefix, '--all', '--omit=dev', '--json']);
+  assert.equal(treeResult.status, 0, treeResult.stderr);
+  // Retain only public dependency identities, not absolute installation paths.
+  function dependencyTree(dependencies) {
+    return Object.fromEntries(
+      Object.entries(dependencies ?? {})
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([name, value]) => [
+          name,
+          {
+            version: value.version,
+            ...(value.dependencies ? { dependencies: dependencyTree(value.dependencies) } : {}),
+          },
+        ]),
+    );
+  }
+  const installedDependencyTree = dependencyTree(JSON.parse(treeResult.stdout).dependencies);
   for (const file of pack.files.filter((file) => /^(?:docs\/.*|README|THIRD_PARTY_NOTICES)\.md$/.test(file.path))) {
     const path = join(packageRoot, file.path);
     for (const match of (await readFile(path, 'utf8')).matchAll(/\[[^\]]*\]\(([^)]+)\)/g)) {
@@ -252,6 +278,10 @@ try {
     skillArchiveEquality: 'passed',
     refinementAndHandoff: 'passed',
     skillArchiveSha256: skillArchive.sha256,
+    shrinkwrapSha256: createHash('sha256').update(shrinkwrap).digest('hex'),
+    dependencyLockQualification,
+    installedDependencyTreeSha256: createHash('sha256').update(JSON.stringify(installedDependencyTree)).digest('hex'),
+    installedDependencyTree,
     networkIsolation: offline,
     fullReleaseQualified: false,
   };

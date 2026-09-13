@@ -12,6 +12,10 @@ npm run test:package
 npm run test:acceptance
 ```
 
+Use Node 24.x and the committed `npm-shrinkwrap.json`, which also locks the published CLI's transitive runtime dependencies. Keep dependency changes exact-pinned and update the lock and generated notices together. Dependabot proposes reviewed updates; no automatic merging is configured. Layout or browser-library updates require the existing semantic and visual regressions, not just a successful install.
+
+Submit changes through pull requests. `main` requires the GitHub Actions `linux` check, an up-to-date branch, and resolved review conversations, and blocks force pushes and deletion. Independent approval is not mandatory for this single-maintainer project. Administrator bypass is deliberately available while hosted CI is billing-blocked; an owner bypass must record the local checks and must not be described as a green hosted run. Local evidence does not waive release qualification.
+
 Keep changes small and explain the user-visible behavior and originating issue. Add a failing public-behavior test before fixing a bug or extending a supported path. Preserve semantic keys and evidence; never change a fixture’s process facts to accommodate a compiler or renderer defect. Notation changes need positive/negative semantic, XSD, DI, and real Viewer evidence.
 
 The test commands serialize files because multiple real browsers and layout workers can otherwise oversubscribe the reference machine and consume the product's unchanged timeout budget. Avoid overlapping full-suite, package, and performance runs. Keep the machine awake for measurements; on macOS, a process-scoped `caffeinate -i npm test` prevents idle sleep only for that run. Preserve interrupted or failed runs rather than counting them as performance samples.

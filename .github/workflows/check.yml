@@ -16,9 +16,16 @@ jobs:
         with:
           node-version: 24.14.0
           cache: npm
+          cache-dependency-path: npm-shrinkwrap.json
       - run: npm ci --ignore-scripts --no-audit --no-fund
       - run: npm run build
       - run: npm run check
+      - name: Record rendering environment
+        run: |
+          mkdir -p .artifacts
+          node --version | tee .artifacts/node-version.txt
+          /usr/bin/google-chrome --version | tee .artifacts/browser-version.txt
+          uname -srm | tee .artifacts/os-version.txt
       - run: npm test
       - run: npm run test:integration
       - name: Installed archive and isolated network smoke

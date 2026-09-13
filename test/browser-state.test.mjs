@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
 import { mkdtemp, readFile, rm, stat, writeFile } from 'node:fs/promises';
+import { syncBuiltinESMExports } from 'node:module';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import test from 'node:test';
@@ -8,6 +10,41 @@ import { layoutXml } from '../dist/layout.js';
 import { browserCapability, renderSvg } from '../dist/renderer.js';
 
 const quote = (value) => "'" + value.replaceAll("'", "'\\''") + "'";
+
+for (const failure of [false, true])
+  test(`renderer cleanup refusal identifies retained files after ${failure ? 'launch failure' : 'rendering'} without exposing contents`, async () => {
+    const originalRm = fs.rm;
+    let retained;
+    try {
+      fs.rm = async (path, options) => {
+        if (typeof path === 'string' && path.startsWith(join(tmpdir(), 'bpmn-weave-render-'))) {
+          retained = path;
+          await writeFile(join(path, 'cleanup-test-secret'), 'synthetic-private-process-content');
+          throw Object.assign(new Error('synthetic-private-process-content'), { code: 'EACCES' });
+        }
+        return originalRm(path, options);
+      };
+      syncBuiltinESMExports();
+      const xml = await readFile(new URL('../examples/purchase-approval.bpmn', import.meta.url), 'utf8');
+      await assert.rejects(
+        () => renderSvg(xml, failure ? { browserExecutable: process.execPath } : {}),
+        (error) => {
+          assert.equal(error.code, 'CLEANUP_FAILED');
+          assert.ok(retained, 'The real filesystem cleanup boundary must have been reached.');
+          assert.ok(error.message.includes(retained), 'The user needs the exact retained directory to recover.');
+          assert.doesNotMatch(error.message, /synthetic-private-process-content/);
+          assert.ok(!JSON.stringify(error).includes('synthetic-private-process-content'));
+          return true;
+        },
+      );
+      assert.equal((await stat(retained)).isDirectory(), true);
+      if (process.platform !== 'win32') assert.equal((await stat(retained)).mode & 0o777, 0o700);
+    } finally {
+      fs.rm = originalRm;
+      syncBuiltinESMExports();
+      if (retained) await originalRm(retained, { recursive: true, force: true });
+    }
+  });
 
 for (const failure of [false, true]) {
   test(`browser configuration and font caches stay disposable after ${failure ? 'launch failure' : 'rendering'}`, {

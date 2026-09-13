@@ -4,6 +4,7 @@ import { validateXml } from './xml.js';
 import { validateModel } from './semantics.js';
 import { assessSuppliedDi } from './renderer.js';
 import { containsCredential } from './review.js';
+import { xmlForBpmnConsumer } from './xml-consumer.js';
 import type { FindingInput } from './diagnostics.js';
 import type {
   ProcessRequest,
@@ -385,7 +386,9 @@ function boundedXml(xml: string): {
         : 'The content remains in the original XML and is not executed or treated as a verified capability.',
     });
   };
-  parser.on('openTag', (element: SaxElement) => {
+  parser.on('openTag', (element: SaxElement, decodeEntities: (value: string) => string) => {
+    const isTrue = (value: string | undefined) =>
+      value !== undefined && /^(?:true|1)$/.test(decodeEntities(value).replace(/^[\t\n\r ]+|[\t\n\r ]+$/g, ''));
     depth++;
     const local = element.name.startsWith('bpmn:') ? element.name.slice(5) : '';
     if (local === 'collaboration' && ++collaborations > 1) profile('PROFILE_DEFERRED', false);
@@ -410,11 +413,7 @@ function boundedXml(xml: string): {
     if (element.name === 'bpmn:extensionElements') extensionDepth++;
     const prefix = element.name.split(':')[0]!;
     if (!['bpmn', 'bpmndi', 'dc', 'di', 'xi'].includes(prefix)) profile('PROFILE_EXTENSION', extensionDepth === 0);
-    if (
-      deferredVisual.has(local) ||
-      element.attrs.triggeredByEvent === 'true' ||
-      element.attrs.isForCompensation === 'true'
-    )
+    if (deferredVisual.has(local) || isTrue(element.attrs.triggeredByEvent) || isTrue(element.attrs.isForCompensation))
       profile('PROFILE_DEFERRED', true);
     if (local && !supportedTags.has(local)) profile('PROFILE_DEFERRED', deferredVisual.has(local));
     for (const [attribute, value] of Object.entries(element.attrs)) {
@@ -425,10 +424,10 @@ function boundedXml(xml: string): {
       if (
         (deferredAttributes.has(attribute) &&
           !(attribute === 'testBefore' && local === 'standardLoopCharacteristics')) ||
-        (attribute === 'isExecutable' && value === 'true')
+        (attribute === 'isExecutable' && isTrue(value))
       )
         profile('PROFILE_DEFERRED', false);
-      if (attribute === 'parallelMultiple' && value === 'true') profile('PROFILE_DEFERRED', true);
+      if (attribute === 'parallelMultiple' && isTrue(value)) profile('PROFILE_DEFERRED', true);
     }
   });
   parser.on('closeTag', (element: SaxElement) => {
@@ -467,7 +466,7 @@ function boundedXml(xml: string): {
   return { findings, refused: false, unsupportedVisible, incompleteSemantics };
 }
 
-/** Read-only inspection never normalizes, repairs, or returns a replacement for supplied XML. */
+/** Read-only inspection never rewrites source bytes, repairs meaning, or returns replacement XML. */
 export async function inspectBpmn(xml: string, options: { signal?: AbortSignal } = {}): Promise<BpmnInspection> {
   const assessment = await validateXml(xml, options);
   const result: BpmnInspection = {
@@ -483,7 +482,7 @@ export async function inspectBpmn(xml: string, options: { signal?: AbortSignal }
   if (bounds.refused) return result;
   let parsed: Awaited<ReturnType<InstanceType<typeof BpmnModdle>['fromXML']>>;
   try {
-    parsed = await new BpmnModdle().fromXML(xml);
+    parsed = await new BpmnModdle().fromXML(xmlForBpmnConsumer(xml));
   } catch {
     result.findings.push({
       code: 'XML_PARSE',
@@ -662,7 +661,29 @@ export async function inspectBpmn(xml: string, options: { signal?: AbortSignal }
     });
   }
   for (const process of processes) {
-    const events = flowElements(process).filter((node) => node.$instanceOf?.('bpmn:Event'));
+    const elements = flowElements(process);
+    const flows = elements.filter((element) => element.$type === 'bpmn:SequenceFlow');
+    for (const gateway of elements.filter((element) => element.$instanceOf?.('bpmn:Gateway'))) {
+      // Assess the original supplied direction before the narrower request projection.
+      // Count actual Sequence Flow endpoints, not optional incoming/outgoing lists.
+      const incoming = flows.filter((flow) => flow.targetRef === gateway).length;
+      const outgoing = flows.filter((flow) => flow.sourceRef === gateway).length;
+      const direction = gateway.gatewayDirection ?? 'Unspecified';
+      if (
+        (direction === 'Converging' && (incoming < 2 || outgoing > 1)) ||
+        (direction === 'Diverging' && (outgoing < 2 || incoming > 1)) ||
+        (direction === 'Mixed' && (incoming < 2 || outgoing < 2))
+      )
+        result.findings.push({
+          code: 'GATEWAY_FLOW',
+          category: 'semantic',
+          elementRefs: gateway.id ? [gateway.id] : [],
+          message: 'The supplied Gateway direction contradicts its incoming or outgoing Sequence Flow cardinalities.',
+          remediation:
+            'Converging merges multiple incoming flows with at most one outgoing; Diverging splits multiple outgoing with at most one incoming; Mixed requires both.',
+        });
+    }
+    const events = elements.filter((node) => node.$instanceOf?.('bpmn:Event'));
     const definitions = events.flatMap((event) =>
       [...(event.eventDefinitions ?? []), ...(event.eventDefinitionRef ?? [])].map((definition) => ({
         event,

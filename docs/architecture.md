@@ -65,6 +65,8 @@ Checks include legal event placement, unresolved references, Sequence Flow scope
 
 `validate` parses an explicitly supplied BPMN file and assesses the original document without first forcing it through the narrower canonical input schema. Unsupported elements must remain visible as findings rather than disappearing during normalization. When source evidence is absent, the report must say that evidence-dependent consulting checks were not run.
 
+XML and XSD validation operate on the original source bytes. The private XML-consumer adapter provides moddle and Viewer with a namespace-aware lexical view of schema-typed boolean attributes: XML Schema's `1`/`0` and whitespace-normalized forms retain their true/false meaning despite the dependency's narrower parser. This view does not rewrite the supplied file, repair invalid XML, change DI, or normalize arbitrary extension/text values. Supplied gateway-direction cardinalities and plane-local DI ownership are assessed before declaring their corresponding checks passed.
+
 `render` uses the supplied DI and does not repair, lay out, or rewrite an external BPMN file. Missing DI, unsupported visible elements, or rendering failure are reported. Validating or rendering a file provides no semantic import or round-trip editing promise.
 
 ## Layout and rendering choices

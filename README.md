@@ -16,7 +16,7 @@ Development build: `0.1.0-dev.0`. The CLI and portable skill are being implement
 Prerequisites: Node.js **24.x**, npm, and an installed Google Chrome or Microsoft Edge. Validation and capability inspection do not require a browser. The CLI does not download one.
 
 ```sh
-git clone --branch wip/v0-implementation https://github.com/ve250104/OpenBPMN.git
+git clone https://github.com/ve250104/OpenBPMN.git
 cd OpenBPMN
 npm ci --ignore-scripts
 npm run build
@@ -48,6 +48,6 @@ The required agent surfaces are Codex CLI, Claude Code, and GitHub Copilot CLI.
 
 ## Project
 
-The repository keeps its original OpenBPMN URL; the public product name is BPMN Weave. [Contributing](https://github.com/ve250104/OpenBPMN/blob/wip/v0-implementation/CONTRIBUTING.md) covers development; the [architecture](https://github.com/ve250104/OpenBPMN/blob/wip/v0-implementation/docs/architecture.md) and [build plan](https://github.com/ve250104/OpenBPMN/blob/wip/v0-implementation/docs/build-plan.md) explain the implementation contracts.
+The repository keeps its original OpenBPMN URL; the public product name is BPMN Weave. [Contributing](https://github.com/ve250104/OpenBPMN/blob/main/CONTRIBUTING.md) covers development; the [architecture](https://github.com/ve250104/OpenBPMN/blob/main/docs/architecture.md) and [build plan](https://github.com/ve250104/OpenBPMN/blob/main/docs/build-plan.md) explain the implementation contracts.
 
 Inspired by [bpmn-js](https://github.com/bpmn-io/bpmn-js) and the agent-first workflow of [diagram-design](https://github.com/cathrynlavery/diagram-design). Project-authored material uses the [MIT license](LICENSE); [third-party notices](THIRD_PARTY_NOTICES.md) retain dependency terms and identify unresolved redistribution gates.

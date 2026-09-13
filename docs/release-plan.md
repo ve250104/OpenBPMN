@@ -32,7 +32,7 @@ The release publishes:
 2. `bpmn-weave-skill-0.1.0.zip`, containing one complete `bpmn-weave/` directory with `SKILL.md`, required reference files, minimal examples, license, and version metadata.
 3. SHA-256 checksums and a release qualification summary linking to full evidence in the repository.
 
-The ZIP is another presentation of the package's skill directory, not a second implementation or separately versioned product. Its contents must match the corresponding package directory byte for byte. Runtime dependencies are resolved by npm during the explicit install step. No browser binary, model runtime, source archive, evaluation transcripts, or historical planning documents enter either runtime artifact. Package `files` is an explicit allowlist, and `npm pack --json` is checked against it.
+The ZIP is another presentation of the package's skill directory, not a second implementation or separately versioned product. Its contents must match the corresponding package directory byte for byte. Runtime dependencies are installed by npm from the committed, published `npm-shrinkwrap.json` during the explicit install step. This CLI uses one canonical lockfile for development and distribution; do not add a competing `package-lock.json`. Package qualification checks the installed shrinkwrap bytes and records its hash and the actual installed dependency tree alongside the archive hash. No browser binary, model runtime, source archive, evaluation transcripts, or historical planning documents enter either runtime artifact. Package `files` is an explicit allowlist, and `npm pack --json` is checked against it.
 
 The standard installation command, once the package has actually been published, is:
 

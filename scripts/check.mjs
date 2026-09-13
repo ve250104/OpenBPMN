@@ -27,9 +27,14 @@ for (const name of ['request', 'handoff', 'quality-report', 'result'])
 assert.deepEqual(await readFile(join(root, 'LICENSE')), await readFile(join(skillRoot, 'LICENSE')));
 const packageJson = JSON.parse(await readFile(join(root, 'package.json'), 'utf8'));
 assert.equal(JSON.parse(await readFile(join(skillRoot, 'version.json'), 'utf8')).toolVersion, packageJson.version);
-assert.equal(
-  JSON.parse(await readFile(join(root, 'package-lock.json'), 'utf8')).packages[''].version,
-  packageJson.version,
+const lockedPackage = JSON.parse(await readFile(join(root, 'npm-shrinkwrap.json'), 'utf8')).packages[''];
+assert.equal(lockedPackage.version, packageJson.version);
+assert.equal(lockedPackage.name, packageJson.name);
+assert.deepEqual(lockedPackage.dependencies, packageJson.dependencies, 'Runtime dependency lock is stale.');
+assert.deepEqual(lockedPackage.devDependencies, packageJson.devDependencies, 'Development dependency lock is stale.');
+assert.ok(
+  !paths.includes(join(root, 'package-lock.json')),
+  'Use one canonical publishable shrinkwrap, not competing locks.',
 );
 assert.ok(
   !Object.keys(packageJson.scripts).some((name) => ['preinstall', 'install', 'postinstall', 'prepare'].includes(name)),

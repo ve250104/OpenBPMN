@@ -6,6 +6,7 @@ import { OperationError, type FindingInput } from './diagnostics.js';
 import type { Browser } from 'puppeteer-core';
 import type { ModdleElement } from 'bpmn-moddle';
 import { displayLabel } from './geometry.js';
+import { xmlForBpmnConsumer } from './xml-consumer.js';
 
 interface FontFace {
   file: string;
@@ -38,9 +39,11 @@ export async function renderSvg(
   options.signal?.addEventListener('abort', abort, { once: true });
   try {
     const { BpmnModdle } = await import('bpmn-moddle');
+    let consumerXml: string;
     let parsed: Awaited<ReturnType<InstanceType<typeof BpmnModdle>['fromXML']>>;
     try {
-      parsed = await new BpmnModdle().fromXML(xml);
+      consumerXml = xmlForBpmnConsumer(xml);
+      parsed = await new BpmnModdle().fromXML(consumerXml);
     } catch {
       throw new OperationError('XML_INVALID', 'xml', 'The BPMN XML could not be parsed.', 3, 'refused');
     }
@@ -532,7 +535,7 @@ export async function renderSvg(
         sheet.setAttribute('viewBox', `0 0 ${width} ${top}`);
         return '<!-- created with bpmn-js / http://bpmn.io -->\n' + new XMLSerializer().serializeToString(sheet) + '\n';
       },
-      { xml, panels, fontCss, labelText },
+      { xml: consumerXml, panels, fontCss, labelText },
     );
     if (unexpectedRequest)
       throw renderRefusal('RENDER_UNSUPPORTED', 'Rendering attempted to load an unapproved external resource.');
@@ -572,7 +575,11 @@ export async function renderSvg(
       });
     if (profile)
       await rm(profile, { recursive: true, force: true, maxRetries: 3, retryDelay: 50 }).catch(() => {
-        throw new OperationError('CLEANUP_FAILED', 'filesystem', 'Temporary renderer files could not be removed.');
+        throw new OperationError(
+          'CLEANUP_FAILED',
+          'filesystem',
+          `Temporary renderer files could not be removed. Remove the retained directory: ${profile}`,
+        );
       });
   }
 }
@@ -613,6 +620,14 @@ export function assessSuppliedDi(root: ModdleElement, elements: Record<string, M
     'bpmn:TextAnnotation',
     'bpmn:Group',
   ]);
+  const requiresGeometry = (element: ModdleElement) =>
+    element.id &&
+    (element.$instanceOf?.('bpmn:FlowNode') ||
+      shapes.has(element.$type) ||
+      connectors.has(element.$type) ||
+      (['bpmn:DataInput', 'bpmn:DataOutput'].includes(element.$type) &&
+        element.$parent?.$type === 'bpmn:InputOutputSpecification' &&
+        element.$parent?.$parent?.$type === 'bpmn:Process'));
   const visible = new Set<string>();
   const boundsValid = (bounds: ModdleElement | undefined) =>
     bounds &&
@@ -632,8 +647,61 @@ export function assessSuppliedDi(root: ModdleElement, elements: Record<string, M
       add('DI_INVALID', 'A diagram plane has no resolved process or collaboration.');
       continue;
     }
+    const subject = diagram.plane.bpmnElement as ModdleElement;
+    const geometry = (diagram.plane.planeElement ?? []) as ModdleElement[];
+    const bySemanticId = new Map(geometry.map((element) => [element.bpmnElement?.id, element]));
+    const ancestors = (element: ModdleElement): ModdleElement[] => {
+      const result: ModdleElement[] = [];
+      for (let parent = element.$parent; parent; parent = parent.$parent) result.push(parent);
+      return result;
+    };
+    const belongsToPlane = (semantic: ModdleElement) => {
+      const parents = ancestors(semantic);
+      if (parents.includes(subject)) return true;
+      const process = parents.find((parent) => parent.$type === 'bpmn:Process');
+      if (
+        process &&
+        subject.$type === 'bpmn:Collaboration' &&
+        (subject.participants ?? []).some((participant: ModdleElement) => participant.processRef === process)
+      )
+        return true;
+      // Groups are intentional, non-owning views and may span subprocess panels.
+      // Their semantic artifact parent is not a control-flow containment boundary.
+      if (semantic.$type === 'bpmn:Group') {
+        if (ancestors(subject).includes(semantic.$parent!)) return true;
+        const collaboration = semantic.$parent;
+        const targetProcess =
+          subject.$type === 'bpmn:Process'
+            ? subject
+            : ancestors(subject).find((parent) => parent.$type === 'bpmn:Process');
+        return (
+          Boolean(targetProcess) &&
+          collaboration?.$type === 'bpmn:Collaboration' &&
+          (collaboration.participants ?? []).some(
+            (participant: ModdleElement) => participant.processRef === targetProcess,
+          )
+        );
+      }
+      return false;
+    };
+    const visibleInPlane = (semantic: ModdleElement) => {
+      if (!belongsToPlane(semantic)) return false;
+      if (semantic.$type === 'bpmn:Group') return true;
+      for (const parent of ancestors(semantic)) {
+        if (parent === subject) break;
+        if (parent.$type === 'bpmn:SubProcess' && !bySemanticId.get(parent.id)?.isExpanded) return false;
+        if (parent.$type === 'bpmn:Process' && subject.$type === 'bpmn:Collaboration')
+          return geometry.some(
+            (shape) =>
+              shape.bpmnElement?.$type === 'bpmn:Participant' &&
+              shape.bpmnElement.processRef === parent &&
+              shape.isExpanded !== false,
+          );
+      }
+      return true;
+    };
     const planeVisible = new Set<string>();
-    for (const element of (diagram.plane.planeElement ?? []) as ModdleElement[]) {
+    for (const element of geometry) {
       const semantic = element.bpmnElement as ModdleElement | undefined;
       if (!semantic?.id) {
         add('DI_INVALID', 'Diagram geometry has an unresolved process element.');
@@ -642,11 +710,14 @@ export function assessSuppliedDi(root: ModdleElement, elements: Record<string, M
       if (planeVisible.has(semantic.id))
         add('DI_INVALID', 'A diagram plane repeats geometry for the same semantic element.', semantic.id);
       planeVisible.add(semantic.id);
-      visible.add(semantic.id);
+      if (visibleInPlane(semantic)) visible.add(semantic.id);
+      else add('DI_INVALID', 'Diagram geometry belongs to a different process or collaboration plane.', semantic.id);
       if (element.$type === 'bpmndi:BPMNShape') {
         if (connectors.has(semantic.$type) || !boundsValid(element.bounds))
           add('DI_INVALID', 'A diagram shape has invalid bounds or element type.', semantic.id);
       } else if (element.$type === 'bpmndi:BPMNEdge') {
+        if ([element.sourceElement, element.targetElement].some((endpoint) => endpoint && !geometry.includes(endpoint)))
+          add('DI_INVALID', 'A diagram connection references an endpoint in a different diagram view.', semantic.id);
         const points = (element.waypoint ?? []) as ModdleElement[];
         if (
           !connectors.has(semantic.$type) ||
@@ -661,21 +732,68 @@ export function assessSuppliedDi(root: ModdleElement, elements: Record<string, M
       } else add('DI_INVALID', 'A diagram contains an unsupported DI element.', semantic.id);
       if (element.label?.bounds && !boundsValid(element.label.bounds))
         add('DI_INVALID', 'A diagram label has invalid bounds.', semantic.id);
+      if (semantic.$type !== 'bpmn:Group' && visibleInPlane(semantic)) {
+        const corners = (bounds: ModdleElement | undefined) =>
+          boundsValid(bounds)
+            ? [
+                { x: bounds!.x, y: bounds!.y },
+                { x: bounds!.x + bounds!.width, y: bounds!.y + bounds!.height },
+              ]
+            : [];
+        const points = [...corners(element.bounds), ...corners(element.label?.bounds), ...(element.waypoint ?? [])];
+        const contains = (container: ModdleElement) =>
+          !boundsValid(container.bounds) ||
+          points.every(
+            (point) =>
+              point.x >= container.bounds.x - 1e-6 &&
+              point.y >= container.bounds.y - 1e-6 &&
+              point.x <= container.bounds.x + container.bounds.width + 1e-6 &&
+              point.y <= container.bounds.y + container.bounds.height + 1e-6,
+          );
+        const parents = ancestors(semantic);
+        const containers = parents
+          .filter((parent) => parent !== subject && ['bpmn:Lane', 'bpmn:SubProcess'].includes(parent.$type))
+          .map((parent) => bySemanticId.get(parent.id))
+          .filter((shape): shape is ModdleElement => Boolean(shape));
+        if (semantic.$instanceOf?.('bpmn:FlowNode')) {
+          const owner = semantic.$type === 'bpmn:BoundaryEvent' ? semantic.attachedToRef : semantic;
+          containers.push(
+            ...geometry.filter(
+              (shape) =>
+                shape.bpmnElement?.$type === 'bpmn:Lane' && (shape.bpmnElement.flowNodeRef ?? []).includes(owner),
+            ),
+          );
+        }
+        const process = parents.find((parent) => parent.$type === 'bpmn:Process');
+        const pools =
+          subject.$type === 'bpmn:Collaboration' && process
+            ? geometry.filter(
+                (shape) =>
+                  shape.bpmnElement?.$type === 'bpmn:Participant' &&
+                  shape.bpmnElement.processRef === process &&
+                  shape.isExpanded !== false,
+              )
+            : [];
+        if (containers.some((container) => !contains(container)) || (pools.length && !pools.some(contains)))
+          add(
+            'DI_INVALID',
+            'Diagram geometry or its label lies outside its declared pool, lane, or subprocess.',
+            semantic.id,
+          );
+      }
+    }
+    for (const semantic of Object.values(elements)) {
+      if (
+        requiresGeometry(semantic) &&
+        semantic.$type !== 'bpmn:Group' &&
+        visibleInPlane(semantic) &&
+        !planeVisible.has(semantic.id!)
+      )
+        add('DI_MISSING', 'A visible process element has no geometry in its declared diagram view.', semantic.id);
     }
   }
   for (const element of Object.values(elements)) {
-    const processIo =
-      ['bpmn:DataInput', 'bpmn:DataOutput'].includes(element.$type) &&
-      element.$parent?.$type === 'bpmn:InputOutputSpecification' &&
-      element.$parent?.$parent?.$type === 'bpmn:Process';
-    if (
-      element.id &&
-      (element.$instanceOf?.('bpmn:FlowNode') ||
-        shapes.has(element.$type) ||
-        connectors.has(element.$type) ||
-        processIo) &&
-      !visible.has(element.id)
-    ) {
+    if (requiresGeometry(element) && !visible.has(element.id!)) {
       add('DI_MISSING', 'A visible process element has no supplied diagram geometry.', element.id);
     }
   }

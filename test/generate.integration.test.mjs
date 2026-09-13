@@ -1,12 +1,13 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { mkdtemp, realpath, rm, readFile, readdir, writeFile } from 'node:fs/promises';
+import { cp, mkdir, mkdtemp, realpath, rm, readFile, readdir, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { compileModel, semanticProjection } from '../dist/compiler.js';
 import { validateXml } from '../dist/xml.js';
+import { assertPublishedSvgEquivalent } from './support/published-svg.mjs';
 
 const cli = fileURLToPath(new URL('../dist/cli.js', import.meta.url));
 const example = fileURLToPath(new URL('../examples/invoice-review.json', import.meta.url));
@@ -30,15 +31,49 @@ test('the published purchase example reproduces from its authored request withou
   const dir = await realpath(await mkdtemp(join(tmpdir(), 'bpmn-weave-published-example-')));
   t.after(() => rm(dir, { recursive: true, force: true }));
   const input = fileURLToPath(new URL('../examples/purchase-approval.json', import.meta.url));
-  const stem = join(dir, 'purchase');
-  const result = await run(['generate', '--input', input, '--output', stem]);
-  assert.equal(result.code, 0, result.stdout + result.stderr);
-  for (const suffix of ['bpmn', 'svg', 'quality.json']) {
-    assert.equal(
-      await readFile(`${stem}.${suffix}`, 'utf8'),
-      await readFile(new URL(`../examples/purchase-approval.${suffix}`, import.meta.url), 'utf8'),
-      `Regenerate the published ${suffix} when the authored request or output pipeline changes.`,
+  const suffixes = ['bpmn', 'svg', 'quality.json'];
+  const results = [];
+  try {
+    for (const name of ['purchase', 'repeat']) {
+      const result = await run(['generate', '--input', input, '--output', join(dir, name)]);
+      results.push(result);
+      assert.equal(result.code, 0, result.stdout + result.stderr);
+    }
+    for (const suffix of suffixes) {
+      const actual = await readFile(join(dir, `purchase.${suffix}`), 'utf8');
+      const repeated = await readFile(join(dir, `repeat.${suffix}`), 'utf8');
+      assert.ok(actual === repeated, `Fresh ${suffix} outputs must remain byte-identical in the same environment.`);
+      const expected = await readFile(new URL(`../examples/purchase-approval.${suffix}`, import.meta.url), 'utf8');
+      if (suffix === 'svg') assertPublishedSvgEquivalent(actual, expected);
+      else {
+        assert.ok(
+          actual === expected,
+          `Regenerate the published ${suffix} when the authored request or output pipeline changes.`,
+        );
+      }
+    }
+  } catch (error) {
+    // CI logs truncate embedded fonts before reaching the useful SVG difference.
+    // Retain the complete synthetic pair, repeats, and CLI results for diagnosis.
+    const artifacts = fileURLToPath(new URL('../.artifacts/', import.meta.url));
+    await mkdir(artifacts, { recursive: true });
+    const retained = await mkdtemp(join(artifacts, 'published-example-failure-'));
+    await cp(dir, retained, { recursive: true });
+    for (const suffix of ['json', ...suffixes]) {
+      await cp(
+        new URL(`../examples/purchase-approval.${suffix}`, import.meta.url),
+        join(retained, `expected.${suffix}`),
+      );
+    }
+    await writeFile(
+      join(retained, 'runtime.json'),
+      JSON.stringify(
+        { node: process.version, platform: process.platform, architecture: process.arch, results },
+        null,
+        2,
+      ),
     );
+    throw new Error(`${error.message}\nComplete example evidence retained at ${retained}`, { cause: error });
   }
 });
 
