@@ -737,7 +737,7 @@ test('mid-render cancellation terminates its launched browser and removes the pr
   );
   const outcome = new Promise((resolve) => child.once('message', resolve));
   const exited = new Promise((resolve) => child.once('exit', resolve));
-  let browserPid;
+  let browserPid: number | undefined;
   try {
     child.send({ xml: many });
     const deadline = Date.now() + 8_000;

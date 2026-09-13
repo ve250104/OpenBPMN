@@ -300,12 +300,7 @@
             "key": "operationsLane",
             "name": "Operations",
             "parentRef": "onboardingProcess",
-            "flowNodeRefs": [
-              "requestVerification",
-              "receiveVerification",
-              "verificationOutcome",
-              "provisionAccount"
-            ]
+            "flowNodeRefs": ["requestVerification", "receiveVerification", "verificationOutcome", "provisionAccount"]
           }
         ]
       }
@@ -396,14 +391,7 @@
   },
   "presentation": {
     "direction": "leftToRight",
-    "participantOrder": [
-      "companyParticipant",
-      "customerParticipant",
-      "verificationProvider"
-    ],
-    "laneOrder": [
-      "customerSuccessLane",
-      "operationsLane"
-    ]
+    "participantOrder": ["companyParticipant", "customerParticipant", "verificationProvider"],
+    "laneOrder": ["customerSuccessLane", "operationsLane"]
   }
 }

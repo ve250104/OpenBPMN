@@ -142,7 +142,13 @@ const simplify = (points: Point[]): Point[] =>
   );
 const lineSegments = (points: Point[]): Segment[] => points.slice(1).map((point, index) => [points[index]!, point]);
 
-function route(edge: ModdleElement, shapes: ModdleElement[], others: ModdleElement[], labels: Rect[]): Point[] {
+function route(
+  edge: ModdleElement,
+  shapes: ModdleElement[],
+  others: ModdleElement[],
+  labels: Rect[],
+  containers: ModdleElement[],
+): Point[] {
   const original = edge.waypoint as Point[];
   const obstacles = [...shapes.map((shape) => shape.bounds as Rect), ...labels.map((box) => expand(box, 4))];
   const occupied = others.flatMap(segments);
@@ -176,13 +182,20 @@ function route(edge: ModdleElement, shapes: ModdleElement[], others: ModdleEleme
     x: point.x + Math.sign(next.x - point.x) * 16,
     y: point.y + Math.sign(next.y - point.y) * 16,
   });
-  const ports = (point: Point, next: Point): Array<[Point, Point]> => {
-    const shape = shapes
-      .filter((shape) => {
-        const b = shape.bounds as Rect;
-        return point.x >= b.x && point.x <= b.x + b.width && point.y >= b.y && point.y <= b.y + b.height;
-      })
-      .sort((a, b) => a.bounds.width * a.bounds.height - b.bounds.width * b.bounds.height)[0];
+  const ports = (point: Point, next: Point, reference: ModdleElement | ModdleElement[]): Array<[Point, Point]> => {
+    let anchor: ModdleElement | undefined;
+    for (let current = Array.isArray(reference) ? reference[0] : reference; current; current = current.$parent) {
+      anchor = [...shapes, ...containers].find((shape) => shape.bpmnElement.id === current.id);
+      if (anchor) break;
+    }
+    const shape =
+      anchor ??
+      shapes
+        .filter((shape) => {
+          const b = shape.bounds as Rect;
+          return point.x >= b.x && point.x <= b.x + b.width && point.y >= b.y && point.y <= b.y + b.height;
+        })
+        .sort((a, b) => a.bounds.width * a.bounds.height - b.bounds.width * b.bounds.height)[0];
     const result: Array<[Point, Point]> = [[point, outward(point, next)]];
     if (shape) {
       const b = shape.bounds as Rect;
@@ -206,7 +219,13 @@ function route(edge: ModdleElement, shapes: ModdleElement[], others: ModdleEleme
           { x: cx, y: b.y - 16 },
         ],
       );
-      for (const fraction of [0.25, 0.75]) {
+      // Centre/quarter ports alone exhaust even a twelve-handoff activity.
+      // Reserve further docking positions from its actual perimeter space.
+      const divisions = Math.max(4, Math.floor(Math.min(b.width, b.height) / 12));
+      const fractions = [
+        ...new Set([0.25, 0.75, ...Array.from({ length: divisions - 1 }, (_, index) => (index + 1) / divisions)]),
+      ];
+      for (const fraction of fractions) {
         const radial = Math.abs(fraction * 2 - 1);
         const inset = shape.bpmnElement.$instanceOf?.('bpmn:Gateway')
           ? radial
@@ -237,8 +256,10 @@ function route(edge: ModdleElement, shapes: ModdleElement[], others: ModdleEleme
   };
   const score = (points: Point[]) =>
     lineSegments(points).reduce((total, [a, b]) => total + distance(a, b), 0) + points.length * 10;
-  for (const [first, start] of ports(original[0]!, original[1]!))
-    for (const [last, end] of ports(original.at(-1)!, original.at(-2)!)) {
+  const starts = ports(original[0]!, original[1]!, edge.bpmnElement.sourceRef);
+  const ends = ports(original.at(-1)!, original.at(-2)!, edge.bpmnElement.targetRef);
+  for (const [first, start] of starts)
+    for (const [last, end] of ends) {
       if (!legal([first, start]) || !legal([end, last])) continue;
       const candidates: Point[][] = [];
       const xs = [
@@ -271,8 +292,8 @@ function route(edge: ModdleElement, shapes: ModdleElement[], others: ModdleEleme
         if (legal(points)) return points;
       }
     }
-  for (const [first, start] of ports(original[0]!, original[1]!))
-    for (const [last, end] of ports(original.at(-1)!, original.at(-2)!)) {
+  for (const [first, start] of starts)
+    for (const [last, end] of ends) {
       if (!legal([first, start]) || !legal([end, last])) continue;
       const xs = [
         ...new Set([start.x, end.x, ...obstacles.flatMap((box) => [box.x - 16, box.x + box.width + 16])]),
@@ -625,13 +646,15 @@ export async function completeGeometry(
   externals.sort((a, b) => Number(a.$type === 'bpmndi:BPMNEdge') - Number(b.$type === 'bpmndi:BPMNEdge'));
   let routed = false;
   const routeEdges = () => {
-    for (const edge of [...edges].reverse())
-      edge.waypoint = route(
-        edge,
-        shapes,
-        edges.filter((other) => other !== edge),
-        placed,
-      ).map((point) => moddle.create('dc:Point', { x: point.x, y: point.y }));
+    // Initial paths are proposals, and may overlap. Only accepted paths occupy
+    // a channel; reserving the unprocessed proposals can make legal routes fail.
+    const completed: ModdleElement[] = [];
+    for (const edge of [...edges].reverse()) {
+      edge.waypoint = route(edge, shapes, completed, placed, containers).map((point) =>
+        moddle.create('dc:Point', { x: point.x, y: point.y }),
+      );
+      completed.push(edge);
+    }
     occupiedSegments = edges.flatMap(segments);
     routed = true;
   };

@@ -49,7 +49,14 @@ export async function renderSvg(
     assertDiagramGeometry(parsed.rootElement, parsed.elementsById);
     const diagrams = (parsed.rootElement.diagrams ?? []) as Array<{
       id?: string;
-      plane?: { bpmnElement?: { id?: string; name?: string }; planeElement?: Array<{ bpmnElement?: { id?: string } }> };
+      plane?: {
+        bpmnElement?: { id?: string; name?: string };
+        planeElement?: Array<{
+          bpmnElement?: { id?: string };
+          sourceElement?: { bpmnElement?: { id?: string } };
+          targetElement?: { bpmnElement?: { id?: string } };
+        }>;
+      };
     }>;
     if (!diagrams.length || !diagrams[0]?.plane?.planeElement?.length || diagrams.some((diagram) => !diagram.id)) {
       throw renderRefusal('DI_MISSING', 'The supplied model has no complete diagram to display.');
@@ -65,6 +72,17 @@ export async function renderSvg(
           element.bpmnElement?.id,
           displayLabel(element.bpmnElement as ModdleElement),
         ]),
+      ),
+      docking: Object.fromEntries(
+        (diagram.plane?.planeElement ?? [])
+          .filter((element) => element.sourceElement || element.targetElement)
+          .map((element) => [
+            element.bpmnElement?.id,
+            {
+              source: element.sourceElement?.bpmnElement?.id,
+              target: element.targetElement?.bpmnElement?.id,
+            },
+          ]),
       ),
     }));
     const labelText =
@@ -114,6 +132,13 @@ export async function renderSvg(
     browser = await puppeteer.launch({
       executablePath: capability.path!,
       userDataDir: profile,
+      // Linux Chromium/Fontconfig also write outside --user-data-dir. Scope
+      // their config and caches to this invocation without changing host state.
+      env: {
+        ...process.env,
+        XDG_CONFIG_HOME: join(profile, 'config'),
+        XDG_CACHE_HOME: join(profile, 'cache'),
+      },
       headless: true,
       pipe: true,
       timeout: 10_000,
@@ -150,7 +175,7 @@ export async function renderSvg(
     if (options.signal?.aborted) throw renderingInterrupted();
     // Puppeteer's fresh about:blank page belongs to this invocation alone.
     const page = (await browser.pages())[0];
-    if (!page || page.url() !== 'about:blank')
+    if (page?.url() !== 'about:blank')
       throw new OperationError(
         'DEPENDENCY_FAILURE',
         'runtime',
@@ -252,6 +277,30 @@ export async function renderSvg(
             },
           });
           try {
+            const registry = viewer.get<{
+              get(id: string): RenderedElement | undefined;
+              getGraphics(element: RenderedElement): SVGElement;
+            }>('elementRegistry');
+            const importer = viewer.get<{
+              add(semantic: ModdleElement, di: ModdleElement, parent: RenderedElement): RenderedElement;
+              addLabel(semantic: ModdleElement, di: ModdleElement, element: RenderedElement): RenderedElement;
+              _getConnectedElement(semantic: ModdleElement, side: 'source' | 'target'): RenderedElement;
+            }>('bpmnImporter');
+            const connectedElement = importer._getConnectedElement.bind(importer);
+            importer._getConnectedElement = (semantic, side) => {
+              const dockingId = panel.docking[semantic.id!]?.[side];
+              const endpoint = semantic[`${side}Ref`] as ModdleElement | undefined;
+              if (semantic.$type === 'bpmn:MessageFlow' && dockingId && endpoint && !registry.get(endpoint.id!)) {
+                // Honor explicit DI docking on a visible collapsed ancestor.
+                // The original Message Flow endpoint remains in its detail panel.
+                for (let current = endpoint.$parent; current; current = current.$parent) {
+                  if (current.id !== dockingId || current.$type !== 'bpmn:SubProcess') continue;
+                  const shape = registry.get(dockingId);
+                  if (shape && shape.di.isExpanded !== true) return shape;
+                }
+              }
+              return connectedElement(semantic, side);
+            };
             // Render one legal DI view at a time. The upstream navigation importer
             // otherwise merges sibling planes into one ID registry, which cannot
             // represent a Group legally repeated across different diagrams.
@@ -264,14 +313,6 @@ export async function renderSvg(
               });
             const result = await viewer.importXML(xml, panel.id);
             if (result.warnings.length) throw new Error('RENDER_UNSUPPORTED');
-            const registry = viewer.get<{
-              get(id: string): RenderedElement | undefined;
-              getGraphics(element: RenderedElement): SVGElement;
-            }>('elementRegistry');
-            const importer = viewer.get<{
-              add(semantic: ModdleElement, di: ModdleElement, parent: RenderedElement): RenderedElement;
-              addLabel(semantic: ModdleElement, di: ModdleElement, element: RenderedElement): RenderedElement;
-            }>('bpmnImporter');
             const canvas = viewer.get<{ getRootElement(): RenderedElement }>('canvas');
             const graphics = viewer.get<{ update(type: string, element: RenderedElement, gfx: SVGElement): void }>(
               'graphicsFactory',

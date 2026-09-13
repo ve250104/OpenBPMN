@@ -24,8 +24,11 @@ async function computeLayout(xml: string, request: ProcessRequest): Promise<stri
     for (const participant of participants) {
       if (participant.processRef && sharedProcesses.has(participant.processRef.id)) delete participant.processRef;
     }
-    const preparedXml = (await moddle.toXML(prepared.rootElement, { format: true })).xml;
     const blackBoxOnly = collaboration && !participants.some((participant) => participant.processRef);
+    // Dense Message Flow routing is completed once by the owned adapter. The
+    // alpha's handoff routing dominates its flow-node placement time.
+    if (!blackBoxOnly && (collaboration?.messageFlows ?? []).length > 10) collaboration!.messageFlows = [];
+    const preparedXml = (await moddle.toXML(prepared.rootElement, { format: true })).xml;
     const primaryResult = blackBoxOnly
       ? await layoutBlackBoxes(prepared.rootElement, prepared.elementsById, request, moddle)
       : await layoutProcess(preparedXml);
@@ -322,13 +325,61 @@ async function prepareLayoutInput(xml: string, request: ProcessRequest, moddle: 
   return (await moddle.toXML(prepared.rootElement, { format: true })).xml;
 }
 
-/** Native Process IO and explicit Group membership are owned DI, not semantic proxies. */
+/** Complete owned handoffs, Process IO and Group DI from original semantic references. */
 function completeOwnedArtifacts(
   diagrams: ModdleElement[],
   elements: Record<string, ModdleElement>,
   request: ProcessRequest,
   moddle: BpmnModdle,
 ): void {
+  for (const flow of Object.values(elements).filter((element) => element.$type === 'bpmn:MessageFlow')) {
+    const views = diagrams.filter((diagram) =>
+      diagram.plane.planeElement.some((element: ModdleElement) => element.bpmnElement.id === flow.id),
+    );
+    const anchor = (plane: ModdleElement, endpoint: ModdleElement): ModdleElement | undefined => {
+      for (let current: ModdleElement | undefined = endpoint; current; current = current.$parent) {
+        const shape = plane.planeElement.find(
+          (element: ModdleElement) => element.bounds && element.bpmnElement.id === current!.id,
+        );
+        if (shape) return shape;
+      }
+      return undefined;
+    };
+    if (!views.length) {
+      const diagram = diagrams.find(
+        (diagram) => anchor(diagram.plane, flow.sourceRef) && anchor(diagram.plane, flow.targetRef),
+      );
+      if (!diagram) throw invalid('DI_MISSING', 'A Message Flow has no complete visible participant scope.');
+      views.push(diagram);
+    }
+    for (const diagram of views) {
+      const sourceShape = anchor(diagram.plane, flow.sourceRef);
+      const targetShape = anchor(diagram.plane, flow.targetRef);
+      if (!sourceShape || !targetShape)
+        throw invalid('DI_MISSING', 'A Message Flow has no complete visible participant scope.');
+      const existing = diagram.plane.planeElement.find((element: ModdleElement) => element.bpmnElement.id === flow.id);
+      if (existing) {
+        // Alpha paths need the same explicit collapsed-ancestor docking as owned
+        // paths; retaining their geometry must not bypass this completion step.
+        if (sourceShape.bpmnElement.id !== flow.sourceRef.id) existing.sourceElement = sourceShape;
+        if (targetShape.bpmnElement.id !== flow.targetRef.id) existing.targetElement = targetShape;
+        continue;
+      }
+      const source = sourceShape.bounds;
+      const target = targetShape.bounds;
+      const first = { x: source.x + source.width / 2, y: source.y + source.height };
+      const last = { x: target.x + target.width / 2, y: target.y };
+      const y = (first.y + last.y) / 2;
+      diagram.plane.planeElement.push(
+        moddle.create('bpmndi:BPMNEdge', {
+          bpmnElement: flow,
+          ...(sourceShape.bpmnElement.id !== flow.sourceRef.id ? { sourceElement: sourceShape } : {}),
+          ...(targetShape.bpmnElement.id !== flow.targetRef.id ? { targetElement: targetShape } : {}),
+          waypoint: [first, { x: first.x, y }, { x: last.x, y }, last].map((point) => moddle.create('dc:Point', point)),
+        }),
+      );
+    }
+  }
   for (const process of request.model.processes) {
     const io = (process.artifacts ?? []).filter(
       (artifact) =>
