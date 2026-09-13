@@ -254,5 +254,30 @@
     "reference": "Native event-based gateway branches to distinct Message and Timer Catch Events; neither branch is a condition/default flow.",
     "intentionalCrossings": [],
     "status": "not_run"
-  }
+  },
+  "symbols": [
+    {
+      "id": "M_invite",
+      "min": {
+        "rect": 1,
+        "path": 1
+      },
+      "text": "Send trial invitation"
+    },
+    {
+      "id": "M_wait",
+      "min": {
+        "polygon": 1,
+        "circle": 2
+      }
+    },
+    {
+      "id": "M_expired",
+      "min": {
+        "circle": 2,
+        "path": 1
+      },
+      "text": "Seven days elapsed"
+    }
+  ]
 }

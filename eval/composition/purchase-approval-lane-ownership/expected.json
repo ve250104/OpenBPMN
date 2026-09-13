@@ -299,5 +299,23 @@
     "reference": "Left-to-right approval with a visible rework return, separate requester and Finance lanes, and two nested Finance lanes.",
     "intentionalCrossings": [],
     "status": "not_run"
-  }
+  },
+  "symbols": [
+    {
+      "id": "M_review",
+      "min": {
+        "rect": 1,
+        "path": 1
+      },
+      "text": "Review budget and rationale"
+    },
+    {
+      "id": "M_decision",
+      "min": {
+        "polygon": 1,
+        "path": 1
+      },
+      "text": "Request acceptable?"
+    }
+  ]
 }

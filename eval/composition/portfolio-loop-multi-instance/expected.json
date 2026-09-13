@@ -195,5 +195,31 @@
     "reference": "User/manual/service task markers plus circular standard-loop, horizontal sequential-MI, and vertical parallel-MI markers; each within its responsible lane.",
     "intentionalCrossings": [],
     "status": "not_run"
-  }
+  },
+  "symbols": [
+    {
+      "id": "M_refine",
+      "min": {
+        "rect": 1,
+        "path": 1
+      },
+      "marker": "loop"
+    },
+    {
+      "id": "M_signoff",
+      "min": {
+        "rect": 1,
+        "path": 1
+      },
+      "marker": "sequential"
+    },
+    {
+      "id": "M_distribute",
+      "min": {
+        "rect": 1,
+        "path": 1
+      },
+      "marker": "parallel"
+    }
+  ]
 }

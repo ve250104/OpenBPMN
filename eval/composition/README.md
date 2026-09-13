@@ -21,8 +21,14 @@ Run complete fresh CLI bundles, supplied-XML validation/rendering, exact semanti
 node eval/composition/run.mjs --runs 1
 node eval/composition/run.mjs --runs 10
 node eval/composition/run.mjs --fixture supplier-order-collaboration --runs 1
+node eval/composition/run.mjs --family notation --runs 10
+node eval/composition/run.mjs --family all --runs 10
 ```
 
 Each invocation creates a new temporary evidence directory and prints its path. `--output-parent DIRECTORY` selects an existing evidence parent, never an existing bundle to overwrite. Results retain failed runs and return nonzero for any failed fixture. Ten-run determinism is qualified only after ten successful fresh CLI runs; a one-run pass is not that evidence. Quality Report bytes are compared without field normalization because the report contract has no timestamps or output paths. This runner does not replace trust-boundary tests, host sessions, cross-platform evidence, performance measurements, or the required maintainer review.
+
+The `notation` family contains the 21 small feature slices in [notation-variants.mjs](notation-variants.mjs), covering the 23 previously unmapped visual variants. Script/Receive Tasks share one slice, as do Link catch/throw Events. Each slice declares a fixed synthetic process, separately supplied BPMN facts, exact visible elements, labels, and native symbol checks. The same declarations feed the public Core generation tests and fresh CLI runner. They do not constitute the full notation corpus required for every existing profile rule. Older feature tests still require independent fixture-level oracles and ten-run/cross-platform evidence before full profile qualification.
+
+Native symbol checks now supplement the eight composition oracles, including standard, sequential, and parallel repetition markers. These are added visual acceptance assertions; no authored process fact was changed to match output. The runner records the source commit and hashes the built runtime before and after a batch. A changed build fails the batch. The package hash remains unset during these development runs, so even an unchanged build is not a packaged release qualification.
 
 Before accepting a changed oracle, identify the changed source requirement and review its effect. Do not regenerate these files from actual output. Initial authoring correction: the invoice-data oracle explicitly records `associationDirection: None`, matching the request's intentional `direction: none`; no process fact was changed.

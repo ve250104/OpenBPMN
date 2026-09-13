@@ -300,5 +300,14 @@
     "reference": "Overview shows expanded qualification containing collapsed verification with a plus marker; verification and activation each have a named detail panel. The Call Activity has a thick border and resolves to the same-file activation Process.",
     "intentionalCrossings": [],
     "status": "not_run"
-  }
+  },
+  "symbols": [
+    {
+      "id": "M_activate",
+      "min": {
+        "rect": 1
+      },
+      "text": "Activate customer account"
+    }
+  ]
 }

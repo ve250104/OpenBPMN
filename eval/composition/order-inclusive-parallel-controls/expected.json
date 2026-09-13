@@ -311,5 +311,36 @@
     "reference": "Different OR-circle and AND-plus gateway pairs; both conditional route labels and the default marker are readable.",
     "intentionalCrossings": [],
     "status": "not_run"
-  }
+  },
+  "symbols": [
+    {
+      "id": "M_tax",
+      "min": {
+        "rect": 1,
+        "path": 1
+      },
+      "text": "Check tax treatment"
+    },
+    {
+      "id": "M_checks",
+      "min": {
+        "polygon": 1,
+        "circle": 1
+      }
+    },
+    {
+      "id": "M_finish",
+      "min": {
+        "polygon": 1,
+        "path": 1
+      }
+    },
+    {
+      "id": "M_finished",
+      "min": {
+        "polygon": 1,
+        "path": 1
+      }
+    }
+  ]
 }

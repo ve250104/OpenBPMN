@@ -289,5 +289,38 @@
     "reference": "Both boundaries touch only the provisioning task; the timer is dashed, the error solid, and the retry return remains distinguishable.",
     "intentionalCrossings": [],
     "status": "not_run"
-  }
+  },
+  "symbols": [
+    {
+      "id": "M_provision",
+      "min": {
+        "rect": 1,
+        "path": 1
+      },
+      "text": "Provision account"
+    },
+    {
+      "id": "M_late",
+      "min": {
+        "circle": 2,
+        "path": 1
+      },
+      "dashed": true
+    },
+    {
+      "id": "M_failed",
+      "min": {
+        "circle": 2,
+        "path": 1
+      },
+      "dashed": false
+    },
+    {
+      "id": "M_unable",
+      "min": {
+        "circle": 1,
+        "path": 1
+      }
+    }
+  ]
 }

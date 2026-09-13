@@ -1319,5 +1319,14 @@
     "flowNodes": 40,
     "connectors": 60,
     "nestedLanes": true
-  }
+  },
+  "symbols": [
+    {
+      "id": "M_b1",
+      "min": {
+        "rect": 1
+      },
+      "text": "Specify purchase"
+    }
+  ]
 }

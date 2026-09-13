@@ -7,6 +7,7 @@ import { layoutXml } from '../dist/layout.js';
 import { renderSvg, assessSuppliedDi } from '../dist/renderer.js';
 import { diagramConflicts } from '../dist/geometry.js';
 import { validateXml } from '../dist/xml.js';
+import { assertMeaning, assertSvgSymbols } from '../eval/composition/assertions.mjs';
 
 const directory = new URL('../eval/composition/', import.meta.url);
 for (const name of (await readdir(directory, { withFileTypes: true }))
@@ -18,6 +19,7 @@ for (const name of (await readdir(directory, { withFileTypes: true }))
     const expected = JSON.parse(await readFile(new URL(`${name}/expected.json`, directory), 'utf8'));
     const compiled = await compileModel(request);
     const xml = await layoutXml(compiled, request);
+    await assertMeaning(xml, expected);
     assert.equal((await validateXml(xml)).schemaValid, true);
     assert.deepEqual(await semanticProjection(xml), await semanticProjection(compiled));
     const parsed = await new BpmnModdle().fromXML(xml);
@@ -44,6 +46,7 @@ for (const name of (await readdir(directory, { withFileTypes: true }))
       assert.deepEqual(diagramConflicts(actual), []);
     }
     const svg = await renderSvg(xml);
+    assertSvgSymbols(svg, expected.symbols);
     for (const plane of expected.visible)
       for (const id of [...plane.shapes, ...plane.edges]) assert.ok(svg.includes(`data-element-id="${id}"`), id);
     assert.equal(xml, await layoutXml(compiled, request));

@@ -314,7 +314,7 @@
     },
     "renderBasic": {
       "file": "test/rendering.test.ts",
-      "title": "layout preserves a simple process and gives every visible element stable geometry"
+      "title": "rendering returns a readable self-contained deterministic SVG of the supplied diagram"
     },
     "renderBlackBox": {
       "file": "test/rendering.test.ts",
@@ -355,6 +355,122 @@
     "renderTimerConditionalSignal": {
       "file": "test/rendering.test.ts",
       "title": "timer forms, conditional waits and signal throws retain native event geometry"
+    },
+    "variant.activity-classifications": {
+      "file": "test/profile-rendering.test.ts",
+      "title": "generation renders Script and Receive Task classifications with their native symbols"
+    },
+    "variant.event.message.boundary.interrupting": {
+      "file": "test/profile-rendering.test.ts",
+      "title": "generation preserves and renders event.message.boundary.interrupting"
+    },
+    "variant.event.conditional.start": {
+      "file": "test/profile-rendering.test.ts",
+      "title": "generation preserves and renders event.conditional.start"
+    },
+    "variant.event.conditional.boundary.interrupting": {
+      "file": "test/profile-rendering.test.ts",
+      "title": "generation preserves and renders event.conditional.boundary.interrupting"
+    },
+    "variant.event.conditional.boundary.nonInterrupting": {
+      "file": "test/profile-rendering.test.ts",
+      "title": "generation preserves and renders event.conditional.boundary.nonInterrupting"
+    },
+    "variant.event.signal.start": {
+      "file": "test/profile-rendering.test.ts",
+      "title": "generation preserves and renders event.signal.start"
+    },
+    "variant.event.signal.catch": {
+      "file": "test/profile-rendering.test.ts",
+      "title": "generation preserves and renders event.signal.catch"
+    },
+    "variant.event.signal.end": {
+      "file": "test/profile-rendering.test.ts",
+      "title": "generation preserves and renders event.signal.end"
+    },
+    "variant.event.signal.boundary.interrupting": {
+      "file": "test/profile-rendering.test.ts",
+      "title": "generation preserves and renders event.signal.boundary.interrupting"
+    },
+    "variant.event.signal.boundary.nonInterrupting": {
+      "file": "test/profile-rendering.test.ts",
+      "title": "generation preserves and renders event.signal.boundary.nonInterrupting"
+    },
+    "variant.event.error.boundary.interrupting.catchAll": {
+      "file": "test/profile-rendering.test.ts",
+      "title": "generation preserves and renders event.error.boundary.interrupting.catchAll"
+    },
+    "variant.event.escalation.throw": {
+      "file": "test/profile-rendering.test.ts",
+      "title": "generation preserves and renders event.escalation.throw"
+    },
+    "variant.event.escalation.end": {
+      "file": "test/profile-rendering.test.ts",
+      "title": "generation preserves and renders event.escalation.end"
+    },
+    "variant.event.escalation.boundary.interrupting.named": {
+      "file": "test/profile-rendering.test.ts",
+      "title": "generation preserves and renders event.escalation.boundary.interrupting.named"
+    },
+    "variant.event.escalation.boundary.nonInterrupting.named": {
+      "file": "test/profile-rendering.test.ts",
+      "title": "generation preserves and renders event.escalation.boundary.nonInterrupting.named"
+    },
+    "variant.event.escalation.boundary.interrupting.catchAll": {
+      "file": "test/profile-rendering.test.ts",
+      "title": "generation preserves and renders event.escalation.boundary.interrupting.catchAll"
+    },
+    "variant.event.escalation.boundary.nonInterrupting.catchAll": {
+      "file": "test/profile-rendering.test.ts",
+      "title": "generation preserves and renders event.escalation.boundary.nonInterrupting.catchAll"
+    },
+    "variant.event.terminate.end": {
+      "file": "test/profile-rendering.test.ts",
+      "title": "generation preserves and renders event.terminate.end"
+    },
+    "variant.event.link.continuation": {
+      "file": "test/profile-rendering.test.ts",
+      "title": "generation preserves same-scope Link continuation with catching and throwing symbols"
+    },
+    "variant.gateway.eventBased.exclusiveInstantiation": {
+      "file": "test/profile-rendering.test.ts",
+      "title": "generation preserves and renders gateway.eventBased.exclusiveInstantiation"
+    },
+    "variant.gateway.eventBased.parallelInstantiation": {
+      "file": "test/profile-rendering.test.ts",
+      "title": "generation preserves and renders gateway.eventBased.parallelInstantiation"
+    },
+    "composition.customer-nested-subprocess-call": {
+      "file": "test/composition-rendering.test.ts",
+      "title": "full-profile composition geometry and real Viewer: customer-nested-subprocess-call"
+    },
+    "composition.supplier-order-collaboration": {
+      "file": "test/composition-rendering.test.ts",
+      "title": "full-profile composition geometry and real Viewer: supplier-order-collaboration"
+    },
+    "composition.purchase-approval-lane-ownership": {
+      "file": "test/composition-rendering.test.ts",
+      "title": "full-profile composition geometry and real Viewer: purchase-approval-lane-ownership"
+    },
+    "composition.portfolio-loop-multi-instance": {
+      "file": "test/composition-rendering.test.ts",
+      "title": "full-profile composition geometry and real Viewer: portfolio-loop-multi-instance"
+    },
+    "composition.provisioning-timer-error-recovery": {
+      "file": "test/composition-rendering.test.ts",
+      "title": "full-profile composition geometry and real Viewer: provisioning-timer-error-recovery"
+    },
+    "composition.order-inclusive-parallel-controls": {
+      "file": "test/composition-rendering.test.ts",
+      "title": "full-profile composition geometry and real Viewer: order-inclusive-parallel-controls"
+    },
+    "composition.trial-event-based-competition": {
+      "file": "test/composition-rendering.test.ts",
+      "title": "full-profile composition geometry and real Viewer: trial-event-based-competition"
+    },
+    "composition.invoice-data-and-documentation": {
+      "file": "test/composition-rendering.test.ts",
+      "title": "full-profile composition geometry and real Viewer: invoice-data-and-documentation"
     }
   },
   "requirements": [
@@ -388,7 +504,8 @@
         "missingCall"
       ],
       "visual": [
-        "renderBasic"
+        "renderBasic",
+        "composition.customer-nested-subprocess-call"
       ],
       "composition": [
         "customer-nested-subprocess-call"
@@ -407,7 +524,8 @@
         "missingCollaborationRef"
       ],
       "visual": [
-        "renderBlackBox"
+        "renderBlackBox",
+        "composition.supplier-order-collaboration"
       ],
       "composition": [
         "supplier-order-collaboration"
@@ -424,7 +542,8 @@
         "missingCollaborationRef"
       ],
       "visual": [
-        "renderShared"
+        "renderShared",
+        "composition.supplier-order-collaboration"
       ],
       "composition": [
         "supplier-order-collaboration"
@@ -457,7 +576,8 @@
         "laneParent"
       ],
       "visual": [
-        "renderLanes"
+        "renderLanes",
+        "composition.purchase-approval-lane-ownership"
       ],
       "composition": [
         "purchase-approval-lane-ownership"
@@ -468,12 +588,14 @@
       "kind": "supported",
       "description": "Generic Task",
       "positive": [
-        "taskTypes"
+        "basic"
       ],
       "negative": [
         "flowScope"
       ],
-      "visual": [],
+      "visual": [
+        "composition.supplier-order-collaboration"
+      ],
       "composition": [
         "supplier-order-collaboration"
       ]
@@ -488,7 +610,9 @@
       "negative": [
         "flowScope"
       ],
-      "visual": [],
+      "visual": [
+        "composition.purchase-approval-lane-ownership"
+      ],
       "composition": [
         "purchase-approval-lane-ownership"
       ]
@@ -503,7 +627,9 @@
       "negative": [
         "flowScope"
       ],
-      "visual": [],
+      "visual": [
+        "composition.portfolio-loop-multi-instance"
+      ],
       "composition": [
         "portfolio-loop-multi-instance"
       ]
@@ -518,7 +644,9 @@
       "negative": [
         "flowScope"
       ],
-      "visual": [],
+      "visual": [
+        "composition.provisioning-timer-error-recovery"
+      ],
       "composition": [
         "provisioning-timer-error-recovery"
       ]
@@ -533,7 +661,9 @@
       "negative": [
         "flowScope"
       ],
-      "visual": [],
+      "visual": [
+        "composition.order-inclusive-parallel-controls"
+      ],
       "composition": [
         "order-inclusive-parallel-controls"
       ]
@@ -548,7 +678,9 @@
       "negative": [
         "flowScope"
       ],
-      "visual": [],
+      "visual": [
+        "variant.activity-classifications"
+      ],
       "composition": []
     },
     {
@@ -562,7 +694,9 @@
         "flowScope",
         "missingMessage"
       ],
-      "visual": [],
+      "visual": [
+        "composition.trial-event-based-competition"
+      ],
       "composition": [
         "trial-event-based-competition"
       ]
@@ -578,7 +712,9 @@
         "flowScope",
         "missingMessage"
       ],
-      "visual": [],
+      "visual": [
+        "variant.activity-classifications"
+      ],
       "composition": []
     },
     {
@@ -593,7 +729,8 @@
         "nestedFlow"
       ],
       "visual": [
-        "renderExpanded"
+        "renderExpanded",
+        "composition.customer-nested-subprocess-call"
       ],
       "composition": [
         "customer-nested-subprocess-call"
@@ -611,7 +748,8 @@
         "nestedFlow"
       ],
       "visual": [
-        "renderCollapsed"
+        "renderCollapsed",
+        "composition.customer-nested-subprocess-call"
       ],
       "composition": [
         "customer-nested-subprocess-call"
@@ -629,7 +767,8 @@
         "missingCall"
       ],
       "visual": [
-        "renderCall"
+        "renderCall",
+        "composition.customer-nested-subprocess-call"
       ],
       "composition": [
         "customer-nested-subprocess-call"
@@ -655,12 +794,14 @@
       "kind": "supported",
       "description": "standard.testAfter",
       "positive": [
-        "loops"
+        "composition.portfolio-loop-multi-instance"
       ],
       "negative": [
         "illegalLoop"
       ],
-      "visual": [],
+      "visual": [
+        "composition.portfolio-loop-multi-instance"
+      ],
       "composition": [
         "portfolio-loop-multi-instance"
       ]
@@ -675,7 +816,9 @@
       "negative": [
         "illegalLoop"
       ],
-      "visual": [],
+      "visual": [
+        "composition.portfolio-loop-multi-instance"
+      ],
       "composition": [
         "portfolio-loop-multi-instance"
       ]
@@ -690,7 +833,9 @@
       "negative": [
         "illegalLoop"
       ],
-      "visual": [],
+      "visual": [
+        "composition.portfolio-loop-multi-instance"
+      ],
       "composition": [
         "portfolio-loop-multi-instance"
       ]
@@ -705,7 +850,9 @@
       "negative": [
         "decisionCondition"
       ],
-      "visual": [],
+      "visual": [
+        "composition.purchase-approval-lane-ownership"
+      ],
       "composition": [
         "purchase-approval-lane-ownership"
       ]
@@ -720,7 +867,9 @@
       "negative": [
         "illegalCondition"
       ],
-      "visual": [],
+      "visual": [
+        "composition.order-inclusive-parallel-controls"
+      ],
       "composition": [
         "order-inclusive-parallel-controls"
       ]
@@ -735,7 +884,9 @@
       "negative": [
         "decisionCondition"
       ],
-      "visual": [],
+      "visual": [
+        "composition.order-inclusive-parallel-controls"
+      ],
       "composition": [
         "order-inclusive-parallel-controls"
       ]
@@ -750,7 +901,9 @@
       "negative": [
         "illegalEventGateway"
       ],
-      "visual": [],
+      "visual": [
+        "composition.trial-event-based-competition"
+      ],
       "composition": [
         "trial-event-based-competition"
       ]
@@ -765,7 +918,9 @@
       "negative": [
         "illegalEventGateway"
       ],
-      "visual": [],
+      "visual": [
+        "variant.gateway.eventBased.exclusiveInstantiation"
+      ],
       "composition": []
     },
     {
@@ -778,7 +933,9 @@
       "negative": [
         "illegalEventGateway"
       ],
-      "visual": [],
+      "visual": [
+        "variant.gateway.eventBased.parallelInstantiation"
+      ],
       "composition": []
     },
     {
@@ -811,7 +968,10 @@
         "illegalCondition",
         "decisionCondition"
       ],
-      "visual": [],
+      "visual": [
+        "composition.purchase-approval-lane-ownership",
+        "composition.order-inclusive-parallel-controls"
+      ],
       "composition": [
         "purchase-approval-lane-ownership",
         "order-inclusive-parallel-controls"
@@ -828,7 +988,10 @@
       "negative": [
         "default"
       ],
-      "visual": [],
+      "visual": [
+        "composition.purchase-approval-lane-ownership",
+        "composition.order-inclusive-parallel-controls"
+      ],
       "composition": [
         "purchase-approval-lane-ownership",
         "order-inclusive-parallel-controls"
@@ -925,7 +1088,9 @@
         "eventRefs",
         "illegalTrigger"
       ],
-      "visual": [],
+      "visual": [
+        "variant.event.message.boundary.interrupting"
+      ],
       "composition": []
     },
     {
@@ -987,7 +1152,9 @@
         "eventRefs",
         "illegalTrigger"
       ],
-      "visual": [],
+      "visual": [
+        "composition.trial-event-based-competition"
+      ],
       "composition": [
         "trial-event-based-competition"
       ]
@@ -1035,7 +1202,9 @@
         "eventRefs",
         "illegalTrigger"
       ],
-      "visual": [],
+      "visual": [
+        "variant.event.conditional.start"
+      ],
       "composition": []
     },
     {
@@ -1065,7 +1234,9 @@
         "eventRefs",
         "illegalTrigger"
       ],
-      "visual": [],
+      "visual": [
+        "variant.event.conditional.boundary.interrupting"
+      ],
       "composition": []
     },
     {
@@ -1079,7 +1250,9 @@
         "eventRefs",
         "illegalTrigger"
       ],
-      "visual": [],
+      "visual": [
+        "variant.event.conditional.boundary.nonInterrupting"
+      ],
       "composition": []
     },
     {
@@ -1093,7 +1266,9 @@
         "eventRefs",
         "illegalTrigger"
       ],
-      "visual": [],
+      "visual": [
+        "variant.event.signal.start"
+      ],
       "composition": []
     },
     {
@@ -1107,7 +1282,9 @@
         "eventRefs",
         "illegalTrigger"
       ],
-      "visual": [],
+      "visual": [
+        "variant.event.signal.catch"
+      ],
       "composition": []
     },
     {
@@ -1137,7 +1314,9 @@
         "eventRefs",
         "illegalTrigger"
       ],
-      "visual": [],
+      "visual": [
+        "variant.event.signal.boundary.interrupting"
+      ],
       "composition": []
     },
     {
@@ -1151,7 +1330,9 @@
         "eventRefs",
         "illegalTrigger"
       ],
-      "visual": [],
+      "visual": [
+        "variant.event.signal.boundary.nonInterrupting"
+      ],
       "composition": []
     },
     {
@@ -1165,7 +1346,9 @@
         "eventRefs",
         "illegalTrigger"
       ],
-      "visual": [],
+      "visual": [
+        "variant.event.signal.end"
+      ],
       "composition": []
     },
     {
@@ -1179,7 +1362,9 @@
         "eventRefs",
         "illegalException"
       ],
-      "visual": [],
+      "visual": [
+        "composition.provisioning-timer-error-recovery"
+      ],
       "composition": [
         "provisioning-timer-error-recovery"
       ]
@@ -1195,7 +1380,9 @@
         "eventRefs",
         "illegalException"
       ],
-      "visual": [],
+      "visual": [
+        "variant.event.error.boundary.interrupting.catchAll"
+      ],
       "composition": []
     },
     {
@@ -1209,7 +1396,9 @@
         "eventRefs",
         "illegalException"
       ],
-      "visual": [],
+      "visual": [
+        "composition.provisioning-timer-error-recovery"
+      ],
       "composition": [
         "provisioning-timer-error-recovery"
       ]
@@ -1225,7 +1414,9 @@
         "eventRefs",
         "illegalException"
       ],
-      "visual": [],
+      "visual": [
+        "variant.event.escalation.throw"
+      ],
       "composition": []
     },
     {
@@ -1239,7 +1430,9 @@
         "eventRefs",
         "illegalException"
       ],
-      "visual": [],
+      "visual": [
+        "variant.event.escalation.boundary.interrupting.named"
+      ],
       "composition": []
     },
     {
@@ -1253,7 +1446,9 @@
         "eventRefs",
         "illegalException"
       ],
-      "visual": [],
+      "visual": [
+        "variant.event.escalation.boundary.nonInterrupting.named"
+      ],
       "composition": []
     },
     {
@@ -1267,7 +1462,9 @@
         "eventRefs",
         "illegalException"
       ],
-      "visual": [],
+      "visual": [
+        "variant.event.escalation.boundary.interrupting.catchAll"
+      ],
       "composition": []
     },
     {
@@ -1281,7 +1478,9 @@
         "eventRefs",
         "illegalException"
       ],
-      "visual": [],
+      "visual": [
+        "variant.event.escalation.boundary.nonInterrupting.catchAll"
+      ],
       "composition": []
     },
     {
@@ -1295,7 +1494,9 @@
         "eventRefs",
         "illegalException"
       ],
-      "visual": [],
+      "visual": [
+        "variant.event.escalation.end"
+      ],
       "composition": []
     },
     {
@@ -1309,7 +1510,9 @@
         "eventRefs",
         "illegalException"
       ],
-      "visual": [],
+      "visual": [
+        "variant.event.terminate.end"
+      ],
       "composition": []
     },
     {
@@ -1322,7 +1525,9 @@
       "negative": [
         "illegalLink"
       ],
-      "visual": [],
+      "visual": [
+        "variant.event.link.continuation"
+      ],
       "composition": []
     },
     {
@@ -1335,7 +1540,9 @@
       "negative": [
         "illegalLink"
       ],
-      "visual": [],
+      "visual": [
+        "variant.event.link.continuation"
+      ],
       "composition": []
     },
     {
@@ -1402,7 +1609,8 @@
       ],
       "visual": [
         "renderBlackBox",
-        "renderShared"
+        "renderShared",
+        "composition.supplier-order-collaboration"
       ],
       "composition": [
         "supplier-order-collaboration"
@@ -1422,7 +1630,8 @@
         "messageAgreement"
       ],
       "visual": [
-        "renderMessage"
+        "renderMessage",
+        "composition.supplier-order-collaboration"
       ],
       "composition": [
         "supplier-order-collaboration"
@@ -1439,7 +1648,8 @@
         "dataScope"
       ],
       "visual": [
-        "renderDataAssociation"
+        "renderDataAssociation",
+        "composition.invoice-data-and-documentation"
       ],
       "composition": [
         "invoice-data-and-documentation"
@@ -1456,7 +1666,8 @@
         "illegalIO"
       ],
       "visual": [
-        "renderIO"
+        "renderIO",
+        "composition.invoice-data-and-documentation"
       ],
       "composition": [
         "invoice-data-and-documentation"
@@ -1473,7 +1684,8 @@
         "illegalIO"
       ],
       "visual": [
-        "renderDataAssociation"
+        "renderDataAssociation",
+        "composition.invoice-data-and-documentation"
       ],
       "composition": [
         "invoice-data-and-documentation"
@@ -1489,7 +1701,9 @@
       "negative": [
         "illegalIO"
       ],
-      "visual": [],
+      "visual": [
+        "composition.invoice-data-and-documentation"
+      ],
       "composition": [
         "invoice-data-and-documentation"
       ]
@@ -1505,7 +1719,7 @@
         "dataScope"
       ],
       "visual": [
-        "suppliedData"
+        "composition.invoice-data-and-documentation"
       ],
       "composition": [
         "invoice-data-and-documentation"
@@ -1523,7 +1737,8 @@
         "associationRoles"
       ],
       "visual": [
-        "renderDataAssociation"
+        "renderDataAssociation",
+        "composition.invoice-data-and-documentation"
       ],
       "composition": [
         "invoice-data-and-documentation"
@@ -1539,7 +1754,9 @@
       "negative": [
         "eventDataAssociations"
       ],
-      "visual": [],
+      "visual": [
+        "composition.invoice-data-and-documentation"
+      ],
       "composition": [
         "invoice-data-and-documentation"
       ]
@@ -1556,7 +1773,7 @@
         "illegalDocumentation"
       ],
       "visual": [
-        "suppliedData"
+        "composition.invoice-data-and-documentation"
       ],
       "composition": [
         "invoice-data-and-documentation"
@@ -1574,7 +1791,7 @@
         "unnameable"
       ],
       "visual": [
-        "suppliedData"
+        "composition.invoice-data-and-documentation"
       ],
       "composition": [
         "invoice-data-and-documentation"
@@ -1592,7 +1809,7 @@
         "unnameable"
       ],
       "visual": [
-        "suppliedData"
+        "composition.invoice-data-and-documentation"
       ],
       "composition": [
         "invoice-data-and-documentation"
@@ -2334,7 +2551,7 @@
   "remainingEvidence": [
     "Run ten fresh notation executions for every applicable feature-slice case, not only composition fixtures.",
     "Bind full CORE-01 through CORE-07 evidence to the exact clean candidate and package hashes.",
-    "Fill empty visual mappings for supported placements/variants; semantic tests alone cannot qualify them.",
+    "The visual mappings identify executable checks, not recorded outcomes; bind their actual results to the exact candidate before qualification.",
     "Run cross-platform semantic/identity/DI comparison and full clean-install checks.",
     "Record all eight composition human reviews; source/expected rows are authored synthetic facts, not human review evidence.",
     "Complete host, handoff, offline runtime, safety, scale and performance gates in their separate acceptance runners."

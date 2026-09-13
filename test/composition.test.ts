@@ -21,24 +21,36 @@ for (const id of fixtureIds) {
     const identities = new Set(expected.facts.map((fact) => fact[0]));
     for (const diagram of expected.visible) {
       assert.ok(identities.has(diagram.plane), 'Every expected plane resolves.');
-      for (const id of [...diagram.shapes, ...diagram.edges]) assert.ok(identities.has(id), 'Every expected visible element resolves.');
+      for (const id of [...diagram.shapes, ...diagram.edges])
+        assert.ok(identities.has(id), 'Every expected visible element resolves.');
       assert.equal(new Set([...diagram.shapes, ...diagram.edges]).size, diagram.shapes.length + diagram.edges.length);
     }
     assert.ok(expected.scenarios.length >= 3);
     for (const scenario of expected.scenarios) {
       assert.ok(scenario.expected.length > 0);
-      for (const id of scenario.path) assert.ok(identities.has(id), 'Every review scenario references an existing fact.');
+      for (const id of scenario.path)
+        assert.ok(identities.has(id), 'Every review scenario references an existing fact.');
     }
   });
 }
 
 test('the composition corpus contains all eight agreed families and the unreduced 40-node 60-connector collaboration', async () => {
   assert.equal(new Set(manifest.fixtures.map((fixture) => fixture.family)).size, 8);
-  const request = JSON.parse(await readFile(new URL('../eval/composition/supplier-order-collaboration/request.json', import.meta.url), 'utf8'));
+  const request = JSON.parse(
+    await readFile(new URL('../eval/composition/supplier-order-collaboration/request.json', import.meta.url), 'utf8'),
+  );
   assert.equal(request.model.collaboration.participants.length, 3);
   assert.equal(request.model.processes.flatMap((process) => process.nodes).length, 40);
-  assert.equal(request.model.processes.flatMap((process) => process.flows).length + request.model.collaboration.messageFlows.length, 60);
-  assert.ok(request.model.processes.some((process) => process.lanes.some((lane) => process.lanes.some((parent) => parent.key === lane.parentRef))));
+  assert.equal(
+    request.model.processes.flatMap((process) => process.flows).length +
+      request.model.collaboration.messageFlows.length,
+    60,
+  );
+  assert.ok(
+    request.model.processes.some((process) =>
+      process.lanes.some((lane) => process.lanes.some((parent) => parent.key === lane.parentRef)),
+    ),
+  );
 });
 
 test('the independent composition oracle detects renamed work, changed routing and missing responsibility', async () => {
