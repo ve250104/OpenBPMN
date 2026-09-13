@@ -52,4 +52,16 @@ First review summary: Standards **0 findings**; Spec **0 findings**. The reviews
 
 The first integrated full-suite run then passed **289/291**, zero skipped, in **124.326 seconds**. The two failures were the 100- and 250-node routing escapes described above; they are retained as failed observations, not discounted as flaky timing or waived. The additional routing correction requires focused scale verification, independent follow-up review, and a new final full-suite run before declaring this remediation verified.
 
+## Routing follow-up verification
+
+Correction commit: `1b5b617`. All three scale tests passed, including unchanged 250-node/500-connector semantics, two layouts, two Viewer renders, and exact repeatability. The 250-node case completed in 52.720 seconds overall (not one layout); the per-layout 30-second budget remained unchanged. This is correctness evidence, not twenty-sample performance qualification.
+
+Both independent axes reviewed `b83c48f...1b5b617` while retaining their earlier full-diff assessments. **Standards: 0 findings. Spec: 0 findings.** The routing constraint preserves process meaning, permits cross-lane and Message Flow behavior, and the added waypoint oracle is independent of the implementation's DI assessment. No tests, facts, or limits were relaxed.
+
+The corrected build/static checks and installed-package smoke passed again. Final development archive SHA-256 `b16332bdd1d7c649c6c67094fc9c1cd71faeed7f857c8ac2a03e24bd91e8e246`; 551,072 compressed bytes, 30,717,950 installed bytes. Skill/shrinkwrap/tree hashes are unchanged from the first smoke. All four commands, Handoff, skill equality, 38 dependency placements, and zero monitored Node/browser network attempts passed. OS-level isolation for this archive remains unrun.
+
+The final serialized full suite passed **291/291**, **zero skipped**, in **139.007 seconds**, with no competing browser/layout work and process-scoped idle-sleep prevention. This includes every integration test selected by `npm test`. The unchanged 250-node test completed both layouts and renders in 35.277 seconds. These single-run durations are not p95 performance qualification. Full output is retained in ignored `.artifacts/remediation-full-suite-1b5b617.log`; the first failure's available output tail is retained separately as `.artifacts/remediation-initial-suite-tail-b83c48f.log`.
+
+All actionable code and repository-maintenance findings in this remediation scope are implemented and locally verified. Both final review axes remain at zero findings. Source changes are committed locally on `main`; this pass did not push them or claim a new hosted CI result. Existing v0 release gates remain open as described below.
+
 No billing changes, hosted reruns, model sessions, registry publication, release, or legal outreach occurred. Optional CodeQL/trusted-publishing setup is not a fixed code defect and is not introduced during a billing-blocked development pass. OMG XSD redistribution interpretation still requires suitable review or authorized clarification; attribution is not legal clearance. The build checkpoint's remaining readability, corpus, performance, supported-platform, real-host, and human qualification tasks remain open.
