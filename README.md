@@ -44,7 +44,7 @@ The Host Agent handles the conversation and process evidence. The local Core own
 
 Process questions and quality findings stay outside the BPMN file. Users can request an incomplete, structurally valid snapshot for discussion; the tool does not assign approval or lifecycle status. The CLI also validates and renders existing BPMN without implying semantic import or repair.
 
-The required agent surfaces are Codex CLI, Claude Code, and GitHub Copilot CLI. SAP Signavio and distinct Celonis workflows have explicit qualification profiles; no verified vendor-import claim is made before the corresponding test.
+The required agent surfaces are Codex CLI, Claude Code, and GitHub Copilot CLI.
 
 ## Project
 
