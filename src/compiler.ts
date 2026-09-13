@@ -70,7 +70,9 @@ export async function compileModel(request: ProcessRequest, options: { allowInva
     }
     return element;
   };
-  const definitions = create('bpmn:Definitions', request.model, {
+  // Definitions is not a BPMN BaseElement: place model documentation on the primary subject below.
+  const { documentation: modelDocumentation, ...definitionRecord } = request.model;
+  const definitions = create('bpmn:Definitions', definitionRecord, {
     targetNamespace: `urn:process-model:${request.model.key}`,
     rootElements: [],
   });
@@ -378,6 +380,12 @@ export async function compileModel(request: ProcessRequest, options: { allowInva
       if (artifact.direction !== undefined)
         element.associationDirection = artifact.direction[0]!.toUpperCase() + artifact.direction.slice(1);
     }
+  }
+  if (modelDocumentation !== undefined) {
+    const primary = elements.get(request.model.primaryRef)!;
+    const documentation = moddle.create('bpmn:Documentation', { text: modelDocumentation });
+    documentation.$parent = primary;
+    primary.documentation = [...(primary.documentation ?? []), documentation];
   }
   return (await moddle.toXML(definitions, { format: true })).xml;
 }

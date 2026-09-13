@@ -5,6 +5,8 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { compileModel, semanticProjection } from '../dist/compiler.js';
+import { validateXml } from '../dist/xml.js';
 
 const cli = fileURLToPath(new URL('../dist/cli.js', import.meta.url));
 const example = fileURLToPath(new URL('../examples/invoice-review.json', import.meta.url));
@@ -65,6 +67,103 @@ test('a user generates and inspects a complete, valid three-file Output Bundle',
     assert.equal(report.checks.find((check) => check.id === id).status, 'passed', id);
   }
 });
+
+for (const [primaryKind, identicalDocumentation] of [
+  ['Process', false],
+  ['Collaboration', false],
+  ['Process', true],
+]) {
+  test(`generation preserves model and ${primaryKind} documentation separately${identicalDocumentation ? ' even when identical' : ''}`, async (t) => {
+    const dir = await realpath(await mkdtemp(join(tmpdir(), 'bpmn-weave-documentation-')));
+    t.after(() => rm(dir, { recursive: true, force: true }));
+    const modelDocumentation = 'Model scope:\nPreserve <review> & its boundaries.';
+    const primaryDocumentation = identicalDocumentation ? modelDocumentation : 'Primary subject instructions.';
+    const request = {
+      schemaVersion: '1.0.0',
+      profileVersion: '1.0.0',
+      model: {
+        key: 'documentedModel',
+        name: 'Documented review',
+        documentation: modelDocumentation,
+        primaryRef: primaryKind === 'Process' ? 'primary' : 'collaboration',
+        processes: [
+          {
+            key: 'primary',
+            name: 'Primary process',
+            documentation: primaryKind === 'Process' ? primaryDocumentation : 'Caller process instructions.',
+            nodes: [
+              {
+                key: 'call',
+                type: 'callActivity',
+                name: 'Review details',
+                containerRef: 'primary',
+                calledProcessRef: 'called',
+              },
+            ],
+            flows: [],
+          },
+          {
+            key: 'called',
+            name: 'Called process',
+            documentation: 'Called process instructions.',
+            nodes: [{ key: 'review', type: 'task', name: 'Review evidence', containerRef: 'called' }],
+            flows: [],
+          },
+        ],
+        ...(primaryKind === 'Collaboration'
+          ? {
+              collaboration: {
+                key: 'collaboration',
+                name: 'Review collaboration',
+                documentation: primaryDocumentation,
+                participants: [{ key: 'participant', name: 'Review team', processRef: 'primary' }],
+                messageFlows: [],
+              },
+            }
+          : {}),
+      },
+    };
+    const original = structuredClone(request);
+    const input = join(dir, 'request.json');
+    const stem = join(dir, 'review');
+    const handoffPath = join(dir, 'review.openbpmn.json');
+    await writeFile(input, JSON.stringify(request));
+    const result = await run(['generate', '--input', input, '--output', stem, '--handoff', handoffPath]);
+    assert.equal(result.code, 0, result.stdout + result.stderr);
+    const envelope = JSON.parse(result.stdout);
+    assert.equal(envelope.signal, 'clean_export_ready');
+    for (const id of ['input', 'xml', 'xsd', 'semantics', 'profile', 'di', 'render']) {
+      assert.equal(envelope.report.checks.find((check) => check.id === id).status, 'passed', id);
+    }
+
+    const compiled = await compileModel(request);
+    const compiledProjection = await semanticProjection(compiled);
+    const xml = await readFile(`${stem}.bpmn`, 'utf8');
+    assert.equal((await validateXml(compiled)).schemaValid, true);
+    assert.equal((await validateXml(xml)).schemaValid, true);
+    assert.deepEqual(await semanticProjection(xml), compiledProjection, 'layout must preserve all documentation');
+    assert.equal(compiledProjection.documentation, undefined, 'Definitions cannot contain BPMN Documentation');
+    const primary = compiledProjection.rootElements.find((element) => element.id === `M_${request.model.primaryRef}`);
+    assert.deepEqual(
+      primary.documentation.map((entry) => entry.text).sort(),
+      [modelDocumentation, primaryDocumentation].sort(),
+      'model and primary documentation must remain separate, verbatim entries without deduplication',
+    );
+    assert.deepEqual(compiledProjection.rootElements.find((element) => element.id === 'M_called').documentation, [
+      { $type: 'bpmn:Documentation', text: 'Called process instructions.' },
+    ]);
+    if (primaryKind === 'Collaboration') {
+      assert.deepEqual(compiledProjection.rootElements.find((element) => element.id === 'M_primary').documentation, [
+        { $type: 'bpmn:Documentation', text: 'Caller process instructions.' },
+      ]);
+    }
+    const svg = await readFile(`${stem}.svg`, 'utf8');
+    assert.match(svg, /data-element-id="M_call"/);
+    assert.match(svg, /data-element-id="M_review"/);
+    assert.deepEqual(JSON.parse(await readFile(handoffPath, 'utf8')).request, original);
+    assert.deepEqual(request, original, 'compilation must not relocate fields in the authored request');
+  });
+}
 
 test('a requested Snapshot and Handoff retain a consequential question without forcing a lifecycle status', async (t) => {
   const dir = await realpath(await mkdtemp(join(tmpdir(), 'bpmn-weave-snapshot-')));
