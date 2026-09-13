@@ -13,6 +13,8 @@ Follow-up to the [full code review](full-code-and-repository-review-2026-09-13.m
 - Supplied gateway directions are checked against their actual incoming/outgoing cardinalities, including Converging, Diverging, and Mixed. Unspecified remains legal under its own rule; the projection no longer silently drops a contradictory declaration. [OMG BPMN 2.0.2 §10.6.1](https://www.omg.org/spec/BPMN/2.0.2/PDF#page=319).
 - DI checks use each plane's semantic scope and visible containment, rather than allowing another plane's shapes to satisfy coverage. Wrong-plane, incomplete repeated-view, misplaced-lane/pool, collapsed-content, and cross-plane explicit endpoint cases have public CLI counterexamples. Existing shared-process pools, subprocess/call panels, Group views, and Process/Activity IO remain covered by the unchanged rendering suite.
 
+Integration exposed an additional existing router defect: the stricter DI checks caught Sequence Flows leaving their own pools in the 100- and 250-node fixtures. In the 100-node case two routes used `y=132` while their pool began at `y=160`. The router now constrains Sequence Flow candidates to the source-declared Process pool and visible enclosing SubProcess bounds. Lanes remain crossable, and Message Flows retain cross-pool routing. Scale tests independently compare every waypoint with the pool selected from the authored request, before invoking the product DI validator. No process facts, scale limits, or timeouts were changed, and containment checks were not relaxed.
+
 ## Cross-platform SVG gate
 
 A fresh native Debian ARM64/Chromium reproduction recovered a concrete difference: 23 horizontal `tspan x` values, maximum delta `0.0005035400390625` SVG units. All other SVG bytes, and the complete BPMN and Quality Report, were identical. Diagnostic pairs are retained under ignored `.artifacts/svg-ci-repro.0ozOfq/`.
@@ -31,6 +33,23 @@ The historical hosted CI log truncates the SVG tail, so its exact difference is 
 
 ## Verification and remaining boundaries
 
-Focused regressions are run as each fix is made; full-suite, installed-archive, and final independent review results will be recorded here after integration. Tests use Node 24.14.0 and installed Chrome on macOS arm64 unless explicitly labelled otherwise.
+Implementation commit: `b83c48f`. Focused regressions were run as each fix was made. Tests use Node 24.14.0 and installed Chrome 152.0.7977.83 on macOS arm64 unless explicitly labelled otherwise.
+
+- Fresh `npm ci --ignore-scripts --no-audit --no-fund`, build, and static checks passed; YAML syntax checks and `git diff --check` passed.
+- Focused suites passed: supplied semantics/lexical view 6/6, DI CLI 6/6, browser lifecycle/cleanup 4/4, existing rendering 27/27, package-lock verification 4/4, SVG comparator 16/16, review/credential refusal 10/10. All eight existing composition layouts remained DI-clean. These overlap the later full suite and are not added to its count.
+- Installed archive smoke passed all four executable commands, user-guide links, ZIP/package skill equality, safe replacement, refinement/Handoff, and 38 exact locked package placements. Archive SHA-256 `8846b046c510b81bc21c6743be1aff0dc67fbb92a408029c8cf127de46528c5d`; 550,815 compressed bytes and 30,716,694 installed bytes. Skill ZIP SHA-256 `79ac71f83b8c9fb45c1f60f819f1bd0a01027c03b2c6e08729f87e83122ad29c`. Shrinkwrap SHA-256 `36a6df0f61c6148ee8b79b244098bca7df2ae46d16167c91ca3a607c6b247825`. The retained package evidence also contains the actual dependency tree and its hash.
+- Mac command monitoring observed zero Node/browser network attempts. OS-level network isolation was **not run** for this new archive; the earlier Linux-isolated archive remains a separate observation. Neither is a fully qualified release candidate.
+
+## Independent Standards review
+
+No findings in `108fda08...b83c48f`. Every changed file/hunk was inspected against the documented repository rules and the code-review skill's judgment-based maintainability baseline. Credential identity refusal and actionable cleanup paths resolve the original hard-contract violations. XML adaptation remains behind the artifact-library boundary; source XML/XSD and process meaning remain authoritative. Exact dependency pins, installed resolution checks, and narrowly scoped SVG comparison preserve the documented boundaries. No actionable maintainability heuristic was identified.
+
+## Independent Spec review
+
+No findings in `108fda08...b83c48f`. The fixes address the reported boolean meaning loss, gateway cardinalities, plane-local DI, credential refusal, cleanup diagnostics, SVG comparison, dependency maintenance, and distribution requirements without identified scope creep. An additional 132 no-browser boolean lexical-preservation cases passed, including entity/numeric values, CR/LF/CRLF and astral characters. The shrinkwrap comparison confirms only Ajv and its root pin changed. Hosted CI, private-notification delivery, OMG permission interpretation, and separate v0 qualification remain explicitly unverified.
+
+First review summary: Standards **0 findings**; Spec **0 findings**. The reviews ran independently and did not modify files or run competing browser workloads.
+
+The first integrated full-suite run then passed **289/291**, zero skipped, in **124.326 seconds**. The two failures were the 100- and 250-node routing escapes described above; they are retained as failed observations, not discounted as flaky timing or waived. The additional routing correction requires focused scale verification, independent follow-up review, and a new final full-suite run before declaring this remediation verified.
 
 No billing changes, hosted reruns, model sessions, registry publication, release, or legal outreach occurred. Optional CodeQL/trusted-publishing setup is not a fixed code defect and is not introduced during a billing-blocked development pass. OMG XSD redistribution interpretation still requires suitable review or authorized clarification; attribution is not legal clearance. The build checkpoint's remaining readability, corpus, performance, supported-platform, real-host, and human qualification tasks remain open.

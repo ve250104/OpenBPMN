@@ -150,6 +150,29 @@ function route(
   containers: ModdleElement[],
 ): Point[] {
   const original = edge.waypoint as Point[];
+  // Sequence Flows may cross lanes, but must stay within their Process pool
+  // and any visible enclosing SubProcess. Message Flows cross pools instead.
+  const ancestors: ModdleElement[] = [];
+  if (edge.bpmnElement.$type === 'bpmn:SequenceFlow')
+    for (let parent = edge.bpmnElement.$parent; parent; parent = parent.$parent) ancestors.push(parent);
+  const subprocesses = containers.filter(
+    (container) =>
+      container.bpmnElement.$type === 'bpmn:SubProcess' &&
+      ancestors.some((parent) => parent.id === container.bpmnElement.id),
+  );
+  const process = ancestors.find((parent) => parent.$type === 'bpmn:Process');
+  const pools = containers.filter(
+    (container) =>
+      container.bpmnElement.$type === 'bpmn:Participant' &&
+      process &&
+      container.bpmnElement.processRef?.id === process.id,
+  );
+  const inside = (points: Point[], container: ModdleElement) => {
+    const box = container.bounds as Rect;
+    return points.every(
+      (point) => point.x >= box.x && point.y >= box.y && point.x <= box.x + box.width && point.y <= box.y + box.height,
+    );
+  };
   const obstacles = [...shapes.map((shape) => shape.bounds as Rect), ...labels.map((box) => expand(box, 4))];
   const occupied = others.flatMap(segments);
   const vertical = new Map<number, Segment[]>();
@@ -163,6 +186,8 @@ function route(
   }
   const cache = new Map<string, boolean>();
   const legal = (points: Point[]) =>
+    subprocesses.every((container) => inside(points, container)) &&
+    (!pools.length || pools.some((container) => inside(points, container))) &&
     lineSegments(points).every((segment) => {
       const [a, b] = segment;
       const key = `${a.x},${a.y},${b.x},${b.y}`;

@@ -28,6 +28,22 @@ for (const count of [25, 100, 250])
     assert.equal((await validateXml(xml)).schemaValid, true);
     assert.deepEqual(await semanticProjection(xml), await semanticProjection(compiled));
     const parsed = await new BpmnModdle().fromXML(xml);
+    // Independent fixture oracle: source-declared Process ownership, not the
+    // implementation's DI validator, determines each Sequence Flow's pool.
+    const geometry = parsed.rootElement.diagrams.flatMap((diagram) => diagram.plane.planeElement);
+    for (const participant of request.model.collaboration.participants) {
+      const process = request.model.processes.find((candidate) => candidate.key === participant.processRef);
+      const pool = geometry.find((element) => element.bpmnElement?.id === `M_${participant.key}`).bounds;
+      for (const flow of process.flows) {
+        const edge = geometry.find((element) => element.bpmnElement?.id === `M_${flow.key}`);
+        assert.ok(edge.waypoint.length >= 2);
+        for (const point of edge.waypoint)
+          assert.ok(
+            point.x >= pool.x && point.x <= pool.x + pool.width && point.y >= pool.y && point.y <= pool.y + pool.height,
+            `${flow.key} escaped its source-declared pool ${participant.key}.`,
+          );
+      }
+    }
     assert.deepEqual(assessSuppliedDi(parsed.rootElement, parsed.elementsById), []);
     assert.deepEqual(
       parsed.rootElement.diagrams.flatMap((diagram) => diagramConflicts(diagram.plane)),
