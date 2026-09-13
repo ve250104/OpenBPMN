@@ -4,9 +4,12 @@ import { chmod, mkdtemp, readFile, realpath, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
+import { verifyNetworkIsolation } from './offline-isolation.mjs';
 
 /** Test infrastructure only. Browser netlog covers background requests, not just page interception. */
 export async function offlineSmoke(cli, fixture, browser) {
+  const useExistingNamespace = process.env.BPMN_WEAVE_TEST_NETWORK_ISOLATED === '1';
+  if (useExistingNamespace) await verifyNetworkIsolation();
   if (!['darwin', 'linux'].includes(process.platform))
     return {
       status: 'not_run',
@@ -15,11 +18,14 @@ export async function offlineSmoke(cli, fixture, browser) {
   const directory = await realpath(await mkdtemp(join(tmpdir(), 'bpmn-weave-offline-')));
   const wrapper = fileURLToPath(new URL('./offline-browser.sh', import.meta.url));
   const hook = fileURLToPath(new URL('./offline-node.cjs', import.meta.url));
+  const isolationRunner = fileURLToPath(new URL('./offline-isolation.mjs', import.meta.url));
   await chmod(wrapper, 0o755);
   const browserLog = join(directory, 'browser-network.json');
   const nodeLog = join(directory, 'node-network.txt');
   try {
     const useNamespace = process.platform === 'linux' && process.env.BPMN_WEAVE_TEST_NETWORK_NAMESPACE === '1';
+    assert.ok(!(useNamespace && useExistingNamespace), 'Choose one Linux network isolation mode.');
+    const isolationEvidence = [];
     const env = {
       ...process.env,
       NODE_OPTIONS: '--require=' + JSON.stringify(hook),
@@ -50,7 +56,13 @@ export async function offlineSmoke(cli, fixture, browser) {
     ];
     for (const command of commands) {
       await rm(browserLog, { force: true });
-      const args = [process.execPath, cli, ...command];
+      const evidencePath = join(directory, command[0] + '-isolation.json');
+      const args = [
+        process.execPath,
+        ...(useNamespace || useExistingNamespace ? [isolationRunner, evidencePath] : []),
+        cli,
+        ...command,
+      ];
       const invocation = useNamespace
         ? [
             'sudo',
@@ -84,6 +96,8 @@ export async function offlineSmoke(cli, fixture, browser) {
       assert.equal(result.status, 0, result.stdout + result.stderr);
       assert.equal(result.stderr, '');
       assert.equal(JSON.parse(result.stdout).status, 'completed');
+      if (useNamespace || useExistingNamespace)
+        isolationEvidence.push({ command: command[0], ...JSON.parse(await readFile(evidencePath, 'utf8')) });
       if (!['generate', 'render'].includes(command[0])) continue;
       const log = JSON.parse(await readFile(browserLog, 'utf8'));
       const names = Object.fromEntries(Object.entries(log.constants.logEventTypes).map(([name, id]) => [id, name]));
@@ -101,11 +115,13 @@ export async function offlineSmoke(cli, fixture, browser) {
       assert.equal(requests.length, 0, 'Browser attempted outbound requests: ' + JSON.stringify(requestKinds));
     }
     return {
-      status: useNamespace ? 'passed' : 'monitoring_passed_isolation_not_run',
+      status: useNamespace || useExistingNamespace ? 'passed' : 'monitoring_passed_isolation_not_run',
       commands: commands.map((command) => command[0]),
-      isolation: useNamespace
-        ? 'Linux network namespace without external interfaces'
-        : 'not_run: macOS outer sandbox conflicts with Chromium child sandbox; Chromium sandbox retained',
+      isolation:
+        useNamespace || useExistingNamespace
+          ? 'Verified Linux network namespace with only loopback interfaces and routes'
+          : 'not_run: command monitoring only; Chromium sandbox retained',
+      isolationEvidence,
       monitoring: ['Node socket/DNS/fetch guards', 'Chromium NetLog request/connect events'],
       nodeAttempts: 0,
       browserRequests: 0,
