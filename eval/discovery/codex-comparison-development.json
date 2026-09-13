@@ -1,0 +1,126 @@
+{
+  "recordVersion": "1.0.0",
+  "case": "employee-offboarding",
+  "observation": "agent-assisted actual Codex CLI; one paired development case",
+  "status": "completed_with_skill_prerequisite_blocked",
+  "source": {
+    "path": "eval/discovery/employee-offboarding.md",
+    "sha256": "221e77c02b195c1601685088c412eeadbf9c8b3596b2688b3f796db51c612d07",
+    "promptSha256": "c8be38a6b4db20a94813a4223ecbe3f06d09fcd95abe67c2653ce87dacbb6e5e",
+    "task": "Create sibling offboarding.bpmn with complete DI, readable offboarding.svg, and offboarding.quality.json from the source; preserve corrections, ask before inventing consequential facts, check artifacts."
+  },
+  "controls": {
+    "creationRunsPerArm": 1,
+    "followupRunsPerArm": 0,
+    "order": ["raw", "skill"],
+    "workspaces": "fresh isolated directories outside repository",
+    "sameSourceAndPromptBytes": true,
+    "reviewerOraclesOrPriorConversationSupplied": false,
+    "model": "gpt-5.6-sol",
+    "reasoningEffort": "high",
+    "modelOverrides": false,
+    "settings": "unchanged shared configured defaults; workspace-write; exec JSONL; skip-git-repo-check; network disabled",
+    "authentication": "existing CLI ChatGPT authentication; no credential files read or copied",
+    "host": "macOS 26.5 build 25F71 arm64; Codex CLI 0.154.0-alpha.6.2",
+    "normalInheritedSkills": "present in both arms; BPMN Weave discovered only in treatment workspace",
+    "manualArtifactRepairs": false,
+    "globalHostChanges": false
+  },
+  "treatment": {
+    "packageVersion": "0.1.0-dev.0",
+    "packageBytes": 538208,
+    "packageSha256": "32d351a12ecd9d84ddf372b6bc56d14dc3b035ad14eb4b7198dad84a6927bb85",
+    "portableSkillZipSha256": "79ac71f83b8c9fb45c1f60f819f1bd0a01027c03b2c6e08729f87e83122ad29c",
+    "installation": "offline local package install and matching workspace .agents/skills extraction; no package edits",
+    "candidateStatus": "frozen development snapshot; later product fixes were not installed into either tested arm"
+  },
+  "raw": {
+    "hostTurn": "completed",
+    "delivery": "three artifacts",
+    "artifactsSha256": {
+      "offboarding.bpmn": "8575f0ecef4c6a51e2f41438ff009a34000753a8aa7d76da3a0b0978483ce16e",
+      "offboarding.svg": "4df30520cbbda4f0dc33560c4c1909fdaa581d0914eac2e3daafb18deac1db63",
+      "offboarding.quality.json": "22f6a56e0c4451c2065d998b3e0d9d5ed1f09735942b6ed3a1e8bc563abbd6dc"
+    },
+    "independentAssessment": {
+      "method": "post-run read-only checks using the frozen installed package, direct XML/SVG graph and geometry inspection, and agent inspection of a librsvg raster preview",
+      "xml": "passed",
+      "officialLocalXsd": "passed",
+      "consultingCoreProfile": "passed",
+      "structuralDi": "passed",
+      "actualViewerRender": "failed: DI_INVALID, cropped or overlapping label",
+      "controlFlow": "all four required control-flow assertions pass; none of four authored forbidden behaviors observed",
+      "equipmentRegister": "source fact retained in task name, but no persistent Data Store or input Data Association; partial modeling coverage, not invalid XML",
+      "departureTiming": "stated in task name, not a Timer Event; report discloses that modeling choice; no factual clarification requested",
+      "svgConsistency": "all 16 flow nodes and 17 routes match BPMN DI after translation (-10,-10); pool and lanes are 10 units narrower, label placement differs, and default-flow slash is absent",
+      "svgVisual": "three lanes and gateway types are readable; Offboarding closed overlaps close-task border, Yes overlaps its connector, and fork edges share a vertical trunk",
+      "qualityReport": "records its own checks and explicitly says official XSD was not run; its clean visual finding misses observed label collisions",
+      "originalArtifactsUnchanged": true
+    },
+    "startedAt": "2026-09-12T20:16:34.196Z",
+    "finishedAt": "2026-09-12T20:22:32.424Z",
+    "monotonicElapsedMilliseconds": 358219.841709,
+    "reportedUsage": {
+      "input_tokens": 393486,
+      "cached_input_tokens": 364928,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 17578,
+      "reasoning_output_tokens": 3539
+    }
+  },
+  "skill": {
+    "hostTurn": "completed",
+    "delivery": "blocked; no requested artifacts",
+    "capabilities": "reported Node 25.9.0 unsupported and Chrome available",
+    "generation": "one attempt; exit 1; RUNTIME_MISSING: This build requires Node.js 24.x",
+    "modelChecks": "all not_run; no semantic or visual output available to compare",
+    "agentBehavior": "read installed skill and schemas, prepared a request, attempted generation, searched installed runtimes, removed its temporary request, and reported prerequisite failure",
+    "setupFinding": "zsh login-shell PATH precedence selected system Node 25 despite the runner prepending an existing Node 24; host settings were deliberately retained for both arms",
+    "reportingCaveat": "the agent's assertion that no Node 24 was installed is too broad: an existing cached Node 24 executable was available but not located by its search",
+    "postRunRecoveryCheck": "root separately verified invocation-local PATH with existing Node 24 passes capabilities; that check did not generate artifacts. Subsequent engine-only replays are recorded separately below; the paired creation remains blocked",
+    "startedAt": "2026-09-12T20:22:52.685Z",
+    "finishedAt": "2026-09-12T20:26:43.310Z",
+    "monotonicElapsedMilliseconds": 230586.783708,
+    "reportedUsage": {
+      "input_tokens": 516316,
+      "cached_input_tokens": 478592,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 10458,
+      "reasoning_output_tokens": 3671
+    }
+  },
+  "postRunEngineReplays": {
+    "observation": "separate engine-only development evidence; not a model rerun or a repair of the original paired result",
+    "requestRecovery": "decoded the literal JSON string in the recorded apply_patch argument as data and removed patch line prefixes; no recorded command was executed and no request field was edited",
+    "requestSha256": "86e2876f66e7e6ab092cb0341444be53a556a7d4621ac158fefa421f9c6887da",
+    "additionalModelRuns": 0,
+    "node": "24.14.0",
+    "frozenEngine": {
+      "packageSha256": "32d351a12ecd9d84ddf372b6bc56d14dc3b035ad14eb4b7198dad84a6927bb85",
+      "exitCode": 2,
+      "outcome": "BPMN_XSD; no artifacts written",
+      "cause": "compiler placed model documentation on Definitions, whose official XSD does not permit a Documentation child"
+    },
+    "correctedDevelopmentEngine": {
+      "change": "preserve model documentation as a separate standard documentation entry on the primary Process or Collaboration; keep that subject's own documentation and the input request unchanged",
+      "exitCode": 0,
+      "outcome": "clean export; all nine machine checks passed",
+      "artifactsSha256": {
+        "offboarding.bpmn": "34b027d4c80adca8200b02d02da1f242ebf93bcda817972c34d01a5a615d02a7",
+        "offboarding.svg": "c8897494943e523283c0393f1786095f4e8e5c6a33d795c83d7f466ed6b26f88",
+        "offboarding.quality.json": "c42123b08ffbb4b20ba390595b0691a9f213bbe6d9b00bbcc028abc451de7a36"
+      },
+      "agentVisualInspection": "labels are not clipped, but several gateway connections take unnecessary U-shaped detours or approach against the reading direction; machine-clean does not qualify readability",
+      "humanReview": "not_run"
+    },
+    "originalPairedSkillStatus": "prerequisite_blocked"
+  },
+  "limits": [
+    "One nonrandomized pair, with prerequisite-blocked treatment: no statistical, modeling-quality, visual-quality, cost, or latency superiority claim.",
+    "Elapsed times and usage are descriptive host observations; competing work was possible. A separately observed later host sleep does not establish overlap with these runs.",
+    "Usage fields are preserved as reported; reasoning tokens are not added to output tokens.",
+    "The raw model used normal host methods, authored its own SVG, and wrote temporary preview PNGs outside its working directory despite the prompt's write-scope request; these actions are preserved in its transcript.",
+    "No model followups, manually repaired model inputs or outputs, additional model creation runs, human review, native-app qualification, or Signavio/Celonis testing occurred. Post-run engine-only replays do not change either original arm's outcome."
+  ],
+  "privateEvidence": ".artifacts/codex-comparison.wrpf68/ contains exact protocol/prompt, commands, source/archive hashes, session metadata, JSONL/stderr/final text, unchanged artifact snapshots, assessment scripts and results; host paths and session IDs remain private"
+}
