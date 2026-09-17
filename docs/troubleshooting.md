@@ -2,9 +2,13 @@
 
 Find the result’s stable code and remediation first. A `cleanEligible` value describes model checks, not whether a failed file operation produced a bundle; inspect the signal and artifact list too.
 
-Missing runtime: use Node 24.x, check `capabilities`, and explicitly point to an installed Chrome/Edge executable when discovery fails. The CLI never installs a browser or attaches to your personal browser session.
+Incomplete setup: run the full `bpmn-weave-manage doctor` path printed by setup. Read each failed check and its remediation. Local application, browser, example generation, and actual host discovery are separate observations. Missing Chrome/Edge requires installing a browser yourself or selecting its absolute executable path; BPMN Weave never silently installs one or attaches to your personal browser session.
 
-Wrong Node version inside an agent: run `node --version` in the same command shell as the failing CLI. A login shell may override the PATH inherited from your terminal. Select an already-installed Node 24 for that invocation as shown in [installation](installation.md); do not change global settings or download another runtime without authorization.
+Command not found after setup: reopen the shell and refresh/restart the selected agent, then use the full launcher path reported during setup. The primary installation's launcher uses its private Node runtime. If a manually invoked `node dist/cli.js` or a secondary npm install reports the wrong Node version, it is not using that launcher. Check the command resolved inside the agent's shell; do not globally replace another tool's Node installation.
+
+Skill not discovered or wrong version: inspect the host and registration paths reported by doctor. Competing personal/project skill folders can shadow the intended installation. Setup reports conflicts and preserves existing files; resolve the named conflict explicitly and rerun. Folder placement is not proof that a running host session has refreshed its skills.
+
+Update/uninstall conflict: preserve user-modified or unowned files named in the diagnostic. Update uses an explicitly supplied extracted candidate; verify its source and hashes. An interrupted installation requires the reported recovery action, not deleting arbitrary directories or globally reinstalling Node. Uninstall deliberately retains files whose ownership can no longer be verified, as well as user models and Handoffs.
 
 Input refusal: check the JSON pointer and versioned schema. Unknown versions, keys, fields, references, overlarge input, and unsafe semantic credentials are refused rather than guessed or silently changed.
 

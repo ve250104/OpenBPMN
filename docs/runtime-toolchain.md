@@ -4,7 +4,7 @@ _Selected and smoke-tested: 2026-09-08. This settles the implementation route; t
 
 ## Selected components
 
-Ship one TypeScript package and CLI. Node 24.x is the v0 runtime contract; the probes below ran on Node 24.14.0. Use exact direct dependency versions and a committed npm lockfile. Dependency updates require the affected semantic, geometry, schema, and rendering fixtures to pass before the pins change.
+Ship one TypeScript application with separate modeling and management entry points. The primary platform bundle supplies a private, exact Node 24 runtime and inventoried production dependencies; secondary npm installations supply their own Node. Node 24.x remains the v0 runtime contract; the probes below ran on Node 24.14.0. Use exact direct dependency versions and a committed npm lockfile. Dependency updates require the affected semantic, geometry, schema, and rendering fixtures to pass before the pins change.
 
 | Responsibility | Selected version | Distribution decision |
 | --- | --- | --- |

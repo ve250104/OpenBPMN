@@ -16,6 +16,14 @@
         "puppeteer-core": "25.10.0",
         "saxen": "11.1.1"
       },
+      "bundleDependencies": [
+        "ajv",
+        "bpmn-auto-layout",
+        "bpmn-moddle",
+        "libxml2-wasm",
+        "puppeteer-core",
+        "saxen"
+      ],
       "bin": {
         "bpmn-weave": "dist/cli.js"
       },

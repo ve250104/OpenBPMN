@@ -53,7 +53,7 @@ BPMN Weave is one portable Modeling Skill and a deterministic local CLI. A Proce
 - **Agent behavior:** implement one progressive Modeling Skill with shared examples and references. Local Codex CLI, Claude Code, and Copilot CLI are the required surfaces; host-specific discovery contains no duplicate consulting method.
 - **Downstream support:** implement separate Signavio Process Manager, Celonis Analysis Conformance, and Celonis Process Management fit profiles. Local qualification packs are required; actual tenant checks govern verified vendor claims and are never fabricated when access is unavailable.
 - **Public identity:** use BPMN Weave, executable/skill `bpmn-weave`, package `@ve250104/bpmn-weave`, and first finished product version 0.1.0. Keep the existing repository URL and format identifiers stable.
-- **Distribution:** one tested npm tarball plus a byte-identical portable-skill ZIP, checksums, support matrix, and concise user documentation. A tested release archive is a valid distribution even when registry publication credentials are unavailable.
+- **Distribution:** the primary platform bundle includes a private pinned Node 24 runtime, inventoried production dependencies, CLI/assets, and matching canonical skill, with explicit setup/doctor/update/uninstall. No system Node/npm or checkout is required. Secondary npm tarballs and skill ZIPs agree with the same build. Checksums, measured footprint, support status, and concise documentation travel with candidate evidence; installation success does not qualify a release.
 - **Repository quality:** use a small understandable structure, one authoritative source for each contract, useful errors, runnable examples, targeted tests, and actual license/provenance records. Keep historical planning out of normal user setup and runtime context.
 
 ## Testing Decisions
@@ -72,7 +72,7 @@ The acceptance contract defines every required check, fixture family, review cri
 - Run the real Modeling Skill on all three declared Host Agent surfaces and perform the specified cross-host Handoff transfers. Record actual human review separately from agent-assisted checks.
 - Keep tenant observations distinct from local consumer-fit rules. Unavailable access is unverified, never a pass or a blanket compatibility claim.
 
-There is no production test suite yet. The isolated runtime-selection harness provides reproducible feasibility evidence and regression seeds; it is not the profile, security, host, performance, or release qualification suite.
+The repository now has development tests and installed-artifact checks. The historical runtime-selection harness provides feasibility evidence and regression seeds; neither it nor passing development tests substitutes for complete profile, security, host, performance, or release qualification.
 
 ## Out of Scope
 

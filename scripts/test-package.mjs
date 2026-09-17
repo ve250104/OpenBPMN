@@ -6,7 +6,7 @@ import { join, dirname, resolve, sep } from 'node:path';
 import { tmpdir } from 'node:os';
 import { createHash } from 'node:crypto';
 import { offlineSmoke } from './test-offline.mjs';
-import { assertInstalledDependencyLock } from './package-dependencies.mjs';
+import { assertBundledDependencies } from './package-dependencies.mjs';
 import { unzipSync } from 'fflate';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
@@ -58,7 +58,7 @@ try {
   const pack = JSON.parse(packed.stdout)[0];
   assert.ok(
     pack.files.every((file) =>
-      /^(?:dist\/|assets\/|schemas\/|skills\/bpmn-weave\/|examples\/|docs\/(?:installation|modeling|commands|support|troubleshooting)\.md$|package\.json$|npm-shrinkwrap\.json$|README\.md$|LICENSE$|THIRD_PARTY_NOTICES\.md$)/.test(
+      /^(?:node_modules\/|dist\/|assets\/|schemas\/|skills\/bpmn-weave\/|examples\/|docs\/(?:installation|modeling|commands|support|troubleshooting)\.md$|package\.json$|npm-shrinkwrap\.json$|README\.md$|LICENSE$|THIRD_PARTY_NOTICES\.md$)/.test(
         file.path,
       ),
     ),
@@ -96,6 +96,9 @@ try {
     prefix,
     '--ignore-scripts',
     '--omit=dev',
+    '--offline',
+    '--cache',
+    join(temporary, 'empty-cache'),
     '--no-audit',
     '--no-fund',
     archive,
@@ -109,7 +112,7 @@ try {
     shrinkwrap,
     'The installed package must carry the exact qualified dependency lock.',
   );
-  const dependencyLockQualification = await assertInstalledDependencyLock(JSON.parse(shrinkwrap), packageRoot, prefix);
+  const dependencyLockQualification = await assertBundledDependencies(JSON.parse(shrinkwrap), packageRoot);
   const treeResult = execute(npm, ['ls', '--prefix', prefix, '--all', '--omit=dev', '--json']);
   assert.equal(treeResult.status, 0, treeResult.stderr);
   // Retain only public dependency identities, not absolute installation paths.

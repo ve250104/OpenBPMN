@@ -88,7 +88,7 @@ A Handoff File contains `handoffVersion: "1.0.0"`, the complete `request`, optio
 
 ## CLI choices
 
-The executable name is defined in the [release plan](release-plan.md). All commands are non-interactive. Default output is a single JSON envelope on stdout, diagnostics on stderr; `--json` explicitly selects that default, and `--human` replaces stdout with a concise human summary. Combining the two is invalid usage. `--help` and `--version` are standard options, not extra commands. `--browser-executable <absolute-path>` is accepted by `generate`, `render`, and `capabilities`; it overrides the documented installed-browser discovery. It is never taken from process evidence or a Handoff File. `--debug` enables data-minimized technical diagnostics on stderr only.
+The executable name is defined in the [release plan](release-plan.md). All four Core commands are non-interactive. Default output is a single JSON envelope on stdout, diagnostics on stderr; `--json` explicitly selects that default, and `--human` replaces stdout with a concise human summary. Combining the two is invalid usage. `--help` and `--version` are standard options, not extra Core commands. `--browser-executable <absolute-path>` is accepted by `generate`, `render`, and `capabilities`; it overrides the documented installed-browser discovery. It is never taken from process evidence or a Handoff File. `--debug` enables data-minimized technical diagnostics on stderr only.
 
 | Command | Options |
 | --- | --- |
@@ -102,6 +102,8 @@ The executable name is defined in the [release plan](release-plan.md). All comma
 For combined `generate --handoff`, the Handoff is a distinct sibling of the output bundle. Canonical preflight rejects aliasing among input, output, and Handoff paths, including links and case-equivalent names on the destination filesystem. It joins the same staged write and handled-failure rollback. `--replace` covers every explicitly named output; the Host Agent passes it only when the user's instruction covers those destinations. A Handoff in a different directory is written separately by the Host Agent on explicit request, without adding a stateful CLI command. The separate operation does not claim bundle transactionality.
 
 Normal user requests go through the Modeling Skill; it supplies paths and flags. The Host Agent carries the user's replacement authority and requests a snapshot when they want the currently expressible model despite outstanding questions. CLI switches are not a user-facing questionnaire.
+
+Installation management is a separate `bpmn-weave-manage` surface with `setup`, `doctor`, `update`, and `uninstall`. Its bootstrap may collect installation choices; unattended use requires explicit options and no prompts. Management results describe installation checks, ownership, and next steps, not a process Quality Report, and do not extend the Core's result schema. Doctor is offline. Explicit setup/update may acquire identified installation material; the four Core commands preserve their no-network and no-installation contract. See [Installation](installation.md), [commands](commands.md), and the [trust contract](local-trust-and-file-safety.md).
 
 ## Export decision table
 
@@ -133,7 +135,7 @@ The complete `signal` enum is `clean_export_ready`, `snapshot_ready`, `clarifica
 
 Read-only inspection does not project away facts it cannot represent. Multiple supplied Collaborations and optional/alternative/while-executing IO-set configurations leave complete semantic assessment `not_run` with a profile limitation. Explicit Link Event references, when present, must agree with opposite catch/throw definitions of the same name in the same scope. These checks neither rewrite supplied XML nor add required XML attributes absent from the standard.
 
-Every JSON result has `resultVersion: "1.0.0"`, `command`, `toolVersion`, `profileVersion`, `status: completed|refused|failed`, `signal`, `exitCode`, `artifacts[]`, and `report`. Artifact records have `kind: bpmn|svg|quality|handoff`, `path`, and `state: produced|preserved`. Capability results additionally have `capabilities`; other commands omit that field. When an input cannot be inspected, produce a minimal report with checks not run rather than echoing the payload. `status` describes command execution, while report checks describe validity; validation can complete and exit 2 because it found defects.
+Every Core JSON result has `resultVersion: "1.0.0"`, `command`, `toolVersion`, `profileVersion`, `status: completed|refused|failed`, `signal`, `exitCode`, `artifacts[]`, and `report`. Artifact records have `kind: bpmn|svg|quality|handoff`, `path`, and `state: produced|preserved`. Capability results additionally have `capabilities`; other commands omit that field. When an input cannot be inspected, produce a minimal report with checks not run rather than echoing the payload. `status` describes command execution, while report checks describe validity; validation can complete and exit 2 because it found defects.
 
 The `capabilities` payload is required for `capabilities_reported`. A refused or failed capability command may omit it when inspection did not run; it must not fabricate runtime observations to satisfy the schema.
 

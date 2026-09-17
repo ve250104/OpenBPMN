@@ -124,9 +124,13 @@ Default CLI output and errors may include:
 
 They do not print Structured Process Evidence, raw interview passages, Handoff contents, full BPMN XML, or secret values. Explicit debug mode may expose technical stack traces but still does not dump process payloads automatically.
 
-OpenBPMN stores no logs outside artifacts requested by the human and retains no process data after the CLI invocation. It performs no telemetry, update check, remote validation, package download, or other network request.
+The four Core commands store no logs outside artifacts requested by the human and retain no process data after the CLI invocation. They perform no telemetry, update check, remote validation, package download, or other network request.
 
-The Host Agent may send conversational content to its own AI provider according to the user's chosen product and account terms. Local-First means no OpenBPMN-operated service or network behavior; it does not claim that third-party model inference occurs on-device.
+Explicit installation management is the narrow exception for setup/update: it may retrieve identified release artifacts and verification material with the user's setup authority. There are no background update checks or implicit downloads from modeling commands; doctor remains offline. Minimal versioned installation metadata may record owned paths, hashes, active application/runtime/skill versions, and selected host registrations. It never contains process evidence, prompts, Session State, credentials, or automatic Handoffs, and is not a process workspace or permission store.
+
+Setup may register only the selected canonical Modeling Skill and disclosed, reversible launcher integration. It cannot rewrite unrelated instructions, permissions, host credentials, system Node/npm, or user data. Updates stage a verified matching runtime/CLI/skill and preserve the previous runnable pair on handled failures. Existing unowned or modified files are preserved and reported. Uninstall removes only verified owned installation files/integration, preserving models, Handoffs, and unrelated or modified files. Abrupt interruption is detected and explained for recovery, never advertised as universal power-loss atomicity. The [installation guide](installation.md) describes the public management boundary.
+
+The Host Agent may send conversational content to its own AI provider according to the user's chosen product and account terms. Local-First means no OpenBPMN-operated process service or modeling-time network behavior; it does not claim that third-party model inference occurs on-device.
 
 ## Failure behavior
 

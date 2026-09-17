@@ -22,35 +22,19 @@ The name avoids direct confusion with the existing [Imixs Open BPMN modeler](htt
 
 Do not claim full BPMN support, official OMG conformance, identical agent conversations, automatic business truth, measured savings, or a vendor integration. “Local” means that the CLI runs locally without a project-hosted service; the user's Host Agent may process evidence with its provider according to its own settings. A compatibility claim names the tested consumer and operation and links to the recorded result. Synthetic examples remain labeled synthetic.
 
-## One package and two installable artifacts
+## One build and a primary platform bundle
 
-Ship one Node.js package containing compiled ESM JavaScript, the four-command CLI, bundled renderer assets, XML schemas, JSON schemas, profile/rule data, font assets, and the portable Modeling Skill. The package has one `bin` entry. Internal modules are private implementation details; there is no separately published SDK.
+The primary user journey is an explicitly obtained platform bundle, then setup, host selection, a local example, and conversation. The bundle contains compiled ESM JavaScript, the four-command Core CLI, a separate installation-management entry point, exact production dependencies, renderer assets, XML/JSON schemas, fonts, the canonical Modeling Skill, and a private exact Node 24 runtime. It requires no system Node/npm, compiler, checkout, account service, or database. No browser is bundled or silently installed.
 
-The release publishes:
+Build one application payload and present it with the appropriate private runtime/bootstrap for each required platform. The installed dependency inventory derives from the single committed `npm-shrinkwrap.json`; do not resolve a fresh dependency tree on the user's primary installation path. Reject unexpected files and development dependencies. Record hashes for the bootstrap, platform payload, runtime, CLI, canonical skill, dependency inventory, and required notices/assets. A second lockfile or duplicate Core implementation is not permitted.
 
-1. The exact npm package tarball produced by `npm pack`, named `ve250104-bpmn-weave-0.1.0.tgz`.
-2. `bpmn-weave-skill-0.1.0.zip`, containing one complete `bpmn-weave/` directory with `SKILL.md`, required reference files, minimal examples, license, and version metadata.
-3. SHA-256 checksums and a release qualification summary linking to full evidence in the repository.
+The release may additionally publish the exact npm tarball and a portable-skill ZIP. Their application and canonical skill bytes must agree with the corresponding primary candidate; the ZIP is a second presentation, not a separately versioned product. Advanced npm users supply Node 24 themselves, and that installed artifact still needs qualification. No install lifecycle scripts or implicit `npx` invocation are introduced.
 
-The ZIP is another presentation of the package's skill directory, not a second implementation or separately versioned product. Its contents must match the corresponding package directory byte for byte. Runtime dependencies are installed by npm from the committed, published `npm-shrinkwrap.json` during the explicit install step. This CLI uses one canonical lockfile for development and distribution; do not add a competing `package-lock.json`. Package qualification checks the installed shrinkwrap bytes and records its hash and the actual installed dependency tree alongside the archive hash. No browser binary, model runtime, source archive, evaluation transcripts, or historical planning documents enter either runtime artifact. Package `files` is an explicit allowlist, and `npm pack --json` is checked against it.
+The extracted `setup.sh` or `setup.ps1` starts the private runtime and the explicit management interface. Setup selects an existing authenticated host, installs the owned runtime/application/skill, discloses narrowly scoped launcher integration, and generates a real synthetic bundle in a selected or fresh temporary output directory. Incomplete browser or host-discovery checks must remain visible. Local setup, local example generation, and actual agent discovery are distinct observations. Source-build instructions belong in the contributor guide.
 
-The standard installation command, once the package has actually been published, is:
+`bpmn-weave-manage` provides setup, offline doctor, explicit update from a selected candidate, and uninstall. Interactive bootstrap may collect choices; unattended mode uses explicit options and meaningful exit statuses. Installation metadata contains ownership, paths, hashes, versions, and host registrations only, never process evidence or Session State. Stage and verify matched updates, preserve the previous runnable pair on handled failure, detect unfinished interruption states, and preserve unrelated or modified files during setup/update/uninstall. No background updater or broad permission system is added.
 
-```sh
-npm install --global @ve250104/bpmn-weave@0.1.0
-bpmn-weave capabilities --json
-```
-
-The GitHub release tarball is an equally supported install source:
-
-```sh
-npm install --global ./ve250104-bpmn-weave-0.1.0.tgz
-bpmn-weave capabilities --json
-```
-
-Documentation uses the archive route until npm publication is verified; it never presents an unpublished package as installable. A project-local npm installation is also documented for users who prefer an existing project package manager. The Modeling Skill invokes the installed executable or its explicitly selected local path. Ordinary modeling does not use `npx` to fetch a tool implicitly.
-
-There is no install lifecycle script, automatic browser download, automatic update, or automatic modification of an agent's instruction files. The maintainer can ship the tested GitHub release archives even when npm credentials are unavailable. npm publication is an additional distribution action using the same tested tarball, and requires verified ownership and current registry authentication. Scoped public packages require public access configuration; follow the [npm publication requirements](https://docs.npmjs.com/creating-and-publishing-scoped-public-packages/).
+Checksums and a qualification summary accompany published archives. Documentation must not advertise an unpublished URL or registry version. The maintainer may distribute an explicitly identified development candidate without presenting it as finished v0. Public release and npm publication remain separate actions subject to existing authority, provenance, ownership, and acceptance requirements. Scoped npm publication requires verified scope ownership and registry authentication; it is not a prerequisite for the platform archive route.
 
 ## Runtime and platform support
 
@@ -62,7 +46,7 @@ The required v0 runtime is **Node.js 24.x**, with `engines.node` set to `>=24.0.
 | Ubuntu 24.04, x86-64 | 24.x | Installed Google Chrome or the exact Chrome for Testing build installed explicitly by CI |
 | Windows 11, x86-64 | 24.x | Installed Microsoft Edge; Chrome is an additional supported discovery path after its smoke check passes |
 
-These are the required release environments, not a claim that they have passed today. A fresh supported environment needs Node, npm, and one documented local browser. `generate` and `render` require the browser; `validate` and `capabilities` do not. Browser absence produces an actionable result describing the prerequisite and preserves the current bundle. The runtime selection contract owns exact discovery rules, renderer isolation, fonts, dependency pins, and timeouts.
+These are the required release environments, not a claim that they have passed today. A fresh primary installation needs the correct platform bundle, the existing selected Host Agent, and one documented local browser. Its private Node runtime is part of the candidate; system Node/npm are prerequisites only for the secondary npm route. `generate` and `render` require the browser; `validate` and `capabilities` do not. Browser absence produces an actionable result describing the prerequisite and preserves the current bundle. The runtime selection contract owns exact discovery rules, renderer isolation, fonts, dependency pins, and timeouts.
 
 The browser runs headlessly in a temporary profile. The tool does not connect to the user's browsing session. A browser executable override is a path to a local executable, never a remote rendering service. Dependencies and bundled fonts/assets must operate without network access after installation. Linux setup names any browser OS packages required by the chosen official browser distribution. Browser downloads for CI are explicit environment preparation, not runtime behavior.
 
@@ -70,7 +54,7 @@ The browser runs headlessly in a temporary profile. The tool does not connect to
 
 Author the consulting workflow once at `skills/bpmn-weave/SKILL.md`. All required branch references travel inside that directory. The skill checks the CLI/profile version through `capabilities`, loads relevant references progressively, and follows the [Agent Workflow](agent-workflow.md). A skill/core version mismatch is reported with a useful upgrade instruction. Do not silently run a payload against an incompatible schema.
 
-The primary user setup is: install the CLI, extract the skill ZIP, put the single `bpmn-weave` folder into the selected Host Agent's skill directory, and start or refresh the agent session. Documentation includes shell and PowerShell copy instructions using explicit source and destination paths and refuses accidental replacement of an unrelated existing skill directory. Installing a skill is user-selected setup; it does not initialize a process workspace. Upgrades replace the named installed skill only with the user's authority and update the CLI and skill together.
+Primary setup installs the matching canonical `bpmn-weave` skill through the selected host discovery route, then explains how to start or refresh that host. Manual folder copying remains an advanced route, not the ordinary journey. Setup detects conflicting personal/project registrations, preserves unrelated or user-modified skills, and provides explicit project scope without requiring a process workspace. Runtime, CLI, and skill move together on an authorized update. Filesystem placement alone does not verify discovery by a real host.
 
 | V0 conversational surface | Personal installation | Project installation | Discovery evidence |
 | --- | --- | --- | --- |
@@ -128,11 +112,11 @@ Use npm with the committed lockfile and exact direct runtime pins. The implement
 | `npm run test:acceptance` | Full corpus, profile coverage, review thresholds, determinism, and recorded release qualification status. |
 | `npm run test:package` | Pack, install into an isolated prefix, and exercise the distributed files and examples outside the checkout. |
 
-These are planned commands to be implemented, not commands alleged to exist today. CI runs `check`, unit tests, build, and integration tests on pull requests. Package qualification runs on the required platform matrix before release. Hosted Windows CI can test the Windows Server runner and its exact OS is recorded; an additional Windows 11 install/workflow observation is required for the Windows 11 support claim. Do not relabel a CI server as a Windows 11 test.
+These contributor commands exist in the development build; their success does not establish full release qualification. CI runs `check`, unit tests, build, and integration tests on pull requests. Package qualification runs on the required platform matrix before release. Hosted Windows CI can test the Windows Server runner and its exact OS is recorded; an additional Windows 11 install/workflow observation is required for the Windows 11 support claim. Do not relabel a CI server as a Windows 11 test.
 
 `test:package` installs the exact packed archive without a source checkout, verifies all four commands, generates/validates/renders an independent fixture, checks the three expected files, and checks missing-browser, invalid-input, path-with-spaces, Unicode-path, overwrite-refusal, and failed-replacement behavior. It also verifies skill references are self-contained and that user setup works from the skill ZIP. Tests must not reach sibling source files accidentally. Record packed and installed sizes; no arbitrary badge claims a small installation without measuring it. The installed browser's size is documented separately.
 
-Release from a clean reviewed commit after all v0 acceptance requirements pass. Generate the package once, test that archive, attach it with the skill ZIP and checksums to the GitHub release, and publish the same archive to npm when publication access is available. Record the source commit, package integrity, exact dependencies/browser/font versions, supported environment observations, host checks, and downstream qualification results. Registry publication and GitHub release creation are external execution steps; this decision authorizes neither action in the planning session.
+Release from a clean reviewed commit after all v0 acceptance requirements pass. Generate each platform artifact and any secondary package/skill archive once, test those exact artifacts, attach them with checksums to the GitHub release, and publish the same tested npm archive when publication access is available. Record the source commit, package integrity, exact dependencies/browser/font versions, supported environment observations, host checks, and downstream qualification results. Registry publication and GitHub release creation are external execution steps; this decision authorizes neither action in the planning session.
 
 Version `0.1.0` denotes the first finished agreed scope. It is not a label for a partly implemented product. Afterward, patch releases fix behavior compatibly, minor releases may change the public CLI or add capabilities with explicit migration notes, and existing schema/profile version rules continue independently. Publish actual limitations in the support matrix. A required supported path that is broken or unverified blocks completion rather than being renamed experimental.
 

@@ -1,13 +1,14 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { chmod, mkdtemp, readFile, realpath, rm } from 'node:fs/promises';
-import { join } from 'node:path';
+import { delimiter, join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { verifyNetworkIsolation } from './offline-isolation.mjs';
 
 /** Test infrastructure only. Browser netlog covers background requests, not just page interception. */
-export async function offlineSmoke(cli, fixture, browser) {
+export async function offlineSmoke(cli, fixture, browser, options = {}) {
+  if (options.manager) assert.ok(options.prefix, 'An installed manager requires its installation prefix.');
   const useExistingNamespace = process.env.BPMN_WEAVE_TEST_NETWORK_ISOLATED === '1';
   if (useExistingNamespace) await verifyNetworkIsolation();
   if (!['darwin', 'linux'].includes(process.platform))
@@ -28,7 +29,12 @@ export async function offlineSmoke(cli, fixture, browser) {
     const isolationEvidence = [];
     const env = {
       ...process.env,
-      NODE_OPTIONS: '--require=' + JSON.stringify(hook),
+      // The isolation runner's kernel-denial probe must run without the guard.
+      // Load it explicitly only when Node starts the application below.
+      NODE_OPTIONS: '',
+      PATH: options.manager
+        ? [join(options.prefix, 'bin'), process.env.PATH].filter(Boolean).join(delimiter)
+        : process.env.PATH,
       BPMN_WEAVE_TEST_BROWSER: browser,
       BPMN_WEAVE_TEST_NETLOG: browserLog,
       BPMN_WEAVE_TEST_NODE_NETLOG: nodeLog,
@@ -39,6 +45,8 @@ export async function offlineSmoke(cli, fixture, browser) {
       'BPMN_WEAVE_TEST_NETLOG',
       'BPMN_WEAVE_TEST_NODE_NETLOG',
       'PATH',
+      'HOME',
+      'USERPROFILE',
     ];
     const commands = [
       ['generate', '--input', fixture, '--output', join(directory, 'offline'), '--browser-executable', wrapper],
@@ -54,13 +62,17 @@ export async function offlineSmoke(cli, fixture, browser) {
       ],
       ['capabilities', '--browser-executable', wrapper],
     ];
+    if (options.manager)
+      commands.push(['doctor', '--prefix', options.prefix, '--browser-executable', wrapper, '--json']);
     for (const command of commands) {
       await rm(browserLog, { force: true });
       const evidencePath = join(directory, command[0] + '-isolation.json');
       const args = [
-        process.execPath,
+        options.runtime ?? process.execPath,
         ...(useNamespace || useExistingNamespace ? [isolationRunner, evidencePath] : []),
-        cli,
+        '--require',
+        hook,
+        command[0] === 'doctor' ? options.manager : cli,
         ...command,
       ];
       const invocation = useNamespace
@@ -75,7 +87,7 @@ export async function offlineSmoke(cli, fixture, browser) {
             process.env.USER,
             '--',
             'env',
-            ...forwarded.map((key) => key + '=' + env[key]),
+            ...forwarded.filter((key) => env[key] !== undefined).map((key) => key + '=' + env[key]),
             ...args,
           ]
         : args;
@@ -95,10 +107,10 @@ export async function offlineSmoke(cli, fixture, browser) {
       assert.equal(nodeAttempts, '', 'Node attempted network activity.');
       assert.equal(result.status, 0, result.stdout + result.stderr);
       assert.equal(result.stderr, '');
-      assert.equal(JSON.parse(result.stdout).status, 'completed');
+      assert.equal(JSON.parse(result.stdout).status, command[0] === 'doctor' ? 'ready' : 'completed');
       if (useNamespace || useExistingNamespace)
         isolationEvidence.push({ command: command[0], ...JSON.parse(await readFile(evidencePath, 'utf8')) });
-      if (!['generate', 'render'].includes(command[0])) continue;
+      if (!['generate', 'render', 'doctor'].includes(command[0])) continue;
       const log = JSON.parse(await readFile(browserLog, 'utf8'));
       const names = Object.fromEntries(Object.entries(log.constants.logEventTypes).map(([name, id]) => [id, name]));
       const requests = log.events.filter(
@@ -119,10 +131,13 @@ export async function offlineSmoke(cli, fixture, browser) {
       commands: commands.map((command) => command[0]),
       isolation:
         useNamespace || useExistingNamespace
-          ? 'Verified Linux network namespace with only loopback interfaces and routes'
+          ? 'Verified Linux network namespace with only loopback interfaces/routes and kernel-denied outbound TCP'
           : 'not_run: command monitoring only; Chromium sandbox retained',
       isolationEvidence,
-      monitoring: ['Node socket/DNS/fetch guards', 'Chromium NetLog request/connect events'],
+      monitoring: [
+        'Node socket/DNS/fetch guards including direct Node subprocesses',
+        'Chromium NetLog request/connect events',
+      ],
       nodeAttempts: 0,
       browserRequests: 0,
     };
