@@ -6,7 +6,7 @@ import { test } from 'node:test';
 import { assertInstalledDependencyLock } from '../scripts/package-dependencies.mjs';
 
 async function fixture(t, manifests) {
-  const root = await realpath(await mkdtemp(join(tmpdir(), 'bpmn-weave-dependency-lock-')));
+  const root = await realpath(await mkdtemp(join(tmpdir(), 'openbpmn-dependency-lock-')));
   t.after(() => rm(root, { recursive: true, force: true }));
   for (const [path, manifest] of Object.entries(manifests)) {
     await mkdir(join(root, path), { recursive: true });

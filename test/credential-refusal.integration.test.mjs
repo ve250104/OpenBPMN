@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 const cli = fileURLToPath(new URL('../dist/cli.js', import.meta.url));
 
 test('a credential-bearing unsupported concept is refused without disclosure or artifacts', async (t) => {
-  const directory = await realpath(await mkdtemp(join(tmpdir(), 'bpmn-weave-concept-secret-')));
+  const directory = await realpath(await mkdtemp(join(tmpdir(), 'openbpmn-concept-secret-')));
   t.after(() => rm(directory, { recursive: true, force: true }));
   const request = JSON.parse(await readFile(new URL('../examples/invoice-review.json', import.meta.url), 'utf8'));
   const secret = 'synthetic-review-credential';

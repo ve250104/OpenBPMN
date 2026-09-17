@@ -6,7 +6,7 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-const skill = join(root, 'skills', 'bpmn-weave');
+const skill = join(root, 'skills', 'openbpmn');
 const destination = join(root, '.artifacts');
 const version = JSON.parse(await readFile(join(root, 'package.json'), 'utf8')).version;
 async function files(directory, prefix = '') {
@@ -27,7 +27,7 @@ const entries = await files(skill);
 const zip = zipSync(
   Object.fromEntries(
     entries.map(([name, data]) => [
-      'bpmn-weave/' + name,
+      'openbpmn/' + name,
       [data, { mtime: new Date(2000, 0, 1), os: 3, attrs: 0o100644 << 16 }],
     ]),
   ),
@@ -36,13 +36,9 @@ const zip = zipSync(
 const unpacked = unzipSync(zip);
 assert.equal(Object.keys(unpacked).length, entries.length);
 for (const [name, data] of entries)
-  assert.deepEqual(
-    Buffer.from(unpacked['bpmn-weave/' + name]),
-    data,
-    'Skill archive differs from its canonical folder.',
-  );
+  assert.deepEqual(Buffer.from(unpacked['openbpmn/' + name]), data, 'Skill archive differs from its canonical folder.');
 await mkdir(destination, { recursive: true });
-const name = `bpmn-weave-skill-${version}.zip`;
+const name = `openbpmn-skill-${version}.zip`;
 await writeFile(join(destination, name), zip);
 await writeFile(
   join(destination, 'skill-archive.json'),

@@ -148,12 +148,12 @@ export async function prepareOutputs(
       }
     }
     const identity = createHash('sha256').update(paths[0]!.toLowerCase()).digest('hex').slice(0, 20);
-    const stage = join(directory, '.bpmn-weave-' + identity + '.stage');
+    const stage = join(directory, '.openbpmn-' + identity + '.stage');
     const locks = paths
       .map((path) =>
         join(
           directory,
-          '.bpmn-weave-' + createHash('sha256').update(path.toLowerCase()).digest('hex').slice(0, 20) + '.lock',
+          '.openbpmn-' + createHash('sha256').update(path.toLowerCase()).digest('hex').slice(0, 20) + '.lock',
         ),
       )
       .sort();

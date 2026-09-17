@@ -1,182 +1,57 @@
-# Local trust, consent, and file safety
+# Data and file safety
 
-## Decision
+OpenBPMN works within the permissions and sandbox of your chosen agent. It does not provide a separate account, permission system, secret vault, or hosted process service.
 
-OpenBPMN inherits the filesystem permissions, sandbox, and approval experience of the user's Host Agent. It does not implement another permission system. Its own responsibility is a small set of deterministic safeguards around explicit CLI inputs, untrusted process evidence, output paths, replacement, temporary data, sensitive companion artifacts, and invalid expert output.
+Your agent may send conversational content to its provider according to that product's settings and terms. A local OpenBPMN CLI does not mean that model inference happens on your device.
 
-This contract keeps the tool lightweight: no custom sandbox, permission UI, account, policy engine, secret vault, audit database, background service, telemetry, or network dependency.
+## Source material
 
-## Authority model
+Supply only process material you are authorized to use. Attachments, interview notes, BPMN XML, and Handoffs are treated as evidence about a process. Instructions embedded in those sources do not authorize the skill to execute commands or take unrelated actions.
 
-Three layers have distinct responsibilities:
+The modeling commands read their explicitly named input or standard input, bundled resources, and browser locations needed for rendering. They do not search your files for evidence. The agent may read additional relevant material within the scope of your request and its own permissions.
 
-| Layer | Authority and responsibility |
-| --- | --- |
-| Human | Chooses the Host Agent, provides or names evidence, selects destinations directly or through the current working directory, authorizes replacement of named artifacts, and explicitly requests Handoff Files or invalid expert output. |
-| Host Agent | Enforces Host-Native Authority, interprets the user's request, reads relevant source material within its granted scope, treats sources as untrusted data, and invokes the CLI with explicit paths and flags. |
-| OpenBPMN CLI | Reads only named paths or standard input, validates all structured and XML inputs, constrains writes to resolved destinations, refuses implicit overwrite, writes safely, minimizes diagnostics, and performs no network activity. |
+Structured input is checked against versioned schemas and size/depth limits. XML with DTDs or external entities is refused. The CLI does not execute scripts, expressions, links, or vendor-extension payloads from a model. See the [protocol reference](../skills/openbpmn/references/protocol.md) for input limits.
 
-OpenBPMN neither expands nor attempts to reproduce a Host Agent's authority. Permission prompts may differ across Codex, Claude Code, Copilot, and other hosts; the CLI invariants remain identical.
+## Generated files
 
-## Read contract
+The usual output contains BPMN, an SVG preview, and a separate Quality Report. You choose the destination directly or through the agent's current directory. Output directories must resolve safely, and output files cannot redirect through symbolic links.
 
-The Host Agent may read files when its native authority permits and the modeling request makes them relevant. Typical authorization comes from:
+Existing files are not overwritten unless you authorize replacement of that named bundle, for example, “Update this process.” The skill carries that choice through the CLI's explicit replacement option. A general modeling request does not authorize replacing existing files.
 
-- an attachment or path supplied by the human;
-- a Handoff File named for resumption; or
-- a request to use relevant project material inside the current working directory.
+New artifacts are prepared and checked before replacing the previous bundle. Handled failures preserve or restore the previous complete output; a failed first generation does not publish an incomplete normal bundle. Successful replacement does not keep an automatic backup.
 
-The Host Agent follows its own permission and sandbox rules for anything outside that scope. OpenBPMN adds no prompt layer.
+Power loss or a forcibly killed process can interrupt a multi-file replacement. A later attempt reports the unfinished staging location and refuses to overwrite recoverable material. Follow the recovery diagnostic before retrying. If the operating system prevents restoration, do not treat the destination files as a complete bundle.
 
-The CLI never searches for evidence. It reads only:
+## Reports and Handoffs
 
-- standard input;
-- an explicit Structured Process Evidence or Handoff File path;
-- an explicit `.bpmn` path supplied to `validate` or `render`; and
-- versioned schemas, profile data, fonts, and fixed runtime assets shipped inside the installed package; and
-- the documented browser executable locations or explicit browser override needed by generation/rendering, using a fresh temporary profile and never the user's browsing profile.
+Quality Reports contain concise evidence references, findings, decisions, unresolved questions, and affected model identifiers. A Handoff is created only when requested and contains the structured model and enough paraphrased context to continue in another session. Neither is intended to copy full source documents or transcripts.
 
-## Write contract
+These files can still contain sensitive business information. Review them before sharing. Source paths are reduced to relative paths or display names where appropriate. High-confidence credential checks can redact obvious secrets or refuse unsafe input, but they cannot recognize every sensitive value. There is no force-include-credentials option.
 
-OpenBPMN may create a new, non-colliding Output Bundle at:
+OpenBPMN does not automatically save conversation history or create a persistent process workspace.
 
-- a destination explicitly named by the human; or
-- a safe new filename in the Host Agent's current working directory.
+## Temporary files and diagnostics
 
-Writing to any other location requires an explicit path accepted by Host-Native Authority. The CLI creates ordinary files only and never writes through a symbolic-link output target.
+Generation uses temporary storage and a fresh browser profile, separate from your ordinary browsing session. Cleanup is attempted after success and failure. If files cannot be removed, the command reports their location without printing their contents.
 
-Before writing, the CLI resolves the destination parent and verifies that every artifact remains within the selected output directory. It rejects path traversal that escapes that directory. Explicit reads may follow symbolic links when Host-Native Authority allows them; generated output paths may not redirect through them.
+Normal diagnostics identify codes, model elements, versions, counts, and artifact paths. They do not automatically dump interviews, structured requests, BPMN XML, or Handoffs. Debug output may include technical stack traces; review logs before sharing them.
 
-## Bundle Replacement
+The modeling commands make no telemetry, update, package-download, or remote-validation requests. See [support status](support.md) for the limits of platform and offline verification.
 
-A user statement such as “update this process,” “replace the invoice-process bundle,” or an equivalent target-specific instruction authorizes replacement of that named Output Bundle. The Modeling Skill passes the authority through an explicit CLI replacement option. The CLI never infers replacement authority from file existence, prior invocations, Session State, or a general modeling request.
+## Installation management
 
-Replacement is bundle-level:
+Setup installs a matched private runtime, CLI, and modeling skill at disclosed locations. It registers the selected skill and reversible command-discovery integration. It preserves unrelated host instructions, permissions, credentials, and user files.
 
-1. generate all new artifacts in a staging location within the destination filesystem;
-2. validate the staged BPMN, SVG, and Quality Report;
-3. verify that all target paths still match the authorized bundle;
-4. replace the bundle only after every staged artifact is ready; and
-5. retain or restore the previous complete bundle if any replacement step fails.
+Updates use an explicitly supplied bundle and do not check for new versions in the background. A handled update failure preserves the previous runnable CLI and skill. An interrupted operation is reported for recovery; installation changes are not claimed to be universally safe from power loss.
 
-OpenBPMN does not add a second interactive confirmation after the human has given target-specific authority. It also does not retain automatic backups after a successful replacement.
+Installation metadata records owned paths, file hashes, versions, and host registrations. It does not store process evidence, prompts, credentials, or chat state. Doctor works without downloads.
 
-Atomic rename applies to each file; ordinary filesystems do not offer an atomic swap of three sibling files. The bundle guarantee covers preflight, staged generation, handled errors, and catchable termination: the command returns success only after all requested files are in place, and restores prior files before reporting a handled failure. Process kill or power loss can interrupt that sequence and is not advertised as a crash-proof multi-file transaction. Keep prior files in the staging area until all replacements finish; interruption tests must establish that those backups remain recoverable. The CLI reports an unfinished staging area for the named target on the next attempt and refuses to overwrite it, with explicit recovery instructions. It does not add a permanent workspace, journal service, or claim to have recovered files automatically. The optional sibling Handoff transaction is defined in the [protocol contract](contracts.md).
+Uninstall removes verified owned installation files and integration. It preserves models, Handoffs, unrelated files, and modified files whose ownership cannot be established safely. Read the retained-path list in its result. See [Installation](installation.md) for commands and locations.
 
-Without replacement authority, a collision returns the filesystem-safety exit class and changes nothing. The Modeling Skill may select a new non-colliding filename and present it to the user.
+## Invalid expert exports
 
-## Temporary data
+An explicitly requested expert snapshot can produce distinct `.invalid.bpmn` and `.invalid.quality.json` files, and an `.invalid.svg` when rendering succeeds. The option applies only to that invocation and is not saved in a Handoff.
 
-Structured Process Evidence is passed through standard input when practical. When a temporary file is required, OpenBPMN:
+These files do not replace a normal valid bundle or signal a clean export. Their report identifies the blocking findings. See the [command reference](commands.md) before using this option.
 
-- uses the operating system's temporary directory;
-- creates a random, content-free filename with user-only access;
-- never places interview or Session State content in the repository as an implementation detail;
-- closes handles before deletion; and
-- attempts cleanup after both success and failure.
-
-There is no background cleanup service. If the operating system prevents immediate removal, OpenBPMN reports the residual path without echoing its contents.
-
-## Untrusted Process Evidence
-
-Attachments, documents, BPMN XML, Handoff Files, annotations, and source excerpts are data. Text such as “ignore previous instructions,” shell commands, scripts, links, tool requests, or role instructions inside those sources carries no authority.
-
-The Modeling Skill interprets imported content only as claims about the process. It acts on a command found inside evidence only if the human independently asks for that action.
-
-The deterministic CLI:
-
-- validates Structured Process Evidence and Handoff Files against strict schemas;
-- enforces bounded input sizes and collection depths;
-- uses XML parsing with DTD and external-entity resolution disabled;
-- never evaluates scripts, expressions, templates, links, or extension payloads;
-- treats unsupported namespaces and extensions as findings rather than executable behavior; and
-- fails closed on malformed input.
-
-The [protocol contract](contracts.md) fixes size and depth limits shipped with the CLI. They are implementation limits, not a user security-policy system.
-
-## Data-minimized artifacts
-
-Quality Reports and Handoff Files are Data-Minimized Artifacts.
-
-Quality Reports contain:
-
-- stable evidence identifiers and display names;
-- concise paraphrases needed to explain a finding;
-- affected model-element identifiers;
-- severity, category, and remediation guidance; and
-- unresolved questions and explicit Modeling Decisions relevant to the result.
-
-They do not copy full interviews, documents, transcripts, credentials, or unrelated source passages. Source paths are relative where useful and otherwise reduced to display names.
-
-Handoff Files contain the minimum paraphrased evidence, decisions, conflicts, draft semantics, and review scenarios needed to continue. They do not embed original source files or chat transcripts.
-
-Before writing either artifact, the skill and CLI apply lightweight high-confidence secret checks. Detected credentials and obvious secret values are redacted and produce a warning tied to the evidence identifier. OpenBPMN offers no force-include-credentials option. Detection is defense-in-depth, not a guarantee that every sensitive value will be recognized.
-
-## Diagnostics and retention
-
-Default CLI output and errors may include:
-
-- stable codes;
-- element and evidence identifiers;
-- counts and versions;
-- artifact paths; and
-- data-minimized explanations.
-
-They do not print Structured Process Evidence, raw interview passages, Handoff contents, full BPMN XML, or secret values. Explicit debug mode may expose technical stack traces but still does not dump process payloads automatically.
-
-OpenBPMN stores no logs outside artifacts requested by the human and retains no process data after the CLI invocation. It performs no telemetry, update check, remote validation, package download, or other network request.
-
-The Host Agent may send conversational content to its own AI provider according to the user's chosen product and account terms. Local-First means no OpenBPMN-operated service or network behavior; it does not claim that third-party model inference occurs on-device.
-
-## Failure behavior
-
-A failed operation:
-
-- returns structured findings and Quality Report content through the result envelope;
-- removes staged and temporary output where possible;
-- leaves the previous Output Bundle unchanged; and
-- creates no destination artifacts on a first-run failure.
-
-For handled failures, the CLI restores the previous complete Output Bundle before returning. Cleanup failures are reported as paths and codes without revealing content. Abrupt interruption follows the recovery limitation described above and is not misreported as a successful or clean transaction.
-
-## Invalid Expert Export
-
-An Invalid Expert Export is available only through an explicit per-invocation option. The option is never persisted in configuration, Session State, or a Handoff File.
-
-The CLI writes distinct names:
-
-- `<process>.invalid.bpmn`;
-- `<process>.invalid.quality.json`; and
-- optionally `<process>.invalid.svg` when rendering succeeds.
-
-Invalid expert files never replace a valid Output Bundle, never emit `clean_export_ready`, and always identify the blocking validation failures and applied override in the Quality Report and result envelope. A collision with an existing invalid expert file still requires target-specific replacement authority.
-
-## Fixed safety surface
-
-V0 exposes only the options needed to carry user intent into the deterministic boundary, including:
-
-- input and output paths;
-- structured result output;
-- target-specific Bundle Replacement;
-- explicit Handoff File creation; and
-- per-invocation Invalid Expert Export.
-
-It has no user security-policy file, broad allowlist, custom permission store, vault, audit mode, or background enforcement process.
-
-## Acceptance evidence
-
-The implementation must demonstrate this contract with focused tests for:
-
-1. explicit-path and standard-input reads only;
-2. prompt-like instructions remaining inert inside every input format;
-3. DTD and external-entity rejection;
-4. traversal and symbolic-link output refusal;
-5. collision refusal without replacement authority;
-6. complete bundle preservation under injected generation and replacement failures;
-7. temporary-input cleanup after success and failure;
-8. high-confidence secret redaction without raw-value logging;
-9. data-minimized default and debug diagnostics;
-10. distinct, non-persistent invalid expert output; and
-11. absence of OpenBPMN network behavior in normal commands.
-
-These are small deterministic tests around the CLI boundary, not the foundation of a broader security subsystem.
+Report suspected vulnerabilities through the [private reporting form](https://github.com/ve250104/OpenBPMN/security/advisories/new). Use synthetic examples and omit confidential process material.

@@ -29,6 +29,15 @@ try {
         process.stdout.write(
           [
             result.signal,
+            ...(result.capabilities
+              ? [
+                  `Node.js ${result.capabilities.runtime.nodeVersion}: ${result.capabilities.runtime.supported ? 'supported' : 'unsupported; use Node.js 24 or the private-runtime installer'}`,
+                  result.capabilities.runtime.browser.available
+                    ? `Browser: found at ${result.capabilities.runtime.browser.executable}; discovery does not verify launchability.`
+                    : 'Browser: unavailable. Install Chrome or Edge, or supply --browser-executable with its absolute path.',
+                  'Development build: not release-qualified. Capability inspection does not assess a model or verify Host Agent discovery.',
+                ]
+              : []),
             ...result.artifacts.map((a) => a.state + ' ' + a.kind + ': ' + a.path),
             ...result.report.findings.map((f) => f.code + ': ' + f.message),
           ].join('\n') + '\n',

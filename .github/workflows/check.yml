@@ -7,14 +7,48 @@ on:
 permissions:
   contents: read
 jobs:
-  linux:
-    runs-on: ubuntu-24.04
-    timeout-minutes: 20
+  qualification:
+    name: ${{ matrix.check_name }}
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - environment: Ubuntu 24.04 x64
+            check_name: linux
+            runner: ubuntu-24.04
+            platform: linux
+            arch: x64
+            browser: /usr/bin/google-chrome
+            network_namespace: '1'
+          - environment: macOS 14 arm64
+            check_name: macOS 14 arm64
+            runner: macos-14
+            platform: darwin
+            arch: arm64
+            browser: /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+            network_namespace: '0'
+          - environment: Windows Server 2022 x64 (not Windows 11)
+            check_name: Windows Server 2022 x64 (not Windows 11)
+            runner: windows-2022
+            platform: win32
+            arch: x64
+            browser: 'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'
+            network_namespace: '0'
+    defaults:
+      run:
+        shell: bash
+    env:
+      OPENBPMN_BROWSER_EXECUTABLE: ${{ matrix.browser }}
+      OPENBPMN_TEST_NETWORK_NAMESPACE: ${{ matrix.network_namespace }}
+      OPENBPMN_EXPECTED_PLATFORM: ${{ matrix.platform }}
+      OPENBPMN_EXPECTED_ARCH: ${{ matrix.arch }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
-          node-version: 24.14.0
+          node-version: 24.19.0
           cache: npm
           cache-dependency-path: npm-shrinkwrap.json
       - run: npm ci --ignore-scripts --no-audit --no-fund
@@ -22,21 +56,66 @@ jobs:
       - run: npm run check
       - name: Record rendering environment
         run: |
-          mkdir -p .artifacts
-          node --version | tee .artifacts/node-version.txt
-          /usr/bin/google-chrome --version | tee .artifacts/browser-version.txt
-          uname -srm | tee .artifacts/os-version.txt
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import { mkdirSync, writeFileSync } from 'node:fs';
+          import { spawnSync } from 'node:child_process';
+          import os from 'node:os';
+          assert.equal(process.platform, process.env.OPENBPMN_EXPECTED_PLATFORM);
+          assert.equal(process.arch, process.env.OPENBPMN_EXPECTED_ARCH);
+          const browser = process.env.OPENBPMN_BROWSER_EXECUTABLE;
+          const version = process.platform === 'win32'
+            ? spawnSync('powershell.exe', ['-NoProfile', '-NonInteractive', '-Command', '(Get-Item -LiteralPath $env:OPENBPMN_BROWSER_EXECUTABLE).VersionInfo.ProductVersion'], { encoding: 'utf8' })
+            : spawnSync(browser, ['--version'], { encoding: 'utf8' });
+          assert.equal(version.status, 0, version.stderr);
+          assert.ok(version.stdout.trim(), 'The exact browser version must be recorded.');
+          const environment = {
+            node: process.version,
+            platform: process.platform,
+            architecture: process.arch,
+            osVersion: os.version(),
+            osRelease: os.release(),
+            runnerImage: process.env.ImageOS,
+            runnerImageVersion: process.env.ImageVersion,
+            browser,
+            browserVersion: version.stdout.trim(),
+            nativeWindows11: 'not_run',
+            realHostSessions: 'not_run'
+          };
+          mkdirSync('.artifacts', { recursive: true });
+          writeFileSync('.artifacts/environment.json', JSON.stringify(environment, null, 2) + '\n');
+          console.log(JSON.stringify(environment, null, 2));
+          NODE
       - run: npm test
       - run: npm run test:integration
-      - name: Installed archive and isolated network smoke
+      - name: Qualify installed npm archive
         run: npm run test:package
-        env:
-          BPMN_WEAVE_BROWSER_EXECUTABLE: /usr/bin/google-chrome
-          BPMN_WEAVE_TEST_NETWORK_NAMESPACE: '1'
+      - name: Build platform bundle with verified private runtime
+        run: npm run package:platform
+      - name: Qualify distributed installation lifecycle
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync } from 'node:fs';
+          import { spawnSync } from 'node:child_process';
+          const { version } = JSON.parse(readFileSync('package.json', 'utf8'));
+          const bundle = `.artifacts/openbpmn-${version}-${process.platform}-${process.arch}`;
+          for (const [script, args] of [
+            ['scripts/test-platform-package.mjs', ['--bundle', bundle]],
+            ['scripts/test-installation.mjs', [bundle]],
+            ['scripts/test-installation-lifecycle.mjs', [bundle]]
+          ]) {
+            const result = spawnSync(process.execPath, [script, ...args], { stdio: 'inherit' });
+            if (result.error) throw result.error;
+            if (result.status !== 0) {
+              process.exitCode = result.status ?? 1;
+              break;
+            }
+          }
+          NODE
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
-          name: linux-development-evidence
+          name: ${{ matrix.platform }}-${{ matrix.arch }}-development-evidence
           path: .artifacts/
           include-hidden-files: true
           if-no-files-found: ignore

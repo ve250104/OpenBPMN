@@ -59,6 +59,19 @@ test('capabilities reports unavailable browser and incomplete profile honestly w
   );
 });
 
+test('human capabilities explain runtime and browser readiness rather than only inspection success', () => {
+  const result = spawnSync(
+    process.execPath,
+    [cli, 'capabilities', '--human', '--browser-executable', '/definitely/not/a/browser'],
+    { encoding: 'utf8' },
+  );
+  assert.equal(result.status, 0);
+  assert.match(result.stdout, /Node\.js .*supported/);
+  assert.match(result.stdout, /Browser: unavailable/);
+  assert.match(result.stdout, /Chrome or Edge/);
+  assert.match(result.stdout, /not release-qualified/);
+});
+
 test('help documents actual command syntax, authority flags, runtime requirements, and exit classes', () => {
   const result = spawnSync(process.execPath, [cli, '--help'], { encoding: 'utf8' });
   assert.equal(result.status, 0);

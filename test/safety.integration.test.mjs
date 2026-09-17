@@ -9,7 +9,7 @@ import { BpmnModdle } from 'bpmn-moddle';
 
 const cli = fileURLToPath(new URL('../dist/cli.js', import.meta.url));
 test('stdin modeling keeps prompt-looking evidence and active-looking labels inert through real XML and SVG export', async (t) => {
-  const directory = await realpath(await mkdtemp(join(tmpdir(), 'bpmn-weave-inert-input-')));
+  const directory = await realpath(await mkdtemp(join(tmpdir(), 'openbpmn-inert-input-')));
   t.after(() => rm(directory, { recursive: true, force: true }));
   const request = JSON.parse(await readFile(new URL('../examples/invoice-review.json', import.meta.url), 'utf8'));
   request.model.processes[0].nodes[1].name = 'Review <script>alert(1)</script> & confirm';

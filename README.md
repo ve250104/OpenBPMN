@@ -1,53 +1,43 @@
-# BPMN Weave
+# OpenBPMN
 
 Turn process descriptions and conversations into reviewable BPMN 2.0 models.
 
-BPMN Weave is designed to work inside an existing agent session: describe how work happens, clarify the important gaps, and refine the result through discussion. One portable Modeling Skill works with a small deterministic local CLI. The output is a standards-based BPMN file, a readable SVG preview, and a separate Quality Report.
+OpenBPMN helps process consultants document responsibilities, decisions, exceptions, and handoffs inside an existing agent session. Describe how work happens, clarify the important gaps, and correct the result through discussion. You receive a BPMN file, an SVG preview, and a separate Quality Report.
 
-## Status
+**Prerelease: `0.1.0-dev.0`.** There is no public release yet. Platform, host, readability, and downstream compatibility limitations are listed in [support status](docs/support.md).
 
-Development build: `0.1.0-dev.0`. The CLI and portable skill are being implemented and tested; **v0.1.0 is not released or qualified yet**. Full-profile readability, offline/platform qualification, and real host/human acceptance remain release gates. A successful example is not evidence that those gates passed.
-
-- [Build progress](https://github.com/ve250104/OpenBPMN/issues/19)
-- [Scope and verification status](docs/support.md)
-
-## Try the development build
-
-Prerequisites: Node.js **24.x**, npm, and an installed Google Chrome or Microsoft Edge. Validation and capability inspection do not require a browser. The CLI does not download one.
-
-```sh
-git clone https://github.com/ve250104/OpenBPMN.git
-cd OpenBPMN
-npm ci --ignore-scripts
-npm run build
-node dist/cli.js capabilities
-node dist/cli.js generate --input examples/invoice-review.json --output my-process
-```
-
-The output is `my-process.bpmn`, `my-process.svg`, and `my-process.quality.json`. Open the SVG to review the diagram; use the BPMN file in a modeling tool. The example is authored synthetic fiction under the project’s MIT license.
-
-For conversational use, install the matching [portable skill](skills/bpmn-weave/SKILL.md), then describe your process in your existing agent session:
-
-> Document our purchase approval process. Operations checks submitted requests, asks the requester to correct missing details, and sends complete requests to the budget owner. Rejected requests end; approved requests become purchase orders. Show me the diagram so we can refine it.
-
-The skill uses the CLI, keeps source evidence and unresolved questions separate, and asks about consequential gaps. It does not require a process workspace or a fixed interview questionnaire.
+## See the result
 
 ![Synthetic purchase approval model with three responsibility lanes and a correction loop](examples/purchase-approval.svg)
 
-[Example BPMN](examples/purchase-approval.bpmn) · [Authored request](examples/purchase-approval.json) · [Quality Report](examples/purchase-approval.quality.json)
+[Walk through a clarification and responsibility correction](docs/modeling.md#an-authored-example) · [Example BPMN](examples/purchase-approval.bpmn) · [Quality Report](examples/purchase-approval.quality.json)
 
-[Installation](docs/installation.md) · [Modeling guide](docs/modeling.md) · [Command reference](docs/commands.md) · [Troubleshooting](docs/troubleshooting.md)
+The walkthrough is authored synthetic material, with actual CLI outputs before and after a correction. It is not a client engagement or a recorded agent conversation.
 
-## Product boundary
+## Get started
 
-The Host Agent handles the conversation and process evidence. The local Core owns model compilation, validation, layout, and export. No hosted service, account, database, project workspace, or graphical editor is provided.
+OpenBPMN runs inside Codex CLI, Claude Code, or GitHub Copilot CLI and uses an installed Chrome or Edge for previews. Its platform bundle includes a private runtime and the matching modeling skill; you do not need to install Node or npm separately.
 
-Process questions and quality findings stay outside the BPMN file. Users can request an incomplete, structurally valid snapshot for discussion; the tool does not assign approval or lifecycle status. The CLI also validates and renders existing BPMN without implying semantic import or repair.
+No public release download is available yet. If you have been supplied a prerelease bundle, follow [Installation](docs/installation.md), then refresh your agent session and ask:
 
-The required agent surfaces are Codex CLI, Claude Code, and GitHub Copilot CLI.
+> Use OpenBPMN to document our purchase approval process. Operations checks submitted requests and sends complete requests to the budget owner. Approved requests become purchase orders; rejected requests end. Show me the diagram and ask about any consequential gaps.
 
-## Project
+Review the preview and correct it naturally: “The budget owner sends the purchase order; Operations only prepares it.” Ask for a Handoff to continue in a new session.
 
-The repository keeps its original OpenBPMN URL; the public product name is BPMN Weave. [Contributing](https://github.com/ve250104/OpenBPMN/blob/main/CONTRIBUTING.md) covers development; the [architecture](https://github.com/ve250104/OpenBPMN/blob/main/docs/architecture.md) and [build plan](https://github.com/ve250104/OpenBPMN/blob/main/docs/build-plan.md) explain the implementation contracts.
+[Installation](docs/installation.md) · [Modeling guide](docs/modeling.md) · [Commands](docs/commands.md) · [Troubleshooting](docs/troubleshooting.md)
 
-Inspired by [bpmn-js](https://github.com/bpmn-io/bpmn-js) and the agent-first workflow of [diagram-design](https://github.com/cathrynlavery/diagram-design). Project-authored material uses the [MIT license](LICENSE); [third-party notices](THIRD_PARTY_NOTICES.md) retain dependency terms and identify unresolved redistribution gates.
+## Scope
+
+OpenBPMN produces design-time process models for documentation, analysis, and discussion. It validates and renders existing BPMN, but does not import arbitrary BPMN for conversational editing or execute workflows. See the [supported BPMN reference](https://github.com/ve250104/OpenBPMN/blob/main/docs/consulting-core-profile.md).
+
+The local CLI compiles, validates, lays out, and exports process artifacts. Your chosen agent handles the conversation and may send content to its own provider. OpenBPMN provides no hosted service, account, database, or graphical editor. Read [data and file safety](https://github.com/ve250104/OpenBPMN/blob/main/docs/local-trust-and-file-safety.md) before supplying sensitive material.
+
+Process questions and quality findings stay outside the BPMN file. Technical validity does not establish business truth or human approval.
+
+## License and feedback
+
+Project-authored material uses the [MIT license](LICENSE). [Third-party notices](THIRD_PARTY_NOTICES.md) preserve dependency terms and describe the unresolved permission question for distributing the bundled OMG schemas.
+
+Report problems through [GitHub Issues](https://github.com/ve250104/OpenBPMN/issues) using a small synthetic example. Use [private reporting](https://github.com/ve250104/OpenBPMN/security/advisories/new) for vulnerabilities.
+
+Built with [bpmn-js](https://github.com/bpmn-io/bpmn-js), with conversational workflow inspiration from [diagram-design](https://github.com/cathrynlavery/diagram-design).

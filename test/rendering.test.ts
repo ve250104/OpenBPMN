@@ -65,7 +65,7 @@ test('layout preserves a simple process and gives every visible element stable g
 });
 
 test('an explicit missing browser never falls back to an installed browser', async () => {
-  const result = await browserCapability('/missing-bpmn-weave-browser');
+  const result = await browserCapability('/missing-openbpmn-browser');
   assert.equal(result.available, false);
   assert.equal(result.path, undefined);
   assert.ok(result.reason);
@@ -708,7 +708,7 @@ test('mid-render cancellation terminates its launched browser and removes the pr
   skip: process.platform === 'win32',
   timeout: 15_000,
 }, async () => {
-  const directory = await mkdtemp(join(tmpdir(), 'bpmn-weave-abort-test-'));
+  const directory = await mkdtemp(join(tmpdir(), 'openbpmn-abort-test-'));
   const laidOut = await layoutXml(xml, request);
   const diagram = laidOut.match(/<bpmndi:BPMNDiagram\b[\s\S]*?<\/bpmndi:BPMNDiagram>/)[0];
   const many = laidOut.replace(
@@ -742,7 +742,7 @@ test('mid-render cancellation terminates its launched browser and removes the pr
     child.send({ xml: many });
     const deadline = Date.now() + 8_000;
     while (Date.now() < deadline && !browserPid) {
-      const profiles = (await readdir(directory)).filter((name) => name.startsWith('bpmn-weave-render-'));
+      const profiles = (await readdir(directory)).filter((name) => name.startsWith('openbpmn-render-'));
       if (profiles.length) {
         const result = await promisify(execFile)('ps', ['-axo', 'pid=,args=']);
         const row = result.stdout

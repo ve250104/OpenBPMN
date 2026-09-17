@@ -6,7 +6,7 @@ import { dirname, join } from 'node:path';
 import { prepareOutputs, commitOutputs } from '../dist/files.js';
 
 async function directory(t, label) {
-  const path = await fs.realpath(await fs.mkdtemp(join(tmpdir(), `bpmn-weave-audit-${label}-`)));
+  const path = await fs.realpath(await fs.mkdtemp(join(tmpdir(), `openbpmn-audit-${label}-`)));
   t.after(() => fs.rm(path, { recursive: true, force: true }));
   return path;
 }

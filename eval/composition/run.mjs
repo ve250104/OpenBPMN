@@ -34,7 +34,7 @@ const fixtures = [
 ].filter((fixture) => !options.has('--fixture') || fixture.id === options.get('--fixture'));
 assert.ok(fixtures.length > 0, 'Unknown fixture.');
 const output = await realpath(
-  await mkdtemp(join(resolve(options.get('--output-parent') ?? tmpdir()), 'bpmn-weave-composition-')),
+  await mkdtemp(join(resolve(options.get('--output-parent') ?? tmpdir()), 'openbpmn-composition-')),
 );
 const hash = (bytes) => createHash('sha256').update(bytes).digest('hex');
 const packageInfo = JSON.parse(await readFile(join(repository, 'package.json'), 'utf8'));

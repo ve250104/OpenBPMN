@@ -1,5 +1,5 @@
 {
-  "name": "@ve250104/bpmn-weave",
+  "name": "@ve250104/openbpmn",
   "version": "0.1.0-dev.0",
   "description": "Evidence-led conversational BPMN modeling with a deterministic local CLI.",
   "type": "module",
@@ -12,14 +12,14 @@
     "node": ">=24 <25"
   },
   "bin": {
-    "bpmn-weave": "dist/cli.js"
+    "openbpmn": "dist/cli.js"
   },
   "files": [
     "npm-shrinkwrap.json",
     "dist",
     "assets",
     "schemas",
-    "skills/bpmn-weave",
+    "skills/openbpmn",
     "examples",
     "docs/installation.md",
     "docs/modeling.md",
@@ -37,7 +37,10 @@
     "test": "node --test --test-concurrency=1 test/*.test.*",
     "test:integration": "node --test --test-concurrency=1 test/*.integration.test.*",
     "test:acceptance": "node scripts/acceptance.mjs",
-    "test:package": "node scripts/package-archives.mjs && node scripts/test-package.mjs"
+    "test:package": "node scripts/package-archives.mjs && node scripts/test-package.mjs",
+    "package:platform": "node scripts/package-platform.mjs",
+    "test:platform-package": "node scripts/test-platform-package.mjs",
+    "test:installation": "node scripts/test-installation.mjs"
   },
   "dependencies": {
     "ajv": "8.18.0",
@@ -47,6 +50,14 @@
     "puppeteer-core": "25.10.0",
     "saxen": "11.1.1"
   },
+  "bundleDependencies": [
+    "ajv",
+    "bpmn-auto-layout",
+    "bpmn-moddle",
+    "libxml2-wasm",
+    "puppeteer-core",
+    "saxen"
+  ],
   "devDependencies": {
     "@biomejs/biome": "2.5.12",
     "@fontsource/noto-sans": "5.3.0",

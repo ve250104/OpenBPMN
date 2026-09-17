@@ -114,8 +114,8 @@ async function run() {
   const artifacts = join(root, '.artifacts');
   await mkdir(artifacts, { recursive: true });
   const directory = await mkdtemp(join(artifacts, 'performance-'));
-  const browserArgs = process.env.BPMN_WEAVE_BROWSER_EXECUTABLE
-    ? ['--browser-executable', process.env.BPMN_WEAVE_BROWSER_EXECUTABLE]
+  const browserArgs = process.env.OPENBPMN_BROWSER_EXECUTABLE
+    ? ['--browser-executable', process.env.OPENBPMN_BROWSER_EXECUTABLE]
     : [];
   const capabilityRun = spawnSync(process.execPath, [cli, 'capabilities', ...browserArgs], { encoding: 'utf8' });
   assert.equal(capabilityRun.status, 0);

@@ -1,7 +1,7 @@
 import { copyFile, mkdir, readFile, writeFile } from 'node:fs/promises';
 
 const root = new URL('../', import.meta.url);
-const skill = new URL('skills/bpmn-weave/', root);
+const skill = new URL('skills/openbpmn/', root);
 await mkdir(new URL('references/', skill), { recursive: true });
 await mkdir(new URL('examples/', skill), { recursive: true });
 for (const name of ['request', 'handoff', 'quality-report', 'result'])

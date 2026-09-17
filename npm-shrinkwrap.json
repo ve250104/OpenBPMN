@@ -1,11 +1,11 @@
 {
-  "name": "@ve250104/bpmn-weave",
+  "name": "@ve250104/openbpmn",
   "version": "0.1.0-dev.0",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
-      "name": "@ve250104/bpmn-weave",
+      "name": "@ve250104/openbpmn",
       "version": "0.1.0-dev.0",
       "license": "MIT",
       "dependencies": {
@@ -16,8 +16,16 @@
         "puppeteer-core": "25.10.0",
         "saxen": "11.1.1"
       },
+      "bundleDependencies": [
+        "ajv",
+        "bpmn-auto-layout",
+        "bpmn-moddle",
+        "libxml2-wasm",
+        "puppeteer-core",
+        "saxen"
+      ],
       "bin": {
-        "bpmn-weave": "dist/cli.js"
+        "openbpmn": "dist/cli.js"
       },
       "devDependencies": {
         "@biomejs/biome": "2.5.12",

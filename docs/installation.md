@@ -1,64 +1,69 @@
 # Installation
 
-There is no published/qualified v0.1.0 yet. Use a locally built development archive; do not assume the planned npm package exists on the registry.
+OpenBPMN `0.1.0-dev.0` is a prerelease with no public release download yet. These instructions apply to a supplied platform bundle. Check [support status](support.md) before relying on a platform or host.
 
-## CLI
+## Set up
 
-Install Node.js 24.x and npm. Install Chrome or Edge yourself for generation/rendering. The package contains no browser, automatic browser downloader, native build toolchain, database, or hosted service. `validate` and `capabilities` are browser-independent.
+Have Codex CLI, Claude Code, or GitHub Copilot CLI installed and signed in, plus Chrome or Edge for diagram previews. The OpenBPMN bundle includes its own runtime and matching modeling skill. It does not install an agent or browser and needs no separate Node/npm installation or administrator privileges.
 
-From a source checkout:
+Verify the supplied archive's checksum and extract the bundle for your operating system and architecture. From the extracted directory, choose your host: `codex`, `claude`, or `copilot`.
 
-```sh
-npm ci --ignore-scripts
-npm run build
-npm pack --ignore-scripts
-```
-
-Install that exact generated archive in an isolated project or globally, according to your preference:
+On macOS or Linux:
 
 ```sh
-npm install --global ./ve250104-bpmn-weave-0.1.0-dev.0.tgz --ignore-scripts
-bpmn-weave capabilities --json
+./setup.sh --host codex --prefix "$HOME/.local/share/openbpmn" --output "$HOME/openbpmn-example"
 ```
 
-For a project-local installation, omit `--global` and run `./node_modules/.bin/bpmn-weave` (Windows: `node_modules\.bin\bpmn-weave.cmd`). Ordinary modeling does not run `npx` or fetch a tool implicitly. Explicit npm installation may download runtime dependencies; runtime commands are separately qualified for offline use.
-
-Verify `node --version` and `bpmn-weave capabilities` inside the agent's command shell, not just the terminal that started it. A login shell can reorder PATH and select another installed Node version. On macOS/Linux, an invocation-local override can select your existing Node 24 installation without changing global settings:
-
-```sh
-env PATH="/absolute/path/to/node-24/bin:$PATH" bpmn-weave capabilities
-```
-
-Replace the placeholder with the directory containing your actual Node 24 executable; use the same prefix for subsequent CLI commands if needed. This does not install Node or qualify an unsupported version.
-
-`--browser-executable` accepts an absolute local executable path and takes precedence over discovery. macOS discovery checks Chrome/Edge applications; Linux checks documented executables on PATH; Windows checks local installed Chrome/Edge locations. Use `capabilities` to inspect the resolved path before modeling. A browser failure leaves the previous bundle intact.
-
-## Portable modeling skill
-
-After building, `skills/bpmn-weave/` is self-contained. Copy that one folder to the native skill directory of your selected CLI host, or extract the matching skill ZIP when available. Start/refresh the host session afterward.
-
-| Host | Personal location | Project location |
-| --- | --- | --- |
-| Codex CLI | `~/.agents/skills/bpmn-weave/` | `.agents/skills/bpmn-weave/` |
-| Claude Code | `~/.claude/skills/bpmn-weave/` | `.claude/skills/bpmn-weave/` |
-| GitHub Copilot CLI | `~/.copilot/skills/bpmn-weave/` | `.github/skills/bpmn-weave/` |
-
-For example, from the checkout, explicitly selecting Codex’s personal location:
-
-```sh
-skill_target="$HOME/.agents/skills/bpmn-weave"
-test ! -e "$skill_target" && mkdir -p "$HOME/.agents/skills" && cp -R skills/bpmn-weave "$skill_target"
-```
-
-PowerShell equivalent:
+On Windows, from PowerShell:
 
 ```powershell
-$skillTarget = Join-Path $HOME '.agents/skills/bpmn-weave'
-if (Test-Path $skillTarget) { throw 'The named skill already exists; inspect it before an authorized upgrade.' }
-New-Item -ItemType Directory -Force (Split-Path $skillTarget) | Out-Null
-Copy-Item -Recurse -LiteralPath 'skills/bpmn-weave' -Destination $skillTarget
+./setup.ps1 --host codex --prefix "$env:LOCALAPPDATA/OpenBPMN" --output "$env:USERPROFILE/openbpmn-example"
 ```
 
-Select the corresponding directory for another host; the skill bytes are identical. Copying the skill is setup, not a new process workspace. Upgrade the matching CLI and named skill together, with explicit replacement authority. The package never rewrites unrelated host instructions or grants itself permissions.
+Setup reports its installation and skill locations, checks prerequisites, and generates `example.bpmn`, `example.svg`, and `example.quality.json`. It does not overwrite existing output files. Omit `--output` to use a new temporary directory whose path is printed. An incomplete result explains what needs attention.
 
-These are the [selected host discovery routes](https://github.com/ve250104/OpenBPMN/blob/wip/v0-implementation/docs/release-plan.md#portable-modeling-skill-and-supported-host-agents), not a claim that every host/platform has passed acceptance. See [support status](support.md) before relying on a surface.
+Close and reopen your shell, then refresh or restart the selected agent session. Ask:
+
+> Use OpenBPMN to document our purchase approval process. Operations checks requests; the budget owner approves or rejects them. Show me the diagram and ask about any consequential gaps.
+
+The agent should load the skill, generate files, and show their paths and preview. A successful local setup does not prove that a running agent has discovered the skill. See [troubleshooting](troubleshooting.md) if it cannot find the skill or command.
+
+## Moving from an older preview
+
+Before installing this preview over an older preview, finish or recover any pending operation with that version's original bundle or manager, then uninstall it using that same version. Keep your process files and Handoffs. Use a fresh setup for the new preview; automatic updates across changed installation identities are not supported. Do not run both previews against the same output files.
+
+## Check, update, or uninstall
+
+```sh
+openbpmn-manage doctor
+openbpmn-manage update --bundle /absolute/path/to/extracted-bundle
+openbpmn-manage uninstall
+```
+
+The installed launcher remembers its installation directory. If command discovery fails, use the full launcher path printed by setup. For the macOS/Linux location above:
+
+```sh
+"$HOME/.local/share/openbpmn/bin/openbpmn-manage" doctor
+```
+
+Doctor checks the local installation and browser without downloading anything. Updates use a separately obtained, verified bundle; there is no automatic update check. The runtime, CLI, and skill are updated together. Handled update failures preserve the previous runnable installation.
+
+Uninstall preserves models, Handoffs, unrelated files, and modified installation files it cannot safely remove. Review any retained paths in its output.
+
+Rerunning setup with the same bundle preserves the installation and verifies a new temporary example. A different bundle requires `update`. For an interrupted operation, follow the reported recovery command using the original installation directory; recovery does not compete with a still-running operation.
+
+## Browser and skill locations
+
+Generation and rendering need Chrome or Edge; validation and capability inspection do not. Pass `--browser-executable /absolute/path/to/browser` when automatic discovery fails. The browser runs headlessly in a fresh temporary profile, separate from your browsing session.
+
+| Host | Personal skill location | Project skill location |
+| --- | --- | --- |
+| Codex CLI | `~/.agents/skills/openbpmn/` | `.agents/skills/openbpmn/` |
+| Claude Code | `~/.claude/skills/openbpmn/` | `.claude/skills/openbpmn/` |
+| GitHub Copilot CLI | `~/.copilot/skills/openbpmn/` | `.github/skills/openbpmn/` |
+
+Use `--project /absolute/project/path` during setup for a project-local skill. The application remains in its installation directory. Conflicting registrations are reported and preserved for you to resolve.
+
+On macOS/Linux, setup adds a marked PATH block while preserving existing shell settings. It may create `.profile`, `.bashrc`, and `.zshenv`; it changes `.bash_profile` or `.bash_login` only if they already exist. Installation paths containing a colon are refused. Uninstall removes only the integration it owns.
+
+For scripted use, `--non-interactive` requires explicit choices and `--json` selects structured output. See the [command reference](commands.md) for management options and [data and file safety](https://github.com/ve250104/OpenBPMN/blob/main/docs/local-trust-and-file-safety.md) for the installation boundary.
