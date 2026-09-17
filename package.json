@@ -1,5 +1,5 @@
 {
-  "name": "@ve250104/bpmn-weave",
+  "name": "@ve250104/openbpmn",
   "version": "0.1.0-dev.0",
   "description": "Evidence-led conversational BPMN modeling with a deterministic local CLI.",
   "type": "module",
@@ -12,14 +12,14 @@
     "node": ">=24 <25"
   },
   "bin": {
-    "bpmn-weave": "dist/cli.js"
+    "openbpmn": "dist/cli.js"
   },
   "files": [
     "npm-shrinkwrap.json",
     "dist",
     "assets",
     "schemas",
-    "skills/bpmn-weave",
+    "skills/openbpmn",
     "examples",
     "docs/installation.md",
     "docs/modeling.md",

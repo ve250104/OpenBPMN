@@ -51,7 +51,7 @@ const capabilities = spawnSync(node, [join(app, 'dist/cli.js'), 'capabilities'],
 assert.equal(capabilities.status, 0, capabilities.stderr);
 assert.equal(JSON.parse(capabilities.stdout).capabilities.runtime.supported, true);
 assert.equal(
-  JSON.parse(await readFile(join(app, 'skills/bpmn-weave/version.json'), 'utf8')).toolVersion,
+  JSON.parse(await readFile(join(app, 'skills/openbpmn/version.json'), 'utf8')).toolVersion,
   manifest.version,
 );
 const lock = JSON.parse(await readFile(join(app, 'npm-shrinkwrap.json'), 'utf8'));

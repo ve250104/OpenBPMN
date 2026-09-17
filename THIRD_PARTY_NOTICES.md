@@ -13,8 +13,6 @@ Project-authored code, documentation, and synthetic examples use the root MIT [L
 | Ajv 8.18.0; saxen 11.1.1 | npm runtime dependencies; exact upstream MIT notices copied into `assets/notices/`. |
 | OMG BPMN 2.0.2 schemas | Five unchanged official schema documents at `assets/xsd/`. `provenance.json` records source URLs, source-check date and SHA-256 hashes. The [OMG specification’s copyright, permission and disclaimer notices](https://www.omg.org/spec/BPMN/2.0.2/PDF#page=2) remain authoritative; no project copyright is claimed over these files. Public-redistribution interpretation remains unresolved. |
 
-The lockfile fixes the development/tested dependency resolution; each installed transitive dependency keeps its own package license. Build-time copies and hashes are reproducible without downloads. Runtime asset manifests identify the copied Viewer/fonts; this index does not assert that an unrun license/redistribution gate passed.
-
-The [distribution provenance record](https://github.com/ve250104/OpenBPMN/blob/wip/v0-implementation/docs/research/distribution-provenance.md) separates verified origin and available notices from the still-open OMG machine-readable-schema redistribution question. No permission was inferred solely from public download availability or from another library’s copies.
+Each dependency keeps its own license. Asset manifests record the source and checksum of bundled material. Attribution and public download availability do not establish permission to redistribute the OMG schemas; that question remains unresolved.
 
 Sources: [bpmn-js license](https://github.com/bpmn-io/bpmn-js/blob/v18.28.0/LICENSE), [layout alpha metadata and declaration](https://github.com/bpmn-io/bpmn-auto-layout/tree/v2.0.0-alpha.2), [OMG machine-readable documents](https://www.omg.org/spec/BPMN/2.0.2/About-BPMN).

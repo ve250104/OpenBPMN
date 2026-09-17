@@ -8,7 +8,7 @@ import { runCommand } from '../dist/core.js';
 import { readOptions } from '../dist/options.js';
 
 async function expertExport(t, duringCommit) {
-  const directory = await fs.realpath(await fs.mkdtemp(join(tmpdir(), 'bpmn-weave-expert-preservation-')));
+  const directory = await fs.realpath(await fs.mkdtemp(join(tmpdir(), 'openbpmn-expert-preservation-')));
   const stem = join(directory, 'invoice');
   const svg = stem + '.invalid.svg';
   const request = JSON.parse(await fs.readFile(new URL('../examples/invoice-review.json', import.meta.url), 'utf8'));

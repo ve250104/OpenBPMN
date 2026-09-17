@@ -1,17 +1,17 @@
 # Command reference
 
-`bpmn-weave --help` is the authoritative syntax/flag reference for the four Core commands. They are non-interactive and default to one JSON envelope on stdout. `--human` selects a concise summary; `--debug` adds payload-minimized technical diagnostics to stderr.
+`openbpmn --help` is the authoritative syntax/flag reference for the four modeling commands. They are non-interactive and default to one JSON envelope on stdout. `--human` selects a concise summary; `--debug` adds payload-minimized technical diagnostics to stderr.
 
 ```sh
-bpmn-weave capabilities
-bpmn-weave generate --input request.json --output purchase
-bpmn-weave generate --input request.json --output purchase --export snapshot
-bpmn-weave generate --input request.json --output purchase --replace --handoff purchase.openbpmn.json
-bpmn-weave validate --input purchase.bpmn
-bpmn-weave render --input purchase.bpmn --output purchase-preview.svg
+openbpmn capabilities
+openbpmn generate --input request.json --output purchase
+openbpmn generate --input request.json --output purchase --export snapshot
+openbpmn generate --input request.json --output purchase --replace --handoff purchase.openbpmn.json
+openbpmn validate --input purchase.bpmn
+openbpmn render --input purchase.bpmn --output purchase-preview.svg
 ```
 
-Generation input is complete Structured Process Evidence or a Handoff; `--input -` reads UTF-8 JSON from stdin. Output is a stem, and the directory must already exist. A requested Handoff joins the bundle transaction at a distinct sibling path. The packaged [schemas](../schemas/) and repository [structured contract](https://github.com/ve250104/OpenBPMN/blob/main/docs/contracts.md) define every accepted field, limit, signal, check, and export outcome.
+Generation input is complete Structured Process Evidence or a Handoff; `--input -` reads UTF-8 JSON from stdin. Output is a stem, and the directory must already exist. A requested Handoff joins the bundle transaction at a distinct sibling path. The bundled [schemas](../schemas/) define accepted fields. The [protocol reference](../skills/openbpmn/references/protocol.md) explains input limits, signals, checks, and export outcomes.
 
 Validation changes nothing. Rendering reads the supplied DI and writes only the named SVG; it does not lay out, repair, or rewrite XML. Optional consumer-fit rules on validation are separate from core validity and actual tenant observations.
 
@@ -29,18 +29,18 @@ JSON results enumerate produced/preserved artifacts and individually assessed ch
 
 ## Installation management
 
-The platform bundle supplies `bpmn-weave-manage`. The extracted `setup.sh` or `setup.ps1` bootstraps its private runtime; see [Installation](installation.md) for the primary route and current release status.
+The platform bundle supplies `openbpmn-manage`. The extracted `setup.sh` or `setup.ps1` bootstraps its private runtime; see [Installation](installation.md) for setup instructions and current availability.
 
 ```sh
-bpmn-weave-manage setup --bundle /absolute/extracted-candidate --host codex --prefix /absolute/install-prefix --output /absolute/example-directory
-bpmn-weave-manage doctor --prefix /absolute/install-prefix
-bpmn-weave-manage update --prefix /absolute/install-prefix --bundle /absolute/extracted-candidate
-bpmn-weave-manage uninstall --prefix /absolute/install-prefix
+openbpmn-manage setup --bundle /absolute/extracted-candidate --host codex --prefix /absolute/install-prefix --output /absolute/example-directory
+openbpmn-manage doctor --prefix /absolute/install-prefix
+openbpmn-manage update --prefix /absolute/install-prefix --bundle /absolute/extracted-candidate
+openbpmn-manage uninstall --prefix /absolute/install-prefix
 ```
 
-Setup selects `codex`, `claude`, or `copilot`. `--project` selects the explicit project skill scope; `--browser-executable` selects the installed local browser. `--non-interactive` requires explicit choices instead of prompts. `--json` selects management output rather than a Core result envelope. The installed management launcher supplies its owned prefix; an explicit prefix identifies the installation when invoking the management entry point directly.
+Setup selects `codex`, `claude`, or `copilot`. `--project` selects the explicit project skill scope; `--browser-executable` selects the installed local browser. `--non-interactive` requires explicit choices instead of prompts. `--json` selects management output rather than a modeling result envelope. The installed management launcher supplies its owned prefix; an explicit prefix identifies the installation when invoking the management entry point directly.
 
-Management distinguishes `ready`, `incomplete`, `removed`, and `failed`. Per-check results distinguish `pass`, `fail`, and `not_verified`; actual host discovery is not inferred from filesystem placement. Failed requested checks return nonzero. Doctor is offline; update reads an explicitly supplied candidate and does not silently look for a newer release. Management never treats an installation check as release qualification or process approval.
+Management distinguishes `ready`, `incomplete`, `removed`, and `failed`. Per-check results distinguish `pass`, `fail`, and `not_verified`; actual host discovery is not inferred from filesystem placement. Failed requested checks return nonzero. Doctor is offline; update reads an explicitly supplied candidate and does not silently look for a newer release. Installation checks do not establish process correctness or approval.
 
 Management JSON uses `schemaVersion: 1` with `operation`, `status`, `message`, `checks`, and `nextSteps`. Successful installation checks also identify `prefix` and `version`; `artifacts` lists example outputs, and `retained` lists paths intentionally preserved during cleanup. Exit 0 means the requested local operation completed, exit 1 means failed or incomplete checks, and exit 3 means invalid usage. A `removed` result can include retained modified or locked files: inspect that list. Human output is the default. `--help` prints usage rather than a management envelope.
 

@@ -41,7 +41,7 @@ const pkg = JSON.parse(await readFile(join(root, 'package.json'), 'utf8'));
 const lock = JSON.parse(await readFile(join(root, 'npm-shrinkwrap.json'), 'utf8'));
 const artifacts = join(root, '.artifacts');
 await mkdir(artifacts, { recursive: true });
-const name = `bpmn-weave-${pkg.version}-${target}`;
+const name = `openbpmn-${pkg.version}-${target}`;
 const destination = join(artifacts, name);
 const archiveDestination = destination + '.zip';
 const digest = (bytes) => createHash('sha256').update(bytes).digest('hex');
@@ -106,12 +106,9 @@ try {
   await mkdir(app);
   execute('tar', ['-xf', join(temporary, packed.filename), '-C', app, '--strip-components=1']);
   const dependencies = (await assertBundledDependencies(lock, app)).dependencies;
-  for (const file of ['dist/cli.js', 'dist/manage.js', 'skills/bpmn-weave/version.json'])
+  for (const file of ['dist/cli.js', 'dist/manage.js', 'skills/openbpmn/version.json'])
     assert.ok((await lstat(join(app, file))).isFile(), 'Missing built application file: ' + file);
-  assert.equal(
-    JSON.parse(await readFile(join(app, 'skills/bpmn-weave/version.json'), 'utf8')).toolVersion,
-    pkg.version,
-  );
+  assert.equal(JSON.parse(await readFile(join(app, 'skills/openbpmn/version.json'), 'utf8')).toolVersion, pkg.version);
 
   const cache = join(artifacts, 'runtime-cache');
   await mkdir(cache, { recursive: true });

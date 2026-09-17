@@ -52,7 +52,7 @@ for (const [api, invoke] of [
       const result = spawnSync(process.execPath, ['--require', hook, '--input-type=module', '--eval', source], {
         encoding: 'utf8',
         timeout: 10_000,
-        env: { ...process.env, NODE_OPTIONS: '', BPMN_WEAVE_TEST_NODE_NETLOG: log },
+        env: { ...process.env, NODE_OPTIONS: '', OPENBPMN_TEST_NODE_NETLOG: log },
       });
       assert.equal(result.status, 0, result.stderr);
       const child = JSON.parse(result.stdout);
@@ -74,21 +74,21 @@ test('offline qualification refuses an isolation flag without an isolated Linux 
     context.skip('This test requires a host with an external interface.');
     return;
   }
-  const previous = process.env.BPMN_WEAVE_TEST_NETWORK_ISOLATED;
-  process.env.BPMN_WEAVE_TEST_NETWORK_ISOLATED = '1';
+  const previous = process.env.OPENBPMN_TEST_NETWORK_ISOLATED;
+  process.env.OPENBPMN_TEST_NETWORK_ISOLATED = '1';
   try {
     await assert.rejects(
       offlineSmoke('/missing-installed-cli', '/missing-fixture', '/missing-browser'),
       /Network isolation requires Linux|External network interfaces are present/,
     );
   } finally {
-    if (previous === undefined) delete process.env.BPMN_WEAVE_TEST_NETWORK_ISOLATED;
-    else process.env.BPMN_WEAVE_TEST_NETWORK_ISOLATED = previous;
+    if (previous === undefined) delete process.env.OPENBPMN_TEST_NETWORK_ISOLATED;
+    else process.env.OPENBPMN_TEST_NETWORK_ISOLATED = previous;
   }
 });
 
 test('offline qualification observes the child network namespace despite host-visible sysfs', (context) => {
-  if (process.platform !== 'linux' || process.env.BPMN_WEAVE_TEST_NETWORK_NAMESPACE !== '1') {
+  if (process.platform !== 'linux' || process.env.OPENBPMN_TEST_NETWORK_NAMESPACE !== '1') {
     context.skip('Requires the explicitly enabled Linux network namespace harness.');
     return;
   }
@@ -121,7 +121,7 @@ test('offline qualification observes the child network namespace despite host-vi
 });
 
 test('offline qualification proves the kernel denies an unguarded outbound connection', (context) => {
-  if (process.platform !== 'linux' || process.env.BPMN_WEAVE_TEST_NETWORK_NAMESPACE !== '1') {
+  if (process.platform !== 'linux' || process.env.OPENBPMN_TEST_NETWORK_NAMESPACE !== '1') {
     context.skip('Requires the explicitly enabled Linux network namespace harness.');
     return;
   }

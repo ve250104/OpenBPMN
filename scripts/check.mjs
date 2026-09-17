@@ -17,7 +17,7 @@ async function walk(directory) {
   return paths;
 }
 const paths = await walk(root);
-const skillRoot = join(root, 'skills', 'bpmn-weave');
+const skillRoot = join(root, 'skills', 'openbpmn');
 for (const name of ['request', 'handoff', 'quality-report', 'result'])
   assert.deepEqual(
     await readFile(join(root, 'schemas', name + '.schema.json')),

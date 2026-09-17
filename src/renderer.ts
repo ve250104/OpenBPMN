@@ -116,13 +116,13 @@ export async function renderSvg(
     const fontCss = faces
       .map(
         (face, index) =>
-          `@font-face{font-family:WeaveSans;font-style:normal;font-weight:${face.weight};src:url(${dataUrls[index]}) format('woff2');unicode-range:${face.unicodeRange}}`,
+          `@font-face{font-family:OpenBPMNSans;font-style:normal;font-weight:${face.weight};src:url(${dataUrls[index]}) format('woff2');unicode-range:${face.unicodeRange}}`,
       )
       .join('');
     const viewerJs = await readFile(new URL(`runtime/${manifest.viewer.file}`, assets), 'utf8');
     const { default: puppeteer } = await import('puppeteer-core');
     if (options.signal?.aborted) throw renderingInterrupted();
-    profile = await mkdtemp(join(tmpdir(), 'bpmn-weave-render-'));
+    profile = await mkdtemp(join(tmpdir(), 'openbpmn-render-'));
     await chmod(profile, 0o700);
     await mkdir(join(profile, 'Default'), { mode: 0o700 });
     // This disposable profile never browses websites; online safety/preload services
@@ -213,11 +213,11 @@ export async function renderSvg(
           for (const [key, value] of Object.entries(attrs)) element.setAttribute(key, value);
           return element;
         };
-        await document.fonts.load('12px WeaveSans', labelText);
-        await document.fonts.load('bold 12px WeaveSans', labelText);
+        await document.fonts.load('12px OpenBPMNSans', labelText);
+        await document.fonts.load('bold 12px OpenBPMNSans', labelText);
         await document.fonts.ready;
         const metrics = document.createElement('canvas').getContext('2d')!;
-        metrics.font = '700 14px WeaveSans';
+        metrics.font = '700 14px OpenBPMNSans';
         const sheet = create('svg', { xmlns: ns, version: '1.1', role: 'img' });
         const style = create('style');
         style.textContent = fontCss;
@@ -249,7 +249,7 @@ export async function renderSvg(
           const title = create('text', {
             x: '16',
             y: String(top + 14),
-            'font-family': 'WeaveSans',
+            'font-family': 'OpenBPMNSans',
             'font-size': '14',
             'font-weight': '700',
             fill: '#22242a',
@@ -263,7 +263,7 @@ export async function renderSvg(
               x: '16',
               y: String(top + 12),
               'data-diagram-id': panel.id,
-              'font-family': 'WeaveSans',
+              'font-family': 'OpenBPMNSans',
               'font-size': '12',
               fill: '#56616b',
             });
@@ -275,8 +275,8 @@ export async function renderSvg(
           const viewer = new ViewerClass({
             container: '#canvas',
             textRenderer: {
-              defaultStyle: { fontFamily: 'WeaveSans', fontSize: 12 },
-              externalStyle: { fontFamily: 'WeaveSans', fontSize: 12 },
+              defaultStyle: { fontFamily: 'OpenBPMNSans', fontSize: 12 },
+              externalStyle: { fontFamily: 'OpenBPMNSans', fontSize: 12 },
             },
           });
           try {
@@ -353,7 +353,7 @@ export async function renderSvg(
                 box: { width: label.width, height: label.height },
                 align: 'center-top',
                 padding: 4,
-                style: { fontFamily: 'WeaveSans', fontSize: 12, lineHeight: 1.2, fill: '#22242a' },
+                style: { fontFamily: 'OpenBPMNSans', fontSize: 12, lineHeight: 1.2, fill: '#22242a' },
               });
               visual.replaceChildren(text);
               const bounds = (text as SVGGraphicsElement).getBBox();
@@ -520,7 +520,7 @@ export async function renderSvg(
         const text = create('text', {
           x: '16',
           y: String(top + 12),
-          'font-family': 'WeaveSans',
+          'font-family': 'OpenBPMNSans',
           'font-size': '12',
           fill: '#56616b',
         });

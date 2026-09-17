@@ -33,7 +33,7 @@ export interface Distribution {
 }
 
 export function skillInventory(manifest: Distribution): InventoryFile[] {
-  const prefix = 'app/skills/bpmn-weave/';
+  const prefix = 'app/skills/openbpmn/';
   return manifest.files
     .filter((file) => file.path.startsWith(prefix))
     .map((file) => ({ ...file, path: file.path.slice(prefix.length) }));
@@ -53,7 +53,7 @@ export function inventoryPath(path: unknown): path is string {
 export async function distributionAt(directory: string): Promise<Distribution> {
   await noLinks(directory);
   const text = await readFile(join(directory, 'manifest.json'), 'utf8').catch(() => {
-    throw new Error('Distribution manifest could not be read. Select an extracted BPMN Weave platform archive.');
+    throw new Error('Distribution manifest could not be read. Select an extracted OpenBPMN platform archive.');
   });
   const manifest = JSON.parse(text) as Distribution;
   if (manifest.schemaVersion !== 1 || !Array.isArray(manifest.files) || !manifest.files.length)
@@ -88,14 +88,14 @@ export async function distributionAt(directory: string): Promise<Distribution> {
     'app/package.json',
     'app/dist/cli.js',
     'app/dist/manage.js',
-    'app/skills/bpmn-weave/version.json',
+    'app/skills/openbpmn/version.json',
     manifest.runtimeExecutable,
   ])
     if (!names.includes(required)) throw new Error('Incomplete distribution inventory: ' + required);
   await verifyFiles(directory, manifest.files, ['manifest.json']);
   const pkg = JSON.parse(await readFile(join(directory, 'app/package.json'), 'utf8'));
-  const skill = JSON.parse(await readFile(join(directory, 'app/skills/bpmn-weave/version.json'), 'utf8'));
-  if (pkg.name !== '@ve250104/bpmn-weave' || pkg.version !== manifest.version || skill.toolVersion !== manifest.version)
+  const skill = JSON.parse(await readFile(join(directory, 'app/skills/openbpmn/version.json'), 'utf8'));
+  if (pkg.name !== '@ve250104/openbpmn' || pkg.version !== manifest.version || skill.toolVersion !== manifest.version)
     throw new Error('CLI and Modeling Skill versions do not match the distribution manifest.');
   return manifest;
 }

@@ -14,7 +14,7 @@ const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 assert.equal(process.versions.node.split('.')[0], '24', 'Package qualification requires Node 24.x.');
 const artifacts = join(root, '.artifacts');
 await mkdir(artifacts, { recursive: true });
-const temporary = await realpath(await mkdtemp(join(tmpdir(), 'bpmn-weave-package-')));
+const temporary = await realpath(await mkdtemp(join(tmpdir(), 'openbpmn-package-')));
 const prefix = join(temporary, 'isolated install');
 await mkdir(prefix);
 
@@ -58,7 +58,7 @@ try {
   const pack = JSON.parse(packed.stdout)[0];
   assert.ok(
     pack.files.every((file) =>
-      /^(?:node_modules\/|dist\/|assets\/|schemas\/|skills\/bpmn-weave\/|examples\/|docs\/(?:installation|modeling|commands|support|troubleshooting)\.md$|package\.json$|npm-shrinkwrap\.json$|README\.md$|LICENSE$|THIRD_PARTY_NOTICES\.md$)/.test(
+      /^(?:node_modules\/|dist\/|assets\/|schemas\/|skills\/openbpmn\/|examples\/|docs\/(?:installation|modeling|commands|support|troubleshooting)\.md$|package\.json$|npm-shrinkwrap\.json$|README\.md$|LICENSE$|THIRD_PARTY_NOTICES\.md$)/.test(
         file.path,
       ),
     ),
@@ -78,8 +78,8 @@ try {
     'docs/commands.md',
     'docs/support.md',
     'docs/troubleshooting.md',
-    'skills/bpmn-weave/SKILL.md',
-    'skills/bpmn-weave/version.json',
+    'skills/openbpmn/SKILL.md',
+    'skills/openbpmn/version.json',
     'THIRD_PARTY_NOTICES.md',
     'LICENSE',
   ]) {
@@ -105,7 +105,7 @@ try {
   ]);
   assert.equal(installation.status, 0, installation.stderr);
   const installedInMs = Math.round(performance.now() - started);
-  const packageRoot = join(prefix, 'node_modules', '@ve250104', 'bpmn-weave');
+  const packageRoot = join(prefix, 'node_modules', '@ve250104', 'openbpmn');
   const shrinkwrap = await readFile(join(root, 'npm-shrinkwrap.json'));
   assert.deepEqual(
     await readFile(join(packageRoot, 'npm-shrinkwrap.json')),
@@ -144,7 +144,7 @@ try {
   }
   const cli = join(packageRoot, 'dist', 'cli.js');
   assert.equal(await realpath(cli), cli, 'Installed CLI must not link back to the checkout.');
-  const binary = join(prefix, 'node_modules', '.bin', 'bpmn-weave' + (process.platform === 'win32' ? '.cmd' : ''));
+  const binary = join(prefix, 'node_modules', '.bin', 'openbpmn' + (process.platform === 'win32' ? '.cmd' : ''));
   const version = execute(binary, ['--version']);
   assert.equal(version.status, 0, version.stdout + version.stderr);
   assert.equal(version.stdout.trim(), pack.version);
@@ -154,7 +154,7 @@ try {
   assert.equal(createHash('sha256').update(skillZip).digest('hex'), skillArchive.sha256);
   const skillFiles = unzipSync(skillZip);
   const packedSkillNames = pack.files
-    .filter((file) => file.path.startsWith('skills/bpmn-weave/'))
+    .filter((file) => file.path.startsWith('skills/openbpmn/'))
     .map((file) => file.path.slice('skills/'.length))
     .sort();
   assert.deepEqual(
@@ -172,8 +172,8 @@ try {
   await mkdir(outputDirectory);
   const stem = join(outputDirectory, 'invoice');
   const fixture = join(packageRoot, 'examples', 'invoice-review.json');
-  const browserArgs = process.env.BPMN_WEAVE_BROWSER_EXECUTABLE
-    ? ['--browser-executable', process.env.BPMN_WEAVE_BROWSER_EXECUTABLE]
+  const browserArgs = process.env.OPENBPMN_BROWSER_EXECUTABLE
+    ? ['--browser-executable', process.env.OPENBPMN_BROWSER_EXECUTABLE]
     : [];
   const command = (args, expected = 0) => {
     const result = execute(binary, args);

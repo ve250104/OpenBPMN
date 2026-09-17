@@ -2,9 +2,9 @@
 
 Find the result’s stable code and remediation first. A `cleanEligible` value describes model checks, not whether a failed file operation produced a bundle; inspect the signal and artifact list too.
 
-Incomplete setup: run the full `bpmn-weave-manage doctor` path printed by setup. Read each failed check and its remediation. Local application, browser, example generation, and actual host discovery are separate observations. Missing Chrome/Edge requires installing a browser yourself or selecting its absolute executable path; BPMN Weave never silently installs one or attaches to your personal browser session.
+Incomplete setup: run the full `openbpmn-manage doctor` path printed by setup. Read each failed check and its remediation. Local application, browser, example generation, and actual host discovery are separate observations. Missing Chrome/Edge requires installing a browser yourself or selecting its absolute executable path; OpenBPMN never silently installs one or attaches to your personal browser session.
 
-Command not found after setup: reopen the shell and refresh/restart the selected agent, then use the full launcher path reported during setup. The primary installation's launcher uses its private Node runtime. If a manually invoked `node dist/cli.js` or a secondary npm install reports the wrong Node version, it is not using that launcher. Check the command resolved inside the agent's shell; do not globally replace another tool's Node installation.
+Command not found after setup: reopen the shell and refresh/restart the selected agent, then use the full launcher path reported during setup. The installation's launcher uses its private runtime. Check which command the agent's shell resolves; use the printed full path if another installation takes precedence.
 
 Skill not discovered or wrong version: inspect the host and registration paths reported by doctor. Competing personal/project skill folders can shadow the intended installation. Setup reports conflicts and preserves existing files; resolve the named conflict explicitly and rerun. Folder placement is not proof that a running host session has refreshed its skills.
 

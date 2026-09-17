@@ -6,7 +6,7 @@ import { defaultPrefix, doctor, setup, type ManagementResult } from './installat
 import type { Host } from './installation-hosts.js';
 import { recover, uninstall, update } from './installation-lifecycle.js';
 
-const HELP = `BPMN Weave installation management (separate from the modeling CLI)
+const HELP = `OpenBPMN installation management (separate from the modeling CLI)
   setup --bundle <extracted-platform-directory> --host codex|claude|copilot
   doctor
   update --bundle <extracted-platform-directory>
@@ -47,7 +47,7 @@ try {
       });
     } catch {
       usage = true;
-      throw new Error('Invalid management options. Run bpmn-weave-manage --help.');
+      throw new Error('Invalid management options. Run openbpmn-manage --help.');
     }
   })();
   const { values, positionals } = parsed;
@@ -74,7 +74,7 @@ try {
     operation = positionals[0] ?? 'setup';
     if (positionals.length > 1 || !['setup', 'doctor', 'update', 'uninstall'].includes(operation)) {
       usage = true;
-      throw new Error('Choose setup, doctor, update, or uninstall. See bpmn-weave-manage --help.');
+      throw new Error('Choose setup, doctor, update, or uninstall. See openbpmn-manage --help.');
     }
     const allowed: Record<string, string[]> = {
       setup: ['bundle', 'host', 'project', 'browser-executable', 'output', 'recover'],
@@ -152,7 +152,7 @@ try {
     status: 'failed',
     message: error instanceof Error ? error.message : 'Installation management failed.',
     checks: [],
-    nextSteps: ['Run bpmn-weave-manage --help for supported operations.'],
+    nextSteps: ['Run openbpmn-manage --help for supported operations.'],
   });
   process.exitCode = usage ? 3 : 1;
 } finally {

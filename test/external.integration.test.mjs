@@ -16,7 +16,7 @@ function command(args, expected = 0) {
 }
 
 test('a user validates and renders original supplied BPMN without modifying it or creating a workspace', async (t) => {
-  const directory = await realpath(await mkdtemp(join(tmpdir(), 'bpmn-weave-external-')));
+  const directory = await realpath(await mkdtemp(join(tmpdir(), 'openbpmn-external-')));
   t.after(() => rm(directory, { recursive: true, force: true }));
   const stem = join(directory, 'original');
   command(['generate', '--input', example, '--output', stem]);
@@ -40,7 +40,7 @@ test('a user validates and renders original supplied BPMN without modifying it o
 });
 
 test('named consumer fit stays separate from core validity and never implies tenant verification', async (t) => {
-  const directory = await realpath(await mkdtemp(join(tmpdir(), 'bpmn-weave-compatibility-')));
+  const directory = await realpath(await mkdtemp(join(tmpdir(), 'openbpmn-compatibility-')));
   t.after(() => rm(directory, { recursive: true, force: true }));
   const stem = join(directory, 'process');
   command(['generate', '--input', example, '--output', stem]);

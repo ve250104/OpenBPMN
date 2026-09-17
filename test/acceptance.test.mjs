@@ -52,7 +52,7 @@ test('missing, stale, flaky and wrong-kind observations cannot qualify a human r
 });
 
 test('qualification verifies real files and archive hashes against a clean source commit', async (t) => {
-  const root = await mkdtemp(join(tmpdir(), 'bpmn-weave-release-check-'));
+  const root = await mkdtemp(join(tmpdir(), 'openbpmn-release-check-'));
   t.after(() => rm(root, { recursive: true, force: true }));
   const git = (args) => execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim();
   git(['init', '--quiet']);

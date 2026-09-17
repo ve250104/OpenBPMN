@@ -4,18 +4,18 @@ import type { Command } from './model.js';
 import { OperationError } from './diagnostics.js';
 
 export const commands: Command[] = ['generate', 'validate', 'render', 'capabilities'];
-export const HELP = `BPMN Weave — local BPMN process modeling
+export const HELP = `OpenBPMN — local BPMN process modeling
 
 Requires Node.js 24.x. Generation/rendering also require an installed Chrome or Edge.
 No browser is downloaded. No account, server, or network is used by the CLI.
 
-  bpmn-weave generate --input <request.json|handoff.openbpmn.json|-> --output <stem>
+  openbpmn generate --input <request.json|handoff.openbpmn.json|-> --output <stem>
     [--export auto|clean|snapshot] [--replace] [--handoff <sibling.openbpmn.json>]
     [--expert-invalid] [--browser-executable <absolute-path>]
-  bpmn-weave validate --input <process.bpmn> [--compatibility <profile-id>]
-  bpmn-weave render --input <process.bpmn> --output <preview.svg>
+  openbpmn validate --input <process.bpmn> [--compatibility <profile-id>]
+  openbpmn render --input <process.bpmn> --output <preview.svg>
     [--replace] [--browser-executable <absolute-path>]
-  bpmn-weave capabilities [--browser-executable <absolute-path>]
+  openbpmn capabilities [--browser-executable <absolute-path>]
 
 Common: --json (default), --human, --debug (technical stderr only), --help, --version.
 generate creates <stem>.bpmn, <stem>.svg, and <stem>.quality.json.

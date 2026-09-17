@@ -28,7 +28,7 @@ function run(args) {
 }
 
 test('the published purchase example reproduces from its authored request without stale artifacts', async (t) => {
-  const dir = await realpath(await mkdtemp(join(tmpdir(), 'bpmn-weave-published-example-')));
+  const dir = await realpath(await mkdtemp(join(tmpdir(), 'openbpmn-published-example-')));
   t.after(() => rm(dir, { recursive: true, force: true }));
   const input = fileURLToPath(new URL('../examples/purchase-approval.json', import.meta.url));
   const suffixes = ['bpmn', 'svg', 'quality.json'];
@@ -78,7 +78,7 @@ test('the published purchase example reproduces from its authored request withou
 });
 
 test('a user generates and inspects a complete, valid three-file Output Bundle', async (t) => {
-  const dir = await realpath(await mkdtemp(join(tmpdir(), 'bpmn-weave-generate-')));
+  const dir = await realpath(await mkdtemp(join(tmpdir(), 'openbpmn-generate-')));
   t.after(() => rm(dir, { recursive: true, force: true }));
   const result = await run(['generate', '--input', example, '--output', join(dir, 'invoice')]);
   assert.equal(result.code, 0, result.stdout + result.stderr);
@@ -109,7 +109,7 @@ for (const [primaryKind, identicalDocumentation] of [
   ['Process', true],
 ]) {
   test(`generation preserves model and ${primaryKind} documentation separately${identicalDocumentation ? ' even when identical' : ''}`, async (t) => {
-    const dir = await realpath(await mkdtemp(join(tmpdir(), 'bpmn-weave-documentation-')));
+    const dir = await realpath(await mkdtemp(join(tmpdir(), 'openbpmn-documentation-')));
     t.after(() => rm(dir, { recursive: true, force: true }));
     const modelDocumentation = 'Model scope:\nPreserve <review> & its boundaries.';
     const primaryDocumentation = identicalDocumentation ? modelDocumentation : 'Primary subject instructions.';
@@ -201,7 +201,7 @@ for (const [primaryKind, identicalDocumentation] of [
 }
 
 test('a requested Snapshot and Handoff retain a consequential question without forcing a lifecycle status', async (t) => {
-  const dir = await realpath(await mkdtemp(join(tmpdir(), 'bpmn-weave-snapshot-')));
+  const dir = await realpath(await mkdtemp(join(tmpdir(), 'openbpmn-snapshot-')));
   t.after(() => rm(dir, { recursive: true, force: true }));
   const request = JSON.parse(await readFile(example, 'utf8'));
   request.issues = [
@@ -239,7 +239,7 @@ test('a requested Snapshot and Handoff retain a consequential question without f
 });
 
 test('an explicit expert export preserves semantic failures in distinct files without touching a normal bundle', async (t) => {
-  const dir = await realpath(await mkdtemp(join(tmpdir(), 'bpmn-weave-expert-')));
+  const dir = await realpath(await mkdtemp(join(tmpdir(), 'openbpmn-expert-')));
   t.after(() => rm(dir, { recursive: true, force: true }));
   const stem = join(dir, 'invoice');
   const originals = ['previous model', 'previous preview', 'previous assessment'];
@@ -281,7 +281,7 @@ test('an explicit expert export preserves semantic failures in distinct files wi
 });
 
 test('the CLI redacts companion credentials but refuses credentials in process meaning without exposing context', async (t) => {
-  const dir = await realpath(await mkdtemp(join(tmpdir(), 'bpmn-weave-secrets-')));
+  const dir = await realpath(await mkdtemp(join(tmpdir(), 'openbpmn-secrets-')));
   t.after(() => rm(dir, { recursive: true, force: true }));
   const request = JSON.parse(await readFile(example, 'utf8'));
   const secret = 'ghp_' + 'S'.repeat(36);
@@ -313,7 +313,7 @@ test('the CLI redacts companion credentials but refuses credentials in process m
 });
 
 test('auto and clean refuse consequential ambiguity while an accepted omission can be exported cleanly', async (t) => {
-  const dir = await realpath(await mkdtemp(join(tmpdir(), 'bpmn-weave-export-matrix-')));
+  const dir = await realpath(await mkdtemp(join(tmpdir(), 'openbpmn-export-matrix-')));
   t.after(() => rm(dir, { recursive: true, force: true }));
   const request = JSON.parse(await readFile(example, 'utf8'));
   request.issues = [
@@ -351,7 +351,7 @@ test('auto and clean refuse consequential ambiguity while an accepted omission c
 });
 
 test('a valid expert request is refused without falsifying checks or creating invalid artifacts', async (t) => {
-  const dir = await realpath(await mkdtemp(join(tmpdir(), 'bpmn-weave-unneeded-expert-')));
+  const dir = await realpath(await mkdtemp(join(tmpdir(), 'openbpmn-unneeded-expert-')));
   t.after(() => rm(dir, { recursive: true, force: true }));
   const response = await run([
     'generate',
@@ -373,7 +373,7 @@ test('a valid expert request is refused without falsifying checks or creating in
 });
 
 test('resuming a Handoff preserves human status and retained identities through a name correction', async (t) => {
-  const dir = await realpath(await mkdtemp(join(tmpdir(), 'bpmn-weave-resume-')));
+  const dir = await realpath(await mkdtemp(join(tmpdir(), 'openbpmn-resume-')));
   t.after(() => rm(dir, { recursive: true, force: true }));
   const request = JSON.parse(await readFile(example, 'utf8'));
   const input = join(dir, 'session.openbpmn.json');

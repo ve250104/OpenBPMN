@@ -10,7 +10,7 @@ const locations: Record<Host, { personal: string; project: string }> = {
 };
 
 export function skillDirectory(host: Host, home: string, project?: string): string {
-  return join(resolve(project ?? home), locations[host][project ? 'project' : 'personal'], 'skills', 'bpmn-weave');
+  return join(resolve(project ?? home), locations[host][project ? 'project' : 'personal'], 'skills', 'openbpmn');
 }
 
 /** Inspect known discovery locations only; never recursively search a user's files. */
@@ -67,8 +67,8 @@ export function launcherFiles(
   const bin = path.join(prefix, 'bin');
   const runtime = path.isAbsolute(runtimeExecutable) ? runtimeExecutable : path.join(releaseDir, runtimeExecutable);
   const runtimeDirectory = path.dirname(runtime);
-  return ['bpmn-weave', 'bpmn-weave-manage'].flatMap((name) => {
-    const management = name === 'bpmn-weave-manage';
+  return ['openbpmn', 'openbpmn-manage'].flatMap((name) => {
+    const management = name === 'openbpmn-manage';
     const entry = path.join(releaseDir, 'app', 'dist', management ? 'manage.js' : 'cli.js');
     if (platform !== 'win32') {
       return [
@@ -90,7 +90,7 @@ export function launcherFiles(
       {
         path: path.join(bin, name + '.ps1'),
         mode: 0o755,
-        content: `$weaveOldPath = $env:PATH\n$weaveOldNodeOptions = $env:NODE_OPTIONS\n$weaveOldNodePath = $env:NODE_PATH\n$weaveOldErrorAction = $ErrorActionPreference\n$weaveExit = 1\ntry {\n  $ErrorActionPreference = 'Stop'\n  $env:NODE_OPTIONS = $null\n  $env:NODE_PATH = $null\n  $env:PATH = ${ps(runtimeDirectory + ';' + bin + ';')} + $weaveOldPath\n  & ${ps(runtime)} ${ps(entry)}${psFixed} @args\n  $weaveExit = $LASTEXITCODE\n} finally {\n  $env:PATH = $weaveOldPath\n  $env:NODE_OPTIONS = $weaveOldNodeOptions\n  $env:NODE_PATH = $weaveOldNodePath\n  $ErrorActionPreference = $weaveOldErrorAction\n}\nexit $weaveExit\n`,
+        content: `$openbpmnOldPath = $env:PATH\n$openbpmnOldNodeOptions = $env:NODE_OPTIONS\n$openbpmnOldNodePath = $env:NODE_PATH\n$openbpmnOldErrorAction = $ErrorActionPreference\n$openbpmnExit = 1\ntry {\n  $ErrorActionPreference = 'Stop'\n  $env:NODE_OPTIONS = $null\n  $env:NODE_PATH = $null\n  $env:PATH = ${ps(runtimeDirectory + ';' + bin + ';')} + $openbpmnOldPath\n  & ${ps(runtime)} ${ps(entry)}${psFixed} @args\n  $openbpmnExit = $LASTEXITCODE\n} finally {\n  $env:PATH = $openbpmnOldPath\n  $env:NODE_OPTIONS = $openbpmnOldNodeOptions\n  $env:NODE_PATH = $openbpmnOldNodePath\n  $ErrorActionPreference = $openbpmnOldErrorAction\n}\nexit $openbpmnExit\n`,
       },
     ];
   });
@@ -102,7 +102,7 @@ export function planPathIntegration(home: string, prefix: string): Array<{ path:
   const bin = join(prefix, 'bin');
   if (bin.includes(':')) throw new Error('POSIX PATH integration cannot represent a colon in the installation path.');
   const marker = singleLine(prefix);
-  const block = `\n# >>> BPMN Weave ${marker} >>>\ncase ":\${PATH-}:" in\n  *${sh(':' + bin + ':')}*) ;;\n  *) export PATH=${sh(bin)}:"\${PATH-}" ;;\nesac\n# <<< BPMN Weave ${marker} <<<\n`;
+  const block = `\n# >>> OpenBPMN ${marker} >>>\ncase ":\${PATH-}:" in\n  *${sh(':' + bin + ':')}*) ;;\n  *) export PATH=${sh(bin)}:"\${PATH-}" ;;\nesac\n# <<< OpenBPMN ${marker} <<<\n`;
   return ['.profile', '.bash_profile', '.bash_login', '.bashrc', '.zshenv'].map((name) => ({
     path: join(home, name),
     block,

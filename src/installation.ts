@@ -76,8 +76,8 @@ export interface InstallationState {
 
 export function defaultPrefix(): string {
   return process.platform === 'win32'
-    ? join(process.env.LOCALAPPDATA ?? join(homedir(), 'AppData', 'Local'), 'BPMNWeave')
-    : join(homedir(), '.local', 'share', 'bpmn-weave');
+    ? join(process.env.LOCALAPPDATA ?? join(homedir(), 'AppData', 'Local'), 'OpenBPMN')
+    : join(homedir(), '.local', 'share', 'openbpmn');
 }
 
 function execute(runtime: string, script: string, args: string[], timeout = 60_000) {
@@ -121,7 +121,7 @@ export async function readState(prefix: string): Promise<InstallationState> {
 export async function windowsPath(prefix: string, action: 'add' | 'remove' | 'contains'): Promise<boolean> {
   if (process.platform !== 'win32') return false;
   const script =
-    "$p=[Environment]::GetEnvironmentVariable('Path','User'); $entry=$env:BPMN_WEAVE_BIN; $parts=@($p -split ';' | Where-Object { $_ }); " +
+    "$p=[Environment]::GetEnvironmentVariable('Path','User'); $entry=$env:OPENBPMN_BIN; $parts=@($p -split ';' | Where-Object { $_ }); " +
     (action === 'contains'
       ? "if ($parts -contains $entry) { Write-Output 'changed' } else { Write-Output 'absent' }"
       : action === 'add'
@@ -130,7 +130,7 @@ export async function windowsPath(prefix: string, action: 'add' | 'remove' | 'co
   const result = spawnSync('powershell.exe', ['-NoProfile', '-NonInteractive', '-Command', script], {
     encoding: 'utf8',
     timeout: 15_000,
-    env: { ...process.env, BPMN_WEAVE_BIN: join(prefix, 'bin') },
+    env: { ...process.env, OPENBPMN_BIN: join(prefix, 'bin') },
   });
   if (result.status !== 0) throw new Error('Could not update the user PATH. Close other setup processes and retry.');
   return result.stdout.trim() === 'changed';
@@ -168,7 +168,7 @@ export async function example(
   }
   const directory = output
     ? await destination(output)
-    : await mkdtemp(join(await destination(tmpdir()), 'bpmn-weave-example-'));
+    : await mkdtemp(join(await destination(tmpdir()), 'openbpmn-example-'));
   await noLinks(directory);
   await mkdir(directory, { recursive: true });
   const generated = execute(runtime, cli, [
@@ -300,7 +300,7 @@ export async function setup(options: ManagementOptions): Promise<ManagementResul
     await distributionAt(release);
     options.signal?.throwIfAborted();
     undo.push(() => rm(skillPath, { recursive: true, force: true }));
-    await copyInventory(join(release, 'app/skills/bpmn-weave'), skillPath, state.skill.files);
+    await copyInventory(join(release, 'app/skills/openbpmn'), skillPath, state.skill.files);
     for (const launcher of plannedLaunchers) {
       options.signal?.throwIfAborted();
       if (await exists(launcher.path)) throw new Error('An unowned launcher already exists: ' + launcher.path);
@@ -376,8 +376,8 @@ function setupReport(
     artifacts: verification.artifacts,
     nextSteps: [
       'Open a new login shell and restart the selected Host Agent so it can discover the skill and command.',
-      'In your agent, ask: Use bpmn-weave to help me describe and review our invoice approval process.',
-      'Run bpmn-weave-manage doctor to check local installation health.',
+      'In your agent, ask: Use openbpmn to help me describe and review our invoice approval process.',
+      'Run openbpmn-manage doctor to check local installation health.',
     ],
   };
 }
@@ -425,7 +425,7 @@ export async function doctor(options: ManagementOptions): Promise<ManagementResu
       message: error instanceof Error ? error.message : 'Installation integrity check failed.',
     });
   }
-  const binary = process.platform === 'win32' ? 'bpmn-weave.cmd' : 'bpmn-weave';
+  const binary = process.platform === 'win32' ? 'openbpmn.cmd' : 'openbpmn';
   let resolved: string | undefined;
   for (const directory of (process.env.PATH ?? '').split(delimiter).filter(isAbsolute)) {
     const candidate = join(directory, binary);
@@ -439,7 +439,7 @@ export async function doctor(options: ManagementOptions): Promise<ManagementResu
     status: resolved === join(prefix, 'bin', binary) ? 'pass' : 'fail',
     message:
       resolved === join(prefix, 'bin', binary)
-        ? 'This shell resolves bpmn-weave to the managed launcher.'
+        ? 'This shell resolves openbpmn to the managed launcher.'
         : 'This shell does not resolve the managed launcher first. Open a new login shell, restart the Host Agent, or invoke the launcher at ' +
           join(prefix, 'bin', binary) +
           '.',
@@ -453,7 +453,7 @@ export async function doctor(options: ManagementOptions): Promise<ManagementResu
       : 'Canonical skill installed at ' + state.skill.path,
   });
   if (verified) {
-    const temporary = await mkdtemp(join(await destination(tmpdir()), 'bpmn-weave-doctor-'));
+    const temporary = await mkdtemp(join(await destination(tmpdir()), 'openbpmn-doctor-'));
     try {
       const tested = await example(prefix, state, options.browser ?? state.browser, temporary);
       checks.push(...tested.checks);
@@ -479,7 +479,7 @@ export async function doctor(options: ManagementOptions): Promise<ManagementResu
       : 'Requested local installation checks passed; actual Host Agent discovery and release qualification remain separate.',
     checks,
     nextSteps: failed
-      ? ['Resolve the failed checks and rerun bpmn-weave-manage doctor.']
-      : ['Ask the selected Host Agent to use bpmn-weave to model a process.'],
+      ? ['Resolve the failed checks and rerun openbpmn-manage doctor.']
+      : ['Ask the selected Host Agent to use openbpmn to model a process.'],
   };
 }

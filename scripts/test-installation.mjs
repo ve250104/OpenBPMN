@@ -10,9 +10,9 @@ import { offlineSmoke } from './test-offline.mjs';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const version = JSON.parse(await readFile(join(root, 'package.json'), 'utf8')).version;
 const candidate = resolve(
-  process.argv[2] ?? join(root, '.artifacts', `bpmn-weave-${version}-${process.platform}-${process.arch}`),
+  process.argv[2] ?? join(root, '.artifacts', `openbpmn-${version}-${process.platform}-${process.arch}`),
 );
-const home = await realpath(await mkdtemp(join(tmpdir(), 'bpmn-weave-install-')));
+const home = await realpath(await mkdtemp(join(tmpdir(), 'openbpmn-install-')));
 const extracted = join(home, 'extracted');
 await mkdir(extracted);
 const unpacked = spawnSync('tar', ['-xf', candidate + '.zip', '-C', extracted], { encoding: 'utf8' });
@@ -21,9 +21,9 @@ const bundle = join(extracted, basename(candidate));
 const manifest = JSON.parse(await readFile(join(bundle, 'manifest.json'), 'utf8'));
 const runtime = join(bundle, manifest.runtimeExecutable);
 const manager = join(bundle, 'app', 'dist', 'manage.js');
-const prefix = join(home, 'BPMN Weave – München');
+const prefix = join(home, 'OpenBPMN – München');
 const output = join(home, 'first example');
-const browser = process.env.BPMN_WEAVE_BROWSER_EXECUTABLE;
+const browser = process.env.OPENBPMN_BROWSER_EXECUTABLE;
 const browserArgs = browser ? ['--browser-executable', browser] : [];
 const env = { ...process.env, HOME: home, USERPROFILE: home };
 function bootstrap(args) {
@@ -43,7 +43,7 @@ function bootstrap(args) {
     env: {
       ...env,
       PATH: process.platform === 'win32' ? join(process.env.SystemRoot ?? 'C:\\Windows', 'System32') : '',
-      NODE_OPTIONS: '--require=/definitely-missing-weave-qualification-hook',
+      NODE_OPTIONS: '--require=/definitely-missing-openbpmn-qualification-hook',
       NODE_PATH: '/definitely-missing-node-path',
     },
   });
@@ -88,7 +88,7 @@ try {
   assert.match(await readFile(join(output, 'example.svg'), 'utf8'), /data-element-id="M_review"/);
   assert.equal(JSON.parse(await readFile(join(output, 'example.quality.json'), 'utf8')).export.outcome, 'clean');
   assert.equal(
-    JSON.parse(await readFile(join(home, '.agents', 'skills', 'bpmn-weave', 'version.json'), 'utf8')).toolVersion,
+    JSON.parse(await readFile(join(home, '.agents', 'skills', 'openbpmn', 'version.json'), 'utf8')).toolVersion,
     version,
   );
   assert.match(await readFile(join(home, '.profile'), 'utf8'), /export KEEP_MY_SETTING=yes/);
@@ -103,22 +103,22 @@ try {
         '-NoProfile',
         '-NonInteractive',
         '-Command',
-        "$env:PATH=[Environment]::GetEnvironmentVariable('Path','Machine')+';'+[Environment]::GetEnvironmentVariable('Path','User'); bpmn-weave capabilities",
+        "$env:PATH=[Environment]::GetEnvironmentVariable('Path','Machine')+';'+[Environment]::GetEnvironmentVariable('Path','User'); openbpmn capabilities",
       ],
-      { encoding: 'utf8', env: { ...env, NODE_OPTIONS: '--require=/definitely-missing-weave-qualification-hook' } },
+      { encoding: 'utf8', env: { ...env, NODE_OPTIONS: '--require=/definitely-missing-openbpmn-qualification-hook' } },
     );
   } else {
     const fakeBin = join(home, 'another-node');
     await mkdir(fakeBin);
     await writeFile(join(fakeBin, 'node'), '#!/bin/sh\nexit 97\n');
     await chmod(join(fakeBin, 'node'), 0o755);
-    shell = spawnSync(process.platform === 'darwin' ? '/bin/zsh' : '/bin/bash', ['-lc', 'bpmn-weave capabilities'], {
+    shell = spawnSync(process.platform === 'darwin' ? '/bin/zsh' : '/bin/bash', ['-lc', 'openbpmn capabilities'], {
       encoding: 'utf8',
       env: {
         ...env,
         ZDOTDIR: home,
         PATH: fakeBin,
-        NODE_OPTIONS: '--require=/definitely-missing-weave-qualification-hook',
+        NODE_OPTIONS: '--require=/definitely-missing-openbpmn-qualification-hook',
       },
     });
   }
@@ -126,7 +126,7 @@ try {
   assert.equal(JSON.parse(shell.stdout).capabilities.runtime.nodeVersion, manifest.nodeVersion);
   env.PATH = join(prefix, 'bin') + delimiter + env.PATH;
   if (process.platform !== 'win32') {
-    const launcher = join(prefix, 'bin', 'bpmn-weave');
+    const launcher = join(prefix, 'bin', 'openbpmn');
     await chmod(launcher, 0o644);
     try {
       const brokenLauncher = run(['doctor', ...browserArgs], 1, installedManager, installedRuntime);

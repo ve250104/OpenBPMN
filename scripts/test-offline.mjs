@@ -9,14 +9,14 @@ import { verifyNetworkIsolation } from './offline-isolation.mjs';
 /** Test infrastructure only. Browser netlog covers background requests, not just page interception. */
 export async function offlineSmoke(cli, fixture, browser, options = {}) {
   if (options.manager) assert.ok(options.prefix, 'An installed manager requires its installation prefix.');
-  const useExistingNamespace = process.env.BPMN_WEAVE_TEST_NETWORK_ISOLATED === '1';
+  const useExistingNamespace = process.env.OPENBPMN_TEST_NETWORK_ISOLATED === '1';
   if (useExistingNamespace) await verifyNetworkIsolation();
   if (!['darwin', 'linux'].includes(process.platform))
     return {
       status: 'not_run',
       reason: 'Network isolation needs the Linux namespace harness; no Windows isolation result is asserted.',
     };
-  const directory = await realpath(await mkdtemp(join(tmpdir(), 'bpmn-weave-offline-')));
+  const directory = await realpath(await mkdtemp(join(tmpdir(), 'openbpmn-offline-')));
   const wrapper = fileURLToPath(new URL('./offline-browser.sh', import.meta.url));
   const hook = fileURLToPath(new URL('./offline-node.cjs', import.meta.url));
   const isolationRunner = fileURLToPath(new URL('./offline-isolation.mjs', import.meta.url));
@@ -24,7 +24,7 @@ export async function offlineSmoke(cli, fixture, browser, options = {}) {
   const browserLog = join(directory, 'browser-network.json');
   const nodeLog = join(directory, 'node-network.txt');
   try {
-    const useNamespace = process.platform === 'linux' && process.env.BPMN_WEAVE_TEST_NETWORK_NAMESPACE === '1';
+    const useNamespace = process.platform === 'linux' && process.env.OPENBPMN_TEST_NETWORK_NAMESPACE === '1';
     assert.ok(!(useNamespace && useExistingNamespace), 'Choose one Linux network isolation mode.');
     const isolationEvidence = [];
     const env = {
@@ -35,15 +35,15 @@ export async function offlineSmoke(cli, fixture, browser, options = {}) {
       PATH: options.manager
         ? [join(options.prefix, 'bin'), process.env.PATH].filter(Boolean).join(delimiter)
         : process.env.PATH,
-      BPMN_WEAVE_TEST_BROWSER: browser,
-      BPMN_WEAVE_TEST_NETLOG: browserLog,
-      BPMN_WEAVE_TEST_NODE_NETLOG: nodeLog,
+      OPENBPMN_TEST_BROWSER: browser,
+      OPENBPMN_TEST_NETLOG: browserLog,
+      OPENBPMN_TEST_NODE_NETLOG: nodeLog,
     };
     const forwarded = [
       'NODE_OPTIONS',
-      'BPMN_WEAVE_TEST_BROWSER',
-      'BPMN_WEAVE_TEST_NETLOG',
-      'BPMN_WEAVE_TEST_NODE_NETLOG',
+      'OPENBPMN_TEST_BROWSER',
+      'OPENBPMN_TEST_NETLOG',
+      'OPENBPMN_TEST_NODE_NETLOG',
       'PATH',
       'HOME',
       'USERPROFILE',

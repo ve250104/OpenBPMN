@@ -16,7 +16,7 @@ function command(args, expected = 0) {
   return JSON.parse(result.stdout);
 }
 async function workspace(t) {
-  const directory = await realpath(await mkdtemp(join(tmpdir(), 'bpmn-weave-supplied-semantics-')));
+  const directory = await realpath(await mkdtemp(join(tmpdir(), 'openbpmn-supplied-semantics-')));
   t.after(() => rm(directory, { recursive: true, force: true }));
   return directory;
 }

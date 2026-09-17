@@ -5,7 +5,7 @@ const childProcess = require('node:child_process');
 const { basename } = require('node:path');
 const { syncBuiltinESMExports } = require('node:module');
 function denied(operation) {
-  fs.appendFileSync(process.env.BPMN_WEAVE_TEST_NODE_NETLOG, operation + '\n', { mode: 0o600 });
+  fs.appendFileSync(process.env.OPENBPMN_TEST_NODE_NETLOG, operation + '\n', { mode: 0o600 });
   throw new Error('Offline qualification refused a network attempt.');
 }
 const originalConnect = net.Socket.prototype.connect;

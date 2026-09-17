@@ -10,7 +10,7 @@ import { assertBundledDependencies } from '../scripts/package-dependencies.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 test('the distributed application installs offline with an empty cache and its exact production dependency tree', async (t) => {
-  const temporary = await mkdtemp(join(tmpdir(), 'bpmn-weave-bundled-'));
+  const temporary = await mkdtemp(join(tmpdir(), 'openbpmn-bundled-'));
   t.after(() => rm(temporary, { recursive: true, force: true }));
   const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
   const invoke = (args, cwd = temporary) => {
@@ -46,7 +46,7 @@ test('the distributed application installs offline with an empty cache and its e
     '--no-fund',
     join(temporary, packed.filename),
   ]);
-  const packageRoot = join(prefix, 'node_modules/@ve250104/bpmn-weave');
+  const packageRoot = join(prefix, 'node_modules/@ve250104/openbpmn');
   const lock = JSON.parse(await readFile(join(root, 'npm-shrinkwrap.json'), 'utf8'));
   assert.equal((await assertBundledDependencies(lock, packageRoot)).status, 'passed');
   const requireFromApp = createRequire(join(packageRoot, 'package.json'));

@@ -18,7 +18,7 @@ const run = (args, home) => {
 };
 
 test('setup refuses an unverified distribution without changing existing user files', async () => {
-  const home = await mkdtemp(join(tmpdir(), 'weave-install-'));
+  const home = await mkdtemp(join(tmpdir(), 'openbpmn-install-'));
   try {
     const profile = join(home, '.profile');
     await writeFile(profile, 'export MY_SETTING=keep\n');
@@ -40,10 +40,10 @@ test('setup refuses an unverified distribution without changing existing user fi
 async function candidate(directory) {
   const runtime = process.platform === 'win32' ? 'runtime/node.exe' : 'runtime/bin/node';
   const contents = {
-    'app/package.json': JSON.stringify({ name: '@ve250104/bpmn-weave', version: '0.1.0-dev.0' }),
+    'app/package.json': JSON.stringify({ name: '@ve250104/openbpmn', version: '0.1.0-dev.0' }),
     'app/dist/cli.js': 'throw new Error("This preflight fixture must never execute");\n',
     'app/dist/manage.js': 'throw new Error("This preflight fixture must never execute");\n',
-    'app/skills/bpmn-weave/version.json': JSON.stringify({ toolVersion: '0.1.0-dev.0' }),
+    'app/skills/openbpmn/version.json': JSON.stringify({ toolVersion: '0.1.0-dev.0' }),
     [runtime]: 'Inert test runtime; never executable.\n',
   };
   const files = [];
@@ -87,7 +87,7 @@ async function snapshot(directory, prefix = '') {
 }
 
 test('noninteractive setup requires an explicit host and returns invalid usage without filesystem changes', async () => {
-  const home = await mkdtemp(join(tmpdir(), 'weave-install-'));
+  const home = await mkdtemp(join(tmpdir(), 'openbpmn-install-'));
   try {
     await writeFile(join(home, '.profile'), 'export USER_SETTING=preserve\n');
     const before = await snapshot(home);
@@ -102,7 +102,7 @@ test('noninteractive setup requires an explicit host and returns invalid usage w
 });
 
 test('management rejects options belonging to another operation instead of silently ignoring them', async () => {
-  const home = await mkdtemp(join(tmpdir(), 'weave-install-'));
+  const home = await mkdtemp(join(tmpdir(), 'openbpmn-install-'));
   try {
     await writeFile(join(home, 'keep.txt'), 'unrelated user material');
     const before = await snapshot(home);
@@ -116,7 +116,7 @@ test('management rejects options belonging to another operation instead of silen
 });
 
 test('conflicting repeated installation prefixes are refused rather than selecting a different target', async () => {
-  const home = await mkdtemp(join(tmpdir(), 'weave-install-'));
+  const home = await mkdtemp(join(tmpdir(), 'openbpmn-install-'));
   try {
     await writeFile(join(home, 'keep.txt'), 'unrelated user material');
     const before = await snapshot(home);
@@ -130,7 +130,7 @@ test('conflicting repeated installation prefixes are refused rather than selecti
 });
 
 test('a candidate for another operating system is refused before installation and preserves the complete user tree', async () => {
-  const home = await mkdtemp(join(tmpdir(), 'weave-install-'));
+  const home = await mkdtemp(join(tmpdir(), 'openbpmn-install-'));
   try {
     const bundle = join(home, 'bundle');
     const manifest = await candidate(bundle);
@@ -148,7 +148,7 @@ test('a candidate for another operating system is refused before installation an
 });
 
 test('a symlinked payload directory cannot redirect installation reads or modify its target', async () => {
-  const home = await mkdtemp(join(tmpdir(), 'weave-install-'));
+  const home = await mkdtemp(join(tmpdir(), 'openbpmn-install-'));
   try {
     const bundle = join(home, 'bundle');
     await candidate(bundle);
@@ -168,7 +168,7 @@ test('a symlinked payload directory cannot redirect installation reads or modify
 });
 
 test('a changed application payload fails inventory verification before skill registration or shell integration', async () => {
-  const home = await mkdtemp(join(tmpdir(), 'weave-install-'));
+  const home = await mkdtemp(join(tmpdir(), 'openbpmn-install-'));
   try {
     const bundle = join(home, 'bundle');
     await candidate(bundle);
@@ -185,7 +185,7 @@ test('a changed application payload fails inventory verification before skill re
 });
 
 test('setup rejects traversal in a distribution inventory before reading or writing its payload', async () => {
-  const home = await mkdtemp(join(tmpdir(), 'weave-install-'));
+  const home = await mkdtemp(join(tmpdir(), 'openbpmn-install-'));
   try {
     const bundle = join(home, 'bundle');
     await mkdir(bundle);
@@ -211,7 +211,7 @@ test('setup rejects traversal in a distribution inventory before reading or writ
 });
 
 test('doctor explains an absent installation without creating state or searching user content', async () => {
-  const home = await mkdtemp(join(tmpdir(), 'weave-install-'));
+  const home = await mkdtemp(join(tmpdir(), 'openbpmn-install-'));
   try {
     const result = run(['doctor', '--prefix', join(home, 'install')], home);
     assert.equal(result.status, 1);

@@ -235,7 +235,7 @@ async function rollbackUpdate(prefix: string, journal: UpdateJournal): Promise<s
   if (await exists(backup)) {
     // Cleanup may have been interrupted after commit. Recreate any missing
     // unchanged backup files from the immutable previous release before restore.
-    await copyInventory(join(prefix, previous.release, 'app/skills/bpmn-weave'), backup, previous.skill.files);
+    await copyInventory(join(prefix, previous.release, 'app/skills/openbpmn'), backup, previous.skill.files);
     await verifyFiles(backup, previous.skill.files);
     if (await exists(previous.skill.path)) {
       await removeInventory(
@@ -253,7 +253,7 @@ async function rollbackUpdate(prefix: string, journal: UpdateJournal): Promise<s
         throw new Error('Could not restore previous skill safely. Retry --recover.');
     }
     await copyInventory(
-      join(prefix, previous.release, 'app/skills/bpmn-weave'),
+      join(prefix, previous.release, 'app/skills/openbpmn'),
       previous.skill.path,
       previous.skill.files,
     );
@@ -427,7 +427,7 @@ export async function update(options: ManagementOptions): Promise<ManagementResu
     ];
     await atomicWrite(pendingPath(prefix), serialized(journal));
     checkpoint();
-    await copyInventory(join(release, 'app/skills/bpmn-weave'), stage, next.skill.files);
+    await copyInventory(join(release, 'app/skills/openbpmn'), stage, next.skill.files);
     await verifyFiles(stage, next.skill.files);
     await verifyInstalled(prefix, previous);
     checkpoint();
@@ -467,7 +467,7 @@ export async function update(options: ManagementOptions): Promise<ManagementResu
     artifacts: verification.artifacts,
     nextSteps: [
       'Restart the selected Host Agent to discover the updated skill.',
-      'Run bpmn-weave-manage doctor to check the installation.',
+      'Run openbpmn-manage doctor to check the installation.',
     ],
     ...(retained.size ? { retained: [...retained] } : {}),
   };
@@ -491,7 +491,7 @@ async function removeInstallation(
       await noLinks(profile.path);
       const before = await readFile(profile.path, 'utf8');
       if (!before.includes(profile.block)) {
-        if (before.includes('# >>> BPMN Weave ' + prefix)) retained.add(profile.path);
+        if (before.includes('# >>> OpenBPMN ' + prefix)) retained.add(profile.path);
         continue;
       }
       if (before.split(profile.block).length !== 2) {

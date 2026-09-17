@@ -11,7 +11,7 @@ import { variants } from '../eval/composition/notation-variants.mjs';
 
 for (const fixture of variants) {
   test(fixture.title, async (t) => {
-    const directory = await realpath(await mkdtemp(join(tmpdir(), 'bpmn-weave-profile-')));
+    const directory = await realpath(await mkdtemp(join(tmpdir(), 'openbpmn-profile-')));
     let passed = false;
     t.after(async () => {
       if (passed) await rm(directory, { recursive: true, force: true });

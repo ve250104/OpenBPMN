@@ -1,46 +1,10 @@
-# Consulting Core Profile
+# Supported BPMN reference
 
-## Decision
+OpenBPMN uses the **Consulting Core 1.0.0** profile for design-time BPMN 2.0.2 Processes and Collaborations. Task and event types describe process meaning; they do not configure or execute a workflow engine. Choreographies and Conversations are outside the profile.
 
-OpenBPMN will publish a versioned **Consulting Core Profile** for design-time Process and Collaboration modeling. Version 1 is broad enough for the large majority of process discovery, documentation, analysis, and handoff scenarios while making every unsupported concept explicit.
+The profile version is separate from the application version. This reference describes the notation scope and constraints; OpenBPMN remains a prerelease with the limitations listed in [support status](support.md). It does not claim official OMG conformance or certification.
 
-The profile is informed by the OMG BPMN 2.0.2 Analytic subclass but is not presented as official OMG Process Modeling or Analytic conformance. OpenBPMN may make such a claim only after every applicable normative requirement is implemented and independently evidenced.
-
-## Profile identity
-
-- Profile name: **OpenBPMN Consulting Core**
-- Initial version: **1.0.0**
-- BPMN interchange target: **BPMN 2.0.2**
-- Modeling purpose: **Design-Time Models**
-- Supported model families: **Processes and Collaborations**
-- Explicitly excluded model families: **Choreographies and Conversations**
-- Execution promise: **none**; task and event types communicate design-time meaning only
-
-The project's eventual public name may change without changing the profile's semantic contract.
-
-Consulting Core 1.0.0 is the support contract required for the finished v0 release. The profile version and product release version are separate. Every concept classified Supported below must meet the complete evidence bar before v0 is finished; the [v0 release contract](product-direction.md) does not allow a partial-profile demonstration to substitute for that release.
-
-## Meaning of support
-
-A BPMN concept is **Supported** only when OpenBPMN can:
-
-1. derive it from Structured Process Evidence;
-2. represent its meaning without approximation;
-3. serialize its required elements, attributes, and references correctly;
-4. generate complete BPMN DI for every visible shape, connector, and label;
-5. enforce its BPMN placement and relationship constraints;
-6. render it deterministically; and
-7. demonstrate positive and negative behavior with fixtures.
-
-The stable matrix has three classifications:
-
-| Classification | Meaning |
-| --- | --- |
-| Supported | Meets the complete quality bar above. |
-| Deferred | Valid BPMN deliberately outside the current profile. OpenBPMN reports it precisely and does not approximate it. |
-| Invalid | The requested placement or relationship violates BPMN or the selected modeling context. |
-
-The stable profile does not use “partial,” “experimental,” or “best effort.” A Deferred Concept can move to Supported only through a profile release with the complete evidence package.
+Run `openbpmn capabilities` to inspect the profile recognized by your installed version. Supported concepts are represented, validated, laid out, and exported within the constraints below. Deferred concepts are outside the profile and reported explicitly. An illegal placement or relationship is invalid even when its individual element types are supported.
 
 ## Supported concept matrix
 
@@ -139,7 +103,7 @@ The following are valid BPMN concepts but outside Consulting Core 1.0.0:
 - engine-specific task configuration, expressions, connectors, listeners, deployment metadata, and input/output mappings; and
 - vendor extensions, including Celonis eBPMN or execution-engine namespaces.
 
-When a Deferred Concept is required, OpenBPMN returns a stable diagnostic, retains the requirement in Session State and the Quality Report, and explains supported alternatives. It may use an alternative only after explicit human approval. It never silently removes, downgrades, or substitutes the concept. An explicitly requested Handoff File preserves the requirement for a later session.
+When a Deferred Concept is required, OpenBPMN returns a stable diagnostic, retains the requirement in the conversation and the Quality Report, and explains supported alternatives. It may use an alternative only after explicit human approval. It never silently removes, downgrades, or substitutes the concept. An explicitly requested Handoff File preserves the requirement for a later session.
 
 ## Model constraints
 
@@ -154,7 +118,7 @@ Every generated artifact follows these profile rules:
 7. Processes are design-time models and carry no implied executability.
 8. BPMN standard documentation content is allowed only when intentionally approved as process meaning.
 9. OpenBPMN metadata, quality findings, assumptions, and Lifecycle Status remain in companion artifacts.
-10. Unsupported requirements remain visible in Session State and the Quality Report even when omitted from a Snapshot Export.
+10. Unsupported requirements remain visible in the conversation and the Quality Report even when omitted from a Snapshot Export.
 
 ## Snapshot and Clean Export behavior
 
@@ -172,7 +136,7 @@ A human may request a Snapshot Export at any point for sharing or clarification.
 
 OpenBPMN makes the snapshot well-formed, schema-valid, and semantically valid whenever technically possible. Its Quality Report declares every limitation. “Snapshot” describes the artifact operation, not a forced draft or working status.
 
-If structurally valid BPMN cannot be produced, OpenBPMN returns the Quality Report through the result envelope and preserves the previous Output Bundle. The Host Agent may show the preserved preview and identify it as unchanged; no new partial normal bundle or preview-from-chat is implied. The human may explicitly request a Handoff File. Invalid `.bpmn` output requires the explicit expert option and distinct artifact names defined in the [export contract](contracts.md); it is never called a Clean Export.
+If structurally valid BPMN cannot be produced, OpenBPMN returns the Quality Report through the result envelope and preserves the previous Output Bundle. The Host Agent may show the preserved preview and identify it as unchanged; no new partial normal bundle or preview-from-chat is implied. The human may explicitly request a Handoff File. Invalid `.bpmn` output requires the explicit expert option and distinct artifact names defined in the [command reference](commands.md); it is never called a Clean Export.
 
 ### Clean Export
 
@@ -198,29 +162,4 @@ Blocking Model Validity findings and advisory consulting-quality findings are se
 | Consulting quality | Vague task names, unclear ownership, missing exception detail, avoidable complexity | Reported; does not block Clean Export by default |
 | Human governance | Draft, working version, reviewed, approved | Never inferred; does not determine technical export validity |
 
-The [export and Quality Report contract](contracts.md) defines severity, overrides, exact check requirements, and command outcomes within these category boundaries.
-
-## Versioning and evidence
-
-The Consulting Core Profile follows semantic versioning:
-
-- **Patch**: clarifies rules or fixes behavior without changing the supported semantic contract.
-- **Minor**: adds Supported Concepts or backward-compatible capabilities.
-- **Major**: removes or changes supported meaning, artifact rules, or validation behavior incompatibly.
-
-Every release publishes:
-
-1. an element-and-attribute conformance matrix;
-2. legal-placement and relationship rules;
-3. positive fixtures for every Supported Concept;
-4. negative fixtures for invalid placements, references, and Deferred Concepts;
-5. expected semantic-graph snapshots;
-6. expected BPMN DI and deterministic renderings; and
-7. validation and downstream-consumer observations where applicable.
-
-## Related evidence and decisions
-
-- [BPMN and downstream interoperability baseline](https://github.com/ve250104/OpenBPMN/issues/6)
-- [OpenBPMN product boundary](product-boundary.md)
-
-The [structured contract](contracts.md), [architecture](architecture.md), [runtime toolchain](runtime-toolchain.md), and [acceptance and compatibility contract](acceptance-and-compatibility.md) supply the implementation decisions and required verification. Executing those checks belongs to the build and release work.
+See the [command reference](commands.md) for export options and exit codes, and the [protocol reference](../skills/openbpmn/references/protocol.md) for Quality Report fields and completion signals.

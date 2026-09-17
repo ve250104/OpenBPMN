@@ -10,12 +10,12 @@ import { fileURLToPath } from 'node:url';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const version = JSON.parse(await readFile(join(root, 'package.json'), 'utf8')).version;
 const bundle = resolve(
-  process.argv[2] ?? join(root, '.artifacts', `bpmn-weave-${version}-${process.platform}-${process.arch}`),
+  process.argv[2] ?? join(root, '.artifacts', `openbpmn-${version}-${process.platform}-${process.arch}`),
 );
 const manifest = JSON.parse(await readFile(join(bundle, 'manifest.json'), 'utf8'));
 const runtime = join(bundle, manifest.runtimeExecutable);
 const manager = join(bundle, 'app/dist/manage.js');
-const home = await realpath(await mkdtemp(join(tmpdir(), 'bpmn-weave-lifecycle-')));
+const home = await realpath(await mkdtemp(join(tmpdir(), 'openbpmn-lifecycle-')));
 const prefix = join(home, 'Managed CLI – München');
 const browser = join(home, 'missing-browser');
 const env = { ...process.env, HOME: home, USERPROFILE: home, PATH: join(prefix, 'bin') + delimiter + process.env.PATH };
@@ -29,7 +29,7 @@ const exists = async (path) =>
   );
 const syntheticVersion = version.split(/[+-]/)[0] + '-qualification.fixture';
 const syntheticBundle = join(home, 'synthetic version fixture');
-const syntheticFiles = ['app/package.json', 'app/skills/bpmn-weave/version.json'];
+const syntheticFiles = ['app/package.json', 'app/skills/openbpmn/version.json'];
 
 async function inventorySyntheticFixture(fixtureManifest, changedFiles = syntheticFiles) {
   for (const path of changedFiles) {
@@ -160,8 +160,8 @@ async function qualifyHostPlacement(host, projectScope = false) {
   const project = join(selectedHome, 'project');
   if (projectScope) await mkdir(project);
   const registration = projectScope
-    ? join(project, '.github/skills/bpmn-weave')
-    : join(selectedHome, host === 'claude' ? '.claude/skills/bpmn-weave' : '.copilot/skills/bpmn-weave');
+    ? join(project, '.github/skills/openbpmn')
+    : join(selectedHome, host === 'claude' ? '.claude/skills/openbpmn' : '.copilot/skills/openbpmn');
   const selectedEnv = { ...process.env, HOME: selectedHome, USERPROFILE: selectedHome };
   const invoke = (args, expected) => {
     const result = spawnSync(runtime, [manager, ...args, '--prefix', selectedPrefix, '--json', '--non-interactive'], {
@@ -252,8 +252,8 @@ try {
     [
       join(prefix, active.release, 'app/dist/cli.js'),
       'capabilities',
-      ...(process.env.BPMN_WEAVE_BROWSER_EXECUTABLE
-        ? ['--browser-executable', process.env.BPMN_WEAVE_BROWSER_EXECUTABLE]
+      ...(process.env.OPENBPMN_BROWSER_EXECUTABLE
+        ? ['--browser-executable', process.env.OPENBPMN_BROWSER_EXECUTABLE]
         : []),
     ],
     { cwd: home, env, encoding: 'utf8' },

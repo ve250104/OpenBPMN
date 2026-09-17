@@ -6,7 +6,7 @@ import { join } from 'node:path';
 import { prepareOutputs, commitOutputs, preservedOutputs } from '../dist/files.js';
 
 test('a complete new Output Bundle is committed with no residual staging files', async (t) => {
-  const dir = await fs.realpath(await fs.mkdtemp(join(tmpdir(), 'bpmn-weave-files-')));
+  const dir = await fs.realpath(await fs.mkdtemp(join(tmpdir(), 'openbpmn-files-')));
   t.after(() => fs.rm(dir, { recursive: true, force: true }));
   const paths = ['process.bpmn', 'process.svg', 'process.quality.json'].map((name) => join(dir, name));
   const plan = await prepareOutputs(paths);
@@ -17,7 +17,7 @@ test('a complete new Output Bundle is committed with no residual staging files',
 });
 
 test('a handled replacement failure restores every prior artifact byte-for-byte', async (t) => {
-  const dir = await fs.realpath(await fs.mkdtemp(join(tmpdir(), 'bpmn-weave-rollback-')));
+  const dir = await fs.realpath(await fs.mkdtemp(join(tmpdir(), 'openbpmn-rollback-')));
   t.after(() => fs.rm(dir, { recursive: true, force: true }));
   const paths = ['process.bpmn', 'process.svg', 'process.quality.json'].map((name) => join(dir, name));
   const old = ['old XML', 'old SVG', 'old report'];
@@ -39,7 +39,7 @@ test('a handled replacement failure restores every prior artifact byte-for-byte'
 });
 
 test('a pending bundle operation cannot be bypassed by omitting its optional Handoff on retry', async (t) => {
-  const dir = await fs.realpath(await fs.mkdtemp(join(tmpdir(), 'bpmn-weave-pending-')));
+  const dir = await fs.realpath(await fs.mkdtemp(join(tmpdir(), 'openbpmn-pending-')));
   t.after(() => fs.rm(dir, { recursive: true, force: true }));
   const paths = ['process.bpmn', 'process.svg', 'process.quality.json'].map((name) => join(dir, name));
   const interrupted = await prepareOutputs([...paths, join(dir, 'process.openbpmn.json')]);
@@ -48,7 +48,7 @@ test('a pending bundle operation cannot be bypassed by omitting its optional Han
 });
 
 test('catchable cancellation during replacement restores the previous complete bundle', async (t) => {
-  const dir = await fs.realpath(await fs.mkdtemp(join(tmpdir(), 'bpmn-weave-cancel-')));
+  const dir = await fs.realpath(await fs.mkdtemp(join(tmpdir(), 'openbpmn-cancel-')));
   t.after(() => fs.rm(dir, { recursive: true, force: true }));
   const paths = ['process.bpmn', 'process.svg'].map((name) => join(dir, name));
   await Promise.all(paths.map((path) => fs.writeFile(path, 'old')));
@@ -78,7 +78,7 @@ test('catchable cancellation during replacement restores the previous complete b
 });
 
 test('an overlapping SVG-only operation cannot bypass an active bundle transaction', async (t) => {
-  const dir = await fs.realpath(await fs.mkdtemp(join(tmpdir(), 'bpmn-weave-overlap-')));
+  const dir = await fs.realpath(await fs.mkdtemp(join(tmpdir(), 'openbpmn-overlap-')));
   t.after(() => fs.rm(dir, { recursive: true, force: true }));
   const paths = ['process.bpmn', 'process.svg'].map((name) => join(dir, name));
   const plan = await prepareOutputs(paths);
@@ -98,7 +98,7 @@ test('an overlapping SVG-only operation cannot bypass an active bundle transacti
 });
 
 test('a handled cleanup failure rolls back before reporting failure', async (t) => {
-  const dir = await fs.realpath(await fs.mkdtemp(join(tmpdir(), 'bpmn-weave-cleanup-')));
+  const dir = await fs.realpath(await fs.mkdtemp(join(tmpdir(), 'openbpmn-cleanup-')));
   t.after(() => fs.rm(dir, { recursive: true, force: true }));
   const paths = ['process.bpmn', 'process.svg'].map((name) => join(dir, name));
   await Promise.all(paths.map((path) => fs.writeFile(path, 'old')));
@@ -121,7 +121,7 @@ test('a handled cleanup failure rolls back before reporting failure', async (t) 
 });
 
 test('symbolic links, input hardlinks, non-sibling paths, and case-equivalent destinations are refused', async (t) => {
-  const dir = await fs.realpath(await fs.mkdtemp(join(tmpdir(), 'bpmn-weave-paths-')));
+  const dir = await fs.realpath(await fs.mkdtemp(join(tmpdir(), 'openbpmn-paths-')));
   t.after(() => fs.rm(dir, { recursive: true, force: true }));
   const input = join(dir, 'input.json');
   const hardlink = join(dir, 'linked.bpmn');
@@ -141,7 +141,7 @@ test('symbolic links, input hardlinks, non-sibling paths, and case-equivalent de
 });
 
 test('rollback never removes a concurrently changed output and claims only verified originals as preserved', async (t) => {
-  const dir = await fs.realpath(await fs.mkdtemp(join(tmpdir(), 'bpmn-weave-recovery-')));
+  const dir = await fs.realpath(await fs.mkdtemp(join(tmpdir(), 'openbpmn-recovery-')));
   t.after(() => fs.rm(dir, { recursive: true, force: true }));
   const paths = ['process.bpmn', 'process.svg'].map((name) => join(dir, name));
   await Promise.all(paths.map((path) => fs.writeFile(path, 'old')));

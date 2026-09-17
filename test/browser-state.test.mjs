@@ -17,7 +17,7 @@ for (const failure of [false, true])
     let retained;
     try {
       fs.rm = async (path, options) => {
-        if (typeof path === 'string' && path.startsWith(join(tmpdir(), 'bpmn-weave-render-'))) {
+        if (typeof path === 'string' && path.startsWith(join(tmpdir(), 'openbpmn-render-'))) {
           retained = path;
           await writeFile(join(path, 'cleanup-test-secret'), 'synthetic-private-process-content');
           throw Object.assign(new Error('synthetic-private-process-content'), { code: 'EACCES' });
@@ -50,7 +50,7 @@ for (const failure of [false, true]) {
   test(`browser configuration and font caches stay disposable after ${failure ? 'launch failure' : 'rendering'}`, {
     skip: process.platform === 'win32',
   }, async () => {
-    const directory = await mkdtemp(join(tmpdir(), 'bpmn-weave-browser-state-test-'));
+    const directory = await mkdtemp(join(tmpdir(), 'openbpmn-browser-state-test-'));
     const originalConfig = process.env.XDG_CONFIG_HOME;
     const originalCache = process.env.XDG_CACHE_HOME;
     try {

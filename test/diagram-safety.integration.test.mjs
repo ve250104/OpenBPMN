@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 const cli = fileURLToPath(new URL('../dist/cli.js', import.meta.url));
 
 async function validate(t, xml, expected) {
-  const directory = await mkdtemp(join(tmpdir(), 'bpmn-weave-di-safety-'));
+  const directory = await mkdtemp(join(tmpdir(), 'openbpmn-di-safety-'));
   t.after(() => rm(directory, { recursive: true, force: true }));
   const input = join(directory, 'process.bpmn');
   await writeFile(input, xml);

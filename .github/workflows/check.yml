@@ -40,10 +40,10 @@ jobs:
       run:
         shell: bash
     env:
-      BPMN_WEAVE_BROWSER_EXECUTABLE: ${{ matrix.browser }}
-      BPMN_WEAVE_TEST_NETWORK_NAMESPACE: ${{ matrix.network_namespace }}
-      BPMN_WEAVE_EXPECTED_PLATFORM: ${{ matrix.platform }}
-      BPMN_WEAVE_EXPECTED_ARCH: ${{ matrix.arch }}
+      OPENBPMN_BROWSER_EXECUTABLE: ${{ matrix.browser }}
+      OPENBPMN_TEST_NETWORK_NAMESPACE: ${{ matrix.network_namespace }}
+      OPENBPMN_EXPECTED_PLATFORM: ${{ matrix.platform }}
+      OPENBPMN_EXPECTED_ARCH: ${{ matrix.arch }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
@@ -61,11 +61,11 @@ jobs:
           import { mkdirSync, writeFileSync } from 'node:fs';
           import { spawnSync } from 'node:child_process';
           import os from 'node:os';
-          assert.equal(process.platform, process.env.BPMN_WEAVE_EXPECTED_PLATFORM);
-          assert.equal(process.arch, process.env.BPMN_WEAVE_EXPECTED_ARCH);
-          const browser = process.env.BPMN_WEAVE_BROWSER_EXECUTABLE;
+          assert.equal(process.platform, process.env.OPENBPMN_EXPECTED_PLATFORM);
+          assert.equal(process.arch, process.env.OPENBPMN_EXPECTED_ARCH);
+          const browser = process.env.OPENBPMN_BROWSER_EXECUTABLE;
           const version = process.platform === 'win32'
-            ? spawnSync('powershell.exe', ['-NoProfile', '-NonInteractive', '-Command', '(Get-Item -LiteralPath $env:BPMN_WEAVE_BROWSER_EXECUTABLE).VersionInfo.ProductVersion'], { encoding: 'utf8' })
+            ? spawnSync('powershell.exe', ['-NoProfile', '-NonInteractive', '-Command', '(Get-Item -LiteralPath $env:OPENBPMN_BROWSER_EXECUTABLE).VersionInfo.ProductVersion'], { encoding: 'utf8' })
             : spawnSync(browser, ['--version'], { encoding: 'utf8' });
           assert.equal(version.status, 0, version.stderr);
           assert.ok(version.stdout.trim(), 'The exact browser version must be recorded.');
@@ -98,7 +98,7 @@ jobs:
           import { readFileSync } from 'node:fs';
           import { spawnSync } from 'node:child_process';
           const { version } = JSON.parse(readFileSync('package.json', 'utf8'));
-          const bundle = `.artifacts/bpmn-weave-${version}-${process.platform}-${process.arch}`;
+          const bundle = `.artifacts/openbpmn-${version}-${process.platform}-${process.arch}`;
           for (const [script, args] of [
             ['scripts/test-platform-package.mjs', ['--bundle', bundle]],
             ['scripts/test-installation.mjs', [bundle]],

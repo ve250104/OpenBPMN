@@ -11,7 +11,7 @@ private_runtime="$bundle_root/runtime/bin/node"
 management="$bundle_root/app/dist/manage.js"
 
 if [ ! -x "$private_runtime" ] || [ ! -f "$management" ]; then
-  printf '%s\n' 'Incomplete BPMN Weave bundle: extract the complete platform archive before running setup.' >&2
+  printf '%s\n' 'Incomplete OpenBPMN bundle: extract the complete platform archive before running setup.' >&2
   exit 2
 fi
 
