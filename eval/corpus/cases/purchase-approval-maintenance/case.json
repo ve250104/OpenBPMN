@@ -1,0 +1,118 @@
+{
+  "caseVersion": "1.0.0",
+  "familyId": "purchase-approval-maintenance",
+  "caseId": "purchase-approval-maintenance.base",
+  "title": "Purchase approval correction",
+  "primaryTask": "maintenance",
+  "evaluationLane": "conversational-correction",
+  "businessDomain": "procurement",
+  "partition": "known-regression",
+  "upstreamOverlapGroup": "purchase-approval",
+  "knownRegression": true,
+  "difficultyTags": [
+    "adversarial",
+    "single-source"
+  ],
+  "coverage": {
+    "estimated-vs-mandatory-thresholds": [
+      "purchase-approval-maintenance.assertion.1"
+    ],
+    "cross-lane-routing": [
+      "purchase-approval-maintenance.assertion.1"
+    ]
+  },
+  "task": {
+    "prompt": "Continue the supplied session. Change the inclusive approval threshold to EUR 7,500 and rename preparation without disturbing unrelated identities.",
+    "scope": {
+      "requested": "Purchase approval correction",
+      "excluded": [
+        "process improvement unless explicitly requested"
+      ]
+    },
+    "clarificationAnswers": [],
+    "correctionTurns": [
+      "Continue the supplied session. Change the inclusive approval threshold to EUR 7,500 and rename preparation without disturbing unrelated identities."
+    ]
+  },
+  "applicability": {
+    "status": "supported",
+    "capability": "source-driven-modeling-session",
+    "reason": "Within the current declared public boundary.",
+    "fixedBeforeExecution": true
+  },
+  "sourceArtifacts": [
+    {
+      "id": "purchase-approval-maintenance.source.1",
+      "path": "inputs/handoff.json",
+      "mediaType": "application/json",
+      "sha256": "4b63a5d221b5b9ff769478380f442869993094ad8cc7ec939350674093a2ff84",
+      "role": "evidence",
+      "viewpoint": "session owner",
+      "provenance": {
+        "classification": "synthetic-fiction",
+        "sourceFamily": "OpenBPMN evaluation corpus",
+        "sourceVersion": "1.0.0",
+        "originalUrl": null,
+        "authorshipRecord": "Authored for OpenBPMN issue #44; not client or operational material.",
+        "retrievedAt": "2026-09-21",
+        "rights": {
+          "license": "MIT",
+          "licenseUrl": "https://opensource.org/license/mit",
+          "attribution": "OpenBPMN contributors"
+        }
+      },
+      "transformationHistory": [
+        "Authored directly in the declared format."
+      ]
+    }
+  ],
+  "reviewerMaterial": "reviewer/assertions.json",
+  "variants": [
+    {
+      "id": "wording-only",
+      "kind": "meaning-preserving",
+      "partition": "known-regression",
+      "prompt": "Continue the supplied session. Change the inclusive approval threshold to EUR 7,500 and rename preparation without disturbing unrelated identities.",
+      "replacesSourceIds": [
+        "purchase-approval-maintenance.source.1"
+      ],
+      "inputArtifacts": [
+        {
+          "id": "purchase-approval-maintenance.variant.wording-only.source.1",
+          "path": "variants/wording-only/handoff.json",
+          "mediaType": "application/json",
+          "sha256": "4fe5e150facf87046095a51d05d96194e6930171348aa654b95eb0a0d8b39d5b",
+          "role": "evidence",
+          "viewpoint": "session owner",
+          "provenance": {
+            "classification": "synthetic-fiction",
+            "sourceFamily": "OpenBPMN evaluation corpus",
+            "sourceVersion": "1.0.0",
+            "originalUrl": null,
+            "authorshipRecord": "Authored for OpenBPMN issue #44; not client or operational material.",
+            "retrievedAt": "2026-09-21",
+            "rights": {
+              "license": "MIT",
+              "licenseUrl": "https://opensource.org/license/mit",
+              "attribution": "OpenBPMN contributors"
+            }
+          },
+          "transformationHistory": [
+            "Authored directly in the declared format."
+          ]
+        }
+      ],
+      "stableAssertionIds": [
+        "purchase-approval-maintenance.assertion.1",
+        "purchase-approval-maintenance.assertion.2"
+      ],
+      "changedAssertionIds": []
+    }
+  ],
+  "reviewStatus": {
+    "machineIntegrity": "pass-at-authored-version",
+    "independentAgentReview": "completed-for-consistency",
+    "expertAdjudication": "not_run",
+    "humanUsabilityReview": "not_run"
+  }
+}

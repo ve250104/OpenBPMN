@@ -1,0 +1,121 @@
+{
+  "reviewVersion": "1.0.0",
+  "familyId": "university-access-discovery",
+  "canary": "reviewer-only-canary-ec4ac8912c7b8c54",
+  "authoredIndependentlyOfCandidate": true,
+  "assertions": [
+    {
+      "id": "university-access-discovery.assertion.1",
+      "claim": "current practice and policy approval routes disagree",
+      "disposition": "required",
+      "severity": "critical",
+      "dimension": "evidenceFidelity",
+      "epistemicStatus": "disputed",
+      "evidence": [
+        {
+          "sourceId": "university-access-discovery.source.1",
+          "locator": "sentences 1-3",
+          "stance": "supports",
+          "effectiveDate": null,
+          "entityScope": "ordinary university access",
+          "caseScope": "observed practice versus policy intent"
+        },
+        {
+          "sourceId": "university-access-discovery.source.2",
+          "locator": "sentence 1",
+          "stance": "supports",
+          "effectiveDate": null,
+          "entityScope": "all new university accounts",
+          "caseScope": "policy intent"
+        }
+      ],
+      "outputLocations": [
+        "BPMN semantics",
+        "SVG preview",
+        "Quality Report",
+        "final delivery claims"
+      ],
+      "evaluation": {
+        "kind": "agent",
+        "instructions": "Inspect the cited source and externally observable candidate artifacts; do not infer from candidate plausibility."
+      }
+    },
+    {
+      "id": "university-access-discovery.assertion.2",
+      "claim": "silence about Security in practice proves approval did not occur",
+      "disposition": "forbidden",
+      "severity": "critical",
+      "dimension": "coverage",
+      "epistemicStatus": "unknown",
+      "evidence": [
+        {
+          "sourceId": "university-access-discovery.source.1",
+          "locator": "sentence 3",
+          "stance": "does-not-support",
+          "effectiveDate": null,
+          "entityScope": "ordinary university access",
+          "caseScope": "technician observation only"
+        },
+        {
+          "sourceId": "university-access-discovery.source.2",
+          "locator": "sentence 1",
+          "stance": "contradicts",
+          "effectiveDate": null,
+          "entityScope": "all new university accounts",
+          "caseScope": "policy intent"
+        }
+      ],
+      "outputLocations": [
+        "BPMN semantics",
+        "SVG preview",
+        "Quality Report",
+        "final delivery claims"
+      ],
+      "evaluation": {
+        "kind": "agent",
+        "instructions": "Inspect the cited source and externally observable candidate artifacts; do not infer from candidate plausibility."
+      }
+    }
+  ],
+  "variantAssertions": [],
+  "reviewRubric": {
+    "version": "1.0.0",
+    "criteria": [
+      {
+        "id": "comprehension",
+        "question": "Can a reviewer identify ownership, branching, and completion without author assistance?",
+        "scale": [
+          "clear",
+          "partly clear",
+          "unclear"
+        ],
+        "citationRequired": true
+      },
+      {
+        "id": "ambiguity",
+        "question": "Are material unknowns and competing interpretations visible rather than silently resolved?",
+        "scale": [
+          "explicit",
+          "partly explicit",
+          "hidden"
+        ],
+        "citationRequired": true
+      },
+      {
+        "id": "correction-effort",
+        "question": "How much measured reviewer effort was required to reach an acceptable correction?",
+        "scale": [
+          "no correction",
+          "minor correction",
+          "major correction",
+          "not measured"
+        ],
+        "citationRequired": true
+      }
+    ]
+  },
+  "acceptableAlternatives": [
+    "Any BPMN topology is acceptable when it preserves every assertion and does not add forbidden meaning."
+  ],
+  "observedResults": []
+}

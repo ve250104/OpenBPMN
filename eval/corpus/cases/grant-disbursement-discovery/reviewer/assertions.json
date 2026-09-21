@@ -1,0 +1,113 @@
+{
+  "reviewVersion": "1.0.0",
+  "familyId": "grant-disbursement-discovery",
+  "canary": "reviewer-only-canary-eca7c1dc14a7d67f",
+  "authoredIndependentlyOfCandidate": true,
+  "assertions": [
+    {
+      "id": "grant-disbursement-discovery.assertion.1",
+      "claim": "program and finance checks may proceed concurrently and both are required",
+      "disposition": "required",
+      "severity": "critical",
+      "dimension": "evidenceFidelity",
+      "epistemicStatus": "established",
+      "evidence": [
+        {
+          "sourceId": "grant-disbursement-discovery.source.1",
+          "locator": "sentences 1-2",
+          "stance": "supports",
+          "effectiveDate": null,
+          "entityScope": "policy owner",
+          "caseScope": "Grant disbursement discovery"
+        }
+      ],
+      "outputLocations": [
+        "BPMN semantics",
+        "SVG preview",
+        "Quality Report",
+        "final delivery claims"
+      ],
+      "evaluation": {
+        "kind": "agent",
+        "instructions": "Inspect the cited source and externally observable candidate artifacts; do not infer from candidate plausibility."
+      }
+    },
+    {
+      "id": "grant-disbursement-discovery.assertion.2",
+      "claim": "the case proves a general operations-director approval rule",
+      "disposition": "forbidden",
+      "severity": "critical",
+      "dimension": "coverage",
+      "epistemicStatus": "disputed",
+      "evidence": [
+        {
+          "sourceId": "grant-disbursement-discovery.source.2",
+          "locator": "sentence 2",
+          "stance": "does-not-support",
+          "effectiveDate": null,
+          "entityScope": "case G-17",
+          "caseScope": "single observed disbursement"
+        },
+        {
+          "sourceId": "grant-disbursement-discovery.source.1",
+          "locator": "sentence 3",
+          "stance": "contradicts",
+          "effectiveDate": null,
+          "entityScope": "all grant disbursements",
+          "caseScope": "policy intent"
+        }
+      ],
+      "outputLocations": [
+        "BPMN semantics",
+        "SVG preview",
+        "Quality Report",
+        "final delivery claims"
+      ],
+      "evaluation": {
+        "kind": "agent",
+        "instructions": "Inspect the cited source and externally observable candidate artifacts; do not infer from candidate plausibility."
+      }
+    }
+  ],
+  "variantAssertions": [],
+  "reviewRubric": {
+    "version": "1.0.0",
+    "criteria": [
+      {
+        "id": "comprehension",
+        "question": "Can a reviewer identify ownership, branching, and completion without author assistance?",
+        "scale": [
+          "clear",
+          "partly clear",
+          "unclear"
+        ],
+        "citationRequired": true
+      },
+      {
+        "id": "ambiguity",
+        "question": "Are material unknowns and competing interpretations visible rather than silently resolved?",
+        "scale": [
+          "explicit",
+          "partly explicit",
+          "hidden"
+        ],
+        "citationRequired": true
+      },
+      {
+        "id": "correction-effort",
+        "question": "How much measured reviewer effort was required to reach an acceptable correction?",
+        "scale": [
+          "no correction",
+          "minor correction",
+          "major correction",
+          "not measured"
+        ],
+        "citationRequired": true
+      }
+    ]
+  },
+  "acceptableAlternatives": [
+    "Any BPMN topology is acceptable when it preserves every assertion and does not add forbidden meaning."
+  ],
+  "observedResults": []
+}

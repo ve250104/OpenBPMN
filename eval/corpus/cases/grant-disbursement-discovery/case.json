@@ -1,0 +1,99 @@
+{
+  "caseVersion": "1.0.0",
+  "familyId": "grant-disbursement-discovery",
+  "caseId": "grant-disbursement-discovery.base",
+  "title": "Grant disbursement discovery",
+  "primaryTask": "discovery",
+  "evaluationLane": "mixed-evidence-discovery",
+  "businessDomain": "nonprofit",
+  "partition": "development",
+  "upstreamOverlapGroup": "grant-disbursement-discovery",
+  "knownRegression": false,
+  "difficultyTags": [
+    "challenging",
+    "multi-source"
+  ],
+  "coverage": {
+    "concurrency": [
+      "grant-disbursement-discovery.assertion.1"
+    ],
+    "contradictory-ownership": [
+      "grant-disbursement-discovery.assertion.1"
+    ]
+  },
+  "task": {
+    "prompt": "Model grant disbursement using the policy and case notes. Retain the ownership dispute for release authorization.",
+    "scope": {
+      "requested": "Grant disbursement discovery",
+      "excluded": [
+        "process improvement unless explicitly requested"
+      ]
+    },
+    "clarificationAnswers": [],
+    "correctionTurns": []
+  },
+  "applicability": {
+    "status": "supported",
+    "capability": "source-driven-modeling-session",
+    "reason": "Within the current declared public boundary.",
+    "fixedBeforeExecution": true
+  },
+  "sourceArtifacts": [
+    {
+      "id": "grant-disbursement-discovery.source.1",
+      "path": "inputs/grant-policy.txt",
+      "mediaType": "text/plain",
+      "sha256": "d481910d56276beeb4be1d5f464cca27d4203726d145b5b34ec59968527e4869",
+      "role": "evidence",
+      "viewpoint": "policy owner",
+      "provenance": {
+        "classification": "synthetic-fiction",
+        "sourceFamily": "OpenBPMN evaluation corpus",
+        "sourceVersion": "1.0.0",
+        "originalUrl": null,
+        "authorshipRecord": "Authored for OpenBPMN issue #44; not client or operational material.",
+        "retrievedAt": "2026-09-21",
+        "rights": {
+          "license": "MIT",
+          "licenseUrl": "https://opensource.org/license/mit",
+          "attribution": "OpenBPMN contributors"
+        }
+      },
+      "transformationHistory": [
+        "Authored directly in the declared format."
+      ]
+    },
+    {
+      "id": "grant-disbursement-discovery.source.2",
+      "path": "inputs/case-notes.txt",
+      "mediaType": "text/plain",
+      "sha256": "c5010ee7ca4cf204eda77ed3939ac7203522d3b45e0d79481c2e986e0dfdc58c",
+      "role": "evidence",
+      "viewpoint": "case worker",
+      "provenance": {
+        "classification": "synthetic-fiction",
+        "sourceFamily": "OpenBPMN evaluation corpus",
+        "sourceVersion": "1.0.0",
+        "originalUrl": null,
+        "authorshipRecord": "Authored for OpenBPMN issue #44; not client or operational material.",
+        "retrievedAt": "2026-09-21",
+        "rights": {
+          "license": "MIT",
+          "licenseUrl": "https://opensource.org/license/mit",
+          "attribution": "OpenBPMN contributors"
+        }
+      },
+      "transformationHistory": [
+        "Authored directly in the declared format."
+      ]
+    }
+  ],
+  "reviewerMaterial": "reviewer/assertions.json",
+  "variants": [],
+  "reviewStatus": {
+    "machineIntegrity": "pass-at-authored-version",
+    "independentAgentReview": "completed-for-consistency",
+    "expertAdjudication": "not_run",
+    "humanUsabilityReview": "not_run"
+  }
+}

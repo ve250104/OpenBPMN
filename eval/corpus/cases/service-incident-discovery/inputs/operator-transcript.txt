@@ -1,0 +1,1 @@
+Operator: We investigate while the escalation clock runs. A lead is notified after four business hours, but investigation does not stop. If recovery fails, we try another remediation.

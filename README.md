@@ -34,6 +34,21 @@ The local CLI compiles, validates, lays out, and exports process artifacts. Your
 
 Process questions and quality findings stay outside the BPMN file. Technical validity does not establish business truth or human approval.
 
+## Local evaluation corpus
+
+The versioned pilot under `eval/corpus/` contains 24 independent process families. Case inputs and reviewer-only assertion ledgers are separate; public-source licenses, transformations, partitions, variants, applicability, and artifact hashes are recorded in each `case.json` contract. Variants declare the sources they replace and the assertions that stay stable or change. The case, reviewer, and run schemas require scoped evidence and auditable agent/human review records. Technical notation fixtures elsewhere under `eval/` are not counted as process families.
+
+Run the lightweight local workflow without GitHub Actions:
+
+```sh
+npm run eval:corpus -- validate --json
+npm run eval:corpus -- prepare --case pmo-customer-order --output /canonical/empty/output/directory --json
+npm run eval:corpus -- assess --run /canonical/run.json --output /canonical/assessment.json --json
+npm run eval:corpus -- compare --baseline /canonical/baseline.json --candidate /canonical/candidate.json --output /canonical/comparison.json --json
+```
+
+Preparation limits the staged directory to the selected task and inputs, but reports `not_isolated` unless a host actually prevents access to reviewer files. Unrun, unsupported, blocked, failed, and partial attempts remain distinct in assessment and comparison records.
+
 ## License and feedback
 
 Project-authored material uses the [MIT license](LICENSE). [Third-party notices](THIRD_PARTY_NOTICES.md) preserve dependency terms and describe the unresolved permission question for distributing the bundled OMG schemas.

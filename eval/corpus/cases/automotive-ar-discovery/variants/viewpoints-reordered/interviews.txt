@@ -1,0 +1,1 @@
+South invoices on shipment and sends month-end accrual extracts to GL. North waits for customer self-bill before reconciling differences and refers doubtful balances to GL.

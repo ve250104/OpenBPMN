@@ -1,0 +1,1 @@
+Retrieve the latest ServiceNow incident. If the incident has "high" impact, create an issue in Jira and send a slack message. Else create a github issue.

@@ -1,0 +1,75 @@
+{
+  "caseVersion": "1.0.0",
+  "familyId": "editable-flowchart-translation",
+  "caseId": "editable-flowchart-translation.base",
+  "title": "Editable non-BPMN flowchart translation",
+  "primaryTask": "legacy",
+  "evaluationLane": "legacy-translation",
+  "businessDomain": "manufacturing",
+  "partition": "development",
+  "upstreamOverlapGroup": "editable-flowchart-translation",
+  "knownRegression": false,
+  "difficultyTags": [
+    "challenging",
+    "single-source"
+  ],
+  "coverage": {
+    "participant-handoffs": [
+      "editable-flowchart-translation.assertion.1"
+    ],
+    "cross-lane-routing": [
+      "editable-flowchart-translation.assertion.1"
+    ]
+  },
+  "task": {
+    "prompt": "Propose a reviewed BPMN translation of the editable flowchart. Keep translation decisions visible.",
+    "scope": {
+      "requested": "Editable non-BPMN flowchart translation",
+      "excluded": [
+        "process improvement unless explicitly requested"
+      ]
+    },
+    "clarificationAnswers": [],
+    "correctionTurns": []
+  },
+  "applicability": {
+    "status": "unsupported",
+    "capability": "arbitrary-non-bpmn-conversion",
+    "reason": "Exploratory corpus probe; current product contract does not implement this conversion.",
+    "fixedBeforeExecution": true
+  },
+  "sourceArtifacts": [
+    {
+      "id": "editable-flowchart-translation.source.1",
+      "path": "inputs/return-flow.drawio",
+      "mediaType": "application/vnd.jgraph.mxfile",
+      "sha256": "37cd608d2d4ab87d2edb63399f35856ff7b1f3e66d2bf1f7814289d54a95d32b",
+      "role": "evidence",
+      "viewpoint": "legacy model owner",
+      "provenance": {
+        "classification": "synthetic-fiction",
+        "sourceFamily": "OpenBPMN evaluation corpus",
+        "sourceVersion": "1.0.0",
+        "originalUrl": null,
+        "authorshipRecord": "Authored for OpenBPMN issue #44; not client or operational material.",
+        "retrievedAt": "2026-09-21",
+        "rights": {
+          "license": "MIT",
+          "licenseUrl": "https://opensource.org/license/mit",
+          "attribution": "OpenBPMN contributors"
+        }
+      },
+      "transformationHistory": [
+        "Authored directly in the declared format."
+      ]
+    }
+  ],
+  "reviewerMaterial": "reviewer/assertions.json",
+  "variants": [],
+  "reviewStatus": {
+    "machineIntegrity": "pass-at-authored-version",
+    "independentAgentReview": "completed-for-consistency",
+    "expertAdjudication": "not_run",
+    "humanUsabilityReview": "not_run"
+  }
+}

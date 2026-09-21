@@ -1,0 +1,169 @@
+{
+  "caseVersion": "1.0.0",
+  "familyId": "automotive-ar-discovery",
+  "caseId": "automotive-ar-discovery.base",
+  "title": "Automotive accounts-receivable discovery",
+  "primaryTask": "discovery",
+  "evaluationLane": "mixed-evidence-discovery",
+  "businessDomain": "automotive-finance",
+  "partition": "known-regression",
+  "upstreamOverlapGroup": "automotive-ar-discovery",
+  "knownRegression": true,
+  "difficultyTags": [
+    "adversarial",
+    "multi-source"
+  ],
+  "coverage": {
+    "contradictory-ownership": [
+      "automotive-ar-discovery.assertion.1"
+    ],
+    "policy-practice-disagreement": [
+      "automotive-ar-discovery.assertion.1"
+    ],
+    "case-vs-batch": [
+      "automotive-ar-discovery.assertion.1"
+    ]
+  },
+  "task": {
+    "prompt": "Discover the current North and South receivables processes. Keep policy intent and observed practice distinct.",
+    "scope": {
+      "requested": "Automotive accounts-receivable discovery",
+      "excluded": [
+        "process improvement unless explicitly requested"
+      ]
+    },
+    "clarificationAnswers": [],
+    "correctionTurns": []
+  },
+  "applicability": {
+    "status": "supported",
+    "capability": "source-driven-modeling-session",
+    "reason": "Within the current declared public boundary.",
+    "fixedBeforeExecution": true
+  },
+  "sourceArtifacts": [
+    {
+      "id": "automotive-ar-discovery.source.1",
+      "path": "inputs/north-interview.txt",
+      "mediaType": "text/plain",
+      "sha256": "4068de6733999a43e69ed501036528d86dcb40ce935c313196067b1072c5b3b5",
+      "role": "evidence",
+      "viewpoint": "North AR analyst",
+      "provenance": {
+        "classification": "synthetic-fiction",
+        "sourceFamily": "OpenBPMN evaluation corpus",
+        "sourceVersion": "1.0.0",
+        "originalUrl": null,
+        "authorshipRecord": "Authored for OpenBPMN issue #44; not client or operational material.",
+        "retrievedAt": "2026-09-21",
+        "rights": {
+          "license": "MIT",
+          "licenseUrl": "https://opensource.org/license/mit",
+          "attribution": "OpenBPMN contributors"
+        }
+      },
+      "transformationHistory": [
+        "Authored directly in the declared format."
+      ]
+    },
+    {
+      "id": "automotive-ar-discovery.source.2",
+      "path": "inputs/south-interview.txt",
+      "mediaType": "text/plain",
+      "sha256": "b0fa2ad7c3fc7c19ff076e6d84508185e7810e086ec3140a398c34bab786e0f2",
+      "role": "evidence",
+      "viewpoint": "South AR analyst",
+      "provenance": {
+        "classification": "synthetic-fiction",
+        "sourceFamily": "OpenBPMN evaluation corpus",
+        "sourceVersion": "1.0.0",
+        "originalUrl": null,
+        "authorshipRecord": "Authored for OpenBPMN issue #44; not client or operational material.",
+        "retrievedAt": "2026-09-21",
+        "rights": {
+          "license": "MIT",
+          "licenseUrl": "https://opensource.org/license/mit",
+          "attribution": "OpenBPMN contributors"
+        }
+      },
+      "transformationHistory": [
+        "Authored directly in the declared format."
+      ]
+    },
+    {
+      "id": "automotive-ar-discovery.source.3",
+      "path": "inputs/policy.txt",
+      "mediaType": "text/plain",
+      "sha256": "f610ccdd73dd721667ebf89f3f2c1574961871faa27fa0ff3bf6f75236689fa8",
+      "role": "evidence",
+      "viewpoint": "corporate policy owner",
+      "provenance": {
+        "classification": "synthetic-fiction",
+        "sourceFamily": "OpenBPMN evaluation corpus",
+        "sourceVersion": "1.0.0",
+        "originalUrl": null,
+        "authorshipRecord": "Authored for OpenBPMN issue #44; not client or operational material.",
+        "retrievedAt": "2026-09-21",
+        "rights": {
+          "license": "MIT",
+          "licenseUrl": "https://opensource.org/license/mit",
+          "attribution": "OpenBPMN contributors"
+        }
+      },
+      "transformationHistory": [
+        "Authored directly in the declared format."
+      ]
+    }
+  ],
+  "reviewerMaterial": "reviewer/assertions.json",
+  "variants": [
+    {
+      "id": "viewpoints-reordered",
+      "kind": "meaning-preserving",
+      "partition": "known-regression",
+      "prompt": "Discover the current North and South receivables processes. Keep policy intent and observed practice distinct.",
+      "replacesSourceIds": [
+        "automotive-ar-discovery.source.1",
+        "automotive-ar-discovery.source.2"
+      ],
+      "inputArtifacts": [
+        {
+          "id": "automotive-ar-discovery.variant.viewpoints-reordered.source.1",
+          "path": "variants/viewpoints-reordered/interviews.txt",
+          "mediaType": "text/plain",
+          "sha256": "d906e9cff6c50970f4e54554458691f5a39212446d12eb6345305c251d598de8",
+          "role": "evidence",
+          "viewpoint": "process owner",
+          "provenance": {
+            "classification": "synthetic-fiction",
+            "sourceFamily": "OpenBPMN evaluation corpus",
+            "sourceVersion": "1.0.0",
+            "originalUrl": null,
+            "authorshipRecord": "Authored for OpenBPMN issue #44; not client or operational material.",
+            "retrievedAt": "2026-09-21",
+            "rights": {
+              "license": "MIT",
+              "licenseUrl": "https://opensource.org/license/mit",
+              "attribution": "OpenBPMN contributors"
+            }
+          },
+          "transformationHistory": [
+            "Authored directly in the declared format."
+          ]
+        }
+      ],
+      "stableAssertionIds": [
+        "automotive-ar-discovery.assertion.1",
+        "automotive-ar-discovery.assertion.2",
+        "automotive-ar-discovery.assertion.3"
+      ],
+      "changedAssertionIds": []
+    }
+  ],
+  "reviewStatus": {
+    "machineIntegrity": "pass-at-authored-version",
+    "independentAgentReview": "completed-for-consistency",
+    "expertAdjudication": "not_run",
+    "humanUsabilityReview": "not_run"
+  }
+}

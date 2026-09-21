@@ -1,0 +1,134 @@
+{
+  "handoffVersion": "1.0.0",
+  "lifecycleStatus": "Synthetic correction fixture; human correction requested but not yet applied.",
+  "reviewNotes": [
+    "PT3H",
+    "Session facts: {\"process\":\"incident escalation\",\"identities\":[\"investigate\",\"escalation-clock\",\"notify-team-lead\"],\"acceptedSimplification\":\"PT4H\",\"correction\":\"PT3H\"}"
+  ],
+  "request": {
+    "schemaVersion": "1.0.0",
+    "profileVersion": "1.0.0",
+    "model": {
+      "key": "incident-escalation-model",
+      "name": "incident escalation",
+      "primaryRef": "incident-escalation",
+      "processes": [
+        {
+          "key": "incident-escalation",
+          "name": "incident escalation",
+          "nodes": [
+            {
+              "key": "session-start",
+              "type": "startEvent",
+              "containerRef": "incident-escalation",
+              "name": "Existing session started",
+              "event": {
+                "kind": "none"
+              }
+            },
+            {
+              "key": "investigate",
+              "type": "task",
+              "containerRef": "incident-escalation",
+              "name": "investigate"
+            },
+            {
+              "key": "escalation-clock",
+              "type": "task",
+              "containerRef": "incident-escalation",
+              "name": "escalation clock"
+            },
+            {
+              "key": "notify-team-lead",
+              "type": "task",
+              "containerRef": "incident-escalation",
+              "name": "notify team lead"
+            },
+            {
+              "key": "session-end",
+              "type": "endEvent",
+              "containerRef": "incident-escalation",
+              "name": "Existing modeled outcome",
+              "event": {
+                "kind": "none"
+              }
+            }
+          ],
+          "flows": [
+            {
+              "key": "session-flow-1",
+              "containerRef": "incident-escalation",
+              "sourceRef": "session-start",
+              "targetRef": "investigate"
+            },
+            {
+              "key": "session-flow-2",
+              "containerRef": "incident-escalation",
+              "sourceRef": "investigate",
+              "targetRef": "escalation-clock"
+            },
+            {
+              "key": "session-flow-3",
+              "containerRef": "incident-escalation",
+              "sourceRef": "escalation-clock",
+              "targetRef": "notify-team-lead"
+            },
+            {
+              "key": "session-flow-4",
+              "containerRef": "incident-escalation",
+              "sourceRef": "notify-team-lead",
+              "targetRef": "session-end"
+            }
+          ],
+          "lanes": [
+            {
+              "key": "current-owner",
+              "name": "Current modeled owner",
+              "parentRef": "incident-escalation",
+              "flowNodeRefs": [
+                "session-start",
+                "investigate",
+                "escalation-clock",
+                "notify-team-lead",
+                "session-end"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "evidence": [
+      {
+        "key": "session-account",
+        "source": "Synthetic session account",
+        "summary": "{\"process\":\"incident escalation\",\"identities\":[\"investigate\",\"escalation-clock\",\"notify-team-lead\"],\"acceptedSimplification\":\"PT4H\",\"correction\":\"PT3H\"}"
+      }
+    ],
+    "links": [
+      {
+        "elementRef": "investigate",
+        "assertion": "Retain the existing investigate identity unless the correction names it.",
+        "basis": "evidence",
+        "supportRefs": [
+          "session-account"
+        ]
+      },
+      {
+        "elementRef": "escalation-clock",
+        "assertion": "Retain the existing escalation-clock identity unless the correction names it.",
+        "basis": "evidence",
+        "supportRefs": [
+          "session-account"
+        ]
+      },
+      {
+        "elementRef": "notify-team-lead",
+        "assertion": "Retain the existing notify-team-lead identity unless the correction names it.",
+        "basis": "evidence",
+        "supportRefs": [
+          "session-account"
+        ]
+      }
+    ]
+  }
+}

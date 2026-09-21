@@ -1,0 +1,1 @@
+The clerk logs a renewal request and checks required attachments. Incomplete requests are returned. Complete requests are reviewed within five business days. If no applicant response arrives within 30 calendar days after a return, close the request as expired. Approved requests produce a renewed permit; refused requests produce a refusal notice.

@@ -1,0 +1,74 @@
+{
+  "caseVersion": "1.0.0",
+  "familyId": "flowbench-account-filing",
+  "caseId": "flowbench-account-filing.base",
+  "title": "Account filing loop",
+  "primaryTask": "description",
+  "evaluationLane": "text-to-process",
+  "businessDomain": "information-technology",
+  "partition": "held-out",
+  "upstreamOverlapGroup": "flowbench-account-filing",
+  "knownRegression": false,
+  "difficultyTags": [
+    "routine",
+    "single-source"
+  ],
+  "coverage": {
+    "case-vs-batch": [
+      "flowbench-account-filing.assertion.1"
+    ],
+    "retries": [
+      "flowbench-account-filing.assertion.1"
+    ]
+  },
+  "task": {
+    "prompt": "Model the account filing workflow. Preserve that the file creation repeats per retrieved account.",
+    "scope": {
+      "requested": "Account filing loop",
+      "excluded": [
+        "process improvement unless explicitly requested"
+      ]
+    },
+    "clarificationAnswers": [],
+    "correctionTurns": []
+  },
+  "applicability": {
+    "status": "supported",
+    "capability": "source-driven-modeling-session",
+    "reason": "Within the current declared public boundary.",
+    "fixedBeforeExecution": true
+  },
+  "sourceArtifacts": [
+    {
+      "id": "flowbench-account-filing.source.1",
+      "path": "inputs/utterance.txt",
+      "mediaType": "text/plain",
+      "sha256": "21015d8bf0197fe194344b0153f03184486ea277a69f4d2ffbccba55d6b6fbca",
+      "role": "evidence",
+      "viewpoint": "process owner",
+      "provenance": {
+        "classification": "public-academic",
+        "sourceFamily": "IBM FLOW-BENCH",
+        "sourceVersion": "git commit 2e4c1e3a128d27b905ab98baa7b13fe4433c9ce7",
+        "originalUrl": "https://github.com/IBM/flow-bench",
+        "retrievedAt": "2026-09-21",
+        "rights": {
+          "license": "Apache-2.0",
+          "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0",
+          "attribution": "IBM FLOW-BENCH contributors"
+        }
+      },
+      "transformationHistory": [
+        "Extracted tests[uid=5].input.utterance from data/conditional_ootb.yaml without semantic edits."
+      ]
+    }
+  ],
+  "reviewerMaterial": "reviewer/assertions.json",
+  "variants": [],
+  "reviewStatus": {
+    "machineIntegrity": "pass-at-authored-version",
+    "independentAgentReview": "completed-for-consistency",
+    "expertAdjudication": "not_run",
+    "humanUsabilityReview": "not_run"
+  }
+}

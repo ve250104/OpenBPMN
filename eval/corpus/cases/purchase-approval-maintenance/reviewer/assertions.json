@@ -1,0 +1,105 @@
+{
+  "reviewVersion": "1.0.0",
+  "familyId": "purchase-approval-maintenance",
+  "canary": "reviewer-only-canary-40148db89fae6d89",
+  "authoredIndependentlyOfCandidate": true,
+  "assertions": [
+    {
+      "id": "purchase-approval-maintenance.assertion.1",
+      "claim": "the threshold changes to EUR 7,500 inclusive",
+      "disposition": "required",
+      "severity": "critical",
+      "dimension": "evidenceFidelity",
+      "epistemicStatus": "established",
+      "evidence": [
+        {
+          "sourceId": "purchase-approval-maintenance.source.1",
+          "locator": "correction",
+          "stance": "supports",
+          "effectiveDate": null,
+          "entityScope": "session owner",
+          "caseScope": "Purchase approval correction"
+        }
+      ],
+      "outputLocations": [
+        "BPMN semantics",
+        "SVG preview",
+        "Quality Report",
+        "final delivery claims"
+      ],
+      "evaluation": {
+        "kind": "agent",
+        "instructions": "Inspect the cited source and externally observable candidate artifacts; do not infer from candidate plausibility."
+      }
+    },
+    {
+      "id": "purchase-approval-maintenance.assertion.2",
+      "claim": "unaffected gateway and flow identities remain stable",
+      "disposition": "required",
+      "severity": "critical",
+      "dimension": "coverage",
+      "epistemicStatus": "established",
+      "evidence": [
+        {
+          "sourceId": "purchase-approval-maintenance.source.1",
+          "locator": "identities",
+          "stance": "supports",
+          "effectiveDate": null,
+          "entityScope": "session owner",
+          "caseScope": "Purchase approval correction"
+        }
+      ],
+      "outputLocations": [
+        "BPMN semantics",
+        "SVG preview",
+        "Quality Report",
+        "final delivery claims"
+      ],
+      "evaluation": {
+        "kind": "agent",
+        "instructions": "Inspect the cited source and externally observable candidate artifacts; do not infer from candidate plausibility."
+      }
+    }
+  ],
+  "variantAssertions": [],
+  "reviewRubric": {
+    "version": "1.0.0",
+    "criteria": [
+      {
+        "id": "comprehension",
+        "question": "Can a reviewer identify ownership, branching, and completion without author assistance?",
+        "scale": [
+          "clear",
+          "partly clear",
+          "unclear"
+        ],
+        "citationRequired": true
+      },
+      {
+        "id": "ambiguity",
+        "question": "Are material unknowns and competing interpretations visible rather than silently resolved?",
+        "scale": [
+          "explicit",
+          "partly explicit",
+          "hidden"
+        ],
+        "citationRequired": true
+      },
+      {
+        "id": "correction-effort",
+        "question": "How much measured reviewer effort was required to reach an acceptable correction?",
+        "scale": [
+          "no correction",
+          "minor correction",
+          "major correction",
+          "not measured"
+        ],
+        "citationRequired": true
+      }
+    ]
+  },
+  "acceptableAlternatives": [
+    "Any BPMN topology is acceptable when it preserves every assertion and does not add forbidden meaning."
+  ],
+  "observedResults": []
+}

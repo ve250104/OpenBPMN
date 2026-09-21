@@ -5,6 +5,8 @@
       "src/**",
       "test/**",
       "scripts/**",
+      "eval/corpus/*.mjs",
+      "eval/corpus/*.schema.json",
       "schemas/**",
       "examples/*.json",
       "!examples/*.quality.json",

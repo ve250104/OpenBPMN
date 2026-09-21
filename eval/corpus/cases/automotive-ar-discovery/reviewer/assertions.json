@@ -1,0 +1,133 @@
+{
+  "reviewVersion": "1.0.0",
+  "familyId": "automotive-ar-discovery",
+  "canary": "reviewer-only-canary-1fb0885d41884c4f",
+  "authoredIndependentlyOfCandidate": true,
+  "assertions": [
+    {
+      "id": "automotive-ar-discovery.assertion.1",
+      "claim": "North waits for self-bill while South invoices on shipment",
+      "disposition": "required",
+      "severity": "critical",
+      "dimension": "evidenceFidelity",
+      "epistemicStatus": "established",
+      "evidence": [
+        {
+          "sourceId": "automotive-ar-discovery.source.1",
+          "locator": "line 2",
+          "stance": "supports",
+          "effectiveDate": null,
+          "entityScope": "North AR analyst",
+          "caseScope": "Automotive accounts-receivable discovery"
+        }
+      ],
+      "outputLocations": [
+        "BPMN semantics",
+        "SVG preview",
+        "Quality Report",
+        "final delivery claims"
+      ],
+      "evaluation": {
+        "kind": "agent",
+        "instructions": "Inspect the cited source and externally observable candidate artifacts; do not infer from candidate plausibility."
+      }
+    },
+    {
+      "id": "automotive-ar-discovery.assertion.2",
+      "claim": "General Ledger, not AR, decides provisions and write-offs",
+      "disposition": "required",
+      "severity": "critical",
+      "dimension": "coverage",
+      "epistemicStatus": "established",
+      "evidence": [
+        {
+          "sourceId": "automotive-ar-discovery.source.1",
+          "locator": "line 2",
+          "stance": "supports",
+          "effectiveDate": null,
+          "entityScope": "North AR analyst",
+          "caseScope": "Automotive accounts-receivable discovery"
+        }
+      ],
+      "outputLocations": [
+        "BPMN semantics",
+        "SVG preview",
+        "Quality Report",
+        "final delivery claims"
+      ],
+      "evaluation": {
+        "kind": "agent",
+        "instructions": "Inspect the cited source and externally observable candidate artifacts; do not infer from candidate plausibility."
+      }
+    },
+    {
+      "id": "automotive-ar-discovery.assertion.3",
+      "claim": "policy wording proves observed collection practice",
+      "disposition": "forbidden",
+      "severity": "critical",
+      "dimension": "behavior",
+      "epistemicStatus": "unknown",
+      "evidence": [
+        {
+          "sourceId": "automotive-ar-discovery.source.3",
+          "locator": "sentences 1-2",
+          "stance": "does-not-support",
+          "effectiveDate": null,
+          "entityScope": "corporate policy owner",
+          "caseScope": "Automotive accounts-receivable discovery"
+        }
+      ],
+      "outputLocations": [
+        "BPMN semantics",
+        "SVG preview",
+        "Quality Report",
+        "final delivery claims"
+      ],
+      "evaluation": {
+        "kind": "agent",
+        "instructions": "Inspect the cited source and externally observable candidate artifacts; do not infer from candidate plausibility."
+      }
+    }
+  ],
+  "variantAssertions": [],
+  "reviewRubric": {
+    "version": "1.0.0",
+    "criteria": [
+      {
+        "id": "comprehension",
+        "question": "Can a reviewer identify ownership, branching, and completion without author assistance?",
+        "scale": [
+          "clear",
+          "partly clear",
+          "unclear"
+        ],
+        "citationRequired": true
+      },
+      {
+        "id": "ambiguity",
+        "question": "Are material unknowns and competing interpretations visible rather than silently resolved?",
+        "scale": [
+          "explicit",
+          "partly explicit",
+          "hidden"
+        ],
+        "citationRequired": true
+      },
+      {
+        "id": "correction-effort",
+        "question": "How much measured reviewer effort was required to reach an acceptable correction?",
+        "scale": [
+          "no correction",
+          "minor correction",
+          "major correction",
+          "not measured"
+        ],
+        "citationRequired": true
+      }
+    ]
+  },
+  "acceptableAlternatives": [
+    "Any BPMN topology is acceptable when it preserves every assertion and does not add forbidden meaning."
+  ],
+  "observedResults": []
+}

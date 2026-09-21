@@ -1,0 +1,75 @@
+{
+  "caseVersion": "1.0.0",
+  "familyId": "clean-raster-bpmn",
+  "caseId": "clean-raster-bpmn.base",
+  "title": "Clean raster invoice BPMN",
+  "primaryTask": "legacy",
+  "evaluationLane": "legacy-recognition",
+  "businessDomain": "finance",
+  "partition": "held-out",
+  "upstreamOverlapGroup": "clean-raster-bpmn",
+  "knownRegression": false,
+  "difficultyTags": [
+    "challenging",
+    "single-source"
+  ],
+  "coverage": {
+    "alternatives": [
+      "clean-raster-bpmn.assertion.1"
+    ],
+    "cross-lane-routing": [
+      "clean-raster-bpmn.assertion.1"
+    ]
+  },
+  "task": {
+    "prompt": "Recognize the clean raster BPMN diagram without assuming hidden XML or metadata.",
+    "scope": {
+      "requested": "Clean raster invoice BPMN",
+      "excluded": [
+        "process improvement unless explicitly requested"
+      ]
+    },
+    "clarificationAnswers": [],
+    "correctionTurns": []
+  },
+  "applicability": {
+    "status": "unsupported",
+    "capability": "raster-ocr-conversion",
+    "reason": "Exploratory corpus probe; current product contract does not implement this conversion.",
+    "fixedBeforeExecution": true
+  },
+  "sourceArtifacts": [
+    {
+      "id": "clean-raster-bpmn.source.1",
+      "path": "inputs/invoice-review.png",
+      "mediaType": "image/png",
+      "sha256": "02e5c8e5a745ca680888a35e5ee1058417f128a74700bf4880d7e4144e04e160",
+      "role": "evidence",
+      "viewpoint": "legacy model owner",
+      "provenance": {
+        "classification": "synthetic-fiction",
+        "sourceFamily": "OpenBPMN evaluation corpus",
+        "sourceVersion": "1.0.0",
+        "originalUrl": null,
+        "authorshipRecord": "Authored for OpenBPMN issue #44; not client or operational material.",
+        "retrievedAt": "2026-09-21",
+        "rights": {
+          "license": "MIT",
+          "licenseUrl": "https://opensource.org/license/mit",
+          "attribution": "OpenBPMN contributors"
+        }
+      },
+      "transformationHistory": [
+        "Authored directly in the declared format."
+      ]
+    }
+  ],
+  "reviewerMaterial": "reviewer/assertions.json",
+  "variants": [],
+  "reviewStatus": {
+    "machineIntegrity": "pass-at-authored-version",
+    "independentAgentReview": "completed-for-consistency",
+    "expertAdjudication": "not_run",
+    "humanUsabilityReview": "not_run"
+  }
+}

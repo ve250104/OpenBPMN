@@ -1,0 +1,133 @@
+{
+  "reviewVersion": "1.0.0",
+  "familyId": "flowbench-incident-routing",
+  "canary": "reviewer-only-canary-211b00a8acef1dc5",
+  "authoredIndependentlyOfCandidate": true,
+  "assertions": [
+    {
+      "id": "flowbench-incident-routing.assertion.1",
+      "claim": "high impact creates both a Jira issue and Slack message",
+      "disposition": "required",
+      "severity": "critical",
+      "dimension": "evidenceFidelity",
+      "epistemicStatus": "established",
+      "evidence": [
+        {
+          "sourceId": "flowbench-incident-routing.source.1",
+          "locator": "sentence 2",
+          "stance": "supports",
+          "effectiveDate": null,
+          "entityScope": "process owner",
+          "caseScope": "Impact-based incident routing"
+        }
+      ],
+      "outputLocations": [
+        "BPMN semantics",
+        "SVG preview",
+        "Quality Report",
+        "final delivery claims"
+      ],
+      "evaluation": {
+        "kind": "agent",
+        "instructions": "Inspect the cited source and externally observable candidate artifacts; do not infer from candidate plausibility."
+      }
+    },
+    {
+      "id": "flowbench-incident-routing.assertion.2",
+      "claim": "the non-high alternative creates a GitHub issue",
+      "disposition": "required",
+      "severity": "critical",
+      "dimension": "coverage",
+      "epistemicStatus": "established",
+      "evidence": [
+        {
+          "sourceId": "flowbench-incident-routing.source.1",
+          "locator": "sentence 3",
+          "stance": "supports",
+          "effectiveDate": null,
+          "entityScope": "process owner",
+          "caseScope": "Impact-based incident routing"
+        }
+      ],
+      "outputLocations": [
+        "BPMN semantics",
+        "SVG preview",
+        "Quality Report",
+        "final delivery claims"
+      ],
+      "evaluation": {
+        "kind": "agent",
+        "instructions": "Inspect the cited source and externally observable candidate artifacts; do not infer from candidate plausibility."
+      }
+    },
+    {
+      "id": "flowbench-incident-routing.assertion.3",
+      "claim": "the two high-impact actions are ordered by business requirement",
+      "disposition": "forbidden",
+      "severity": "major",
+      "dimension": "behavior",
+      "epistemicStatus": "unknown",
+      "evidence": [
+        {
+          "sourceId": "flowbench-incident-routing.source.1",
+          "locator": "sentence 2",
+          "stance": "does-not-support",
+          "effectiveDate": null,
+          "entityScope": "process owner",
+          "caseScope": "Impact-based incident routing"
+        }
+      ],
+      "outputLocations": [
+        "BPMN semantics",
+        "SVG preview",
+        "Quality Report",
+        "final delivery claims"
+      ],
+      "evaluation": {
+        "kind": "agent",
+        "instructions": "Inspect the cited source and externally observable candidate artifacts; do not infer from candidate plausibility."
+      }
+    }
+  ],
+  "variantAssertions": [],
+  "reviewRubric": {
+    "version": "1.0.0",
+    "criteria": [
+      {
+        "id": "comprehension",
+        "question": "Can a reviewer identify ownership, branching, and completion without author assistance?",
+        "scale": [
+          "clear",
+          "partly clear",
+          "unclear"
+        ],
+        "citationRequired": true
+      },
+      {
+        "id": "ambiguity",
+        "question": "Are material unknowns and competing interpretations visible rather than silently resolved?",
+        "scale": [
+          "explicit",
+          "partly explicit",
+          "hidden"
+        ],
+        "citationRequired": true
+      },
+      {
+        "id": "correction-effort",
+        "question": "How much measured reviewer effort was required to reach an acceptable correction?",
+        "scale": [
+          "no correction",
+          "minor correction",
+          "major correction",
+          "not measured"
+        ],
+        "citationRequired": true
+      }
+    ]
+  },
+  "acceptableAlternatives": [
+    "Any BPMN topology is acceptable when it preserves every assertion and does not add forbidden meaning."
+  ],
+  "observedResults": []
+}

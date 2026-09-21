@@ -1,0 +1,1 @@
+Create a new box folder. For every retrieved salesforce account, create a new file in the folder.

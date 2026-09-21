@@ -1,0 +1,2 @@
+Buyer: I collect tax and bank forms, then send the pack to Vendor Risk. I only know that a response eventually arrives.
+Risk analyst: We screen the supplier and send a decision to Master Data.

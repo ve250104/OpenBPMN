@@ -1,0 +1,105 @@
+{
+  "reviewVersion": "1.0.0",
+  "familyId": "contract-renewal-discovery",
+  "canary": "reviewer-only-canary-b42fb34c08aabe38",
+  "authoredIndependentlyOfCandidate": true,
+  "assertions": [
+    {
+      "id": "contract-renewal-discovery.assertion.1",
+      "claim": "monthly portfolio assignment is not sequence flow inside one renewal case",
+      "disposition": "required",
+      "severity": "critical",
+      "dimension": "evidenceFidelity",
+      "epistemicStatus": "established",
+      "evidence": [
+        {
+          "sourceId": "contract-renewal-discovery.source.2",
+          "locator": "sentence 1",
+          "stance": "supports",
+          "effectiveDate": null,
+          "entityScope": "sales operations",
+          "caseScope": "Contract renewal discovery"
+        }
+      ],
+      "outputLocations": [
+        "BPMN semantics",
+        "SVG preview",
+        "Quality Report",
+        "final delivery claims"
+      ],
+      "evaluation": {
+        "kind": "agent",
+        "instructions": "Inspect the cited source and externally observable candidate artifacts; do not infer from candidate plausibility."
+      }
+    },
+    {
+      "id": "contract-renewal-discovery.assertion.2",
+      "claim": "customer decline and unsigned expiry are distinguishable outcomes",
+      "disposition": "required",
+      "severity": "major",
+      "dimension": "coverage",
+      "epistemicStatus": "established",
+      "evidence": [
+        {
+          "sourceId": "contract-renewal-discovery.source.1",
+          "locator": "sentence 2",
+          "stance": "supports",
+          "effectiveDate": null,
+          "entityScope": "legal operations",
+          "caseScope": "Contract renewal discovery"
+        }
+      ],
+      "outputLocations": [
+        "BPMN semantics",
+        "SVG preview",
+        "Quality Report",
+        "final delivery claims"
+      ],
+      "evaluation": {
+        "kind": "agent",
+        "instructions": "Inspect the cited source and externally observable candidate artifacts; do not infer from candidate plausibility."
+      }
+    }
+  ],
+  "variantAssertions": [],
+  "reviewRubric": {
+    "version": "1.0.0",
+    "criteria": [
+      {
+        "id": "comprehension",
+        "question": "Can a reviewer identify ownership, branching, and completion without author assistance?",
+        "scale": [
+          "clear",
+          "partly clear",
+          "unclear"
+        ],
+        "citationRequired": true
+      },
+      {
+        "id": "ambiguity",
+        "question": "Are material unknowns and competing interpretations visible rather than silently resolved?",
+        "scale": [
+          "explicit",
+          "partly explicit",
+          "hidden"
+        ],
+        "citationRequired": true
+      },
+      {
+        "id": "correction-effort",
+        "question": "How much measured reviewer effort was required to reach an acceptable correction?",
+        "scale": [
+          "no correction",
+          "minor correction",
+          "major correction",
+          "not measured"
+        ],
+        "citationRequired": true
+      }
+    ]
+  },
+  "acceptableAlternatives": [
+    "Any BPMN topology is acceptable when it preserves every assertion and does not add forbidden meaning."
+  ],
+  "observedResults": []
+}

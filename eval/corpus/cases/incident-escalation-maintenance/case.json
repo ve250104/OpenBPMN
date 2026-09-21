@@ -1,0 +1,119 @@
+{
+  "caseVersion": "1.0.0",
+  "familyId": "incident-escalation-maintenance",
+  "caseId": "incident-escalation-maintenance.base",
+  "title": "Incident escalation correction",
+  "primaryTask": "maintenance",
+  "evaluationLane": "conversational-correction",
+  "businessDomain": "information-technology",
+  "partition": "held-out",
+  "upstreamOverlapGroup": "incident-escalation-maintenance",
+  "knownRegression": false,
+  "difficultyTags": [
+    "routine",
+    "single-source"
+  ],
+  "coverage": {
+    "business-vs-elapsed-time": [
+      "incident-escalation-maintenance.assertion.1"
+    ],
+    "cancellation-escalation-timeout": [
+      "incident-escalation-maintenance.assertion.1"
+    ]
+  },
+  "task": {
+    "prompt": "Continue the supplied session. Change the accepted elapsed escalation interval to three hours while retaining the boundary-event identity.",
+    "scope": {
+      "requested": "Incident escalation correction",
+      "excluded": [
+        "process improvement unless explicitly requested"
+      ]
+    },
+    "clarificationAnswers": [],
+    "correctionTurns": [
+      "Continue the supplied session. Change the accepted elapsed escalation interval to three hours while retaining the boundary-event identity."
+    ]
+  },
+  "applicability": {
+    "status": "supported",
+    "capability": "source-driven-modeling-session",
+    "reason": "Within the current declared public boundary.",
+    "fixedBeforeExecution": true
+  },
+  "sourceArtifacts": [
+    {
+      "id": "incident-escalation-maintenance.source.1",
+      "path": "inputs/handoff.json",
+      "mediaType": "application/json",
+      "sha256": "7b1bac26c563b60b7f9354d8bd187225c6f1426d20ec3eb722644b53416d6681",
+      "role": "evidence",
+      "viewpoint": "session owner",
+      "provenance": {
+        "classification": "synthetic-fiction",
+        "sourceFamily": "OpenBPMN evaluation corpus",
+        "sourceVersion": "1.0.0",
+        "originalUrl": null,
+        "authorshipRecord": "Authored for OpenBPMN issue #44; not client or operational material.",
+        "retrievedAt": "2026-09-21",
+        "rights": {
+          "license": "MIT",
+          "licenseUrl": "https://opensource.org/license/mit",
+          "attribution": "OpenBPMN contributors"
+        }
+      },
+      "transformationHistory": [
+        "Authored directly in the declared format."
+      ]
+    }
+  ],
+  "reviewerMaterial": "reviewer/assertions.json",
+  "variants": [
+    {
+      "id": "three-to-two-hours",
+      "kind": "meaning-changing",
+      "partition": "held-out",
+      "prompt": "Continue the supplied session using the targeted correction. Change the accepted elapsed escalation interval to two hours while retaining the boundary-event identity.",
+      "replacesSourceIds": [
+        "incident-escalation-maintenance.source.1"
+      ],
+      "inputArtifacts": [
+        {
+          "id": "incident-escalation-maintenance.variant.three-to-two-hours.source.1",
+          "path": "variants/three-to-two-hours/handoff.json",
+          "mediaType": "application/json",
+          "sha256": "d77b2445fd2a35afbd30d552648dd9905387e953eaeee378f4bde99879317a52",
+          "role": "evidence",
+          "viewpoint": "session owner",
+          "provenance": {
+            "classification": "synthetic-fiction",
+            "sourceFamily": "OpenBPMN evaluation corpus",
+            "sourceVersion": "1.0.0",
+            "originalUrl": null,
+            "authorshipRecord": "Authored for OpenBPMN issue #44; not client or operational material.",
+            "retrievedAt": "2026-09-21",
+            "rights": {
+              "license": "MIT",
+              "licenseUrl": "https://opensource.org/license/mit",
+              "attribution": "OpenBPMN contributors"
+            }
+          },
+          "transformationHistory": [
+            "Authored directly in the declared format."
+          ]
+        }
+      ],
+      "stableAssertionIds": [
+        "incident-escalation-maintenance.assertion.2"
+      ],
+      "changedAssertionIds": [
+        "incident-escalation-maintenance.assertion.1"
+      ]
+    }
+  ],
+  "reviewStatus": {
+    "machineIntegrity": "pass-at-authored-version",
+    "independentAgentReview": "completed-for-consistency",
+    "expertAdjudication": "not_run",
+    "humanUsabilityReview": "not_run"
+  }
+}

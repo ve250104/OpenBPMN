@@ -1,0 +1,75 @@
+{
+  "caseVersion": "1.0.0",
+  "familyId": "structured-bpmn-preservation",
+  "caseId": "structured-bpmn-preservation.base",
+  "title": "Structured BPMN preservation",
+  "primaryTask": "legacy",
+  "evaluationLane": "legacy-preservation",
+  "businessDomain": "procurement",
+  "partition": "known-regression",
+  "upstreamOverlapGroup": "purchase-approval",
+  "knownRegression": true,
+  "difficultyTags": [
+    "adversarial",
+    "single-source"
+  ],
+  "coverage": {
+    "alternatives": [
+      "structured-bpmn-preservation.assertion.1"
+    ],
+    "nested-detail-views": [
+      "structured-bpmn-preservation.assertion.1"
+    ]
+  },
+  "task": {
+    "prompt": "Validate and render the supplied BPMN read-only. Report preservation defects; do not import it for conversational editing.",
+    "scope": {
+      "requested": "Structured BPMN preservation",
+      "excluded": [
+        "process improvement unless explicitly requested"
+      ]
+    },
+    "clarificationAnswers": [],
+    "correctionTurns": []
+  },
+  "applicability": {
+    "status": "supported",
+    "capability": "supplied-bpmn-validation-rendering",
+    "reason": "Within the current declared public boundary.",
+    "fixedBeforeExecution": true
+  },
+  "sourceArtifacts": [
+    {
+      "id": "structured-bpmn-preservation.source.1",
+      "path": "inputs/purchase-approval.bpmn",
+      "mediaType": "application/xml",
+      "sha256": "b8e57af3a4bf02951b9188f109c46493868ded613cc81063c856ccc2c6abe5bd",
+      "role": "evidence",
+      "viewpoint": "legacy model owner",
+      "provenance": {
+        "classification": "synthetic-fiction",
+        "sourceFamily": "OpenBPMN evaluation corpus",
+        "sourceVersion": "1.0.0",
+        "originalUrl": null,
+        "authorshipRecord": "Authored for OpenBPMN issue #44; not client or operational material.",
+        "retrievedAt": "2026-09-21",
+        "rights": {
+          "license": "MIT",
+          "licenseUrl": "https://opensource.org/license/mit",
+          "attribution": "OpenBPMN contributors"
+        }
+      },
+      "transformationHistory": [
+        "copied unchanged from examples/purchase-approval.bpmn at bf84f92aaf43c8a735bd29cb4a2a70791b0eda05"
+      ]
+    }
+  ],
+  "reviewerMaterial": "reviewer/assertions.json",
+  "variants": [],
+  "reviewStatus": {
+    "machineIntegrity": "pass-at-authored-version",
+    "independentAgentReview": "completed-for-consistency",
+    "expertAdjudication": "not_run",
+    "humanUsabilityReview": "not_run"
+  }
+}

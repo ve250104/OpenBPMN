@@ -1,0 +1,99 @@
+{
+  "caseVersion": "1.0.0",
+  "familyId": "university-access-discovery",
+  "caseId": "university-access-discovery.base",
+  "title": "University access provisioning discovery",
+  "primaryTask": "discovery",
+  "evaluationLane": "mixed-evidence-discovery",
+  "businessDomain": "education",
+  "partition": "development",
+  "upstreamOverlapGroup": "university-access-discovery",
+  "knownRegression": false,
+  "difficultyTags": [
+    "challenging",
+    "multi-source"
+  ],
+  "coverage": {
+    "policy-practice-disagreement": [
+      "university-access-discovery.assertion.1"
+    ],
+    "cross-lane-routing": [
+      "university-access-discovery.assertion.1"
+    ]
+  },
+  "task": {
+    "prompt": "Discover current access provisioning and call out the unresolved difference between policy and observed routing.",
+    "scope": {
+      "requested": "University access provisioning discovery",
+      "excluded": [
+        "process improvement unless explicitly requested"
+      ]
+    },
+    "clarificationAnswers": [],
+    "correctionTurns": []
+  },
+  "applicability": {
+    "status": "supported",
+    "capability": "source-driven-modeling-session",
+    "reason": "Within the current declared public boundary.",
+    "fixedBeforeExecution": true
+  },
+  "sourceArtifacts": [
+    {
+      "id": "university-access-discovery.source.1",
+      "path": "inputs/technician-interview.txt",
+      "mediaType": "text/plain",
+      "sha256": "4d2554afd8a3409dcd2225ab39f02e63009b77502d74e0bf2c35af60752935e9",
+      "role": "evidence",
+      "viewpoint": "IT technician",
+      "provenance": {
+        "classification": "synthetic-fiction",
+        "sourceFamily": "OpenBPMN evaluation corpus",
+        "sourceVersion": "1.0.0",
+        "originalUrl": null,
+        "authorshipRecord": "Authored for OpenBPMN issue #44; not client or operational material.",
+        "retrievedAt": "2026-09-21",
+        "rights": {
+          "license": "MIT",
+          "licenseUrl": "https://opensource.org/license/mit",
+          "attribution": "OpenBPMN contributors"
+        }
+      },
+      "transformationHistory": [
+        "Authored directly in the declared format."
+      ]
+    },
+    {
+      "id": "university-access-discovery.source.2",
+      "path": "inputs/access-policy.txt",
+      "mediaType": "text/plain",
+      "sha256": "bfcbd21f7fd3c9376cf493cd7d9480d6d8c14e93bd443815103d8b72e6856edc",
+      "role": "evidence",
+      "viewpoint": "policy owner",
+      "provenance": {
+        "classification": "synthetic-fiction",
+        "sourceFamily": "OpenBPMN evaluation corpus",
+        "sourceVersion": "1.0.0",
+        "originalUrl": null,
+        "authorshipRecord": "Authored for OpenBPMN issue #44; not client or operational material.",
+        "retrievedAt": "2026-09-21",
+        "rights": {
+          "license": "MIT",
+          "licenseUrl": "https://opensource.org/license/mit",
+          "attribution": "OpenBPMN contributors"
+        }
+      },
+      "transformationHistory": [
+        "Authored directly in the declared format."
+      ]
+    }
+  ],
+  "reviewerMaterial": "reviewer/assertions.json",
+  "variants": [],
+  "reviewStatus": {
+    "machineIntegrity": "pass-at-authored-version",
+    "independentAgentReview": "completed-for-consistency",
+    "expertAdjudication": "not_run",
+    "humanUsabilityReview": "not_run"
+  }
+}

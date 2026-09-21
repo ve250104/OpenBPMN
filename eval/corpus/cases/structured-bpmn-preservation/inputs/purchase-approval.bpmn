@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="M_purchaseApproval" name="Purchase approval" targetNamespace="urn:process-model:purchaseApproval">
+  <bpmn:process id="M_purchase" name="Purchase approval" isExecutable="false">
+    <bpmn:laneSet id="G_lanes_purchase">
+      <bpmn:lane id="M_requester" name="Requester">
+        <bpmn:flowNodeRef>M_submitted</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>M_correct</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="M_operations" name="Operations">
+        <bpmn:flowNodeRef>M_check</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>M_complete</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>M_order</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>M_send</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>M_sent</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="M_budgetOwner" name="Budget owner">
+        <bpmn:flowNodeRef>M_review</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>M_approved</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>M_rejected</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="M_submitted" name="Request submitted">
+      <bpmn:outgoing>M_startCheck</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:userTask id="M_check" name="Check request details">
+      <bpmn:incoming>M_startCheck</bpmn:incoming>
+      <bpmn:incoming>M_retry</bpmn:incoming>
+      <bpmn:outgoing>M_checkResult</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="M_complete" name="Request complete?" default="M_missing">
+      <bpmn:incoming>M_checkResult</bpmn:incoming>
+      <bpmn:outgoing>M_ready</bpmn:outgoing>
+      <bpmn:outgoing>M_missing</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="M_correct" name="Correct request">
+      <bpmn:incoming>M_missing</bpmn:incoming>
+      <bpmn:outgoing>M_retry</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="M_review" name="Review purchase">
+      <bpmn:incoming>M_ready</bpmn:incoming>
+      <bpmn:outgoing>M_reviewResult</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="M_approved" name="Approved?" default="M_rejection">
+      <bpmn:incoming>M_reviewResult</bpmn:incoming>
+      <bpmn:outgoing>M_approval</bpmn:outgoing>
+      <bpmn:outgoing>M_rejection</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="M_order" name="Prepare purchase order">
+      <bpmn:incoming>M_approval</bpmn:incoming>
+      <bpmn:outgoing>M_orderPrepared</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sendTask id="M_send" name="Send purchase order">
+      <bpmn:incoming>M_orderPrepared</bpmn:incoming>
+      <bpmn:outgoing>M_orderSent</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:endEvent id="M_sent" name="Purchase order sent">
+      <bpmn:incoming>M_orderSent</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="M_rejected" name="Request rejected">
+      <bpmn:incoming>M_rejection</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="M_startCheck" sourceRef="M_submitted" targetRef="M_check" />
+    <bpmn:sequenceFlow id="M_checkResult" sourceRef="M_check" targetRef="M_complete" />
+    <bpmn:sequenceFlow id="M_ready" name="Complete" sourceRef="M_complete" targetRef="M_review">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">All required details supplied</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="M_missing" name="Missing details" sourceRef="M_complete" targetRef="M_correct" />
+    <bpmn:sequenceFlow id="M_retry" sourceRef="M_correct" targetRef="M_check" />
+    <bpmn:sequenceFlow id="M_reviewResult" sourceRef="M_review" targetRef="M_approved" />
+    <bpmn:sequenceFlow id="M_approval" name="Yes" sourceRef="M_approved" targetRef="M_order">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Budget owner approves</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="M_rejection" name="No" sourceRef="M_approved" targetRef="M_rejected" />
+    <bpmn:sequenceFlow id="M_orderPrepared" sourceRef="M_order" targetRef="M_send" />
+    <bpmn:sequenceFlow id="M_orderSent" sourceRef="M_send" targetRef="M_sent" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="D_diagram_M_purchase">
+    <bpmndi:BPMNPlane id="D_plane_M_purchase" bpmnElement="M_purchase">
+      <bpmndi:BPMNShape id="D_shape_M_purchase_M_requester" bpmnElement="M_requester" isHorizontal="true">
+        <dc:Bounds x="80" y="80" width="1352" height="356" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_purchase_M_operations" bpmnElement="M_operations" isHorizontal="true">
+        <dc:Bounds x="80" y="436" width="1352" height="400" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_purchase_M_budgetOwner" bpmnElement="M_budgetOwner" isHorizontal="true">
+        <dc:Bounds x="80" y="836" width="1352" height="240" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_purchase_M_submitted" bpmnElement="M_submitted">
+        <dc:Bounds x="120" y="160" width="36" height="36" />
+        <bpmndi:BPMNLabel id="D_label_M_purchase_M_submitted">
+          <dc:Bounds x="116" y="204" width="128" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_purchase_M_check" bpmnElement="M_check">
+        <dc:Bounds x="256" y="516" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_purchase_M_complete" bpmnElement="M_complete" isMarkerVisible="true">
+        <dc:Bounds x="456" y="531" width="50" height="50" />
+        <bpmndi:BPMNLabel id="D_label_M_purchase_M_complete">
+          <dc:Bounds x="417" y="589" width="128" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_purchase_M_correct" bpmnElement="M_correct">
+        <dc:Bounds x="606" y="276" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_purchase_M_review" bpmnElement="M_review">
+        <dc:Bounds x="606" y="916" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_purchase_M_approved" bpmnElement="M_approved" isMarkerVisible="true">
+        <dc:Bounds x="806" y="931" width="50" height="50" />
+        <bpmndi:BPMNLabel id="D_label_M_purchase_M_approved">
+          <dc:Bounds x="786" y="989" width="90" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_purchase_M_order" bpmnElement="M_order">
+        <dc:Bounds x="956" y="676" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_purchase_M_send" bpmnElement="M_send">
+        <dc:Bounds x="1156" y="676" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_purchase_M_sent" bpmnElement="M_sent">
+        <dc:Bounds x="1356" y="698" width="36" height="36" />
+        <bpmndi:BPMNLabel id="D_label_M_purchase_M_sent">
+          <dc:Bounds x="1289" y="742" width="135" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_purchase_M_rejected" bpmnElement="M_rejected">
+        <dc:Bounds x="988" y="938" width="36" height="36" />
+        <bpmndi:BPMNLabel id="D_label_M_purchase_M_rejected">
+          <dc:Bounds x="948.5" y="982" width="115" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="D_edge_M_purchase_M_startCheck" bpmnElement="M_startCheck">
+        <di:waypoint x="156" y="178" />
+        <di:waypoint x="306" y="178" />
+        <di:waypoint x="306" y="516" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_purchase_M_checkResult" bpmnElement="M_checkResult">
+        <di:waypoint x="356" y="556" />
+        <di:waypoint x="456" y="556" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_purchase_M_ready" bpmnElement="M_ready">
+        <di:waypoint x="506" y="556" />
+        <di:waypoint x="582" y="556" />
+        <di:waypoint x="582" y="900" />
+        <di:waypoint x="656" y="900" />
+        <di:waypoint x="656" y="916" />
+        <bpmndi:BPMNLabel id="D_label_M_purchase_M_ready">
+          <dc:Bounds x="518" y="525" width="90" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_purchase_M_reviewResult" bpmnElement="M_reviewResult">
+        <di:waypoint x="706" y="956" />
+        <di:waypoint x="806" y="956" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_purchase_M_rejection" bpmnElement="M_rejection">
+        <di:waypoint x="856" y="956" />
+        <di:waypoint x="988" y="956" />
+        <bpmndi:BPMNLabel id="D_label_M_purchase_M_rejection">
+          <dc:Bounds x="877" y="925" width="90" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_purchase_M_missing" bpmnElement="M_missing">
+        <di:waypoint x="481" y="531" />
+        <di:waypoint x="481" y="316" />
+        <di:waypoint x="606" y="316" />
+        <bpmndi:BPMNLabel id="D_label_M_purchase_M_missing">
+          <dc:Bounds x="489" y="400.05555555555554" width="103" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_purchase_M_approval" bpmnElement="M_approval">
+        <di:waypoint x="831" y="931" />
+        <di:waypoint x="831" y="716" />
+        <di:waypoint x="956" y="716" />
+        <bpmndi:BPMNLabel id="D_label_M_purchase_M_approval">
+          <dc:Bounds x="839" y="800.0555555555555" width="90" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_purchase_M_orderPrepared" bpmnElement="M_orderPrepared">
+        <di:waypoint x="1056" y="716" />
+        <di:waypoint x="1156" y="716" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_purchase_M_orderSent" bpmnElement="M_orderSent">
+        <di:waypoint x="1256" y="716" />
+        <di:waypoint x="1356" y="716" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_purchase_M_retry" bpmnElement="M_retry">
+        <di:waypoint x="656" y="356" />
+        <di:waypoint x="656" y="616" />
+        <di:waypoint x="306" y="616" />
+        <di:waypoint x="306" y="596" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

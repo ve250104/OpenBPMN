@@ -1,0 +1,61 @@
+%PDF-1.4
+%âãÏÓ
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 842 595] /Resources << /Font << /F1 5 0 R >> >> /Contents 4 0 R >>
+endobj
+4 0 obj
+<< /Length 1087 >>
+stream
+0.8 w
+35 90 772 430 re S
+BT /F1 16 Tf 55 485 Td (Claims intake legacy flow) Tj ET
+88 300 m 88 309.94 79.94 318 70 318 c 60.06 318 52 309.94 52 300 c 52 290.06 60.06 282 70 282 c 79.94 282 88 290.06 88 300 c S
+BT /F1 10 Tf 50 262 Td (Claim received) Tj ET
+150 390 160 60 re S
+BT /F1 10 Tf 158 416 Td (Broker sends documents) Tj ET
+350 270 190 60 re S
+BT /F1 9 Tf 358 296 Td (Claims team checks completeness) Tj ET
+570 328 m 598 300 l 570 272 l 542 300 l h S
+BT /F1 9 Tf 548 257 Td (Complete?) Tj ET
+640 390 140 60 re S
+BT /F1 10 Tf 648 416 Td (Register complete claim) Tj ET
+640 150 140 60 re S
+BT /F1 10 Tf 648 176 Td (Return incomplete claim) Tj ET
+88 300 m 150 420 l S
+150 420 m 142 424 l 142 416 l h f
+310 420 m 350 300 l S
+350 300 m 342 304 l 342 296 l h f
+540 300 m 542 300 l S
+542 300 m 534 304 l 534 296 l h f
+598 300 m 640 420 l S
+640 420 m 632 424 l 632 416 l h f
+580 276 m 640 180 l S
+640 180 m 632 184 l 632 176 l h f
+640 165 m 125 165 l 125 405 l 150 405 l S
+150 405 m 142 409 l 142 401 l h f
+BT /F1 9 Tf 595 438 Td (complete) Tj ET
+BT /F1 9 Tf 585 198 Td (incomplete) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000019 00000 n 
+0000000068 00000 n 
+0000000125 00000 n 
+0000000251 00000 n 
+0000001389 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+1459
+%%EOF

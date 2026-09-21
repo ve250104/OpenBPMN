@@ -1,0 +1,75 @@
+{
+  "caseVersion": "1.0.0",
+  "familyId": "ambiguous-swimlane-diagram",
+  "caseId": "ambiguous-swimlane-diagram.base",
+  "title": "Ambiguous informal swimlane diagram",
+  "primaryTask": "legacy",
+  "evaluationLane": "legacy-translation",
+  "businessDomain": "logistics",
+  "partition": "development",
+  "upstreamOverlapGroup": "ambiguous-swimlane-diagram",
+  "knownRegression": false,
+  "difficultyTags": [
+    "challenging",
+    "single-source"
+  ],
+  "coverage": {
+    "contradictory-ownership": [
+      "ambiguous-swimlane-diagram.assertion.1"
+    ],
+    "cross-lane-routing": [
+      "ambiguous-swimlane-diagram.assertion.1"
+    ]
+  },
+  "task": {
+    "prompt": "Translate the informal swimlane diagram only after surfacing the ambiguous ownership of release.",
+    "scope": {
+      "requested": "Ambiguous informal swimlane diagram",
+      "excluded": [
+        "process improvement unless explicitly requested"
+      ]
+    },
+    "clarificationAnswers": [],
+    "correctionTurns": []
+  },
+  "applicability": {
+    "status": "unsupported",
+    "capability": "visual-flowchart-conversion",
+    "reason": "Exploratory corpus probe; current product contract does not implement this conversion.",
+    "fixedBeforeExecution": true
+  },
+  "sourceArtifacts": [
+    {
+      "id": "ambiguous-swimlane-diagram.source.1",
+      "path": "inputs/shipment-release.svg",
+      "mediaType": "image/svg+xml",
+      "sha256": "43387e9ef19af5048a632d1e7aa82cd41fe58c3bc2a75473679327276813c9ad",
+      "role": "evidence",
+      "viewpoint": "legacy model owner",
+      "provenance": {
+        "classification": "synthetic-fiction",
+        "sourceFamily": "OpenBPMN evaluation corpus",
+        "sourceVersion": "1.0.0",
+        "originalUrl": null,
+        "authorshipRecord": "Authored for OpenBPMN issue #44; not client or operational material.",
+        "retrievedAt": "2026-09-21",
+        "rights": {
+          "license": "MIT",
+          "licenseUrl": "https://opensource.org/license/mit",
+          "attribution": "OpenBPMN contributors"
+        }
+      },
+      "transformationHistory": [
+        "Authored directly in the declared format."
+      ]
+    }
+  ],
+  "reviewerMaterial": "reviewer/assertions.json",
+  "variants": [],
+  "reviewStatus": {
+    "machineIntegrity": "pass-at-authored-version",
+    "independentAgentReview": "completed-for-consistency",
+    "expertAdjudication": "not_run",
+    "humanUsabilityReview": "not_run"
+  }
+}
