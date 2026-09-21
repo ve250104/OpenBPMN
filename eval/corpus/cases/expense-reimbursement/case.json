@@ -1,5 +1,5 @@
 {
-  "caseVersion": "1.0.0",
+  "caseVersion": "2.0.0",
   "familyId": "expense-reimbursement",
   "caseId": "expense-reimbursement.base",
   "title": "Expense reimbursement",
@@ -11,7 +11,7 @@
   "knownRegression": true,
   "difficultyTags": [
     "adversarial",
-    "single-source"
+    "multi-source"
   ],
   "coverage": {
     "cross-lane-routing": [
@@ -30,13 +30,78 @@
       ]
     },
     "clarificationAnswers": [],
-    "correctionTurns": []
+    "correctionTurns": [
+      "Later correction: change finance-controller approval from above EUR 2,000 to EUR 2,500 or more, with the complementary route below EUR 2,500; preserve unrelated work and identities."
+    ]
   },
   "applicability": {
     "status": "supported",
     "capability": "source-driven-modeling-session",
     "reason": "Within the current declared public boundary.",
     "fixedBeforeExecution": true
+  },
+  "correctionContract": {
+    "baselineRequired": true,
+    "mutableElementIds": [
+      "F_controller",
+      "F_standard",
+      "controllerRequired",
+      "controllerNotRequired"
+    ],
+    "removableElementIds": [],
+    "allowedNewElements": [],
+    "allowedElementChanges": [],
+    "allowedFlowChanges": [
+      {
+        "id": "F_controller",
+        "field": "name",
+        "from": "Above EUR 2,000",
+        "to": "EUR 2,500 or more"
+      },
+      {
+        "id": "F_controller",
+        "field": "condition",
+        "from": "amount > 2000",
+        "to": "amount >= 2500"
+      },
+      {
+        "id": "F_standard",
+        "field": "name",
+        "from": "EUR 2,000 or less",
+        "to": "Below EUR 2,500"
+      },
+      {
+        "id": "F_standard",
+        "field": "condition",
+        "from": "amount <= 2000",
+        "to": "amount < 2500"
+      },
+      {
+        "id": "controllerRequired",
+        "field": "name",
+        "from": "Above EUR 2,000",
+        "to": "EUR 2,500 or more"
+      },
+      {
+        "id": "controllerRequired",
+        "field": "condition",
+        "from": "Claim amount is greater than EUR 2,000.",
+        "to": "Claim amount is greater than or equal to EUR 2,500."
+      },
+      {
+        "id": "controllerNotRequired",
+        "field": "name",
+        "from": "EUR 2,000 or less",
+        "to": "Below EUR 2,500"
+      },
+      {
+        "id": "controllerNotRequired",
+        "field": "condition",
+        "from": "Claim amount is less than or equal to EUR 2,000.",
+        "to": "Claim amount is less than EUR 2,500."
+      }
+    ],
+    "allowedNewFlows": []
   },
   "sourceArtifacts": [
     {
@@ -61,6 +126,78 @@
       },
       "transformationHistory": [
         "Authored directly in the declared format."
+      ]
+    },
+    {
+      "id": "expense-reimbursement.source.2",
+      "path": "inputs/interviews.txt",
+      "mediaType": "text/plain",
+      "sha256": "d740276192c82d63eb404eb2dd44f94fb1c70a54183994743a3d73dbe0956f17",
+      "role": "evidence",
+      "viewpoint": "employee and line manager",
+      "provenance": {
+        "classification": "synthetic-fiction",
+        "sourceFamily": "OpenBPMN evaluation corpus",
+        "sourceVersion": "2.0.0",
+        "originalUrl": null,
+        "authorshipRecord": "Authored for OpenBPMN issue #45; not client or operational material.",
+        "retrievedAt": "2026-09-21",
+        "rights": {
+          "license": "MIT",
+          "licenseUrl": "https://opensource.org/license/mit",
+          "attribution": "OpenBPMN contributors"
+        }
+      },
+      "transformationHistory": [
+        "Authored directly in the declared format as a richer related case pack."
+      ]
+    },
+    {
+      "id": "expense-reimbursement.source.3",
+      "path": "inputs/policy.txt",
+      "mediaType": "text/plain",
+      "sha256": "532e85832d112eea49baf77d3c3e8530eaa8f32b2b8d835a0d20bb75f91fcb0d",
+      "role": "evidence",
+      "viewpoint": "process owner",
+      "provenance": {
+        "classification": "synthetic-fiction",
+        "sourceFamily": "OpenBPMN evaluation corpus",
+        "sourceVersion": "2.0.0",
+        "originalUrl": null,
+        "authorshipRecord": "Authored for OpenBPMN issue #45; not client or operational material.",
+        "retrievedAt": "2026-09-21",
+        "rights": {
+          "license": "MIT",
+          "licenseUrl": "https://opensource.org/license/mit",
+          "attribution": "OpenBPMN contributors"
+        }
+      },
+      "transformationHistory": [
+        "Authored directly in the declared format as a richer related case pack."
+      ]
+    },
+    {
+      "id": "expense-reimbursement.source.4",
+      "path": "inputs/correction.txt",
+      "mediaType": "text/plain",
+      "sha256": "60fd205d2288f7df605d365be47e5b3b5689c1fc098a9906c877216b49c7c188",
+      "role": "evidence",
+      "viewpoint": "process owner",
+      "provenance": {
+        "classification": "synthetic-fiction",
+        "sourceFamily": "OpenBPMN evaluation corpus",
+        "sourceVersion": "2.0.0",
+        "originalUrl": null,
+        "authorshipRecord": "Authored for OpenBPMN issue #45; not client or operational material.",
+        "retrievedAt": "2026-09-21",
+        "rights": {
+          "license": "MIT",
+          "licenseUrl": "https://opensource.org/license/mit",
+          "attribution": "OpenBPMN contributors"
+        }
+      },
+      "transformationHistory": [
+        "Authored directly in the declared format as the correction-turn evidence."
       ]
     }
   ],

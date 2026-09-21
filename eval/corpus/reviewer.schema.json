@@ -1,13 +1,39 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:openbpmn:evaluation:reviewer:1.0.0",
+  "$id": "urn:openbpmn:evaluation:reviewer:2.0.0",
   "type": "object",
   "additionalProperties": false,
   "properties": {
-    "reviewVersion": { "const": "1.0.0" },
+    "reviewVersion": { "const": "2.0.0" },
     "familyId": { "$ref": "#/$defs/id" },
     "canary": { "type": "string", "pattern": "^reviewer-only-canary-[a-f0-9]{16}$" },
     "authoredIndependentlyOfCandidate": { "const": true },
+    "expectationReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "status": { "enum": ["completed", "not_run"] },
+        "method": { "enum": ["independent-agent", "human", "expert"] },
+        "scope": { "$ref": "#/$defs/text" },
+        "adjudication": { "enum": ["proposed-not-expert", "human-recorded", "expert-adjudicated", "not_adjudicated"] }
+      },
+      "required": ["status", "method", "scope", "adjudication"]
+    },
+    "sourceFactLedger": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": { "$ref": "#/$defs/id" },
+          "sourceId": { "$ref": "#/$defs/id" },
+          "locator": { "$ref": "#/$defs/text" },
+          "statement": { "$ref": "#/$defs/text" },
+          "treatment": { "enum": ["required-in-diagram", "permitted-scope", "question-required"] }
+        },
+        "required": ["id", "sourceId", "locator", "statement", "treatment"]
+      }
+    },
     "assertions": {
       "type": "array",
       "minItems": 2,
@@ -74,6 +100,7 @@
     "familyId",
     "canary",
     "authoredIndependentlyOfCandidate",
+    "expectationReview",
     "assertions",
     "variantAssertions",
     "reviewRubric",
@@ -103,17 +130,64 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "kind": { "enum": ["element", "sequence", "path", "di-label"] },
+        "kind": { "enum": ["element", "sequence", "path", "dependency", "condition", "di-label"] },
         "name": { "type": "string" },
+        "aliases": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/text" } },
+        "startAliases": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/text" } },
+        "sourceAliases": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/text" } },
+        "targetAliases": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/text" } },
         "nameMode": { "enum": ["equals", "includes"] },
         "type": { "type": "string" },
+        "types": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string" } },
+        "allowGenericTask": { "type": "boolean" },
         "lane": { "type": "string" },
         "source": { "type": "string" },
         "target": { "type": "string" },
-        "condition": { "type": "string" },
+        "condition": {
+          "anyOf": [
+            { "type": "string" },
+            {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "variable": { "$ref": "#/$defs/id" },
+                    "operator": { "enum": ["<", "<=", ">", ">=", "=", "=="] },
+                    "value": { "type": "number" },
+                    "unit": { "$ref": "#/$defs/text" }
+                  },
+                  "required": ["variable", "operator", "value"]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "allowedExpressions": {
+                      "type": "array",
+                      "minItems": 1,
+                      "uniqueItems": true,
+                      "items": { "$ref": "#/$defs/text" }
+                    },
+                    "forbiddenExpressions": {
+                      "type": "array",
+                      "minItems": 1,
+                      "uniqueItems": true,
+                      "items": { "$ref": "#/$defs/text" }
+                    }
+                  },
+                  "required": ["allowedExpressions"]
+                }
+              ]
+            }
+          ]
+        },
         "from": { "type": "string" },
         "to": { "type": "string" },
+        "start": { "type": "string" },
+        "required": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/text" } },
         "sequenceName": { "type": "string" },
+        "maxDistance": { "type": "number", "exclusiveMinimum": 0 },
         "expect": { "enum": ["present", "absent"] }
       },
       "required": ["kind", "expect"]
@@ -160,6 +234,12 @@
           "minItems": 1,
           "uniqueItems": true,
           "items": { "$ref": "#/$defs/text" }
+        },
+        "appliesTo": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["initial", "correction"] }
         },
         "evaluation": { "$ref": "#/$defs/evaluation" }
       },

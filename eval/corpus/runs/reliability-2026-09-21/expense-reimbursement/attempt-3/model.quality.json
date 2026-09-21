@@ -1,0 +1,380 @@
+{
+  "reportVersion": "1.0.0",
+  "toolVersion": "0.1.0-dev.0",
+  "profileVersion": "1.0.0",
+  "export": {
+    "requested": "auto",
+    "outcome": "clean",
+    "cleanEligible": true,
+    "expertOverride": false
+  },
+  "checks": [
+    {
+      "id": "input",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "xml",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "xsd",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "semantics",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "profile",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "di",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "render",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "evidence",
+      "status": "passed",
+      "findingRefs": [
+        "F_0df6f4fa4190e2419c08",
+        "F_8818d83721c5356eeec9",
+        "F_91a18a24f00758912cab",
+        "F_a7ed38bf04f13a143c20",
+        "F_b726cdf4b2a988057384",
+        "F_d5a0349f0a12c9fe2467",
+        "F_dd0e2b106ce5556a18dc"
+      ]
+    },
+    {
+      "id": "consulting",
+      "status": "passed",
+      "findingRefs": []
+    }
+  ],
+  "findings": [
+    {
+      "id": "F_a7ed38bf04f13a143c20",
+      "code": "DECLARED_OMISSION",
+      "category": "evidence",
+      "severity": "info",
+      "blocksClean": false,
+      "message": "An explicit Modeling Decision accepts a recorded omission for this model.",
+      "remediation": "Retain the omission and its decision when sharing or continuing the process model.",
+      "elementRefs": [],
+      "evidenceRefs": [
+        "interviewsSource",
+        "policySource"
+      ]
+    },
+    {
+      "id": "F_0df6f4fa4190e2419c08",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "No Evidence Link records the basis for a routing condition.",
+      "remediation": "Record the source or human decision behind this condition; do not infer that a plausible route is verified.",
+      "elementRefs": [
+        "flowMissingApprovalToRejection"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "id": "F_8818d83721c5356eeec9",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "No Evidence Link records the basis for a supplied responsibility.",
+      "remediation": "Record the source or human decision supporting this ownership assignment.",
+      "elementRefs": [
+        "accountsPayableLane"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "id": "F_91a18a24f00758912cab",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "No Evidence Link records the basis for a routing condition.",
+      "remediation": "Record the source or human decision behind this condition; do not infer that a plausible route is verified.",
+      "elementRefs": [
+        "flowCompleteToReviews"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "id": "F_b726cdf4b2a988057384",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "No Evidence Link records the basis for a supplied responsibility.",
+      "remediation": "Record the source or human decision supporting this ownership assignment.",
+      "elementRefs": [
+        "employeeLane"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "id": "F_d5a0349f0a12c9fe2467",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "No Evidence Link records the basis for a supplied responsibility.",
+      "remediation": "Record the source or human decision supporting this ownership assignment.",
+      "elementRefs": [
+        "financeControllerLane"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "id": "F_dd0e2b106ce5556a18dc",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "No Evidence Link records the basis for a supplied responsibility.",
+      "remediation": "Record the source or human decision supporting this ownership assignment.",
+      "elementRefs": [
+        "lineManagerLane"
+      ],
+      "evidenceRefs": []
+    }
+  ],
+  "context": {
+    "evidence": [
+      {
+        "key": "procedureSource",
+        "source": "Expense reimbursement procedure",
+        "summary": "An employee submits a claim; Accounts Payable checks receipts and returns incomplete claims; manager and threshold-based controller approval precede payment; Accounts Payable informs the employee of payment or rejection.",
+        "locator": "procedure.txt"
+      },
+      {
+        "key": "interviewsSource",
+        "source": "Employee and line manager interviews",
+        "summary": "The employee corrects an incomplete pack under the same claim identity; the manager decides business purpose; controller approval applies above EUR 2,000; approval order is not prescribed; payment waits for every required approval.",
+        "locator": "interviews.txt"
+      },
+      {
+        "key": "policySource",
+        "source": "Expense reimbursement control note effective 2026-01-01",
+        "summary": "Accounts Payable checks receipts, correction may repeat under the same claim identity, manager approval is mandatory, claims above EUR 2,000 require controller approval without a prescribed order, and Accounts Payable records payment or rejection and sends the matching notice.",
+        "locator": "policy.txt"
+      },
+      {
+        "key": "correctionSource",
+        "source": "Later expense reimbursement correction dated 2026-09-21",
+        "summary": "Finance-controller approval applies at EUR 2,500 or more, and the complementary route is below EUR 2,500; unrelated work and identities must remain unchanged.",
+        "locator": "correction.txt"
+      }
+    ],
+    "decisions": [
+      {
+        "key": "approvalConcurrencyDecision",
+        "description": "Model the manager review and the controller-threshold route as parallel work because the sources require both when applicable and explicitly prescribe no order.",
+        "elementRefs": [
+          "splitRequiredReviews",
+          "requiredApprovalsJoin",
+          "decideBusinessPurpose",
+          "controllerThresholdGateway",
+          "decideControllerApproval"
+        ],
+        "evidenceRefs": [
+          "interviewsSource",
+          "policySource"
+        ]
+      },
+      {
+        "key": "omitUnspecifiedEscalationDecision",
+        "description": "Do not invent an escalation or disagreement-resolution path because the sources identify neither an escalation approver nor an external recipient.",
+        "elementRefs": [],
+        "evidenceRefs": [
+          "interviewsSource",
+          "policySource"
+        ]
+      },
+      {
+        "key": "controllerThresholdCorrectionDecision",
+        "description": "Replace the controller threshold with EUR 2,500 or more and the complementary route with below EUR 2,500 while preserving every unrelated element identity and behavior.",
+        "elementRefs": [
+          "controllerThresholdGateway",
+          "controllerRequired",
+          "controllerNotRequired",
+          "decideControllerApproval"
+        ],
+        "evidenceRefs": [
+          "correctionSource"
+        ]
+      }
+    ],
+    "issues": [
+      {
+        "key": "businessPurposeDisagreementOwner",
+        "kind": "question",
+        "description": "The sources do not identify who resolves a disagreement about business purpose; that unsupported exception is omitted from this process scope.",
+        "affectsMeaning": false,
+        "evidenceRefs": [
+          "interviewsSource",
+          "policySource"
+        ],
+        "resolution": {
+          "decisionRef": "omitUnspecifiedEscalationDecision",
+          "kind": "acceptedOmission"
+        }
+      }
+    ],
+    "links": [
+      {
+        "elementRef": "submitClaim",
+        "assertion": "The employee submits the claim and receipt images.",
+        "basis": "evidence",
+        "supportRefs": [
+          "procedureSource",
+          "interviewsSource"
+        ]
+      },
+      {
+        "elementRef": "checkReceipts",
+        "assertion": "Accounts Payable checks that required receipts are present.",
+        "basis": "evidence",
+        "supportRefs": [
+          "procedureSource",
+          "policySource"
+        ]
+      },
+      {
+        "elementRef": "flowIncompleteToCorrection",
+        "assertion": "An incomplete claim is returned for correction.",
+        "basis": "evidence",
+        "supportRefs": [
+          "procedureSource",
+          "policySource"
+        ]
+      },
+      {
+        "elementRef": "correctClaim",
+        "assertion": "The employee corrects the same claim rather than creating a new identity.",
+        "basis": "evidence",
+        "supportRefs": [
+          "interviewsSource",
+          "policySource"
+        ]
+      },
+      {
+        "elementRef": "flowCorrectionToRecheck",
+        "assertion": "A corrected claim may be checked again.",
+        "basis": "evidence",
+        "supportRefs": [
+          "policySource"
+        ]
+      },
+      {
+        "elementRef": "decideBusinessPurpose",
+        "assertion": "The line manager decides whether the expense had a business purpose.",
+        "basis": "evidence",
+        "supportRefs": [
+          "interviewsSource",
+          "policySource"
+        ]
+      },
+      {
+        "elementRef": "splitRequiredReviews",
+        "assertion": "No order is prescribed between manager and controller approvals.",
+        "basis": "decision",
+        "supportRefs": [
+          "approvalConcurrencyDecision"
+        ]
+      },
+      {
+        "elementRef": "controllerRequired",
+        "assertion": "Controller approval is required when the claim amount is EUR 2,500 or more.",
+        "basis": "decision",
+        "supportRefs": [
+          "controllerThresholdCorrectionDecision"
+        ]
+      },
+      {
+        "elementRef": "controllerNotRequired",
+        "assertion": "The complementary route covers claim amounts below EUR 2,500.",
+        "basis": "decision",
+        "supportRefs": [
+          "controllerThresholdCorrectionDecision"
+        ]
+      },
+      {
+        "elementRef": "decideControllerApproval",
+        "assertion": "The Finance Controller supplies the additional approval when the threshold is met.",
+        "basis": "evidence",
+        "supportRefs": [
+          "procedureSource",
+          "interviewsSource",
+          "policySource"
+        ]
+      },
+      {
+        "elementRef": "flowApprovedToPayment",
+        "assertion": "Payment occurs only after every required approval is present.",
+        "basis": "evidence",
+        "supportRefs": [
+          "interviewsSource",
+          "policySource"
+        ]
+      },
+      {
+        "elementRef": "payClaim",
+        "assertion": "Accounts Payable records payment for an approved claim.",
+        "basis": "evidence",
+        "supportRefs": [
+          "procedureSource",
+          "policySource"
+        ]
+      },
+      {
+        "elementRef": "recordRejection",
+        "assertion": "Accounts Payable records rejection when required approval is absent.",
+        "basis": "evidence",
+        "supportRefs": [
+          "procedureSource",
+          "policySource"
+        ]
+      },
+      {
+        "elementRef": "sendPaymentNotice",
+        "assertion": "Accounts Payable sends the employee a payment notice.",
+        "basis": "evidence",
+        "supportRefs": [
+          "procedureSource",
+          "interviewsSource",
+          "policySource"
+        ]
+      },
+      {
+        "elementRef": "sendRejectionNotice",
+        "assertion": "Accounts Payable sends the employee a rejection notice.",
+        "basis": "evidence",
+        "supportRefs": [
+          "procedureSource",
+          "interviewsSource",
+          "policySource"
+        ]
+      }
+    ]
+  },
+  "modelKey": "expenseReimbursementModel"
+}

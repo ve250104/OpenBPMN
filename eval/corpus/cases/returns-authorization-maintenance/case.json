@@ -1,5 +1,5 @@
 {
-  "caseVersion": "1.0.0",
+  "caseVersion": "2.0.0",
   "familyId": "returns-authorization-maintenance",
   "caseId": "returns-authorization-maintenance.base",
   "title": "Returns authorization correction",
@@ -40,12 +40,28 @@
     "reason": "Within the current declared public boundary.",
     "fixedBeforeExecution": true
   },
+  "correctionContract": {
+    "baselineRequired": true,
+    "mutableElementIds": ["inspection-complete", "approval-complete", "choose-remedy"],
+    "removableElementIds": ["warehouse-approval"],
+    "allowedNewElements": [],
+    "allowedElementChanges": [],
+    "allowedFlowChanges": [
+      {
+        "id": "inspection-complete",
+        "field": "target",
+        "from": "warehouse-approval",
+        "to": "choose-remedy"
+      }
+    ],
+    "allowedNewFlows": []
+  },
   "sourceArtifacts": [
     {
       "id": "returns-authorization-maintenance.source.1",
       "path": "inputs/handoff.json",
       "mediaType": "application/json",
-      "sha256": "e04cd4a076dd6a7aad76bb8e4aef704c7e8a4314adccc81c2bb3759d3bda31c0",
+      "sha256": "29875b435aa81f0f683a4ef2ae7263208da8e4253202e394198c7660b8e79da5",
       "role": "evidence",
       "viewpoint": "session owner",
       "provenance": {

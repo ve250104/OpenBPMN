@@ -1,5 +1,5 @@
 {
-  "reviewVersion": "1.0.0",
+  "reviewVersion": "2.0.0",
   "familyId": "supplier-onboarding-discovery",
   "canary": "reviewer-only-canary-07dd1c25c5486732",
   "authoredIndependentlyOfCandidate": true,
@@ -58,6 +58,75 @@
       "evaluation": {
         "kind": "agent",
         "instructions": "Inspect the cited source and externally observable candidate artifacts; do not infer from candidate plausibility."
+      }
+    },
+    {
+      "id": "supplier-onboarding-discovery.assertion.3",
+      "claim": "screening rejection remains distinct from clearance and record creation",
+      "disposition": "required",
+      "severity": "critical",
+      "dimension": "behavior",
+      "epistemicStatus": "established",
+      "evidence": [
+        {
+          "sourceId": "supplier-onboarding-discovery.source.4",
+          "locator": "paragraph 1",
+          "stance": "supports",
+          "effectiveDate": "2026-08-16",
+          "entityScope": "regional operations",
+          "caseScope": "ordinary supplier onboarding"
+        }
+      ],
+      "outputLocations": ["BPMN semantics", "SVG preview", "Quality Report"],
+      "evaluation": {
+        "kind": "agent",
+        "instructions": "Verify that rejection cannot be reported as clearance or vendor-record completion."
+      }
+    },
+    {
+      "id": "supplier-onboarding-discovery.assertion.4",
+      "claim": "a missing-evidence response returns work to the buyer without fabricating approval",
+      "disposition": "required",
+      "severity": "major",
+      "dimension": "coverage",
+      "epistemicStatus": "established",
+      "evidence": [
+        {
+          "sourceId": "supplier-onboarding-discovery.source.4",
+          "locator": "paragraph 1",
+          "stance": "supports",
+          "effectiveDate": "2026-08-16",
+          "entityScope": "regional operations",
+          "caseScope": "ordinary supplier onboarding"
+        }
+      ],
+      "outputLocations": ["BPMN semantics", "SVG preview", "Quality Report"],
+      "evaluation": {
+        "kind": "agent",
+        "instructions": "Verify the rework destination and that missing evidence is not treated as a screening decision."
+      }
+    },
+    {
+      "id": "supplier-onboarding-discovery.assertion.5",
+      "claim": "record creation completion is communicated to the buyer",
+      "disposition": "required",
+      "severity": "major",
+      "dimension": "downstreamUsability",
+      "epistemicStatus": "established",
+      "evidence": [
+        {
+          "sourceId": "supplier-onboarding-discovery.source.4",
+          "locator": "paragraph 1",
+          "stance": "supports",
+          "effectiveDate": "2026-08-16",
+          "entityScope": "regional operations",
+          "caseScope": "ordinary supplier onboarding"
+        }
+      ],
+      "outputLocations": ["BPMN semantics", "SVG preview", "final delivery claims"],
+      "evaluation": {
+        "kind": "agent",
+        "instructions": "Verify visible completion communication and cite the output location."
       }
     }
   ],
@@ -135,5 +204,62 @@
   "acceptableAlternatives": [
     "Any BPMN topology is acceptable when it preserves every assertion and does not add forbidden meaning."
   ],
-  "observedResults": []
+  "observedResults": [],
+  "expectationReview": {
+    "status": "completed",
+    "method": "independent-agent",
+    "scope": "Source passages, scope, assertions, alternatives, output locations, and coverage tags.",
+    "adjudication": "proposed-not-expert"
+  },
+  "sourceFactLedger": [
+    {
+      "id": "supplier.fact.1",
+      "sourceId": "supplier-onboarding-discovery.source.4",
+      "locator": "paragraph 1",
+      "statement": "Buyer collects the evidence pack.",
+      "treatment": "required-in-diagram"
+    },
+    {
+      "id": "supplier.fact.2",
+      "sourceId": "supplier-onboarding-discovery.source.4",
+      "locator": "paragraph 1",
+      "statement": "Vendor Risk owns sanctions screening.",
+      "treatment": "required-in-diagram"
+    },
+    {
+      "id": "supplier.fact.3",
+      "sourceId": "supplier-onboarding-discovery.source.4",
+      "locator": "paragraph 1",
+      "statement": "Rejection and missing-evidence handling remain distinct from clearance.",
+      "treatment": "required-in-diagram"
+    },
+    {
+      "id": "supplier.fact.4",
+      "sourceId": "supplier-onboarding-discovery.source.4",
+      "locator": "paragraph 1",
+      "statement": "Master Data creates the vendor record only after clearance.",
+      "treatment": "required-in-diagram"
+    },
+    {
+      "id": "supplier.fact.5",
+      "sourceId": "supplier-onboarding-discovery.source.4",
+      "locator": "paragraph 2",
+      "statement": "Appeal ownership is unknown.",
+      "treatment": "question-required"
+    },
+    {
+      "id": "supplier.fact.6",
+      "sourceId": "supplier-onboarding-discovery.source.4",
+      "locator": "paragraph 2",
+      "statement": "No urgent screening bypass is established.",
+      "treatment": "question-required"
+    },
+    {
+      "id": "supplier.fact.7",
+      "sourceId": "supplier-onboarding-discovery.source.4",
+      "locator": "paragraph 2",
+      "statement": "Inconclusive screening handling is unknown.",
+      "treatment": "question-required"
+    }
+  ]
 }

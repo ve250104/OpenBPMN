@@ -1,0 +1,5 @@
+Regional operations interview, 2026-08-16
+
+For an ordinary supplier, the buyer collects tax and bank forms and sends the pack to Vendor Risk. Vendor Risk owns sanctions screening and either clears the supplier, rejects the onboarding, or asks the buyer for missing evidence. A clearance is not itself a vendor-record creation. Master Data creates the record only after a clearance and tells the buyer whether creation completed.
+
+The interviewee has not observed which team owns an appeal after rejection, whether an urgent exception can bypass screening, or how a supplier is handled when sanctions data is inconclusive. Those points must remain questions unless another supplied source resolves them.

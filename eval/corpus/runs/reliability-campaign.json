@@ -1,0 +1,116 @@
+{
+  "campaignVersion": "2.0.0",
+  "campaignId": "reliability-richer-packs-2026-09-21",
+  "predeclared": true,
+  "scope": "Three fresh source-only Host Agent sessions for the richer related cases, plus a paired expense correction.",
+  "reviewState": "agent_proposed_not_human_adjudicated",
+  "independentReview": "runs/reliability-2026-09-21/independent-review.json",
+  "retainedDiagnostics": {
+    "status": "available",
+    "sourceCommit": "6fc6b6e02b3e565b5b4320e0b74c798dc05a8921",
+    "runContractVersion": "1.0.0",
+    "assessmentVersion": "1.0.0",
+    "compatibilityRecord": "runs/retained-september-2026/compatibility.json",
+    "sessionManifest": "runs/retained-september-2026/session-manifest.json",
+    "reviewSummary": "runs/retained-september-2026/review-summary.json",
+    "regradedByCurrentEvaluator": false,
+    "reason": "The retained records were reassessed only with the unchanged version-1 evaluator. The version-2 evaluator rejects them rather than silently applying changed contracts and assertions."
+  },
+  "historicalScorerReproduction": {
+    "status": "completed",
+    "evaluatorCommit": "6fc6b6e02b3e565b5b4320e0b74c798dc05a8921",
+    "relationship": "direct-parent",
+    "workingTree": "unchanged-detached-worktree",
+    "publicCli": true,
+    "record": "runs/historical-scorer-misses/provenance.json",
+    "attempts": 3,
+    "historicalPasses": 3,
+    "currentRegradeAttempted": false
+  },
+  "isolation": {
+    "staging": "source-only",
+    "filesystemBoundary": "not_enforced",
+    "reviewerMaterialAccessibleFromHost": true,
+    "freshAgentConversationInherited": false
+  },
+  "sessions": [
+    {
+      "familyId": "expense-reimbursement",
+      "status": "completed",
+      "applicability": "supported",
+      "run": "runs/reliability-2026-09-21/expense-reimbursement/run.json",
+      "assessment": "runs/reliability-2026-09-21/expense-reimbursement/assessment.json",
+      "sessionRecord": "runs/reliability-2026-09-21/expense-reimbursement/session-record.json",
+      "preliminarySession": "runs/reliability-2026-09-21/expense-reimbursement/preliminary-session/session-notes.json",
+      "firstAttemptArtifacts": [
+        "runs/reliability-2026-09-21/expense-reimbursement/attempt-1/model.bpmn",
+        "runs/reliability-2026-09-21/expense-reimbursement/attempt-1/model.svg"
+      ],
+      "repairArtifacts": [
+        "runs/reliability-2026-09-21/expense-reimbursement/attempt-3/model.bpmn",
+        "runs/reliability-2026-09-21/expense-reimbursement/attempt-3/model.svg"
+      ],
+      "attempts": { "initial": 1, "correction": 2, "generationRepairs": 1 },
+      "reviewProvenance": {
+        "reviewer": "issue-45-independent-review",
+        "method": "current public evaluator plus independent source, BPMN, Handoff, quality-report, and actual SVG review",
+        "adjudication": "proposed"
+      },
+      "rubricResponses": [
+        { "criterion": "comprehension", "response": "clear" },
+        { "criterion": "ambiguity", "response": "explicit" },
+        { "criterion": "correction-effort", "response": "minor correction" }
+      ],
+      "correctionEffortMinutes": 3,
+      "limits": ["Filesystem isolation was not enforced.", "No human adjudication was performed."]
+    },
+    {
+      "familyId": "supplier-onboarding-discovery",
+      "status": "completed",
+      "applicability": "supported",
+      "run": "runs/reliability-2026-09-21/supplier-onboarding-discovery/run.json",
+      "assessment": "runs/reliability-2026-09-21/supplier-onboarding-discovery/assessment.json",
+      "sessionRecord": "runs/reliability-2026-09-21/supplier-onboarding-discovery/session-notes.json",
+      "firstAttemptArtifacts": [
+        "runs/reliability-2026-09-21/supplier-onboarding-discovery/attempt-1/model.bpmn",
+        "runs/reliability-2026-09-21/supplier-onboarding-discovery/attempt-1/model.svg"
+      ],
+      "repairArtifacts": [],
+      "attempts": { "initial": 1, "generationRepairs": 0 },
+      "reviewProvenance": {
+        "reviewer": "issue-45-independent-review",
+        "method": "independent evidence-to-output comparison and actual SVG review",
+        "adjudication": "proposed"
+      },
+      "rubricResponses": [
+        { "criterion": "comprehension", "response": "clear" },
+        { "criterion": "ambiguity", "response": "explicit" },
+        { "criterion": "correction-effort", "response": "no correction" }
+      ],
+      "correctionEffortMinutes": 0,
+      "limits": ["Filesystem isolation was not enforced.", "Agent observations are proposed, not human-adjudicated."]
+    },
+    {
+      "familyId": "editable-flowchart-translation",
+      "status": "unsupported",
+      "applicability": "unsupported",
+      "reason": "The fixed product contract does not support arbitrary non-BPMN conversion; the fresh agent inspected and hashed the source but did not fabricate BPMN.",
+      "record": "runs/reliability-2026-09-21/editable-flowchart-translation/session-record.json",
+      "firstAttemptArtifacts": [],
+      "repairArtifacts": [],
+      "attempts": { "inspection": 1, "generation": 0, "generationRepairs": 0 },
+      "reviewProvenance": {
+        "reviewer": "issue-45-independent-review",
+        "method": "source identity and applicability review",
+        "adjudication": "proposed"
+      },
+      "rubricResponses": [
+        { "criterion": "comprehension", "response": "not assessed" },
+        { "criterion": "ambiguity", "response": "explicit" },
+        { "criterion": "correction-effort", "response": "not measured" }
+      ],
+      "correctionEffortMinutes": null,
+      "limits": ["No BPMN or SVG was generated because the declared capability is unsupported."]
+    }
+  ]
+}

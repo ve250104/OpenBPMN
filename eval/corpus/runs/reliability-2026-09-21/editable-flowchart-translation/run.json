@@ -1,0 +1,54 @@
+{
+  "runContractVersion": "2.0.0",
+  "runId": null,
+  "familyId": "editable-flowchart-translation",
+  "caseId": "editable-flowchart-translation.base",
+  "variantId": null,
+  "caseSha256": "1b9d3e48e0effe1e65665cb0214c7660ef53f69691fd45e2d393b2b3c61a6e80",
+  "assertionSha256": "701502693a617af4fc196719bf246340eea6894c17cffb592b78598a95f9fddd",
+  "sourceArtifacts": [
+    {
+      "id": "editable-flowchart-translation.source.1",
+      "path": "inputs/return-flow.drawio",
+      "mediaType": "application/vnd.jgraph.mxfile",
+      "sha256": "af3157a8384ec8e1c124b1c015f5bede9e869ac632d76cb34abc3a3643069d9d"
+    }
+  ],
+  "candidate": {
+    "commit": "not_observed",
+    "buildIdentity": "not_observed",
+    "dirtyState": "not_observed"
+  },
+  "environment": {
+    "runtime": "v24.19.0",
+    "platform": "darwin",
+    "architecture": "arm64",
+    "browser": "not_observed",
+    "host": "local"
+  },
+  "skill": {
+    "version": "not_observed"
+  },
+  "model": {
+    "id": "not_observed",
+    "reasoningSettings": "not_observed"
+  },
+  "prompt": "Propose a reviewed BPMN translation of the editable flowchart. Keep translation decisions visible.",
+  "answers": [],
+  "attemptCount": 0,
+  "attempts": [],
+  "isolation": {
+    "status": "not_isolated",
+    "stagingSeparation": "case-only-directory",
+    "filesystemBoundary": "not_enforced",
+    "reviewerFilesAccessibleFromHost": true,
+    "reason": "Preparation limits staged inputs, but this local process can still reach the repository and reviewer files.",
+    "canaryCheck": "absent_from_staged_files"
+  },
+  "metrics": {
+    "tokens": null,
+    "cost": null,
+    "humanCorrectionMinutes": null
+  },
+  "preparedAt": "2026-09-21T15:48:26.283Z"
+}

@@ -1,0 +1,96 @@
+{
+  "runContractVersion": "1.0.0",
+  "runId": "fresh-expense-reimbursement-20260921",
+  "familyId": "expense-reimbursement",
+  "caseId": "expense-reimbursement.base",
+  "variantId": null,
+  "caseSha256": "362fabdeebf850aefe9330cfa46a913a5c7464e77d65b6c126e6e23ee9687455",
+  "assertionSha256": "c76c034795b7d1e12b4a7aa278062ad8f88d64f1d9a0045f2f8c29d53802674a",
+  "sourceArtifacts": [
+    {
+      "id": "expense-reimbursement.source.1",
+      "path": "inputs/procedure.txt",
+      "mediaType": "text/plain",
+      "sha256": "c106190a51aa8926422a823d9608917ce21ce555f59c39da669a51c51e9d9dac"
+    }
+  ],
+  "candidate": {
+    "commit": "6fc6b6e02b3e565b5b4320e0b74c798dc05a8921",
+    "buildIdentity": "a83d830ef49b1970e26a39587cbe244e7fe50eebc3802e3aec964714661bd79a",
+    "dirtyState": "clean"
+  },
+  "environment": {
+    "runtime": "v24.19.0",
+    "platform": "darwin",
+    "architecture": "arm64",
+    "browser": "Google Chrome 153.0.8010.52",
+    "host": "local source-only session"
+  },
+  "skill": {
+    "version": "0.1.0-dev.0"
+  },
+  "model": {
+    "id": "not_observed (Codex task host default)",
+    "reasoningSettings": "not_observed"
+  },
+  "prompt": "Use the staged OpenBPMN runtime and skill to model employee expense reimbursement from inputs/procedure.txt while retaining the different owner and approver roles. Produce an initial snapshot, keep missing facts unresolved, inspect the preview, use only staged sources, and do not inspect reviewer material.",
+  "answers": [],
+  "attemptCount": 1,
+  "attempts": [
+    {
+      "attemptId": "initial-session",
+      "status": "completed",
+      "startedAt": "2026-09-21T12:13:25+00:00",
+      "finishedAt": "2026-09-21T12:18:49+00:00",
+      "commands": [
+        "openbpmn generate",
+        "browser preview inspection"
+      ],
+      "exitResults": [
+        {
+          "command": "openbpmn generate",
+          "exitCode": 0
+        },
+        {
+          "command": "browser preview inspection",
+          "exitCode": 0
+        }
+      ],
+      "artifacts": [
+        {
+          "kind": "bpmn",
+          "path": "artifacts/initial/expense-reimbursement-initial.bpmn",
+          "sha256": "2a8f5936d84cddd40e67789409e9d95e471324f15a4779a2134982d76bf6cc7d"
+        },
+        {
+          "kind": "quality",
+          "path": "artifacts/initial/expense-reimbursement-initial.quality.json",
+          "sha256": "8c0029e36bca9e266d7b5cc071cfdbb7019a50d7cc6b719b87453a6a565dd1ed"
+        },
+        {
+          "kind": "svg",
+          "path": "artifacts/initial/expense-reimbursement-initial.svg",
+          "sha256": "f791dec32348a35414f708408d1afd6276da3371de90ed541d7c4caea0021597"
+        }
+      ],
+      "conversation": [],
+      "toolCalls": [],
+      "finalClaims": [],
+      "observations": []
+    }
+  ],
+  "isolation": {
+    "status": "not_isolated",
+    "stagingSeparation": "case-only-directory",
+    "filesystemBoundary": "not_enforced",
+    "reviewerFilesAccessibleFromHost": true,
+    "reason": "Preparation limits staged inputs, but this local process can still reach the repository and reviewer files.",
+    "canaryCheck": "absent_from_staged_files"
+  },
+  "metrics": {
+    "tokens": null,
+    "cost": null,
+    "humanCorrectionMinutes": null
+  },
+  "preparedAt": "2026-09-21T12:12:41.595Z"
+}

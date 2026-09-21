@@ -1,0 +1,157 @@
+{
+  "runContractVersion": "1.0.0",
+  "runId": "fresh-supplier-onboarding-discovery-20260921",
+  "familyId": "supplier-onboarding-discovery",
+  "caseId": "supplier-onboarding-discovery.base",
+  "variantId": null,
+  "caseSha256": "745957cc73de878a9711e829caa8e647b240cafd4eb4444cf8a0dc7b5069c143",
+  "assertionSha256": "3a3b31b6c542ff49ac5a6ce50bb6f76d2b7e9adf2926ad12d7b94975c2838fe5",
+  "sourceArtifacts": [
+    {
+      "id": "supplier-onboarding-discovery.source.1",
+      "path": "inputs/interview.txt",
+      "mediaType": "text/plain",
+      "sha256": "d185245477c1bf34dbf1676fb288d2d1415f3e636cf855961d22cd963873fea9"
+    },
+    {
+      "id": "supplier-onboarding-discovery.source.2",
+      "path": "inputs/checklist.docx",
+      "mediaType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "sha256": "5fd9914492243928a3518c199075dfda7f62c658fc38bca52c37df8016ba5267"
+    },
+    {
+      "id": "supplier-onboarding-discovery.source.3",
+      "path": "inputs/dated-correction.txt",
+      "mediaType": "text/plain",
+      "sha256": "142adf247f480bb87a4894df601b8fe2d8e2c490250d76b6a7f286c7103eb01c"
+    }
+  ],
+  "candidate": {
+    "commit": "6fc6b6e02b3e565b5b4320e0b74c798dc05a8921",
+    "buildIdentity": "a83d830ef49b1970e26a39587cbe244e7fe50eebc3802e3aec964714661bd79a",
+    "dirtyState": "clean"
+  },
+  "environment": {
+    "runtime": "v24.19.0",
+    "platform": "darwin",
+    "architecture": "arm64",
+    "browser": "Google Chrome 153.0.8010.52",
+    "host": "local source-only session"
+  },
+  "skill": {
+    "version": "0.1.0-dev.0"
+  },
+  "model": {
+    "id": "not_observed (Codex task host default)",
+    "reasoningSettings": "not_observed"
+  },
+  "prompt": "Use the staged OpenBPMN runtime and skill to model current supplier onboarding from inputs/interview.txt, inputs/checklist.docx, and inputs/dated-correction.txt. Do not treat document transmission as approval. Produce an initial snapshot, keep missing facts unresolved, inspect the preview, use only staged sources, and do not inspect reviewer material.",
+  "answers": [],
+  "attemptCount": 1,
+  "attempts": [
+    {
+      "attemptId": "initial-session",
+      "status": "completed",
+      "startedAt": "2026-09-21T12:13:26+00:00",
+      "finishedAt": "2026-09-21T12:17:59+00:00",
+      "commands": [
+        "openbpmn generate",
+        "browser preview inspection"
+      ],
+      "exitResults": [
+        {
+          "command": "openbpmn generate",
+          "exitCode": 0
+        },
+        {
+          "command": "browser preview inspection",
+          "exitCode": 0
+        }
+      ],
+      "artifacts": [
+        {
+          "kind": "bpmn",
+          "path": "artifacts/initial/supplier-onboarding-initial.bpmn",
+          "sha256": "c0f8fb3cf90afeb0f8813bcd88c9143c066d47542e85bbfe4b3ddc9a55f109b7"
+        },
+        {
+          "kind": "quality",
+          "path": "artifacts/initial/supplier-onboarding-initial.quality.json",
+          "sha256": "957a878d6dff6f077ade628e4114fa7b69013c6ead78ac8e25ca2be3be27292c"
+        },
+        {
+          "kind": "svg",
+          "path": "artifacts/initial/supplier-onboarding-initial.svg",
+          "sha256": "6a5ec9dcf1d48525a25e9859682ee5d32ae3809054a2cd77e738feedb2d9dfc7"
+        }
+      ],
+      "conversation": [],
+      "toolCalls": [],
+      "finalClaims": [],
+      "observations": [
+        {
+          "assertionId": "supplier-onboarding-discovery.assertion.1",
+          "method": "agent",
+          "methodDescription": "Independent source, BPMN XML, quality-report, sanitized session provenance, and rendered-preview review; not human adjudication.",
+          "status": "pass",
+          "reviewer": {
+            "identity": "root independent review",
+            "role": "agent"
+          },
+          "sourceCitations": [
+            {
+              "artifact": "inputs/dated-correction.txt",
+              "locator": "entire source"
+            }
+          ],
+          "outputCitations": [
+            {
+              "artifact": "artifacts/initial/supplier-onboarding-initial.bpmn",
+              "locator": "Vendor Risk and Master Data lanes; M_createVendorRecord; M_approvalToCreation"
+            }
+          ],
+          "adjudicationStatus": "proposed",
+          "reason": "Record creation belongs to Master Data and is guarded by Vendor Risk approval."
+        },
+        {
+          "assertionId": "supplier-onboarding-discovery.assertion.2",
+          "method": "agent",
+          "methodDescription": "Independent source, BPMN XML, quality-report, sanitized session provenance, and rendered-preview review; not human adjudication.",
+          "status": "pass",
+          "reviewer": {
+            "identity": "root independent review",
+            "role": "agent"
+          },
+          "sourceCitations": [
+            {
+              "artifact": "inputs/interview.txt",
+              "locator": "entire source"
+            }
+          ],
+          "outputCitations": [
+            {
+              "artifact": "artifacts/initial/supplier-onboarding-initial.bpmn",
+              "locator": "Send pack, Screen supplier, Send risk decision, and conditional approvalToCreation flow"
+            }
+          ],
+          "adjudicationStatus": "proposed",
+          "reason": "Sending the pack is distinct from screening and approval; no unsupported approval shortcut was added."
+        }
+      ]
+    }
+  ],
+  "isolation": {
+    "status": "not_isolated",
+    "stagingSeparation": "case-only-directory",
+    "filesystemBoundary": "not_enforced",
+    "reviewerFilesAccessibleFromHost": true,
+    "reason": "Preparation limits staged inputs, but this local process can still reach the repository and reviewer files.",
+    "canaryCheck": "absent_from_staged_files"
+  },
+  "metrics": {
+    "tokens": null,
+    "cost": null,
+    "humanCorrectionMinutes": null
+  },
+  "preparedAt": "2026-09-21T12:12:41.775Z"
+}

@@ -21,34 +21,40 @@
               "key": "session-start",
               "type": "startEvent",
               "containerRef": "account-closure",
-              "name": "Existing session started",
+              "name": "Closure approved",
               "event": {
                 "kind": "none"
               }
             },
             {
+              "key": "closure-controls-split",
+              "type": "parallelGateway",
+              "containerRef": "account-closure",
+              "name": "Begin closure controls"
+            },
+            {
               "key": "settle-balance",
               "type": "task",
               "containerRef": "account-closure",
-              "name": "settle balance"
+              "name": "Settle balance"
             },
             {
               "key": "revoke-access",
               "type": "task",
               "containerRef": "account-closure",
-              "name": "revoke access"
+              "name": "Revoke access"
             },
             {
-              "key": "closure-controls-complete",
-              "type": "task",
+              "key": "closure-controls-join",
+              "type": "parallelGateway",
               "containerRef": "account-closure",
-              "name": "closure controls complete"
+              "name": "Both closure controls complete"
             },
             {
               "key": "session-end",
               "type": "endEvent",
               "containerRef": "account-closure",
-              "name": "Existing modeled outcome",
+              "name": "Account closed",
               "event": {
                 "kind": "none"
               }
@@ -56,40 +62,53 @@
           ],
           "flows": [
             {
-              "key": "session-flow-1",
+              "key": "closure-start",
               "containerRef": "account-closure",
               "sourceRef": "session-start",
+              "targetRef": "closure-controls-split"
+            },
+            {
+              "key": "settlement-route",
+              "containerRef": "account-closure",
+              "sourceRef": "closure-controls-split",
               "targetRef": "settle-balance"
             },
             {
-              "key": "session-flow-2",
+              "key": "revocation-route",
               "containerRef": "account-closure",
-              "sourceRef": "settle-balance",
+              "sourceRef": "closure-controls-split",
               "targetRef": "revoke-access"
             },
             {
-              "key": "session-flow-3",
+              "key": "settlement-complete",
               "containerRef": "account-closure",
-              "sourceRef": "revoke-access",
-              "targetRef": "closure-controls-complete"
+              "sourceRef": "settle-balance",
+              "targetRef": "closure-controls-join"
             },
             {
-              "key": "session-flow-4",
+              "key": "revocation-complete",
               "containerRef": "account-closure",
-              "sourceRef": "closure-controls-complete",
+              "sourceRef": "revoke-access",
+              "targetRef": "closure-controls-join"
+            },
+            {
+              "key": "closure-complete",
+              "containerRef": "account-closure",
+              "sourceRef": "closure-controls-join",
               "targetRef": "session-end"
             }
           ],
           "lanes": [
             {
-              "key": "current-owner",
-              "name": "Current modeled owner",
+              "key": "closure-team",
+              "name": "Closure team",
               "parentRef": "account-closure",
               "flowNodeRefs": [
                 "session-start",
+                "closure-controls-split",
                 "settle-balance",
                 "revoke-access",
-                "closure-controls-complete",
+                "closure-controls-join",
                 "session-end"
               ]
             }
@@ -122,8 +141,16 @@
         ]
       },
       {
-        "elementRef": "closure-controls-complete",
+        "elementRef": "closure-controls-join",
         "assertion": "Retain the existing closure-controls-complete identity unless the correction names it.",
+        "basis": "evidence",
+        "supportRefs": [
+          "session-account"
+        ]
+      },
+      {
+        "elementRef": "closure-team",
+        "assertion": "The closure team owns the supplied baseline controls.",
         "basis": "evidence",
         "supportRefs": [
           "session-account"

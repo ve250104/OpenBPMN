@@ -1,0 +1,476 @@
+{
+  "reportVersion": "1.0.0",
+  "toolVersion": "0.1.0-dev.0",
+  "profileVersion": "1.0.0",
+  "export": {
+    "requested": "snapshot",
+    "outcome": "snapshot",
+    "cleanEligible": false,
+    "expertOverride": false
+  },
+  "checks": [
+    {
+      "id": "input",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "xml",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "xsd",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "semantics",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "profile",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "di",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "render",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "evidence",
+      "status": "failed",
+      "findingRefs": [
+        "F_00da424fab6babb7c241",
+        "F_0498836250cf995017d4",
+        "F_1ad82a1f0a61db6cfadb",
+        "F_2044c88c6e16f1da70f5",
+        "F_27488ab6903654fe7a80",
+        "F_76d48f7e27393390c574",
+        "F_81cb726025b2fdfca5ba",
+        "F_973b0bdba921d2302bf0",
+        "F_a5cde3eb97bd4834c71d",
+        "F_a98325da846bb52a8276",
+        "F_c95df37866bb2bd85b05",
+        "F_d5896c05fb462567a8d8",
+        "F_ddb0d523d052eb8b33bf",
+        "F_f8c2739c8eb22ec85e7c",
+        "F_fb8ced423c4f13e01962"
+      ]
+    },
+    {
+      "id": "consulting",
+      "status": "passed",
+      "findingRefs": []
+    }
+  ],
+  "findings": [
+    {
+      "id": "F_00da424fab6babb7c241",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "No Evidence Link records the basis for a routing condition.",
+      "remediation": "Record the source or human decision behind this condition; do not infer that a plausible route is verified.",
+      "elementRefs": [
+        "flow_creation_incomplete_report"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "id": "F_0498836250cf995017d4",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "error",
+      "blocksClean": true,
+      "message": "A recorded process question or conflict remains unresolved.",
+      "remediation": "Discuss the recorded issue and retain the human decision, or request a faithful snapshot for clarification.",
+      "elementRefs": [
+        "screen_supplier",
+        "screening_outcome"
+      ],
+      "evidenceRefs": [
+        "evidence_regional_interview"
+      ]
+    },
+    {
+      "id": "F_1ad82a1f0a61db6cfadb",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "No Evidence Link records the basis for a routing condition.",
+      "remediation": "Record the source or human decision behind this condition; do not infer that a plausible route is verified.",
+      "elementRefs": [
+        "flow_cleared_create"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "id": "F_2044c88c6e16f1da70f5",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "No Evidence Link records the basis for this activity.",
+      "remediation": "Record a relevant source, human Modeling Decision, or explicitly identified inference; this check does not verify truth.",
+      "elementRefs": [
+        "confirm_creation_completed"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "id": "F_27488ab6903654fe7a80",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "No Evidence Link records the basis for a supplied responsibility.",
+      "remediation": "Record the source or human decision supporting this ownership assignment.",
+      "elementRefs": [
+        "lane_buyer"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "id": "F_76d48f7e27393390c574",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "No Evidence Link records the basis for this activity.",
+      "remediation": "Record a relevant source, human Modeling Decision, or explicitly identified inference; this check does not verify truth.",
+      "elementRefs": [
+        "send_additional_evidence"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "id": "F_81cb726025b2fdfca5ba",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "No Evidence Link records the basis for this activity.",
+      "remediation": "Record a relevant source, human Modeling Decision, or explicitly identified inference; this check does not verify truth.",
+      "elementRefs": [
+        "collect_missing_evidence"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "id": "F_973b0bdba921d2302bf0",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "No Evidence Link records the basis for a routing condition.",
+      "remediation": "Record the source or human decision behind this condition; do not infer that a plausible route is verified.",
+      "elementRefs": [
+        "flow_rejected_end"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "id": "F_a5cde3eb97bd4834c71d",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "No Evidence Link records the basis for this activity.",
+      "remediation": "Record a relevant source, human Modeling Decision, or explicitly identified inference; this check does not verify truth.",
+      "elementRefs": [
+        "report_creation_incomplete"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "id": "F_a98325da846bb52a8276",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "error",
+      "blocksClean": true,
+      "message": "A recorded process question or conflict remains unresolved.",
+      "remediation": "Discuss the recorded issue and retain the human decision, or request a faithful snapshot for clarification.",
+      "elementRefs": [
+        "onboarding_rejected"
+      ],
+      "evidenceRefs": [
+        "evidence_regional_interview"
+      ]
+    },
+    {
+      "id": "F_c95df37866bb2bd85b05",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "error",
+      "blocksClean": true,
+      "message": "A recorded process question or conflict remains unresolved.",
+      "remediation": "Discuss the recorded issue and retain the human decision, or request a faithful snapshot for clarification.",
+      "elementRefs": [
+        "screen_supplier",
+        "screening_outcome"
+      ],
+      "evidenceRefs": [
+        "evidence_regional_interview"
+      ]
+    },
+    {
+      "id": "F_d5896c05fb462567a8d8",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "No Evidence Link records the basis for a routing condition.",
+      "remediation": "Record the source or human decision behind this condition; do not infer that a plausible route is verified.",
+      "elementRefs": [
+        "flow_missing_request"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "id": "F_ddb0d523d052eb8b33bf",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "No Evidence Link records the basis for a supplied responsibility.",
+      "remediation": "Record the source or human decision supporting this ownership assignment.",
+      "elementRefs": [
+        "lane_vendor_risk"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "id": "F_f8c2739c8eb22ec85e7c",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "No Evidence Link records the basis for a routing condition.",
+      "remediation": "Record the source or human decision behind this condition; do not infer that a plausible route is verified.",
+      "elementRefs": [
+        "flow_creation_complete_report"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "id": "F_fb8ced423c4f13e01962",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "No Evidence Link records the basis for a supplied responsibility.",
+      "remediation": "Record the source or human decision supporting this ownership assignment.",
+      "elementRefs": [
+        "lane_master_data"
+      ],
+      "evidenceRefs": []
+    }
+  ],
+  "context": {
+    "evidence": [
+      {
+        "key": "evidence_interview",
+        "source": "Buyer and Risk analyst interview",
+        "summary": "Buyer collects tax and bank forms and sends the pack to Vendor Risk; Vendor Risk screens the supplier and sends a decision to Master Data.",
+        "locator": "interview.txt"
+      },
+      {
+        "key": "evidence_checklist",
+        "source": "Supplier checklist",
+        "summary": "The checklist names tax form, bank evidence, sanctions screening, and master-data creation.",
+        "locator": "inputs/checklist.docx, paragraph 1"
+      },
+      {
+        "key": "evidence_master_data_correction",
+        "source": "Master Data lead correction dated 2026-08-14",
+        "summary": "Procurement no longer creates vendor records; Master Data creates them after Vendor Risk approval.",
+        "locator": "inputs/dated-correction.txt, line 1"
+      },
+      {
+        "key": "evidence_regional_interview",
+        "source": "Regional operations interview dated 2026-08-16",
+        "summary": "Vendor Risk clears, rejects, or requests missing evidence; clearance does not create the vendor record; Master Data creates it after clearance and reports whether creation completed. Appeal ownership, urgent screening bypass, and handling of inconclusive sanctions data were not observed.",
+        "locator": "regional-interview.txt"
+      }
+    ],
+    "decisions": [
+      {
+        "key": "decision_current_record_owner",
+        "description": "Model Master Data as the current owner of vendor-record creation after Vendor Risk clearance, applying the dated correction and retaining prior Procurement ownership only as historical source context.",
+        "elementRefs": [
+          "attempt_vendor_record_creation",
+          "lane_master_data"
+        ],
+        "evidenceRefs": [
+          "evidence_master_data_correction",
+          "evidence_regional_interview"
+        ]
+      },
+      {
+        "key": "decision_transmission_not_approval",
+        "description": "Treat sending documents as a handoff into screening, not as approval. The clearance branch from Vendor Risk is the gate to record creation.",
+        "elementRefs": [
+          "send_pack_to_vendor_risk",
+          "screen_supplier",
+          "screening_outcome",
+          "flow_cleared_create"
+        ],
+        "evidenceRefs": [
+          "evidence_interview",
+          "evidence_master_data_correction",
+          "evidence_regional_interview"
+        ]
+      },
+      {
+        "key": "decision_unobserved_exceptions_omitted",
+        "description": "Do not invent appeal ownership, an urgent screening bypass, or handling for inconclusive sanctions data; retain them as unresolved questions outside the ordinary modeled path.",
+        "elementRefs": [
+          "screen_supplier",
+          "screening_outcome",
+          "onboarding_rejected"
+        ],
+        "evidenceRefs": [
+          "evidence_regional_interview"
+        ]
+      }
+    ],
+    "issues": [
+      {
+        "key": "issue_historical_record_owner",
+        "kind": "conflict",
+        "description": "The dated correction records a change from prior Procurement ownership to current Master Data ownership for vendor-record creation.",
+        "affectsMeaning": true,
+        "evidenceRefs": [
+          "evidence_master_data_correction",
+          "evidence_regional_interview"
+        ],
+        "elementRefs": [
+          "attempt_vendor_record_creation",
+          "lane_master_data"
+        ],
+        "resolution": {
+          "decisionRef": "decision_current_record_owner",
+          "kind": "resolved"
+        }
+      },
+      {
+        "key": "issue_appeal_owner",
+        "kind": "question",
+        "description": "Which team, if any, owns an appeal after Vendor Risk rejects onboarding?",
+        "affectsMeaning": true,
+        "evidenceRefs": [
+          "evidence_regional_interview"
+        ],
+        "elementRefs": [
+          "onboarding_rejected"
+        ]
+      },
+      {
+        "key": "issue_urgent_bypass",
+        "kind": "question",
+        "description": "Can an urgent exception bypass sanctions screening, and if so, who authorizes it?",
+        "affectsMeaning": true,
+        "evidenceRefs": [
+          "evidence_regional_interview"
+        ],
+        "elementRefs": [
+          "screen_supplier",
+          "screening_outcome"
+        ]
+      },
+      {
+        "key": "issue_inconclusive_screening",
+        "kind": "question",
+        "description": "How is the supplier handled when sanctions data is inconclusive?",
+        "affectsMeaning": true,
+        "evidenceRefs": [
+          "evidence_regional_interview"
+        ],
+        "elementRefs": [
+          "screen_supplier",
+          "screening_outcome"
+        ]
+      }
+    ],
+    "links": [
+      {
+        "elementRef": "collect_tax_bank_forms",
+        "assertion": "Buyer collects the tax and bank forms.",
+        "basis": "evidence",
+        "supportRefs": [
+          "evidence_interview",
+          "evidence_checklist",
+          "evidence_regional_interview"
+        ]
+      },
+      {
+        "elementRef": "send_pack_to_vendor_risk",
+        "assertion": "Buyer sends the document pack to Vendor Risk without that transmission constituting approval.",
+        "basis": "decision",
+        "supportRefs": [
+          "decision_transmission_not_approval"
+        ]
+      },
+      {
+        "elementRef": "screen_supplier",
+        "assertion": "Vendor Risk owns sanctions screening.",
+        "basis": "evidence",
+        "supportRefs": [
+          "evidence_checklist",
+          "evidence_regional_interview"
+        ]
+      },
+      {
+        "elementRef": "screening_outcome",
+        "assertion": "Observed screening results are clearance, rejection, or a request for missing evidence.",
+        "basis": "evidence",
+        "supportRefs": [
+          "evidence_regional_interview"
+        ]
+      },
+      {
+        "elementRef": "request_missing_evidence",
+        "assertion": "Vendor Risk asks the Buyer for missing evidence.",
+        "basis": "evidence",
+        "supportRefs": [
+          "evidence_regional_interview"
+        ]
+      },
+      {
+        "elementRef": "attempt_vendor_record_creation",
+        "assertion": "Master Data creates the record only after clearance; the current owner supersedes prior Procurement ownership.",
+        "basis": "decision",
+        "supportRefs": [
+          "decision_current_record_owner"
+        ]
+      },
+      {
+        "elementRef": "record_creation_outcome",
+        "assertion": "Clearance and record creation are distinct; Master Data reports whether creation completed.",
+        "basis": "evidence",
+        "supportRefs": [
+          "evidence_regional_interview"
+        ]
+      },
+      {
+        "elementRef": "onboarding_rejected",
+        "assertion": "Vendor Risk can reject onboarding; any appeal path remains unobserved.",
+        "basis": "evidence",
+        "supportRefs": [
+          "evidence_regional_interview"
+        ]
+      }
+    ]
+  },
+  "modelKey": "supplier_onboarding_model"
+}

@@ -1,5 +1,5 @@
 {
-  "caseVersion": "1.0.0",
+  "caseVersion": "2.0.0",
   "familyId": "editable-flowchart-translation",
   "caseId": "editable-flowchart-translation.base",
   "title": "Editable non-BPMN flowchart translation",
@@ -10,7 +10,7 @@
   "upstreamOverlapGroup": "editable-flowchart-translation",
   "knownRegression": false,
   "difficultyTags": [
-    "challenging",
+    "adversarial",
     "single-source"
   ],
   "coverage": {
@@ -43,7 +43,7 @@
       "id": "editable-flowchart-translation.source.1",
       "path": "inputs/return-flow.drawio",
       "mediaType": "application/vnd.jgraph.mxfile",
-      "sha256": "37cd608d2d4ab87d2edb63399f35856ff7b1f3e66d2bf1f7814289d54a95d32b",
+      "sha256": "af3157a8384ec8e1c124b1c015f5bede9e869ac632d76cb34abc3a3643069d9d",
       "role": "evidence",
       "viewpoint": "legacy model owner",
       "provenance": {

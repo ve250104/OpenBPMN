@@ -21,7 +21,7 @@
               "key": "session-start",
               "type": "startEvent",
               "containerRef": "purchase-approval",
-              "name": "Existing session started",
+              "name": "Purchase requested",
               "event": {
                 "kind": "none"
               }
@@ -30,31 +30,32 @@
               "key": "check",
               "type": "task",
               "containerRef": "purchase-approval",
-              "name": "check"
+              "name": "Check request"
             },
             {
-              "key": "budget-approval",
-              "type": "task",
+              "key": "approval-threshold",
+              "type": "exclusiveGateway",
               "containerRef": "purchase-approval",
-              "name": "budget approval"
+              "name": "At least EUR 5,000?",
+              "defaultFlowRef": "below-threshold"
             },
             {
               "key": "finance-approval",
               "type": "task",
               "containerRef": "purchase-approval",
-              "name": "finance approval"
+              "name": "Obtain finance approval"
             },
             {
               "key": "prepare-po",
               "type": "task",
               "containerRef": "purchase-approval",
-              "name": "prepare po"
+              "name": "Create purchase order"
             },
             {
               "key": "session-end",
               "type": "endEvent",
               "containerRef": "purchase-approval",
-              "name": "Existing modeled outcome",
+              "name": "Purchase order ready",
               "event": {
                 "kind": "none"
               }
@@ -62,31 +63,40 @@
           ],
           "flows": [
             {
-              "key": "session-flow-1",
+              "key": "purchase-start",
               "containerRef": "purchase-approval",
               "sourceRef": "session-start",
               "targetRef": "check"
             },
             {
-              "key": "session-flow-2",
+              "key": "request-checked",
               "containerRef": "purchase-approval",
               "sourceRef": "check",
-              "targetRef": "budget-approval"
+              "targetRef": "approval-threshold"
             },
             {
-              "key": "session-flow-3",
+              "key": "approval-required",
               "containerRef": "purchase-approval",
-              "sourceRef": "budget-approval",
-              "targetRef": "finance-approval"
+              "sourceRef": "approval-threshold",
+              "targetRef": "finance-approval",
+              "name": "EUR 5,000 or more",
+              "condition": "amount >= 5000"
             },
             {
-              "key": "session-flow-4",
+              "key": "below-threshold",
+              "containerRef": "purchase-approval",
+              "sourceRef": "approval-threshold",
+              "targetRef": "prepare-po",
+              "name": "Below EUR 5,000"
+            },
+            {
+              "key": "approval-complete",
               "containerRef": "purchase-approval",
               "sourceRef": "finance-approval",
               "targetRef": "prepare-po"
             },
             {
-              "key": "session-flow-5",
+              "key": "order-created",
               "containerRef": "purchase-approval",
               "sourceRef": "prepare-po",
               "targetRef": "session-end"
@@ -94,16 +104,23 @@
           ],
           "lanes": [
             {
-              "key": "current-owner",
-              "name": "Current modeled owner",
+              "key": "purchasing",
+              "name": "Purchasing",
               "parentRef": "purchase-approval",
               "flowNodeRefs": [
                 "session-start",
                 "check",
-                "budget-approval",
-                "finance-approval",
+                "approval-threshold",
                 "prepare-po",
                 "session-end"
+              ]
+            },
+            {
+              "key": "finance",
+              "name": "Finance",
+              "parentRef": "purchase-approval",
+              "flowNodeRefs": [
+                "finance-approval"
               ]
             }
           ]
@@ -127,8 +144,8 @@
         ]
       },
       {
-        "elementRef": "budget-approval",
-        "assertion": "Retain the existing budget-approval identity unless the correction names it.",
+        "elementRef": "approval-threshold",
+        "assertion": "Retain the inclusive threshold decision identity.",
         "basis": "evidence",
         "supportRefs": [
           "session-account"
@@ -145,6 +162,38 @@
       {
         "elementRef": "prepare-po",
         "assertion": "Retain the existing prepare-po identity unless the correction names it.",
+        "basis": "evidence",
+        "supportRefs": [
+          "session-account"
+        ]
+      },
+      {
+        "elementRef": "purchasing",
+        "assertion": "Purchasing owns request checking and purchase-order preparation.",
+        "basis": "evidence",
+        "supportRefs": [
+          "session-account"
+        ]
+      },
+      {
+        "elementRef": "finance",
+        "assertion": "Finance owns finance approval.",
+        "basis": "evidence",
+        "supportRefs": [
+          "session-account"
+        ]
+      },
+      {
+        "elementRef": "approval-required",
+        "assertion": "The original inclusive threshold is EUR 5,000.",
+        "basis": "evidence",
+        "supportRefs": [
+          "session-account"
+        ]
+      },
+      {
+        "elementRef": "below-threshold",
+        "assertion": "Amounts below EUR 5,000 follow the complementary route.",
         "basis": "evidence",
         "supportRefs": [
           "session-account"

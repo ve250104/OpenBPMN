@@ -1,0 +1,410 @@
+{
+  "reportVersion": "1.0.0",
+  "toolVersion": "0.1.0-dev.0",
+  "profileVersion": "1.0.0",
+  "export": {
+    "requested": "auto",
+    "outcome": "clean",
+    "cleanEligible": true,
+    "expertOverride": false
+  },
+  "checks": [
+    {
+      "id": "input",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "xml",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "xsd",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "semantics",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "profile",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "di",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "render",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "evidence",
+      "status": "passed",
+      "findingRefs": [
+        "F_068240582e4308329fd4",
+        "F_4ffc6b194424797579dc",
+        "F_5b5aec5aec06c40b8a49",
+        "F_774fb293d2f811b5adb3",
+        "F_8818d83721c5356eeec9",
+        "F_975304cf744ab281560f",
+        "F_ab9b118d9d3174f2d19c",
+        "F_b726cdf4b2a988057384",
+        "F_bb5e32276f737d250fbd",
+        "F_d5a0349f0a12c9fe2467",
+        "F_dd0e2b106ce5556a18dc",
+        "F_e77a3f6dddb10094421e",
+        "F_f2c33adb620c07e5519a"
+      ]
+    },
+    {
+      "id": "consulting",
+      "status": "passed",
+      "findingRefs": []
+    }
+  ],
+  "findings": [
+    {
+      "id": "F_068240582e4308329fd4",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "No Evidence Link records the basis for a routing condition.",
+      "remediation": "Record the source or human decision behind this condition; do not infer that a plausible route is verified.",
+      "elementRefs": [
+        "standardToManager"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "id": "F_4ffc6b194424797579dc",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "No Evidence Link records the basis for a routing condition.",
+      "remediation": "Record the source or human decision behind this condition; do not infer that a plausible route is verified.",
+      "elementRefs": [
+        "managerApprovalRejected"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "id": "F_5b5aec5aec06c40b8a49",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "No Evidence Link records the basis for a routing condition.",
+      "remediation": "Record the source or human decision behind this condition; do not infer that a plausible route is verified.",
+      "elementRefs": [
+        "controllerApprovalRejected"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "id": "F_774fb293d2f811b5adb3",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "No Evidence Link records the basis for a routing condition.",
+      "remediation": "Record the source or human decision behind this condition; do not infer that a plausible route is verified.",
+      "elementRefs": [
+        "managerApprovalAccepted"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "id": "F_8818d83721c5356eeec9",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "No Evidence Link records the basis for a supplied responsibility.",
+      "remediation": "Record the source or human decision supporting this ownership assignment.",
+      "elementRefs": [
+        "accountsPayableLane"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "id": "F_975304cf744ab281560f",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "No Evidence Link records the basis for a routing condition.",
+      "remediation": "Record the source or human decision behind this condition; do not infer that a plausible route is verified.",
+      "elementRefs": [
+        "controllerApprovalAccepted"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "id": "F_ab9b118d9d3174f2d19c",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "No Evidence Link records the basis for a routing condition.",
+      "remediation": "Record the source or human decision behind this condition; do not infer that a plausible route is verified.",
+      "elementRefs": [
+        "incompleteToCorrection"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "id": "F_b726cdf4b2a988057384",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "No Evidence Link records the basis for a supplied responsibility.",
+      "remediation": "Record the source or human decision supporting this ownership assignment.",
+      "elementRefs": [
+        "employeeLane"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "id": "F_bb5e32276f737d250fbd",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "No Evidence Link records the basis for a routing condition.",
+      "remediation": "Record the source or human decision behind this condition; do not infer that a plausible route is verified.",
+      "elementRefs": [
+        "highValueToManager"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "id": "F_d5a0349f0a12c9fe2467",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "No Evidence Link records the basis for a supplied responsibility.",
+      "remediation": "Record the source or human decision supporting this ownership assignment.",
+      "elementRefs": [
+        "financeControllerLane"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "id": "F_dd0e2b106ce5556a18dc",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "No Evidence Link records the basis for a supplied responsibility.",
+      "remediation": "Record the source or human decision supporting this ownership assignment.",
+      "elementRefs": [
+        "lineManagerLane"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "id": "F_e77a3f6dddb10094421e",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "No Evidence Link records the basis for a routing condition.",
+      "remediation": "Record the source or human decision behind this condition; do not infer that a plausible route is verified.",
+      "elementRefs": [
+        "highValueToController"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "id": "F_f2c33adb620c07e5519a",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "No Evidence Link records the basis for a routing condition.",
+      "remediation": "Record the source or human decision behind this condition; do not infer that a plausible route is verified.",
+      "elementRefs": [
+        "completeToApprovals"
+      ],
+      "evidenceRefs": []
+    }
+  ],
+  "context": {
+    "evidence": [
+      {
+        "key": "procedure",
+        "source": "Expense reimbursement procedure",
+        "summary": "Employees submit claims; Accounts Payable checks receipts and returns incomplete claims; the line manager approves business purpose; claims above EUR 2,000 also require Finance Controller approval; Accounts Payable pays approved claims and informs the employee; rejected claims end with a notice.",
+        "locator": "procedure.txt"
+      },
+      {
+        "key": "employeeInterview",
+        "source": "Employee interview, 2026-08-18",
+        "summary": "The employee submits the expense form with receipt images, corrects the same claim when incomplete, and receives a notice when it is rejected or paid.",
+        "locator": "inputs/interviews.txt, employee interview"
+      },
+      {
+        "key": "managerInterview",
+        "source": "Line manager interview, 2026-08-19",
+        "summary": "The line manager decides business purpose; Finance Controller approval is also required above EUR 2,000; no approval order is prescribed; Accounts Payable pays only after every required approval is present.",
+        "locator": "inputs/interviews.txt, line manager interview"
+      },
+      {
+        "key": "policy",
+        "source": "Expense reimbursement control note, effective 2026-01-01",
+        "summary": "Accounts Payable checks required receipts; incomplete claims loop for same-claim correction; business-purpose approval is required; claims above EUR 2,000 additionally require Finance Controller approval without prescribed order; Accounts Payable records payment or rejection and sends the corresponding employee notice.",
+        "locator": "inputs/policy.txt, clauses 1-6"
+      }
+    ],
+    "decisions": [
+      {
+        "key": "sameClaimRecheck",
+        "description": "Represent incomplete-claim correction as a loop back to receipt checking under the same claim identity.",
+        "elementRefs": [
+          "incompleteToCorrection",
+          "correctClaim",
+          "correctionToRecheck"
+        ],
+        "evidenceRefs": [
+          "employeeInterview",
+          "policy"
+        ]
+      },
+      {
+        "key": "unorderedConditionalApprovals",
+        "description": "Use an inclusive split and join so line-manager approval is always selected and Finance Controller approval is additionally selected above the threshold, without prescribing an order between them.",
+        "elementRefs": [
+          "selectApprovals",
+          "standardToManager",
+          "highValueToManager",
+          "highValueToController",
+          "requiredApprovalsComplete"
+        ],
+        "evidenceRefs": [
+          "managerInterview",
+          "policy"
+        ]
+      },
+      {
+        "key": "rejectionTerminatesApprovals",
+        "description": "A rejection ends the claim and terminates any other active approval branch after Accounts Payable records the rejection and notifies the employee.",
+        "elementRefs": [
+          "managerApprovalRejected",
+          "controllerApprovalRejected",
+          "recordRejection",
+          "claimRejected"
+        ],
+        "evidenceRefs": [
+          "procedure",
+          "policy"
+        ]
+      }
+    ],
+    "issues": [],
+    "links": [
+      {
+        "elementRef": "submitClaim",
+        "assertion": "The employee submits the expense claim.",
+        "basis": "evidence",
+        "supportRefs": [
+          "procedure",
+          "employeeInterview"
+        ]
+      },
+      {
+        "elementRef": "checkReceipts",
+        "assertion": "Accounts Payable checks required receipts.",
+        "basis": "evidence",
+        "supportRefs": [
+          "procedure",
+          "policy"
+        ]
+      },
+      {
+        "elementRef": "correctClaim",
+        "assertion": "An incomplete claim is corrected under the same identity and checked again.",
+        "basis": "decision",
+        "supportRefs": [
+          "sameClaimRecheck"
+        ]
+      },
+      {
+        "elementRef": "selectApprovals",
+        "assertion": "Required approvals are selected without imposing an order.",
+        "basis": "decision",
+        "supportRefs": [
+          "unorderedConditionalApprovals"
+        ]
+      },
+      {
+        "elementRef": "managerApproval",
+        "assertion": "The line manager approves business purpose for every claim.",
+        "basis": "evidence",
+        "supportRefs": [
+          "procedure",
+          "managerInterview",
+          "policy"
+        ]
+      },
+      {
+        "elementRef": "controllerApproval",
+        "assertion": "Finance Controller approval is required above EUR 2,000.",
+        "basis": "evidence",
+        "supportRefs": [
+          "procedure",
+          "managerInterview",
+          "policy"
+        ]
+      },
+      {
+        "elementRef": "requiredApprovalsComplete",
+        "assertion": "Payment waits until every selected approval is present.",
+        "basis": "evidence",
+        "supportRefs": [
+          "managerInterview",
+          "policy"
+        ]
+      },
+      {
+        "elementRef": "recordRejection",
+        "assertion": "Accounts Payable records rejection and notifies the employee.",
+        "basis": "evidence",
+        "supportRefs": [
+          "procedure",
+          "policy"
+        ]
+      },
+      {
+        "elementRef": "payClaim",
+        "assertion": "Accounts Payable pays approved claims.",
+        "basis": "evidence",
+        "supportRefs": [
+          "procedure",
+          "policy"
+        ]
+      },
+      {
+        "elementRef": "notifyPayment",
+        "assertion": "Accounts Payable sends the employee the payment notice.",
+        "basis": "evidence",
+        "supportRefs": [
+          "procedure",
+          "employeeInterview",
+          "policy"
+        ]
+      }
+    ]
+  },
+  "modelKey": "expenseReimbursement"
+}

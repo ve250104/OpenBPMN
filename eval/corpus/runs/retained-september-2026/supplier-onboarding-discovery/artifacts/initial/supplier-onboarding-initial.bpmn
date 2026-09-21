@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="M_supplierOnboardingModel" name="Supplier onboarding: approval path" targetNamespace="urn:process-model:supplierOnboardingModel">
+  <bpmn:process id="M_supplierOnboarding" name="Supplier onboarding: approval path" isExecutable="false">
+    <bpmn:laneSet id="G_lanes_supplierOnboarding">
+      <bpmn:lane id="M_buyer" name="Buyer">
+        <bpmn:flowNodeRef>M_collectionBegins</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>M_collectForms</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>M_sendPack</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="M_vendorRisk" name="Vendor Risk">
+        <bpmn:flowNodeRef>M_screenSupplier</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>M_sendRiskDecision</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="M_masterData" name="Master Data">
+        <bpmn:flowNodeRef>M_createVendorRecord</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>M_vendorRecordCreated</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="M_collectionBegins" name="Collection begins">
+      <bpmn:outgoing>M_beginCollection</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="M_collectForms" name="Collect tax and bank forms">
+      <bpmn:incoming>M_beginCollection</bpmn:incoming>
+      <bpmn:outgoing>M_formsToTransmission</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="M_sendPack" name="Send pack to Vendor Risk">
+      <bpmn:incoming>M_formsToTransmission</bpmn:incoming>
+      <bpmn:outgoing>M_packToScreening</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="M_screenSupplier" name="Screen supplier">
+      <bpmn:incoming>M_packToScreening</bpmn:incoming>
+      <bpmn:outgoing>M_screeningToDecision</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="M_sendRiskDecision" name="Send risk decision to Master Data">
+      <bpmn:incoming>M_screeningToDecision</bpmn:incoming>
+      <bpmn:outgoing>M_approvalToCreation</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="M_createVendorRecord" name="Create vendor record">
+      <bpmn:incoming>M_approvalToCreation</bpmn:incoming>
+      <bpmn:outgoing>M_recordCreationComplete</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:endEvent id="M_vendorRecordCreated" name="Vendor record created">
+      <bpmn:incoming>M_recordCreationComplete</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="M_beginCollection" sourceRef="M_collectionBegins" targetRef="M_collectForms" />
+    <bpmn:sequenceFlow id="M_formsToTransmission" sourceRef="M_collectForms" targetRef="M_sendPack" />
+    <bpmn:sequenceFlow id="M_packToScreening" sourceRef="M_sendPack" targetRef="M_screenSupplier" />
+    <bpmn:sequenceFlow id="M_screeningToDecision" sourceRef="M_screenSupplier" targetRef="M_sendRiskDecision" />
+    <bpmn:sequenceFlow id="M_approvalToCreation" name="Approved" sourceRef="M_sendRiskDecision" targetRef="M_createVendorRecord">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Vendor Risk decision is approval</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="M_recordCreationComplete" sourceRef="M_createVendorRecord" targetRef="M_vendorRecordCreated" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="D_diagram_M_supplierOnboarding">
+    <bpmndi:BPMNPlane id="D_plane_M_supplierOnboarding" bpmnElement="M_supplierOnboarding">
+      <bpmndi:BPMNShape id="D_shape_M_supplierOnboarding_M_buyer" bpmnElement="M_buyer" isHorizontal="true">
+        <dc:Bounds x="80" y="80" width="1261" height="240" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_supplierOnboarding_M_vendorRisk" bpmnElement="M_vendorRisk" isHorizontal="true">
+        <dc:Bounds x="80" y="320" width="1261" height="240" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_supplierOnboarding_M_masterData" bpmnElement="M_masterData" isHorizontal="true">
+        <dc:Bounds x="80" y="560" width="1261" height="240" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_supplierOnboarding_M_collectionBegins" bpmnElement="M_collectionBegins">
+        <dc:Bounds x="120" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel id="D_label_M_supplierOnboarding_M_collectionBegins">
+          <dc:Bounds x="116" y="226" width="117" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_supplierOnboarding_M_collectForms" bpmnElement="M_collectForms">
+        <dc:Bounds x="256" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_supplierOnboarding_M_sendPack" bpmnElement="M_sendPack">
+        <dc:Bounds x="456" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_supplierOnboarding_M_screenSupplier" bpmnElement="M_screenSupplier">
+        <dc:Bounds x="656" y="400" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_supplierOnboarding_M_sendRiskDecision" bpmnElement="M_sendRiskDecision">
+        <dc:Bounds x="856" y="400" width="109" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_supplierOnboarding_M_createVendorRecord" bpmnElement="M_createVendorRecord">
+        <dc:Bounds x="1065" y="640" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_supplierOnboarding_M_vendorRecordCreated" bpmnElement="M_vendorRecordCreated">
+        <dc:Bounds x="1265" y="662" width="36" height="36" />
+        <bpmndi:BPMNLabel id="D_label_M_supplierOnboarding_M_vendorRecordCreated">
+          <dc:Bounds x="1183" y="706" width="150" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="D_edge_M_supplierOnboarding_M_beginCollection" bpmnElement="M_beginCollection">
+        <di:waypoint x="156" y="200" />
+        <di:waypoint x="256" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_supplierOnboarding_M_formsToTransmission" bpmnElement="M_formsToTransmission">
+        <di:waypoint x="356" y="200" />
+        <di:waypoint x="456" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_supplierOnboarding_M_packToScreening" bpmnElement="M_packToScreening">
+        <di:waypoint x="556" y="200" />
+        <di:waypoint x="706" y="200" />
+        <di:waypoint x="706" y="400" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_supplierOnboarding_M_screeningToDecision" bpmnElement="M_screeningToDecision">
+        <di:waypoint x="756" y="440" />
+        <di:waypoint x="856" y="440" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_supplierOnboarding_M_approvalToCreation" bpmnElement="M_approvalToCreation">
+        <di:waypoint x="965" y="440" />
+        <di:waypoint x="1115" y="440" />
+        <di:waypoint x="1115" y="640" />
+        <bpmndi:BPMNLabel id="D_label_M_supplierOnboarding_M_approvalToCreation">
+          <dc:Bounds x="995" y="409" width="90" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_supplierOnboarding_M_recordCreationComplete" bpmnElement="M_recordCreationComplete">
+        <di:waypoint x="1165" y="680" />
+        <di:waypoint x="1265" y="680" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

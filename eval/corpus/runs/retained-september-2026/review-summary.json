@@ -1,0 +1,135 @@
+{
+  "reviewedAt": "2026-09-21",
+  "mergedCommit": "6fc6b6e02b3e565b5b4320e0b74c798dc05a8921",
+  "checks": {
+    "githubCI": "not invoked",
+    "localCorpusValidation": "passed",
+    "focusedCorpusTests": {
+      "passed": 9
+    },
+    "remoteMainVerified": true,
+    "workingTreeClean": true
+  },
+  "scope": "Three different fresh source-only modeling tasks and one expense follow-up; exploratory coverage, not repeated-run reliability or a blind benchmark.",
+  "limitations": [
+    "Filesystem isolation was not enforced.",
+    "Task host default model and reasoning settings were not observed.",
+    "Human adjudication and external BPMN-editor roundtrip testing were not performed.",
+    "Separate issue #43 routing/fidelity changes were not part of main."
+  ],
+  "cases": [
+    {
+      "caseId": "expense-reimbursement",
+      "generationAttempts": 1,
+      "technicalChecks": "passed",
+      "export": "snapshot",
+      "cleanEligible": false,
+      "manualVerdict": "Factually cautious, weak end-to-end usability",
+      "findings": [
+        "Preserves AP, line-manager, controller and employee roles, strict >2000 threshold, and unresolved questions.",
+        "Four disconnected components; approvals-to-payment dependency is in a start label/report rather than a visible connected route.",
+        "Receipt gateway has overlapping hooked connectors.",
+        "Generic tasks and equivalent wording trigger misleading failures."
+      ],
+      "rawCorpusGrade": {
+        "pass": 1,
+        "fail": 7,
+        "criticalFailures": 6
+      },
+      "sessionLabel": "retained-expense-reimbursement"
+    },
+    {
+      "caseId": "supplier-onboarding-discovery",
+      "generationAttempts": 1,
+      "technicalChecks": "passed",
+      "export": "snapshot",
+      "cleanEligible": false,
+      "manualVerdict": "Useful approval-path snapshot",
+      "findings": [
+        "Respects dated Master Data ownership correction and Vendor Risk approval condition.",
+        "Does not conflate sending a pack with approval.",
+        "Sanctions screening is explicitly unresolved in the report but absent from visible graph.",
+        "Nonapproval behavior and overall completion remain unresolved."
+      ],
+      "rawCorpusGrade": {
+        "pass": 2,
+        "fail": 0,
+        "review": "agent proposed; not human adjudicated"
+      },
+      "sessionLabel": "retained-supplier-onboarding-discovery"
+    },
+    {
+      "caseId": "editable-flowchart-translation",
+      "generationAttempts": 2,
+      "firstFailure": "REF_MISSING evidence link in agent-generated request, repaired on next attempt",
+      "technicalChecks": "passed on second generation",
+      "export": "snapshot",
+      "cleanEligible": false,
+      "manualVerdict": "Promising small agent-assisted translation; not general importer qualification",
+      "findings": [
+        "Preserves Yes -> Send replacement and No -> Escalate dispute.",
+        "Keeps owners, criteria and continuation unknown; marks added boundary events as provisional.",
+        "Gateway has hooked overlapping routing.",
+        "Only three activities and one decision in native uncompressed draw.io XML."
+      ],
+      "rawCorpusGrade": {
+        "pass": 2,
+        "fail": 0,
+        "review": "agent proposed; not human adjudicated",
+        "applicabilityCaveat": "Corpus declares arbitrary conversion unsupported, which headline score does not preserve."
+      },
+      "sessionLabel": "retained-editable-flowchart-translation"
+    }
+  ],
+  "correction": {
+    "caseId": "expense-reimbursement",
+    "requested": ">2000 becomes >=2500, complement <2500",
+    "result": "passed",
+    "preserved": [
+      "103 XML IDs",
+      "element types",
+      "lane membership",
+      "flow endpoints",
+      "unrelated names",
+      "three unresolved questions"
+    ],
+    "changes": [
+      "gateway label",
+      "two branch labels",
+      "two branch conditions",
+      "supporting evidence, superseding decision and threshold-related links",
+      "generated threshold-label bounds"
+    ],
+    "handoff": "matches revised BPMN, quality context and embedded report",
+    "initialBundle": "retained; no pre-follow-up byte-identity proof claimed"
+  },
+  "corpusAudit": {
+    "families": 24,
+    "domains": 17,
+    "familiesWithOnlyTwoAssertions": 15,
+    "medianAssertions": 2,
+    "findings": [
+      "Many discovery source packs contain only a few sentences; category breadth exceeds realistic evidence depth.",
+      "All four maintenance starting Handoffs have material mismatches with their advertised starting processes: missing parallel structure, missing actual boundary timer, absent threshold decision/already-renamed task, and serial refund/replacement with no removal target.",
+      "Several assertions overstate ambiguous source evidence or require unsupported specificity."
+    ]
+  },
+  "scorerAudit": {
+    "method": "Read-only code review plus in-memory probes of unchanged matcher functions; mutation probes were not submitted as full CLI evaluation runs.",
+    "findings": [
+      "Exact label and condition matching can reject semantically equivalent models.",
+      "Existence/path checks can give 8/8 to a graph that starts at the paid end with work unreachable.",
+      "Swapped approval/rejection conditions can still score 8/8.",
+      "The label-presence check still scores 8/8 with label coordinates moved to (500000,500000).",
+      "Headline pass ignores unsupported applicability and does not distinguish proposed agent reviews from adjudication."
+    ]
+  },
+  "assessment": "Useful assisted modeling prototype and test harness; not yet a trustworthy product-quality gate or consistently presentation-ready output.",
+  "priorities": [
+    "Repair scorer correctness and maintenance fixtures before using benchmark scores.",
+    "Deepen a small set of source packs with realistic documents and observable source-grounded outcomes.",
+    "Evaluate the separate #43 routing changes against these retained outputs.",
+    "Improve connected partial-model presentation without fabricating missing facts."
+  ],
+  "retention": "Sanitized review findings retained; raw task transcripts and machine-specific paths omitted."
+}

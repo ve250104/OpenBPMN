@@ -1,0 +1,22 @@
+{
+  "artifacts": [
+    {
+      "path": "expense-reimbursement/artifacts/revised/expense-reimbursement-revised.openbpmn.json",
+      "sha256": "372cb3940bd9412b9aa0e03cdd917fa3420402e524c84de07d3d57a3f07ead97"
+    },
+    {
+      "path": "expense-reimbursement/artifacts/revised/expense-reimbursement-revised.bpmn",
+      "sha256": "147f4093b0e8b47d03d1a53edef8306255755706659f3b1ad2f0e6183bd0261b"
+    },
+    {
+      "path": "expense-reimbursement/artifacts/revised/expense-reimbursement-revised.quality.json",
+      "sha256": "3e7539e5abb940143466d751ae93045ea4ce3d35e3edaf8ae3876ec8b82df46b"
+    },
+    {
+      "path": "expense-reimbursement/artifacts/revised/expense-reimbursement-revised.svg",
+      "sha256": "e3b8845b9c94aa6b52308ebfca772051e48ffcefb672a6978d017ed03bbc4deb"
+    }
+  ],
+  "capture": "run.json",
+  "review": "../review-summary.json"
+}

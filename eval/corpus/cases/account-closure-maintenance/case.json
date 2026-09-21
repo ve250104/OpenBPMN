@@ -1,5 +1,5 @@
 {
-  "caseVersion": "1.0.0",
+  "caseVersion": "2.0.0",
   "familyId": "account-closure-maintenance",
   "caseId": "account-closure-maintenance.base",
   "title": "Customer account closure correction",
@@ -40,12 +40,42 @@
     "reason": "Within the current declared public boundary.",
     "fixedBeforeExecution": true
   },
+  "correctionContract": {
+    "baselineRequired": true,
+    "mutableElementIds": ["closure-controls-join", "closure-complete"],
+    "removableElementIds": [],
+    "allowedNewElements": [
+      {
+        "id": "archive-notification",
+        "type": "bpmn:Task",
+        "nameAliases": ["Send archive notification", "Notify archive team"]
+      }
+    ],
+    "allowedElementChanges": [],
+    "allowedFlowChanges": [
+      {
+        "id": "closure-complete",
+        "field": "target",
+        "from": "session-end",
+        "to": "archive-notification"
+      }
+    ],
+    "allowedNewFlows": [
+      {
+        "id": "archive-complete",
+        "source": "archive-notification",
+        "target": "session-end",
+        "name": "",
+        "condition": ""
+      }
+    ]
+  },
   "sourceArtifacts": [
     {
       "id": "account-closure-maintenance.source.1",
       "path": "inputs/handoff.json",
       "mediaType": "application/json",
-      "sha256": "e8380f14a7d43168188c02c14de1eb8dff23bed112bb539ef44337381a5e946d",
+      "sha256": "a835e6182ce75a5bcf5d4c43e654a6799334cd3ed1a6ab6ba9584f0a25318763",
       "role": "evidence",
       "viewpoint": "session owner",
       "provenance": {

@@ -1,0 +1,355 @@
+{
+  "assessmentVersion": "2.0.0",
+  "evaluatorRevision": "2.0.0",
+  "compatibility": {
+    "runContractVersion": "2.0.0",
+    "interpretation": "current"
+  },
+  "status": "complete",
+  "familyId": "supplier-onboarding-discovery",
+  "caseId": "supplier-onboarding-discovery.base",
+  "variantId": null,
+  "runId": "fresh-supplier-issue-45",
+  "identities": {
+    "caseSha256": "b6fa8c2e6f06957f5f7532a515d00fe8897a55ac8f558663ca49e949c285c4f9",
+    "assertionSha256": "bfb90cced55f839b7c28605fc1b3b7d3dde6e4efd9e89c1103dcd1165b842aaa",
+    "sourceArtifacts": [
+      {
+        "id": "supplier-onboarding-discovery.source.1",
+        "path": "inputs/interview.txt",
+        "mediaType": "text/plain",
+        "sha256": "d185245477c1bf34dbf1676fb288d2d1415f3e636cf855961d22cd963873fea9",
+        "declaredSha256": "d185245477c1bf34dbf1676fb288d2d1415f3e636cf855961d22cd963873fea9",
+        "observedSha256": "d185245477c1bf34dbf1676fb288d2d1415f3e636cf855961d22cd963873fea9",
+        "identity": "current"
+      },
+      {
+        "id": "supplier-onboarding-discovery.source.2",
+        "path": "inputs/checklist.docx",
+        "mediaType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "sha256": "5fd9914492243928a3518c199075dfda7f62c658fc38bca52c37df8016ba5267",
+        "declaredSha256": "5fd9914492243928a3518c199075dfda7f62c658fc38bca52c37df8016ba5267",
+        "observedSha256": "5fd9914492243928a3518c199075dfda7f62c658fc38bca52c37df8016ba5267",
+        "identity": "current"
+      },
+      {
+        "id": "supplier-onboarding-discovery.source.3",
+        "path": "inputs/dated-correction.txt",
+        "mediaType": "text/plain",
+        "sha256": "142adf247f480bb87a4894df601b8fe2d8e2c490250d76b6a7f286c7103eb01c",
+        "declaredSha256": "142adf247f480bb87a4894df601b8fe2d8e2c490250d76b6a7f286c7103eb01c",
+        "observedSha256": "142adf247f480bb87a4894df601b8fe2d8e2c490250d76b6a7f286c7103eb01c",
+        "identity": "current"
+      },
+      {
+        "id": "supplier-onboarding-discovery.source.4",
+        "path": "inputs/regional-interview.txt",
+        "mediaType": "text/plain",
+        "sha256": "cda02b5c3a4b779c7af3204139e86141b1a1797b20715c6417208fc2b6f57493",
+        "declaredSha256": "cda02b5c3a4b779c7af3204139e86141b1a1797b20715c6417208fc2b6f57493",
+        "observedSha256": "cda02b5c3a4b779c7af3204139e86141b1a1797b20715c6417208fc2b6f57493",
+        "identity": "current"
+      }
+    ],
+    "case": "current",
+    "assertions": "current",
+    "sources": "current"
+  },
+  "candidate": {
+    "commit": "e9edfe8",
+    "buildIdentity": "issue-45-evidence-working-tree",
+    "dirtyState": "dirty"
+  },
+  "environment": {
+    "runtime": "v24.19.0",
+    "platform": "darwin",
+    "architecture": "arm64",
+    "browser": "not_observed",
+    "host": "local"
+  },
+  "skill": {
+    "version": "not_observed"
+  },
+  "model": {
+    "id": "not_observed",
+    "reasoningSettings": "not_observed"
+  },
+  "isolation": {
+    "status": "not_isolated",
+    "stagingSeparation": "case-only-directory",
+    "filesystemBoundary": "not_enforced",
+    "reviewerFilesAccessibleFromHost": true,
+    "reason": "Preparation limits staged inputs, but this local process can still reach the repository and reviewer files.",
+    "canaryCheck": "absent_from_staged_files"
+  },
+  "applicability": {
+    "status": "supported",
+    "capability": "source-driven-modeling-session",
+    "reason": "Within the current declared public boundary.",
+    "fixedBeforeExecution": true
+  },
+  "reviewRubric": {
+    "version": "1.0.0",
+    "criteria": [
+      {
+        "id": "comprehension",
+        "question": "Can a reviewer identify ownership, branching, and completion without author assistance?",
+        "scale": [
+          "clear",
+          "partly clear",
+          "unclear"
+        ],
+        "citationRequired": true
+      },
+      {
+        "id": "ambiguity",
+        "question": "Are material unknowns and competing interpretations visible rather than silently resolved?",
+        "scale": [
+          "explicit",
+          "partly explicit",
+          "hidden"
+        ],
+        "citationRequired": true
+      },
+      {
+        "id": "correction-effort",
+        "question": "How much measured reviewer effort was required to reach an acceptable correction?",
+        "scale": [
+          "no correction",
+          "minor correction",
+          "major correction",
+          "not measured"
+        ],
+        "citationRequired": true
+      }
+    ]
+  },
+  "inputFindings": [],
+  "attempts": [
+    {
+      "attemptId": "attempt-1",
+      "recordedStatus": "completed",
+      "status": "pass",
+      "assertions": [
+        {
+          "claim": "Vendor Risk decides screening and Master Data creates the record",
+          "disposition": "required",
+          "epistemicStatus": "established",
+          "dimension": "evidenceFidelity",
+          "assertionId": "supplier-onboarding-discovery.assertion.1",
+          "method": "agent",
+          "methodDescription": "Independent source-to-BPMN and rendered-SVG review by the evaluation maintainer.",
+          "status": "pass",
+          "reviewer": {
+            "identity": "issue-45-independent-review",
+            "role": "evaluation maintainer"
+          },
+          "sourceCitations": [
+            {
+              "artifact": "inputs/dated-correction.txt",
+              "locator": "dated correction"
+            }
+          ],
+          "outputCitations": [
+            {
+              "artifact": "attempt-1/model.bpmn",
+              "locator": "Master Data lane and Vendor Risk screening outcome"
+            }
+          ],
+          "adjudicationStatus": "proposed"
+        },
+        {
+          "claim": "sending the pack establishes that Vendor Risk approved it",
+          "disposition": "forbidden",
+          "epistemicStatus": "unknown",
+          "dimension": "coverage",
+          "assertionId": "supplier-onboarding-discovery.assertion.2",
+          "method": "agent",
+          "methodDescription": "Independent source-to-BPMN and rendered-SVG review by the evaluation maintainer.",
+          "status": "pass",
+          "reviewer": {
+            "identity": "issue-45-independent-review",
+            "role": "evaluation maintainer"
+          },
+          "sourceCitations": [
+            {
+              "artifact": "inputs/interview.txt",
+              "locator": "buyer statement"
+            }
+          ],
+          "outputCitations": [
+            {
+              "artifact": "attempt-1/model.bpmn",
+              "locator": "distinct Send pack and Screen supplier activities"
+            }
+          ],
+          "adjudicationStatus": "proposed"
+        },
+        {
+          "claim": "screening rejection remains distinct from clearance and record creation",
+          "disposition": "required",
+          "epistemicStatus": "established",
+          "dimension": "behavior",
+          "assertionId": "supplier-onboarding-discovery.assertion.3",
+          "method": "agent",
+          "methodDescription": "Independent source-to-BPMN and rendered-SVG review by the evaluation maintainer.",
+          "status": "pass",
+          "reviewer": {
+            "identity": "issue-45-independent-review",
+            "role": "evaluation maintainer"
+          },
+          "sourceCitations": [
+            {
+              "artifact": "inputs/regional-interview.txt",
+              "locator": "paragraph 1"
+            }
+          ],
+          "outputCitations": [
+            {
+              "artifact": "attempt-1/model.bpmn",
+              "locator": "distinct Cleared and Rejected routes"
+            }
+          ],
+          "adjudicationStatus": "proposed"
+        },
+        {
+          "claim": "a missing-evidence response returns work to the buyer without fabricating approval",
+          "disposition": "required",
+          "epistemicStatus": "established",
+          "dimension": "coverage",
+          "assertionId": "supplier-onboarding-discovery.assertion.4",
+          "method": "agent",
+          "methodDescription": "Independent source-to-BPMN and rendered-SVG review by the evaluation maintainer.",
+          "status": "pass",
+          "reviewer": {
+            "identity": "issue-45-independent-review",
+            "role": "evaluation maintainer"
+          },
+          "sourceCitations": [
+            {
+              "artifact": "inputs/regional-interview.txt",
+              "locator": "paragraph 1"
+            }
+          ],
+          "outputCitations": [
+            {
+              "artifact": "attempt-1/model.bpmn",
+              "locator": "missing-evidence loop to Buyer and rescreening"
+            }
+          ],
+          "adjudicationStatus": "proposed"
+        },
+        {
+          "claim": "record creation completion is communicated to the buyer",
+          "disposition": "required",
+          "epistemicStatus": "established",
+          "dimension": "downstreamUsability",
+          "assertionId": "supplier-onboarding-discovery.assertion.5",
+          "method": "agent",
+          "methodDescription": "Independent source-to-BPMN and rendered-SVG review by the evaluation maintainer.",
+          "status": "pass",
+          "reviewer": {
+            "identity": "issue-45-independent-review",
+            "role": "evaluation maintainer"
+          },
+          "sourceCitations": [
+            {
+              "artifact": "inputs/regional-interview.txt",
+              "locator": "paragraph 1"
+            }
+          ],
+          "outputCitations": [
+            {
+              "artifact": "attempt-1/model.bpmn",
+              "locator": "Tell buyer creation completed activity"
+            }
+          ],
+          "adjudicationStatus": "proposed"
+        }
+      ],
+      "findings": [],
+      "artifacts": [
+        {
+          "kind": "bpmn",
+          "path": "attempt-1/model.bpmn",
+          "sha256": "65f4813881379151de1135395ad995e4de21829990af3f416c44fd572a181d41",
+          "observedSha256": "65f4813881379151de1135395ad995e4de21829990af3f416c44fd572a181d41",
+          "identity": "current"
+        },
+        {
+          "kind": "svg",
+          "path": "attempt-1/model.svg",
+          "sha256": "c4df29a126d74de535f917117c6d9a8ced9b97d85c797318500a741c3bdce96a",
+          "observedSha256": "c4df29a126d74de535f917117c6d9a8ced9b97d85c797318500a741c3bdce96a",
+          "identity": "current"
+        },
+        {
+          "kind": "handoff",
+          "path": "attempt-1/model.openbpmn.json",
+          "sha256": "33dde593fab5d7039218545fda59344e1a64756a3fd070e7c75458540c77590f",
+          "observedSha256": "33dde593fab5d7039218545fda59344e1a64756a3fd070e7c75458540c77590f",
+          "identity": "current"
+        },
+        {
+          "kind": "quality-report",
+          "path": "attempt-1/model.quality.json",
+          "sha256": "a1efb90eae7268c6592dedcb145d41d38914174903200fc80d9ca9d47958afe3",
+          "observedSha256": "a1efb90eae7268c6592dedcb145d41d38914174903200fc80d9ca9d47958afe3",
+          "identity": "current"
+        }
+      ],
+      "preservation": null
+    }
+  ],
+  "summary": {
+    "attemptCount": 1,
+    "sessions": {
+      "planned": 1,
+      "attempted": 1,
+      "completed": 1,
+      "firstGeneration": "pass",
+      "repairedCompletion": false
+    },
+    "statuses": {
+      "pass": 1
+    },
+    "criticalFailures": 0,
+    "humanChecks": {
+      "requested": 0,
+      "completed": 0,
+      "missing": 0
+    },
+    "reviewState": {
+      "proposedAgentChecks": 5,
+      "recordedHumanChecks": 0,
+      "adjudicatedChecks": 0
+    },
+    "unresolvedJudgments": 0,
+    "preservation": {
+      "pass": 0,
+      "fail": 0,
+      "unavailable": 0
+    },
+    "supportedProduct": {
+      "applicable": true,
+      "denominator": 1,
+      "passed": 1,
+      "qualified": true
+    },
+    "dimensions": {
+      "evidenceFidelity": {
+        "pass": 1
+      },
+      "coverage": {
+        "pass": 2
+      },
+      "behavior": {
+        "pass": 1
+      },
+      "downstreamUsability": {
+        "pass": 1
+      }
+    },
+    "correctionMinutes": null
+  }
+}

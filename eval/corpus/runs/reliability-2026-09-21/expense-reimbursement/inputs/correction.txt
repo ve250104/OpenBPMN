@@ -1,0 +1,1 @@
+Later correction (2026-09-21): finance-controller approval now applies at EUR 2,500 or more. The complementary route is below EUR 2,500. Preserve unrelated work and identities.

@@ -1,5 +1,5 @@
 {
-  "caseVersion": "1.0.0",
+  "caseVersion": "2.0.0",
   "familyId": "incident-escalation-maintenance",
   "caseId": "incident-escalation-maintenance.base",
   "title": "Incident escalation correction",
@@ -40,12 +40,34 @@
     "reason": "Within the current declared public boundary.",
     "fixedBeforeExecution": true
   },
+  "correctionContract": {
+    "baselineRequired": true,
+    "mutableElementIds": ["escalation-clock"],
+    "removableElementIds": [],
+    "allowedNewElements": [],
+    "allowedElementChanges": [
+      {
+        "id": "escalation-clock",
+        "field": "event.timeDuration",
+        "from": "PT4H",
+        "to": "PT3H"
+      },
+      {
+        "id": "escalation-clock",
+        "field": "event.timeDuration",
+        "from": "PT3H",
+        "to": "PT2H"
+      }
+    ],
+    "allowedFlowChanges": [],
+    "allowedNewFlows": []
+  },
   "sourceArtifacts": [
     {
       "id": "incident-escalation-maintenance.source.1",
       "path": "inputs/handoff.json",
       "mediaType": "application/json",
-      "sha256": "7b1bac26c563b60b7f9354d8bd187225c6f1426d20ec3eb722644b53416d6681",
+      "sha256": "a8c56edf763ee9f58077b143b6822cb99733e98490353a59be79be070818949e",
       "role": "evidence",
       "viewpoint": "session owner",
       "provenance": {
@@ -81,7 +103,7 @@
           "id": "incident-escalation-maintenance.variant.three-to-two-hours.source.1",
           "path": "variants/three-to-two-hours/handoff.json",
           "mediaType": "application/json",
-          "sha256": "d77b2445fd2a35afbd30d552648dd9905387e953eaeee378f4bde99879317a52",
+          "sha256": "07347154a0771079f7bab7eef52d20fa2af2b44137760649a94123c76ed39a70",
           "role": "evidence",
           "viewpoint": "session owner",
           "provenance": {
@@ -103,7 +125,8 @@
         }
       ],
       "stableAssertionIds": [
-        "incident-escalation-maintenance.assertion.2"
+        "incident-escalation-maintenance.assertion.2",
+        "incident-escalation-maintenance.assertion.3"
       ],
       "changedAssertionIds": [
         "incident-escalation-maintenance.assertion.1"

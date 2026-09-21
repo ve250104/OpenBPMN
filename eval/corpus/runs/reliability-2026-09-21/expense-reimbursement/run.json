@@ -1,0 +1,194 @@
+{
+  "runContractVersion": "2.0.0",
+  "runId": "fresh-expense-exact-correction-2026-09-21",
+  "familyId": "expense-reimbursement",
+  "caseId": "expense-reimbursement.base",
+  "variantId": null,
+  "caseSha256": "1a3593999611295db1c0e31231ce2aa878dc313e0dc169eb05e5e374519b0422",
+  "assertionSha256": "531c04472a3244532863235e800438eeb62c50b0e46ff880ebe9090128ba2d3e",
+  "sourceArtifacts": [
+    {
+      "id": "expense-reimbursement.source.1",
+      "path": "inputs/procedure.txt",
+      "mediaType": "text/plain",
+      "sha256": "c106190a51aa8926422a823d9608917ce21ce555f59c39da669a51c51e9d9dac"
+    },
+    {
+      "id": "expense-reimbursement.source.2",
+      "path": "inputs/interviews.txt",
+      "mediaType": "text/plain",
+      "sha256": "d740276192c82d63eb404eb2dd44f94fb1c70a54183994743a3d73dbe0956f17"
+    },
+    {
+      "id": "expense-reimbursement.source.3",
+      "path": "inputs/policy.txt",
+      "mediaType": "text/plain",
+      "sha256": "532e85832d112eea49baf77d3c3e8530eaa8f32b2b8d835a0d20bb75f91fcb0d"
+    },
+    {
+      "id": "expense-reimbursement.source.4",
+      "path": "inputs/correction.txt",
+      "mediaType": "text/plain",
+      "sha256": "60fd205d2288f7df605d365be47e5b3b5689c1fc098a9906c877216b49c7c188"
+    }
+  ],
+  "candidate": {
+    "commit": "e9edfe8",
+    "buildIdentity": "issue-45-evidence-working-tree",
+    "dirtyState": "dirty"
+  },
+  "environment": {
+    "runtime": "v24.19.0",
+    "platform": "darwin",
+    "architecture": "arm64",
+    "browser": "not_observed",
+    "host": "local"
+  },
+  "skill": {
+    "version": "not_observed"
+  },
+  "model": {
+    "id": "not_observed",
+    "reasoningSettings": "not_observed"
+  },
+  "prompt": "Model employee expense reimbursement from the supplied procedure, retaining the different owner and approver roles.",
+  "answers": [],
+  "attemptCount": 3,
+  "attempts": [
+    {
+      "attemptId": "initial-1",
+      "phase": "initial",
+      "status": "completed",
+      "startedAt": "2026-09-21T15:58:33.000Z",
+      "finishedAt": "2026-09-21T15:58:55.000Z",
+      "commands": [
+        "openbpmn generate"
+      ],
+      "exitResults": [
+        {
+          "command": "openbpmn generate",
+          "exitCode": 0
+        }
+      ],
+      "artifacts": [
+        {
+          "kind": "bpmn",
+          "path": "attempt-1/model.bpmn",
+          "sha256": "1b00bedd7d7f9b140dd57604cd3552cd44a60ba47f2d2e12607ed7c5fe2f806c"
+        },
+        {
+          "kind": "svg",
+          "path": "attempt-1/model.svg",
+          "sha256": "d2bc3f5b37efe3d68412f684878de761e6fe8d124f2047b8296e8a3090576311"
+        },
+        {
+          "kind": "handoff",
+          "path": "attempt-1/model.openbpmn.json",
+          "sha256": "2fd7cf5aaef3ad67eafcd593e3c0bc2a716529a1bf79df20752db1715db8e3dd"
+        },
+        {
+          "kind": "quality-report",
+          "path": "attempt-1/model.quality.json",
+          "sha256": "9bb049e95265a1b39423af3e6f34881e516949f9643677b75c1aa91b38d00255"
+        }
+      ],
+      "conversation": [],
+      "toolCalls": [],
+      "finalClaims": [],
+      "observations": []
+    },
+    {
+      "attemptId": "correction-1",
+      "phase": "correction",
+      "status": "failed",
+      "startedAt": "2026-09-21T16:00:35.000Z",
+      "finishedAt": "2026-09-21T16:00:35.000Z",
+      "reason": "Correction helper used CommonJS syntax in an ES-module environment; no model artifacts were produced.",
+      "commands": [
+        "openbpmn generate"
+      ],
+      "exitResults": [
+        {
+          "command": "openbpmn generate",
+          "exitCode": 3
+        }
+      ],
+      "artifacts": [],
+      "conversation": [],
+      "toolCalls": [],
+      "finalClaims": [],
+      "observations": []
+    },
+    {
+      "attemptId": "correction-2",
+      "phase": "correction",
+      "status": "completed",
+      "startedAt": "2026-09-21T16:00:54.000Z",
+      "finishedAt": "2026-09-21T16:01:16.000Z",
+      "commands": [
+        "openbpmn generate"
+      ],
+      "exitResults": [
+        {
+          "command": "openbpmn generate",
+          "exitCode": 0
+        }
+      ],
+      "artifacts": [
+        {
+          "kind": "baseline-bpmn",
+          "path": "attempt-3/baseline.bpmn",
+          "sha256": "1b00bedd7d7f9b140dd57604cd3552cd44a60ba47f2d2e12607ed7c5fe2f806c"
+        },
+        {
+          "kind": "baseline-handoff",
+          "path": "attempt-3/baseline.openbpmn.json",
+          "sha256": "2fd7cf5aaef3ad67eafcd593e3c0bc2a716529a1bf79df20752db1715db8e3dd"
+        },
+        {
+          "kind": "baseline-quality-report",
+          "path": "attempt-3/baseline.quality.json",
+          "sha256": "9bb049e95265a1b39423af3e6f34881e516949f9643677b75c1aa91b38d00255"
+        },
+        {
+          "kind": "bpmn",
+          "path": "attempt-3/model.bpmn",
+          "sha256": "701158e9f40d678d2955ae4762b05e546a6f0d39222769621035f9ea95a8fe89"
+        },
+        {
+          "kind": "svg",
+          "path": "attempt-3/model.svg",
+          "sha256": "038436113e32fb93cc1133ec1fe5f7d617c849fcea3445407feaf3ef672ae9e6"
+        },
+        {
+          "kind": "handoff",
+          "path": "attempt-3/model.openbpmn.json",
+          "sha256": "10de2892d0f796b9b835849eb92819383796972724449d9f46afecd2611b6870"
+        },
+        {
+          "kind": "quality-report",
+          "path": "attempt-3/model.quality.json",
+          "sha256": "8a8966e2b51d7d9a3ed8954947819c18674f733a50bf6e413f98dfb9541b9ea9"
+        }
+      ],
+      "conversation": [],
+      "toolCalls": [],
+      "finalClaims": [],
+      "observations": []
+    }
+  ],
+  "isolation": {
+    "status": "not_isolated",
+    "stagingSeparation": "case-only-directory",
+    "filesystemBoundary": "not_enforced",
+    "reviewerFilesAccessibleFromHost": true,
+    "reason": "Preparation limits staged inputs, but this local process can still reach the repository and reviewer files.",
+    "canaryCheck": "absent_from_staged_files"
+  },
+  "metrics": {
+    "tokens": null,
+    "cost": null,
+    "humanCorrectionMinutes": null
+  },
+  "preparedAt": "2026-09-21T16:08:26.825Z"
+}

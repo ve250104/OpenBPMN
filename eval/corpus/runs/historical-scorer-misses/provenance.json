@@ -1,0 +1,46 @@
+{
+  "recordVersion": "1.0.0",
+  "reproducedAt": "2026-09-21",
+  "evaluator": {
+    "commit": "6fc6b6e02b3e565b5b4320e0b74c798dc05a8921",
+    "relationship": "direct-parent",
+    "workingTree": "unchanged-detached-worktree",
+    "publicEntrypoint": "eval/corpus/run.mjs assess",
+    "runContractVersion": "1.0.0",
+    "assessmentVersion": "1.0.0"
+  },
+  "run": {
+    "path": "run-v1.json",
+    "sha256": "55b72d4c3c510453950cd5554f2c8ad517a7d55df60561a101938f78e3ec94e1"
+  },
+  "assessment": {
+    "path": "assessment-v1.json",
+    "sha256": "5c5ac31213286c3a553c764e04cdeea15e2fb8faacb4e01070ae694577d7ac5c",
+    "statuses": {
+      "pass": 3
+    }
+  },
+  "counterexamples": [
+    {
+      "attemptId": "direct-bypass",
+      "defect": "a new direct sequence flow connects the start event to payment",
+      "historicalAssessment": "pass"
+    },
+    {
+      "attemptId": "swapped-conditions",
+      "defect": "approval and rejection condition expressions are exchanged",
+      "historicalAssessment": "pass"
+    },
+    {
+      "attemptId": "detached-label",
+      "defect": "the claimed branch label bounds are moved to coordinates 500000,500000",
+      "historicalAssessment": "pass"
+    }
+  ],
+  "currentEvaluatorCompatibility": {
+    "runContractVersion": "2.0.0",
+    "action": "rejected",
+    "reason": "Version 1 records require evaluator 1.x and are never regraded against current assertions.",
+    "crossVersionScoreDeltaAllowed": false
+  }
+}

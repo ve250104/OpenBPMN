@@ -1,5 +1,5 @@
 {
-  "caseVersion": "1.0.0",
+  "caseVersion": "2.0.0",
   "familyId": "supplier-onboarding-discovery",
   "caseId": "supplier-onboarding-discovery.base",
   "title": "Supplier onboarding discovery",
@@ -113,6 +113,30 @@
       "transformationHistory": [
         "Authored directly in the declared format."
       ]
+    },
+    {
+      "id": "supplier-onboarding-discovery.source.4",
+      "path": "inputs/regional-interview.txt",
+      "mediaType": "text/plain",
+      "sha256": "cda02b5c3a4b779c7af3204139e86141b1a1797b20715c6417208fc2b6f57493",
+      "role": "evidence",
+      "viewpoint": "regional operations",
+      "provenance": {
+        "classification": "synthetic-fiction",
+        "sourceFamily": "OpenBPMN evaluation corpus",
+        "sourceVersion": "2.0.0",
+        "originalUrl": null,
+        "authorshipRecord": "Authored for OpenBPMN issue #45; not client or operational material.",
+        "retrievedAt": "2026-09-21",
+        "rights": {
+          "license": "MIT",
+          "licenseUrl": "https://opensource.org/license/mit",
+          "attribution": "OpenBPMN contributors"
+        }
+      },
+      "transformationHistory": [
+        "Authored directly in the declared format as a richer related case pack."
+      ]
     }
   ],
   "reviewerMaterial": "reviewer/assertions.json",
@@ -152,7 +176,10 @@
         }
       ],
       "stableAssertionIds": [
-        "supplier-onboarding-discovery.assertion.2"
+        "supplier-onboarding-discovery.assertion.2",
+        "supplier-onboarding-discovery.assertion.3",
+        "supplier-onboarding-discovery.assertion.4",
+        "supplier-onboarding-discovery.assertion.5"
       ],
       "changedAssertionIds": [
         "supplier-onboarding-discovery.assertion.1"

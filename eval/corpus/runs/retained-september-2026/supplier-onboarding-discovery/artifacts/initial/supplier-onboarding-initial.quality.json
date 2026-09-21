@@ -1,0 +1,568 @@
+{
+  "reportVersion": "1.0.0",
+  "toolVersion": "0.1.0-dev.0",
+  "profileVersion": "1.0.0",
+  "export": {
+    "requested": "snapshot",
+    "outcome": "snapshot",
+    "cleanEligible": false,
+    "expertOverride": false
+  },
+  "checks": [
+    {
+      "id": "input",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "xml",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "xsd",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "semantics",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "profile",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "di",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "render",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "evidence",
+      "status": "failed",
+      "findingRefs": [
+        "F_07549ce2d23ca47181c3",
+        "F_329c63e4a56daee222c7",
+        "F_40a621aba39b6de824da",
+        "F_42a30ad2e0c786a94070",
+        "F_479106a35210d5aa8801",
+        "F_4f042129b849ecb5d44f",
+        "F_8be8324654dbb821f682",
+        "F_962e9f5eeb1c459d7913",
+        "F_97cca3ab05e0b435493f",
+        "F_b42819a3c74194aebf27",
+        "F_c08423726afbe2dbb8f6",
+        "F_e1580034dbc327386d9c",
+        "F_f84f90c520c8a4524d20"
+      ]
+    },
+    {
+      "id": "consulting",
+      "status": "passed",
+      "findingRefs": []
+    }
+  ],
+  "findings": [
+    {
+      "id": "F_07549ce2d23ca47181c3",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "error",
+      "blocksClean": true,
+      "message": "A recorded process question or conflict remains unresolved.",
+      "remediation": "Discuss the recorded issue and retain the human decision, or request a faithful snapshot for clarification.",
+      "elementRefs": [
+        "screenSupplier"
+      ],
+      "evidenceRefs": [
+        "riskScreenDecision",
+        "supplierChecklist"
+      ]
+    },
+    {
+      "id": "F_329c63e4a56daee222c7",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "error",
+      "blocksClean": true,
+      "message": "A recorded process question or conflict remains unresolved.",
+      "remediation": "Discuss the recorded issue and retain the human decision, or request a faithful snapshot for clarification.",
+      "elementRefs": [
+        "sendPack",
+        "sendRiskDecision"
+      ],
+      "evidenceRefs": [
+        "buyerResponse",
+        "riskScreenDecision"
+      ]
+    },
+    {
+      "id": "F_40a621aba39b6de824da",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "error",
+      "blocksClean": true,
+      "message": "A recorded process question or conflict remains unresolved.",
+      "remediation": "Discuss the recorded issue and retain the human decision, or request a faithful snapshot for clarification.",
+      "elementRefs": [
+        "collectForms"
+      ],
+      "evidenceRefs": [
+        "buyerCollection",
+        "supplierChecklist"
+      ]
+    },
+    {
+      "id": "F_42a30ad2e0c786a94070",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "A supplied assertion is explicitly identified as inference, not verified process evidence.",
+      "remediation": "Review this inference when it affects a consequential process choice; the Core cannot verify the assertion.",
+      "elementRefs": [
+        "recordCreationComplete"
+      ],
+      "evidenceRefs": [
+        "currentCreationRule"
+      ]
+    },
+    {
+      "id": "F_479106a35210d5aa8801",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "error",
+      "blocksClean": true,
+      "message": "A recorded process question or conflict remains unresolved.",
+      "remediation": "Discuss the recorded issue and retain the human decision, or request a faithful snapshot for clarification.",
+      "elementRefs": [
+        "collectForms",
+        "collectionBegins"
+      ],
+      "evidenceRefs": [
+        "buyerCollection"
+      ]
+    },
+    {
+      "id": "F_4f042129b849ecb5d44f",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "A supplied assertion is explicitly identified as inference, not verified process evidence.",
+      "remediation": "Review this inference when it affects a consequential process choice; the Core cannot verify the assertion.",
+      "elementRefs": [
+        "packToScreening"
+      ],
+      "evidenceRefs": [
+        "buyerCollection",
+        "riskScreenDecision"
+      ]
+    },
+    {
+      "id": "F_8be8324654dbb821f682",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "error",
+      "blocksClean": true,
+      "message": "A recorded process question or conflict remains unresolved.",
+      "remediation": "Discuss the recorded issue and retain the human decision, or request a faithful snapshot for clarification.",
+      "elementRefs": [
+        "collectForms",
+        "sendPack"
+      ],
+      "evidenceRefs": [
+        "buyerCollection",
+        "supplierChecklist"
+      ]
+    },
+    {
+      "id": "F_962e9f5eeb1c459d7913",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "A supplied assertion is explicitly identified as inference, not verified process evidence.",
+      "remediation": "Review this inference when it affects a consequential process choice; the Core cannot verify the assertion.",
+      "elementRefs": [
+        "beginCollection"
+      ],
+      "evidenceRefs": [
+        "buyerCollection"
+      ]
+    },
+    {
+      "id": "F_97cca3ab05e0b435493f",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "error",
+      "blocksClean": true,
+      "message": "A recorded process question or conflict remains unresolved.",
+      "remediation": "Discuss the recorded issue and retain the human decision, or request a faithful snapshot for clarification.",
+      "elementRefs": [
+        "createVendorRecord",
+        "vendorRecordCreated"
+      ],
+      "evidenceRefs": [
+        "currentCreationRule"
+      ]
+    },
+    {
+      "id": "F_b42819a3c74194aebf27",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "error",
+      "blocksClean": true,
+      "message": "A recorded process question or conflict remains unresolved.",
+      "remediation": "Discuss the recorded issue and retain the human decision, or request a faithful snapshot for clarification.",
+      "elementRefs": [
+        "approvalToCreation",
+        "sendRiskDecision"
+      ],
+      "evidenceRefs": [
+        "currentCreationRule",
+        "riskScreenDecision"
+      ]
+    },
+    {
+      "id": "F_c08423726afbe2dbb8f6",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "A supplied assertion is explicitly identified as inference, not verified process evidence.",
+      "remediation": "Review this inference when it affects a consequential process choice; the Core cannot verify the assertion.",
+      "elementRefs": [
+        "collectionBegins"
+      ],
+      "evidenceRefs": [
+        "buyerCollection"
+      ]
+    },
+    {
+      "id": "F_e1580034dbc327386d9c",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "A supplied assertion is explicitly identified as inference, not verified process evidence.",
+      "remediation": "Review this inference when it affects a consequential process choice; the Core cannot verify the assertion.",
+      "elementRefs": [
+        "supplierOnboarding"
+      ],
+      "evidenceRefs": [
+        "buyerCollection",
+        "currentCreationRule",
+        "riskScreenDecision"
+      ]
+    },
+    {
+      "id": "F_f84f90c520c8a4524d20",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "A supplied assertion is explicitly identified as inference, not verified process evidence.",
+      "remediation": "Review this inference when it affects a consequential process choice; the Core cannot verify the assertion.",
+      "elementRefs": [
+        "vendorRecordCreated"
+      ],
+      "evidenceRefs": [
+        "currentCreationRule"
+      ]
+    }
+  ],
+  "context": {
+    "evidence": [
+      {
+        "key": "buyerCollection",
+        "source": "interview.txt",
+        "locator": "Buyer, sentence 1",
+        "summary": "The Buyer collects tax and bank forms, then sends the pack to Vendor Risk."
+      },
+      {
+        "key": "buyerResponse",
+        "source": "interview.txt",
+        "locator": "Buyer, sentence 2",
+        "summary": "The Buyer knows only that a response eventually arrives; sender, contents, timing and consequences are not specified."
+      },
+      {
+        "key": "riskScreenDecision",
+        "source": "interview.txt",
+        "locator": "Risk analyst statement",
+        "summary": "The risk analyst screens the supplier and sends a decision to Master Data."
+      },
+      {
+        "key": "supplierChecklist",
+        "source": "checklist.docx",
+        "locator": "Supplier checklist paragraph",
+        "summary": "The checklist lists tax form, bank evidence, sanctions screening and master-data creation. It does not allocate responsibility or specify routing."
+      },
+      {
+        "key": "currentCreationRule",
+        "source": "dated-correction.txt",
+        "locator": "2026-08-14, Master Data lead statement",
+        "summary": "Procurement no longer creates vendor records. Master Data creates them after Vendor Risk approval."
+      }
+    ],
+    "decisions": [
+      {
+        "key": "applyCurrentCreationRule",
+        "description": "Apply the explicitly dated current-state correction: Master Data replaces Procurement as vendor-record creator, and creation follows Vendor Risk approval. Preserve the superseded Procurement ownership in evidence history.",
+        "elementRefs": [
+          "masterData",
+          "createVendorRecord",
+          "approvalToCreation"
+        ],
+        "evidenceRefs": [
+          "currentCreationRule"
+        ]
+      }
+    ],
+    "issues": [
+      {
+        "key": "nonApprovalHandling",
+        "kind": "question",
+        "description": "What happens when Vendor Risk does not approve, including rejection or a request for more information, and who owns each next action? Only the supported approval path is modeled. The conditional flow permits record creation only for approval; this snapshot leaves execution for all other decisions undefined and does not assert that those cases terminate.",
+        "affectsMeaning": true,
+        "elementRefs": [
+          "sendRiskDecision",
+          "approvalToCreation"
+        ],
+        "evidenceRefs": [
+          "riskScreenDecision",
+          "currentCreationRule"
+        ]
+      },
+      {
+        "key": "onboardingTrigger",
+        "kind": "question",
+        "description": "What business event starts supplier onboarding, and who supplies the initial documents? Collection begins is a boundary for the evidenced portion, not an established business trigger.",
+        "affectsMeaning": true,
+        "elementRefs": [
+          "collectionBegins",
+          "collectForms"
+        ],
+        "evidenceRefs": [
+          "buyerCollection"
+        ]
+      },
+      {
+        "key": "documentCompleteness",
+        "kind": "question",
+        "description": "Are tax and bank documents checked for completeness or validity, by whom, and how are missing or invalid documents handled? The sources do not specify a completeness gate or rework path.",
+        "affectsMeaning": true,
+        "elementRefs": [
+          "collectForms",
+          "sendPack"
+        ],
+        "evidenceRefs": [
+          "buyerCollection",
+          "supplierChecklist"
+        ]
+      },
+      {
+        "key": "sanctionsCoverage",
+        "kind": "question",
+        "description": "Does Vendor Risk supplier screening include the checklist sanctions screening, and who performs it? The checklist requirement is retained here, but a separate sanctions task, its owner and its ordering cannot yet be supported.",
+        "affectsMeaning": true,
+        "elementRefs": [
+          "screenSupplier"
+        ],
+        "evidenceRefs": [
+          "supplierChecklist",
+          "riskScreenDecision"
+        ]
+      },
+      {
+        "key": "buyerResponseMeaning",
+        "kind": "question",
+        "description": "Who sends the response that eventually reaches the Buyer, what does it contain, and what follows it? It cannot be identified with the risk decision sent to Master Data from the available evidence; no return flow, wait duration or notification is modeled.",
+        "affectsMeaning": true,
+        "elementRefs": [
+          "sendPack",
+          "sendRiskDecision"
+        ],
+        "evidenceRefs": [
+          "buyerResponse",
+          "riskScreenDecision"
+        ]
+      },
+      {
+        "key": "overallCompletion",
+        "kind": "question",
+        "description": "Does vendor-record creation complete onboarding, or are further actions or notifications required? Vendor record created is the end of the supported snapshot portion, not a claim of overall onboarding completion.",
+        "affectsMeaning": true,
+        "elementRefs": [
+          "createVendorRecord",
+          "vendorRecordCreated"
+        ],
+        "evidenceRefs": [
+          "currentCreationRule"
+        ]
+      },
+      {
+        "key": "bankDocumentMeaning",
+        "kind": "question",
+        "description": "Does the interview term bank forms satisfy the checklist term bank evidence, or are additional documents required? Their equivalence is unconfirmed.",
+        "affectsMeaning": true,
+        "elementRefs": [
+          "collectForms"
+        ],
+        "evidenceRefs": [
+          "buyerCollection",
+          "supplierChecklist"
+        ]
+      }
+    ],
+    "links": [
+      {
+        "elementRef": "supplierOnboarding",
+        "assertion": "This initial current-state view contains only the supported approval path from collection through vendor-record creation; its boundary and all other outcomes remain explicitly unresolved.",
+        "basis": "inference",
+        "supportRefs": [
+          "buyerCollection",
+          "riskScreenDecision",
+          "currentCreationRule"
+        ]
+      },
+      {
+        "elementRef": "buyer",
+        "assertion": "The Buyer owns document collection and transmission.",
+        "basis": "evidence",
+        "supportRefs": [
+          "buyerCollection"
+        ]
+      },
+      {
+        "elementRef": "vendorRisk",
+        "assertion": "Vendor Risk owns supplier screening and transmission of the risk decision.",
+        "basis": "evidence",
+        "supportRefs": [
+          "riskScreenDecision"
+        ]
+      },
+      {
+        "elementRef": "masterData",
+        "assertion": "Master Data is the current vendor-record creator.",
+        "basis": "decision",
+        "supportRefs": [
+          "applyCurrentCreationRule"
+        ]
+      },
+      {
+        "elementRef": "collectionBegins",
+        "assertion": "This none start event marks the beginning of the evidenced collection segment; the actual business trigger is unknown.",
+        "basis": "inference",
+        "supportRefs": [
+          "buyerCollection"
+        ]
+      },
+      {
+        "elementRef": "collectForms",
+        "assertion": "The Buyer collects tax and bank forms; equivalence to checklist bank evidence remains unresolved.",
+        "basis": "evidence",
+        "supportRefs": [
+          "buyerCollection"
+        ]
+      },
+      {
+        "elementRef": "sendPack",
+        "assertion": "The Buyer sends the collected document pack to Vendor Risk. Transmission is not approval.",
+        "basis": "evidence",
+        "supportRefs": [
+          "buyerCollection"
+        ]
+      },
+      {
+        "elementRef": "screenSupplier",
+        "assertion": "The risk analyst screens the supplier. The checklist sanctions-screening allocation is not established.",
+        "basis": "evidence",
+        "supportRefs": [
+          "riskScreenDecision"
+        ]
+      },
+      {
+        "elementRef": "sendRiskDecision",
+        "assertion": "Vendor Risk sends a decision to Master Data; the statement does not say every decision is approval.",
+        "basis": "evidence",
+        "supportRefs": [
+          "riskScreenDecision"
+        ]
+      },
+      {
+        "elementRef": "createVendorRecord",
+        "assertion": "Master Data creates the vendor record after Vendor Risk approval.",
+        "basis": "decision",
+        "supportRefs": [
+          "applyCurrentCreationRule"
+        ]
+      },
+      {
+        "elementRef": "vendorRecordCreated",
+        "assertion": "This end event denotes the result of record creation and the boundary of this snapshot, without asserting overall onboarding completion.",
+        "basis": "inference",
+        "supportRefs": [
+          "currentCreationRule"
+        ]
+      },
+      {
+        "elementRef": "beginCollection",
+        "assertion": "The snapshot begins with the first evidenced activity.",
+        "basis": "inference",
+        "supportRefs": [
+          "buyerCollection"
+        ]
+      },
+      {
+        "elementRef": "formsToTransmission",
+        "assertion": "The Buyer explicitly collects the forms before sending the pack.",
+        "basis": "evidence",
+        "supportRefs": [
+          "buyerCollection"
+        ]
+      },
+      {
+        "elementRef": "packToScreening",
+        "assertion": "The pack sent to Vendor Risk is interpreted as input to the supplier screening described by the risk analyst; receipt mechanics are not specified.",
+        "basis": "inference",
+        "supportRefs": [
+          "buyerCollection",
+          "riskScreenDecision"
+        ]
+      },
+      {
+        "elementRef": "screeningToDecision",
+        "assertion": "The risk analyst describes screening the supplier and sending a decision to Master Data.",
+        "basis": "evidence",
+        "supportRefs": [
+          "riskScreenDecision"
+        ]
+      },
+      {
+        "elementRef": "approvalToCreation",
+        "assertion": "Only a Vendor Risk approval permits creation. The flow condition does not infer approval from pack or decision transmission, and routes for other decisions are unresolved.",
+        "basis": "decision",
+        "supportRefs": [
+          "applyCurrentCreationRule"
+        ]
+      },
+      {
+        "elementRef": "recordCreationComplete",
+        "assertion": "Completion of creation yields a vendor record, the endpoint of the evidenced portion.",
+        "basis": "inference",
+        "supportRefs": [
+          "currentCreationRule"
+        ]
+      }
+    ]
+  },
+  "modelKey": "supplierOnboardingModel"
+}

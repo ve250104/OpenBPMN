@@ -1,0 +1,39 @@
+{
+  "recordVersion": "1.0.0",
+  "retainedAt": "2026-09-21",
+  "sourceCommit": "6fc6b6e02b3e565b5b4320e0b74c798dc05a8921",
+  "sourceRunContractVersion": "1.0.0",
+  "sourceAssessmentVersion": "1.0.0",
+  "reassessment": {
+    "evaluatorCommit": "6fc6b6e02b3e565b5b4320e0b74c798dc05a8921",
+    "workingTree": "unchanged-detached-worktree",
+    "publicEntrypoint": "eval/corpus/run.mjs assess",
+    "result": "completed",
+    "records": [
+      "expense-reimbursement/reassessment-v1.json",
+      "supplier-onboarding-discovery/reassessment-v1.json",
+      "editable-flowchart-translation/reassessment-v1.json"
+    ]
+  },
+  "currentEvaluator": {
+    "runContractVersion": "2.0.0",
+    "treatment": "incompatible-retained-evidence",
+    "regraded": false,
+    "reason": "The cases, source inventories, assertion sets, phase model, and scoring semantics changed. Regrading would silently reinterpret historical sessions.",
+    "crossVersionScoreDeltaAllowed": false
+  },
+  "reviewProvenance": {
+    "sessionManifest": "session-manifest.json",
+    "reviewSummary": "review-summary.json",
+    "visibleSessionRecordsRetained": false,
+    "artifactsRetained": true,
+    "humanAdjudication": "not_performed",
+    "retention": "Sanitized summaries, run records, assessments, and artifacts retained; raw transcripts omitted."
+  },
+  "limits": [
+    "Filesystem isolation was not enforced.",
+    "Model and reasoning settings were not observed.",
+    "The sessions are exploratory evidence, not repeated-run reliability estimates.",
+    "The old and current assessment totals are not directly comparable."
+  ]
+}

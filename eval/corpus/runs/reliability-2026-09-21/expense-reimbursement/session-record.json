@@ -1,0 +1,173 @@
+{
+  "recordVersion": "1.0.0",
+  "startedAtUtc": "2026-09-21T15:55:46Z",
+  "completedAtUtc": "2026-09-21T16:04:06Z",
+  "constraintsObserved": {
+    "sourceOnly": true,
+    "repositoryInspected": false,
+    "reviewerOrAssertionFilesInspected": false,
+    "otherSessionsInspected": false,
+    "testsInspected": false,
+    "webUsed": false,
+    "runJsonEdited": false
+  },
+  "runtime": {
+    "nodeVersion": "24.19.0",
+    "browser": "Google Chrome 153.0.8010.52",
+    "openbpmnToolVersion": "0.1.0-dev.0",
+    "requestSchemaVersion": "1.0.0",
+    "handoffSchemaVersion": "1.0.0",
+    "profileVersion": "1.0.0"
+  },
+  "commands": [
+    {
+      "timestampUtc": "2026-09-21T15:55:46Z",
+      "purpose": "Inspect public CLI syntax",
+      "command": "openbpmn --help",
+      "exitResult": 0
+    },
+    {
+      "timestampUtc": "2026-09-21T15:55:53Z",
+      "purpose": "Inspect installed capability and runtime versions once",
+      "command": "openbpmn capabilities --json",
+      "exitResult": 0,
+      "signal": "capabilities_reported"
+    },
+    {
+      "timestampUtc": "2026-09-21T15:58:33Z",
+      "purpose": "Generate the initial source-based model and saved baseline handoff",
+      "command": "openbpmn generate --input initial/request.json --output initial/expense-reimbursement --export auto --handoff initial/expense-reimbursement.openbpmn.json --json",
+      "exitResult": 0,
+      "signal": "clean_export_ready"
+    },
+    {
+      "timestampUtc": "2026-09-21T15:58:55Z",
+      "purpose": "Render the initial SVG to a PNG for visual inspection",
+      "command": "browser render initial/expense-reimbursement.svg -> initial/expense-reimbursement-inspection.png",
+      "exitResult": 0
+    },
+    {
+      "timestampUtc": "2026-09-21T16:00:35Z",
+      "purpose": "Correction attempt 1 from the saved baseline handoff",
+      "command": "node correction/apply-correction.js | openbpmn generate --input - --output correction/expense-reimbursement-corrected --export auto --handoff correction/expense-reimbursement-corrected.openbpmn.json --json",
+      "exitResult": 3,
+      "signal": "generation_failed",
+      "artifactsProduced": [],
+      "failure": "The handoff-transform helper used CommonJS require syntax while the local package treats .js as an ES module, so the CLI received empty non-JSON input."
+    },
+    {
+      "timestampUtc": "2026-09-21T16:00:54Z",
+      "purpose": "Correction attempt 2 from the same saved baseline handoff after repairing only the helper import",
+      "command": "node correction/apply-correction.js | openbpmn generate --input - --output correction/expense-reimbursement-corrected --export auto --handoff correction/expense-reimbursement-corrected.openbpmn.json --json",
+      "exitResult": 0,
+      "signal": "clean_export_ready"
+    },
+    {
+      "timestampUtc": "2026-09-21T16:01:16Z",
+      "purpose": "Render the corrected SVG to a PNG for visual inspection",
+      "command": "browser render correction/expense-reimbursement-corrected.svg -> correction/expense-reimbursement-corrected-inspection.png",
+      "exitResult": 0
+    }
+  ],
+  "attempts": [
+    {
+      "attemptId": "initial-1",
+      "kind": "initial-model",
+      "startedAtUtc": "2026-09-21T15:58:33Z",
+      "exitResult": 0,
+      "signal": "clean_export_ready",
+      "exportOutcome": "clean",
+      "handoffSaved": true,
+      "visualInspection": {
+        "performed": true,
+        "artifact": "initial/expense-reimbursement-inspection.png",
+        "result": "The four role lanes, incomplete-claim correction loop, parallel manager and controller-threshold routes, payment path, rejection path, and original threshold labels were readable."
+      }
+    },
+    {
+      "attemptId": "correction-1",
+      "kind": "handoff-correction",
+      "startedAtUtc": "2026-09-21T16:00:35Z",
+      "exitResult": 3,
+      "signal": "generation_failed",
+      "exportOutcome": "none",
+      "artifactsProduced": [],
+      "repairNeeded": true
+    },
+    {
+      "attemptId": "correction-2",
+      "kind": "handoff-correction-retry",
+      "startedAtUtc": "2026-09-21T16:00:54Z",
+      "exitResult": 0,
+      "signal": "clean_export_ready",
+      "exportOutcome": "clean",
+      "handoffSaved": true,
+      "visualInspection": {
+        "performed": true,
+        "artifact": "correction/expense-reimbursement-corrected-inspection.png",
+        "result": "The corrected diagram visibly showed 'EUR 2,500 or more' on the controller-required route and 'Below EUR 2,500' on the complementary route; the unrelated role lanes and process paths remained visible and readable."
+      }
+    }
+  ],
+  "correctionEffort": {
+    "baselineUsed": "initial/expense-reimbursement.openbpmn.json",
+    "correctionInvocations": 2,
+    "successfulCorrectionInvocations": 1,
+    "failedCorrectionInvocations": 1,
+    "helperRepairs": 1,
+    "repairDescription": "Changed the helper's filesystem import from CommonJS require syntax to an ES-module import; no baseline or BPMN semantic content was repaired.",
+    "semanticChange": {
+      "elementKeysChanged": [],
+      "flowKeysRetained": [
+        "controllerRequired",
+        "controllerNotRequired"
+      ],
+      "controllerRequiredBefore": "Claim amount is greater than EUR 2,000.",
+      "controllerRequiredAfter": "Claim amount is greater than or equal to EUR 2,500.",
+      "complementBefore": "Claim amount is less than or equal to EUR 2,000.",
+      "complementAfter": "Claim amount is less than EUR 2,500."
+    },
+    "identityVerification": {
+      "modelKeyPreserved": true,
+      "processKeyPreserved": true,
+      "nodeKeysPreserved": true,
+      "flowKeysPreserved": true,
+      "laneKeysPreserved": true
+    }
+  },
+  "artifactHashesSha256": {
+    "initial/request.json": "c2a929ae13e26a0304776def9d74419241bf251547d1423c45ca92b0330ee021",
+    "initial/expense-reimbursement.bpmn": "1b00bedd7d7f9b140dd57604cd3552cd44a60ba47f2d2e12607ed7c5fe2f806c",
+    "initial/expense-reimbursement.svg": "d2bc3f5b37efe3d68412f684878de761e6fe8d124f2047b8296e8a3090576311",
+    "initial/expense-reimbursement.quality.json": "9bb049e95265a1b39423af3e6f34881e516949f9643677b75c1aa91b38d00255",
+    "initial/expense-reimbursement.openbpmn.json": "2fd7cf5aaef3ad67eafcd593e3c0bc2a716529a1bf79df20752db1715db8e3dd",
+    "initial/expense-reimbursement-inspection.png": "ce679c1f0c5b809daca8ab2ea89d4c3e37168879f856fbc469eed459728f4b99",
+    "correction/apply-correction.js": "5748807b969110064dd8c2fb225c2120cd3b2024c43975c451a39db35e44634e",
+    "correction/expense-reimbursement-corrected.bpmn": "701158e9f40d678d2955ae4762b05e546a6f0d39222769621035f9ea95a8fe89",
+    "correction/expense-reimbursement-corrected.svg": "038436113e32fb93cc1133ec1fe5f7d617c849fcea3445407feaf3ef672ae9e6",
+    "correction/expense-reimbursement-corrected.quality.json": "8a8966e2b51d7d9a3ed8954947819c18674f733a50bf6e413f98dfb9541b9ea9",
+    "correction/expense-reimbursement-corrected.openbpmn.json": "10de2892d0f796b9b835849eb92819383796972724449d9f46afecd2611b6870",
+    "correction/expense-reimbursement-corrected-inspection.png": "828423c647b75d4b9e4b6f2d3715806fce258511608969cc596d4df56b86dc95"
+  },
+  "sourceHashesSha256": {
+    "inputs/procedure.txt": "c106190a51aa8926422a823d9608917ce21ce555f59c39da669a51c51e9d9dac",
+    "inputs/interviews.txt": "d740276192c82d63eb404eb2dd44f94fb1c70a54183994743a3d73dbe0956f17",
+    "inputs/policy.txt": "532e85832d112eea49baf77d3c3e8530eaa8f32b2b8d835a0d20bb75f91fcb0d",
+    "inputs/correction.txt": "60fd205d2288f7df605d365be47e5b3b5689c1fc098a9906c877216b49c7c188"
+  },
+  "finalVerification": {
+    "timestampUtc": "2026-09-21T16:04:06Z",
+    "recordedJsonParsed": true,
+    "correctedBpmnContainsExactRequiredLabel": true,
+    "correctedBpmnContainsExactComplementaryLabel": true,
+    "correctedBpmnContainsExactRequiredCondition": true,
+    "correctedBpmnContainsExactComplementaryCondition": true,
+    "runJsonEdited": false
+  },
+  "sessionNotes": [
+    "The initial model used only the staged procedure, interviews, and policy; the later correction was not applied until the separate handoff-based correction attempt.",
+    "The initial and corrected CLI runs both completed with clean_export_ready and passed input, XML, XSD, semantics, profile, DI, rendering, evidence, and consulting checks.",
+    "The correction changed only the two threshold-route labels and conditions plus supporting evidence, decision, scenario, and review context; all model, process, node, flow, and lane keys were preserved.",
+    "One helper-runtime repair was needed after a failed correction invocation that produced no artifacts."
+  ]
+}

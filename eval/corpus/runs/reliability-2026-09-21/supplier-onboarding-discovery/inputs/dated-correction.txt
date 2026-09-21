@@ -1,0 +1,1 @@
+2026-08-14 — Master Data lead: Procurement no longer creates vendor records; Master Data creates them after Vendor Risk approval.

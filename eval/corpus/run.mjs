@@ -17,6 +17,7 @@ const validateCaseSchema = ajv.compile(await readJson(join(corpusRoot, 'case.sch
 const validateReviewerSchema = ajv.compile(await readJson(join(corpusRoot, 'reviewer.schema.json')));
 const validateRunSchema = ajv.compile(await readJson(join(corpusRoot, 'run.schema.json')));
 const validateHandoffSchema = ajv.getSchema('urn:openbpmn:schema:handoff:1.0.0');
+const validateQualityReportSchema = ajv.getSchema('urn:openbpmn:schema:quality-report:1.0.0');
 
 function options(args) {
   const parsed = { command: args[0], flags: new Map() };
@@ -76,9 +77,62 @@ async function validateSourceArtifact(directory, artifact, label) {
   return bytes;
 }
 
+function validateMaintenanceBaseline(familyId, handoff, variantId = null) {
+  const process = handoff.request.model.processes[0];
+  const nodes = new Map(process.nodes.map((item) => [item.key, item]));
+  const flows = process.flows;
+  const hasFlow = (sourceRef, targetRef) =>
+    flows.some((item) => item.sourceRef === sourceRef && item.targetRef === targetRef);
+  if (familyId === 'account-closure-maintenance') {
+    assert.equal(nodes.get('closure-controls-split')?.type, 'parallelGateway');
+    assert.equal(nodes.get('closure-controls-join')?.type, 'parallelGateway');
+    assert.ok(hasFlow('closure-controls-split', 'settle-balance'));
+    assert.ok(hasFlow('closure-controls-split', 'revoke-access'));
+    assert.ok(hasFlow('settle-balance', 'closure-controls-join'));
+    assert.ok(hasFlow('revoke-access', 'closure-controls-join'));
+    assert.ok(
+      !nodes.has('archive-notification'),
+      'Account-closure baseline already contains the requested correction.',
+    );
+  } else if (familyId === 'incident-escalation-maintenance') {
+    const timer = nodes.get('escalation-clock');
+    assert.equal(timer?.type, 'boundaryEvent');
+    assert.equal(timer?.attachedToRef, 'investigate');
+    assert.equal(timer?.interrupting, false);
+    assert.equal(timer?.event?.kind, 'timer');
+    assert.equal(timer?.event?.timeDuration, variantId === 'three-to-two-hours' ? 'PT3H' : 'PT4H');
+  } else if (familyId === 'purchase-approval-maintenance') {
+    assert.equal(nodes.get('approval-threshold')?.type, 'exclusiveGateway');
+    assert.equal(nodes.get('prepare-po')?.name, 'Create purchase order');
+    assert.ok(
+      flows.some(
+        (item) =>
+          item.sourceRef === 'approval-threshold' &&
+          item.targetRef === 'finance-approval' &&
+          item.condition === 'amount >= 5000',
+      ),
+    );
+    assert.ok(
+      flows.some(
+        (item) =>
+          item.sourceRef === 'approval-threshold' &&
+          item.targetRef === 'prepare-po' &&
+          item.key === nodes.get('approval-threshold').defaultFlowRef &&
+          item.name === 'Below EUR 5,000',
+      ),
+    );
+  } else if (familyId === 'returns-authorization-maintenance') {
+    assert.ok(nodes.has('warehouse-approval'));
+    assert.equal(nodes.get('choose-remedy')?.type, 'exclusiveGateway');
+    assert.ok(hasFlow('choose-remedy', 'refund'));
+    assert.ok(hasFlow('choose-remedy', 'replacement'));
+  }
+  return { familyId, variantId, status: 'pass' };
+}
+
 async function validate(root) {
   const manifest = await readJson(join(root, 'pilot.json'));
-  assert.equal(manifest.corpusVersion, '1.0.0');
+  assert.equal(manifest.corpusVersion, '2.0.0', `Unsupported corpus version ${manifest.corpusVersion}.`);
   assert.equal(manifest.familyCount, 24);
   assert.equal(manifest.cases.length, 24);
   const seenFamilies = new Set();
@@ -96,6 +150,9 @@ async function validate(root) {
   const overlapPartitions = new Map();
   const legacyExtensions = new Set();
   const cases = [];
+  const maintenancePreconditions = [];
+  let completedExpectationReviews = 0;
+  let ledgerFacts = 0;
   let discoveryHasTranscript = false;
   let discoveryHasPolicy = false;
   let discoveryHasTable = false;
@@ -108,15 +165,25 @@ async function validate(root) {
     const casePath = inside(root, entry.case, `Case ${entry.familyId}`);
     const contract = await readJson(casePath);
     const directory = dirname(casePath);
+    assert.equal(
+      contract.caseVersion,
+      '2.0.0',
+      `${entry.familyId}: unsupported case contract ${contract.caseVersion}.`,
+    );
     assert.ok(
       validateCaseSchema(contract),
       `${entry.familyId}: case schema invalid: ${ajv.errorsText(validateCaseSchema.errors)}`,
     );
-    assert.equal(contract.caseVersion, '1.0.0', `${entry.familyId}: unsupported case contract.`);
     assert.equal(contract.familyId, entry.familyId);
     assert.ok(!seenCases.has(contract.caseId), `Duplicate case identity ${contract.caseId}.`);
     seenCases.add(contract.caseId);
     assert.ok(Object.hasOwn(taskCounts, contract.primaryTask), `${entry.familyId}: unknown primary task.`);
+    if (contract.primaryTask === 'maintenance')
+      assert.equal(
+        contract.correctionContract?.baselineRequired,
+        true,
+        `${entry.familyId}: maintenance correction requires a paired baseline contract.`,
+      );
     taskCounts[contract.primaryTask]++;
     domainCounts.set(contract.businessDomain, (domainCounts.get(contract.businessDomain) ?? 0) + 1);
     if (contract.partition === 'held-out') heldOutTasks.add(contract.primaryTask);
@@ -145,12 +212,24 @@ async function validate(root) {
 
     const reviewerPath = inside(directory, contract.reviewerMaterial, `${entry.familyId} reviewer material`);
     const reviewer = await readJson(reviewerPath);
+    assert.equal(
+      reviewer.reviewVersion,
+      '2.0.0',
+      `${entry.familyId}: unsupported reviewer contract ${reviewer.reviewVersion}.`,
+    );
     assert.ok(
       validateReviewerSchema(reviewer),
       `${entry.familyId}: reviewer schema invalid: ${ajv.errorsText(validateReviewerSchema.errors)}`,
     );
     assert.equal(reviewer.familyId, entry.familyId);
     assert.equal(reviewer.authoredIndependentlyOfCandidate, true);
+    assert.equal(reviewer.expectationReview.status, 'completed', `${entry.familyId}: expectation review is missing.`);
+    assert.equal(
+      reviewer.expectationReview.adjudication,
+      'proposed-not-expert',
+      `${entry.familyId}: independent agent review must not imply expert adjudication.`,
+    );
+    completedExpectationReviews++;
     assert.ok(reviewer.canary?.startsWith('reviewer-only-canary-'));
     assert.ok(reviewer.assertions.length >= 2, `${entry.familyId}: insufficient reviewer assertions.`);
     assert.deepEqual(
@@ -159,6 +238,10 @@ async function validate(root) {
       `${entry.familyId}: incomplete human-review rubric.`,
     );
     const sourceIds = new Set(contract.sourceArtifacts.map((artifact) => artifact.id));
+    for (const fact of reviewer.sourceFactLedger ?? []) {
+      assert.ok(sourceIds.has(fact.sourceId), `${fact.id}: fact ledger cites an unknown source.`);
+      ledgerFacts++;
+    }
     assert.equal(sourceIds.size, contract.sourceArtifacts.length, `${entry.familyId}: duplicate source identity.`);
     const claimDispositions = new Map();
     for (const assertion of reviewer.assertions) {
@@ -191,10 +274,12 @@ async function validate(root) {
       }
       if (contract.primaryTask === 'legacy') legacyExtensions.add(extname(artifact.path));
       if (contract.primaryTask === 'maintenance' && basename(artifact.path) === 'handoff.json') {
+        const handoff = JSON.parse(bytes);
         assert.ok(
-          validateHandoffSchema(JSON.parse(bytes)),
+          validateHandoffSchema(handoff),
           `${artifact.id}: invalid OpenBPMN Handoff: ${ajv.errorsText(validateHandoffSchema.errors)}`,
         );
+        maintenancePreconditions.push(validateMaintenanceBaseline(entry.familyId, handoff));
       }
       if (contract.primaryTask === 'discovery') {
         discoveryHasTranscript ||= /transcript|interview/i.test(artifact.path);
@@ -241,11 +326,14 @@ async function validate(root) {
         );
         variantSourceIds.add(artifact.id);
         const bytes = await validateSourceArtifact(directory, artifact, `${entry.familyId} variant`);
-        if (contract.primaryTask === 'maintenance' && basename(artifact.path) === 'handoff.json')
+        if (contract.primaryTask === 'maintenance' && basename(artifact.path) === 'handoff.json') {
+          const handoff = JSON.parse(bytes);
           assert.ok(
-            validateHandoffSchema(JSON.parse(bytes)),
+            validateHandoffSchema(handoff),
             `${artifact.id}: invalid OpenBPMN Handoff: ${ajv.errorsText(validateHandoffSchema.errors)}`,
           );
+          maintenancePreconditions.push(validateMaintenanceBaseline(entry.familyId, handoff, variant.id));
+        }
       }
       const stable = new Set(variant.stableAssertionIds);
       const changed = new Set(variant.changedAssertionIds);
@@ -320,6 +408,10 @@ async function validate(root) {
     publicFamilies.size >= manifest.publicSourceRequirements.minimumFamilies,
     'Not enough public-source families.',
   );
+  for (const familyId of ['expense-reimbursement', 'supplier-onboarding-discovery', 'editable-flowchart-translation']) {
+    const selected = cases.find((item) => item.entry.familyId === familyId);
+    assert.ok(selected.reviewer.sourceFactLedger?.length >= 4, `${familyId}: richer pack needs a source-fact ledger.`);
+  }
   assert.ok(
     publicCollections.size >= manifest.publicSourceRequirements.minimumCollections,
     'Not enough public collections.',
@@ -380,6 +472,50 @@ async function validate(root) {
     smoke.attempts.every((attempt) => attempt.status !== 'not_run' || attempt.reason),
     'Unrun attempts need a blocking reason.',
   );
+  const reliability = await readJson(inside(root, manifest.reliabilityCampaign, 'Reliability campaign'));
+  assert.equal(reliability.campaignVersion, '2.0.0');
+  assert.deepEqual(reliability.sessions.map((session) => session.familyId).sort(), [
+    'editable-flowchart-translation',
+    'expense-reimbursement',
+    'supplier-onboarding-discovery',
+  ]);
+  assert.ok(
+    reliability.sessions.every(
+      (session) =>
+        ['completed', 'failed', 'blocked', 'unsupported', 'not_run'].includes(session.status) &&
+        (session.status !== 'not_run' || session.reason),
+    ),
+    'Fresh-session execution and unrun reasons must be reported honestly.',
+  );
+  assert.equal(reliability.retainedDiagnostics.status, 'available');
+  const retainedCompatibility = await readJson(
+    inside(root, reliability.retainedDiagnostics.compatibilityRecord, 'Retained compatibility record'),
+  );
+  assert.equal(retainedCompatibility.sourceRunContractVersion, '1.0.0');
+  assert.equal(retainedCompatibility.currentEvaluator.regraded, false);
+  assert.equal(retainedCompatibility.currentEvaluator.crossVersionScoreDeltaAllowed, false);
+  const historicalProvenance = await readJson(
+    inside(root, reliability.historicalScorerReproduction.record, 'Historical scorer reproduction'),
+  );
+  assert.equal(historicalProvenance.evaluator.relationship, 'direct-parent');
+  assert.equal(historicalProvenance.evaluator.runContractVersion, '1.0.0');
+  assert.equal(historicalProvenance.assessment.statuses.pass, 3);
+  assert.ok(
+    historicalProvenance.counterexamples.every((counterexample) => counterexample.historicalAssessment === 'pass'),
+  );
+  for (const session of reliability.sessions) {
+    if (session.run) {
+      const retainedRun = await readJson(inside(root, session.run, `${session.familyId} fresh run`));
+      const retainedAssessment = await readJson(
+        inside(root, session.assessment, `${session.familyId} fresh assessment`),
+      );
+      assert.equal(retainedRun.runContractVersion, '2.0.0');
+      assert.equal(retainedAssessment.assessmentVersion, '2.0.0');
+      assert.equal(retainedAssessment.identities.case, 'current');
+      assert.equal(retainedAssessment.identities.assertions, 'current');
+      assert.equal(retainedAssessment.identities.sources, 'current');
+    } else await readJson(inside(root, session.record, `${session.familyId} session record`));
+  }
 
   return {
     status: 'pass',
@@ -394,6 +530,11 @@ async function validate(root) {
     assertionDispositions: [...assertionDispositions].sort(),
     difficultyTags: [...difficultyTags].sort(),
     missingCoverage: Object.keys(manifest.coverage).filter((tag) => !coverageSeen.has(tag)),
+    sourceReview: {
+      familiesReviewed: completedExpectationReviews,
+      ledgerFacts,
+      adjudication: 'proposed-not-expert',
+    },
     smoke: {
       plannedAttempts: smoke.attempts.length,
       statuses: Object.fromEntries(
@@ -404,6 +545,14 @@ async function validate(root) {
       ),
       isolation: smoke.host.filesystemIsolation,
     },
+    freshSessions: {
+      planned: reliability.sessions.length,
+      completed: reliability.sessions.filter((session) => session.status === 'completed').length,
+      unsupported: reliability.sessions.filter((session) => session.status === 'unsupported').length,
+      notRun: reliability.sessions.filter((session) => session.status === 'not_run').length,
+      isolation: reliability.isolation.filesystemBoundary,
+    },
+    maintenancePreconditions,
   };
 }
 
@@ -530,7 +679,7 @@ async function prepare(root, flags) {
     variantArtifacts: exposedVariant,
   };
   const run = {
-    runContractVersion: '1.0.0',
+    runContractVersion: '2.0.0',
     runId: null,
     familyId,
     caseId: selected.contract.caseId,
@@ -587,6 +736,7 @@ async function prepare(root, flags) {
 function bpmnProjection(definitions, xml) {
   const elements = [];
   const flows = [];
+  const edges = new Map();
   const lanesByNode = new Map();
   const visitLane = (lane) => {
     for (const node of lane.flowNodeRef ?? []) {
@@ -597,7 +747,7 @@ function bpmnProjection(definitions, xml) {
     for (const childSet of lane.childLaneSet ? [lane.childLaneSet] : [])
       for (const child of childSet.lanes ?? []) visitLane(child);
   };
-  const visitElements = (items) => {
+  const visitElements = (items, container) => {
     for (const element of items ?? []) {
       if (element.$type === 'bpmn:SequenceFlow') {
         flows.push({
@@ -606,17 +756,45 @@ function bpmnProjection(definitions, xml) {
           source: element.sourceRef?.id,
           target: element.targetRef?.id,
           condition: element.conditionExpression?.body?.trim() ?? '',
+          container,
         });
       } else if (element.id) {
-        elements.push({ id: element.id, name: element.name ?? '', type: element.$type });
+        const eventDefinition = element.eventDefinitions?.[0];
+        elements.push({
+          id: element.id,
+          name: element.name ?? '',
+          type: element.$type,
+          container,
+          documentation: (element.documentation ?? []).map((item) => item.text ?? '').join('\n'),
+          attachedTo: element.attachedToRef?.id ?? null,
+          interrupting: element.cancelActivity ?? null,
+          event: eventDefinition
+            ? {
+                type: eventDefinition.$type,
+                timeDate: eventDefinition.timeDate?.body ?? null,
+                timeDuration: eventDefinition.timeDuration?.body ?? null,
+                timeCycle: eventDefinition.timeCycle?.body ?? null,
+              }
+            : null,
+        });
       }
-      if (element.flowElements) visitElements(element.flowElements);
+      if (element.flowElements) visitElements(element.flowElements, element.id);
     }
   };
   for (const rootElement of definitions.rootElements ?? []) {
     if (rootElement.$type !== 'bpmn:Process') continue;
     for (const laneSet of rootElement.laneSets ?? []) for (const lane of laneSet.lanes ?? []) visitLane(lane);
-    visitElements(rootElement.flowElements);
+    visitElements(rootElement.flowElements, rootElement.id);
+  }
+  for (const diagram of definitions.diagrams ?? []) {
+    for (const item of diagram.plane?.planeElement ?? []) {
+      if (item.$type !== 'bpmndi:BPMNEdge' || !item.bpmnElement?.id) continue;
+      const bounds = item.label?.bounds;
+      edges.set(item.bpmnElement.id, {
+        waypoints: (item.waypoint ?? []).map(({ x, y }) => ({ x, y })),
+        labelBounds: bounds ? { x: bounds.x, y: bounds.y, width: bounds.width, height: bounds.height } : null,
+      });
+    }
   }
   const byId = new Map(elements.map((element) => [element.id, element]));
   for (const element of elements) element.lanes = lanesByNode.get(element.id) ?? [];
@@ -624,63 +802,517 @@ function bpmnProjection(definitions, xml) {
     flow.sourceName = byId.get(flow.source)?.name ?? '';
     flow.targetName = byId.get(flow.target)?.name ?? '';
   }
-  return { elements, flows, byId, xml };
+  return { elements, flows, byId, edges, xml };
 }
 
 function nameMatches(actual, expected, mode = 'equals') {
   if (mode === 'includes') return actual.toLowerCase().includes(expected.toLowerCase());
-  return actual === expected;
+  return actual.trim().toLowerCase() === expected.trim().toLowerCase();
 }
 
-function matcherObserved(projection, matcher) {
+function typeMatches(actual, expected, allowGenericTask = false) {
+  if (!expected || actual === expected) return true;
+  return allowGenericTask && actual === 'bpmn:Task' && expected.endsWith('Task');
+}
+
+function isTaskType(type) {
+  return /^bpmn:(?:Task|UserTask|ManualTask|ServiceTask|BusinessRuleTask|ScriptTask|SendTask|ReceiveTask)$/.test(type);
+}
+
+function elementMatches(element, matcher) {
+  const names = [matcher.name, ...(matcher.aliases ?? [])].filter(Boolean);
+  const types = matcher.types ?? (matcher.type ? [matcher.type] : []);
+  return (
+    (!names.length || names.some((name) => nameMatches(element.name, name, matcher.nameMode))) &&
+    (!types.length || types.some((type) => typeMatches(element.type, type, matcher.allowGenericTask))) &&
+    (!matcher.lane || element.lanes.some((lane) => nameMatches(lane, matcher.lane)))
+  );
+}
+
+function adjacency(projection, excluded = new Set()) {
+  const result = new Map();
+  for (const flow of projection.flows) {
+    if (excluded.has(flow.source) || excluded.has(flow.target)) continue;
+    result.set(flow.source, [...(result.get(flow.source) ?? []), flow.target]);
+  }
+  return result;
+}
+
+function reachable(projection, starts, targets, excluded = new Set()) {
+  const targetIds = new Set(targets);
+  const graph = adjacency(projection, excluded);
+  const pending = starts.filter((id) => !excluded.has(id));
+  const visited = new Set();
+  while (pending.length) {
+    const current = pending.shift();
+    if (targetIds.has(current)) return true;
+    if (visited.has(current)) continue;
+    visited.add(current);
+    pending.push(...(graph.get(current) ?? []));
+  }
+  return false;
+}
+
+function reachableWithoutRequiredJoin(projection, start, target, excluded) {
+  const graph = adjacency(projection, excluded);
+  const incoming = new Map();
+  for (const flow of projection.flows) incoming.set(flow.target, [...(incoming.get(flow.target) ?? []), flow.source]);
+  const requiredIds = [...excluded];
+  const pending = [start];
+  const visited = new Set();
+  while (pending.length) {
+    const current = pending.shift();
+    if (current === target) return true;
+    if (visited.has(current)) continue;
+    visited.add(current);
+    const element = projection.byId.get(current);
+    const sources = incoming.get(current) ?? [];
+    const synchronizingJoin =
+      sources.length > 1 && ['bpmn:InclusiveGateway', 'bpmn:ParallelGateway'].includes(element?.type);
+    if (synchronizingJoin && sources.some((source) => reachable(projection, requiredIds, [source]))) continue;
+    pending.push(...(graph.get(current) ?? []));
+  }
+  return false;
+}
+
+function resolveUnique(projection, name, label, aliases = []) {
+  const names = [name, ...aliases];
+  const matches = projection.elements.filter((element) =>
+    names.some((candidate) => nameMatches(element.name, candidate)),
+  );
+  if (matches.length === 1) return { element: matches[0] };
+  if (matches.length > 1) return { status: 'unresolved', reason: `Ambiguous ${label} binding for ${name}.` };
+  return { status: 'fail', reason: `No ${label} matched ${name}.` };
+}
+
+function comparison(operator, left, right) {
+  if (operator === '<') return left < right;
+  if (operator === '<=') return left <= right;
+  if (operator === '>') return left > right;
+  if (operator === '>=') return left >= right;
+  return left === right;
+}
+
+function parsedCondition(text) {
+  const normalized = text.replaceAll(/\s+/g, ' ').trim();
+  const direct = /^([A-Za-z][A-Za-z0-9_.-]*)\s*(<=|>=|<|>|==|=)\s*(-?\d+(?:\.\d+)?)$/i.exec(normalized);
+  if (direct) return { variable: direct[1], operator: direct[2], value: Number(direct[3]), reversed: false };
+  const reversed = /^(-?\d+(?:\.\d+)?)\s*(<=|>=|<|>|==|=)\s*([A-Za-z][A-Za-z0-9_.-]*)$/i.exec(normalized);
+  if (!reversed) {
+    const natural =
+      /^(?:claim\s+)?([A-Za-z][A-Za-z0-9_.-]*)\s+is\s+(less than or equal to|greater than or equal to|less than|greater than)\s+(?:[A-Z]{3}\s+)?(-?\d[\d,]*(?:\.\d+)?)\.?$/i.exec(
+        normalized,
+      );
+    if (!natural) return null;
+    const operators = {
+      'less than': '<',
+      'less than or equal to': '<=',
+      'greater than': '>',
+      'greater than or equal to': '>=',
+    };
+    return {
+      variable: natural[1],
+      operator: operators[natural[2].toLowerCase()],
+      value: Number(natural[3].replaceAll(',', '')),
+      reversed: false,
+    };
+  }
+  const inverse = { '<': '>', '<=': '>=', '>': '<', '>=': '<=', '=': '=', '==': '==' };
+  return {
+    variable: reversed[3],
+    operator: inverse[reversed[2]],
+    value: Number(reversed[1]),
+    reversed: true,
+  };
+}
+
+function distanceToSegment(point, start, end) {
+  const dx = end.x - start.x;
+  const dy = end.y - start.y;
+  if (dx === 0 && dy === 0) return Math.hypot(point.x - start.x, point.y - start.y);
+  const position = Math.max(
+    0,
+    Math.min(1, ((point.x - start.x) * dx + (point.y - start.y) * dy) / (dx * dx + dy * dy)),
+  );
+  return Math.hypot(point.x - (start.x + position * dx), point.y - (start.y + position * dy));
+}
+
+function matcherResult(projection, matcher, renderedSvg) {
   if (matcher.kind === 'element') {
-    return projection.elements.some(
-      (element) =>
-        nameMatches(element.name, matcher.name, matcher.nameMode) &&
-        (!matcher.type || element.type === matcher.type) &&
-        (!matcher.lane || element.lanes.includes(matcher.lane)),
-    );
+    const matches = projection.elements.filter((element) => elementMatches(element, matcher));
+    if (matches.length > 1 && matcher.expect === 'present')
+      return { status: 'unresolved', reason: `Declared concept matched ${matches.length} elements.` };
+    if (!matches.length && matcher.expect === 'present') {
+      const declaredNames = [matcher.name, ...(matcher.aliases ?? [])].filter(Boolean);
+      const named = projection.elements.filter((element) => declaredNames.includes(element.name));
+      if (
+        matcher.allowGenericTask &&
+        named.some(
+          (element) => isTaskType(element.type) && !typeMatches(element.type, matcher.type, matcher.allowGenericTask),
+        )
+      )
+        return {
+          status: 'unresolved',
+          reason: 'The activity uses a consequential task specialization that the source did not establish.',
+        };
+      if (named.length) return { observed: false };
+      const contextual = projection.elements.filter(
+        (element) =>
+          (matcher.types ?? [matcher.type]).some((type) => typeMatches(element.type, type, matcher.allowGenericTask)) &&
+          (!matcher.lane || element.lanes.some((lane) => nameMatches(lane, matcher.lane))),
+      );
+      if (contextual.length)
+        return { status: 'unresolved', reason: 'A plausible element exists, but its wording is not a declared alias.' };
+    }
+    if (matches.length === 1 && matcher.start) {
+      const start = resolveUnique(projection, matcher.start, 'start', matcher.startAliases);
+      if (start.status) return start;
+      return { observed: reachable(projection, [start.element.id], [matches[0].id]) };
+    }
+    return { observed: matches.length > 0 };
   }
   if (matcher.kind === 'sequence') {
-    return projection.flows.some(
+    const matches = projection.flows.filter(
       (flow) =>
         (!matcher.name || flow.name === matcher.name) &&
         (!matcher.source || flow.sourceName === matcher.source) &&
         (!matcher.target || flow.targetName === matcher.target) &&
-        (!matcher.condition || flow.condition.replaceAll(/\s+/g, ' ').trim() === matcher.condition),
+        (!matcher.condition ||
+          typeof matcher.condition !== 'string' ||
+          flow.condition.replaceAll(/\s+/g, ' ').trim() === matcher.condition),
     );
+    if (matches.length > 1 && matcher.expect === 'present')
+      return { status: 'unresolved', reason: `Sequence matcher has ${matches.length} possible bindings.` };
+    return { observed: matches.length > 0 };
   }
   if (matcher.kind === 'path') {
-    const starts = projection.elements.filter((element) => element.name === matcher.from).map((element) => element.id);
-    const targets = new Set(
-      projection.elements.filter((element) => element.name === matcher.to).map((element) => element.id),
-    );
-    const adjacency = new Map();
-    for (const flow of projection.flows)
-      adjacency.set(flow.source, [...(adjacency.get(flow.source) ?? []), flow.target]);
-    const pending = [...starts];
-    const visited = new Set();
-    while (pending.length) {
-      const current = pending.shift();
-      if (targets.has(current)) return true;
-      if (visited.has(current)) continue;
-      visited.add(current);
-      pending.push(...(adjacency.get(current) ?? []));
+    const start = resolveUnique(projection, matcher.from, 'path origin', matcher.aliases);
+    if (start.status) return start;
+    const target = resolveUnique(projection, matcher.to, 'path destination', matcher.targetAliases);
+    if (target.status) return target;
+    if (matcher.start) {
+      const relevantStart = resolveUnique(projection, matcher.start, 'relevant start');
+      if (relevantStart.status) return relevantStart;
+      if (!reachable(projection, [relevantStart.element.id], [start.element.id])) return { observed: false };
     }
-    return false;
+    return { observed: reachable(projection, [start.element.id], [target.element.id]) };
+  }
+  if (matcher.kind === 'dependency') {
+    const start = resolveUnique(projection, matcher.start, 'relevant start', matcher.startAliases);
+    if (start.status) return start;
+    const target = resolveUnique(projection, matcher.to, 'path destination', matcher.targetAliases);
+    if (target.status) return target;
+    const names = matcher.required;
+    const resolved = names.map((name) => resolveUnique(projection, name, 'path constraint', matcher.aliases));
+    const issue = resolved.find((item) => item.status);
+    if (issue) return issue;
+    if (!reachable(projection, [start.element.id], [target.element.id])) return { observed: false };
+    const bypasses = resolved.map((item) =>
+      reachableWithoutRequiredJoin(projection, start.element.id, target.element.id, new Set([item.element.id])),
+    );
+    return {
+      observed: bypasses.every((bypass) => !bypass),
+      measurements: { constrainedElements: names, bypasses },
+    };
+  }
+  if (matcher.kind === 'condition') {
+    const matches = projection.flows.filter(
+      (flow) =>
+        (!matcher.name || [matcher.name, ...(matcher.aliases ?? [])].some((name) => nameMatches(flow.name, name))) &&
+        (!matcher.source ||
+          [matcher.source, ...(matcher.sourceAliases ?? [])].some((name) => nameMatches(flow.sourceName, name))) &&
+        (!matcher.target ||
+          [matcher.target, ...(matcher.targetAliases ?? [])].some((name) => nameMatches(flow.targetName, name))),
+    );
+    if (matches.length !== 1)
+      return {
+        status: matches.length ? 'unresolved' : 'fail',
+        reason: matches.length ? 'Condition destination is ambiguous.' : 'Condition destination is missing.',
+      };
+    if (typeof matcher.condition === 'string')
+      return { observed: matches[0].condition.replaceAll(/\s+/g, ' ').trim() === matcher.condition };
+    if (matcher.condition.allowedExpressions) {
+      const expression = matches[0].condition.replaceAll(/\s+/g, ' ').trim();
+      if (matcher.condition.allowedExpressions.includes(expression))
+        return { observed: true, measurements: { expression, declaredEquivalent: true } };
+      if (matcher.condition.forbiddenExpressions?.includes(expression))
+        return { observed: false, measurements: { expression, declaredEquivalent: false } };
+      return {
+        status: 'unresolved',
+        reason: 'Condition text is not one of the declared reviewed expressions.',
+        measurements: { expression, declaredEquivalent: false },
+      };
+    }
+    const actual = parsedCondition(matches[0].condition);
+    if (!actual)
+      return { status: 'unresolved', reason: 'Condition uses syntax outside the declared comparison subset.' };
+    if (actual.variable.toLowerCase() !== matcher.condition.variable.toLowerCase())
+      return { status: 'unresolved', reason: 'Condition variable is not a declared equivalent.' };
+    const boundary = matcher.condition.value;
+    const samples = [boundary - 1, boundary, boundary + 1].map((value) => ({
+      value,
+      expected: comparison(matcher.condition.operator, value, boundary),
+      observed: comparison(actual.operator, value, actual.value),
+    }));
+    return {
+      observed: samples.every((sample) => sample.expected === sample.observed),
+      measurements: {
+        expression: matches[0].condition,
+        normalized: actual,
+        unit: matcher.condition.unit ?? null,
+        samples,
+      },
+    };
   }
   if (matcher.kind === 'di-label') {
-    const matchingIds = projection.flows.filter((flow) => flow.name === matcher.sequenceName).map((flow) => flow.id);
-    return matchingIds.some((id) => {
-      const escaped = id.replaceAll(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      const edge = new RegExp(
-        `<[^>]*BPMNEdge\\b[^>]*bpmnElement=["']${escaped}["'][\\s\\S]*?<\\/[^>]*BPMNEdge>`,
-        'i',
-      ).exec(projection.xml)?.[0];
-      return Boolean(edge && /<[^>]*BPMNLabel\b/i.test(edge));
-    });
+    if (!renderedSvg)
+      return { status: 'unavailable', reason: 'No rendered SVG artifact is available for a visibility check.' };
+    const matching = projection.flows.filter(
+      (flow) =>
+        nameMatches(flow.name, matcher.sequenceName) &&
+        (!matcher.target ||
+          [matcher.target, ...(matcher.targetAliases ?? [])].some((name) => nameMatches(flow.targetName, name))),
+    );
+    if (matching.length !== 1)
+      return { status: 'unresolved', reason: 'Label association does not identify exactly one sequence flow.' };
+    const edge = projection.edges.get(matching[0].id);
+    if (!edge?.labelBounds || edge.waypoints.length < 2)
+      return { status: 'unavailable', reason: 'Parsed label bounds or associated edge geometry are unavailable.' };
+    const center = {
+      x: edge.labelBounds.x + edge.labelBounds.width / 2,
+      y: edge.labelBounds.y + edge.labelBounds.height / 2,
+    };
+    const distances = edge.waypoints
+      .slice(1)
+      .map((end, index) => distanceToSegment(center, edge.waypoints[index], end));
+    const distance = Math.min(...distances);
+    const maxDistance = matcher.maxDistance ?? 160;
+    const escapedFlowId = matching[0].id.replaceAll(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const labelTag = new RegExp(
+      `<g\\b(?=[^>]*data-element-id="${escapedFlowId}_label")(?=[^>]*style="[^"]*display:\\s*block[^"]*")(?=[^>]*transform="matrix\\(([^)]*)\\)")[^>]*>`,
+    ).exec(renderedSvg);
+    const nextElement = labelTag ? renderedSvg.indexOf('data-element-id=', labelTag.index + labelTag[0].length) : -1;
+    const renderedLabel = labelTag
+      ? renderedSvg
+          .slice(labelTag.index, nextElement < 0 ? renderedSvg.length : nextElement)
+          .replaceAll(/<[^>]*>/g, ' ')
+          .replaceAll('&gt;', '>')
+          .replaceAll('&lt;', '<')
+          .replaceAll('&amp;', '&')
+          .replaceAll(/\s+/g, ' ')
+      : '';
+    const transform = labelTag?.[1].trim().split(/\s+/).map(Number) ?? [];
+    const renderedOrigin = transform.length === 6 ? { x: transform[4], y: transform[5] } : null;
+    const originDistance = renderedOrigin
+      ? Math.hypot(renderedOrigin.x - edge.labelBounds.x, renderedOrigin.y - edge.labelBounds.y)
+      : null;
+    const visibleInRender =
+      renderedLabel.includes(matcher.sequenceName) && originDistance !== null && originDistance <= 2;
+    return {
+      observed: distance <= maxDistance && visibleInRender,
+      measurements: { distance, maxDistance, visibleInRender, renderedOrigin, originDistance },
+    };
   }
   throw new Error(`Unknown automated matcher ${matcher.kind}.`);
+}
+
+function preservationResult(baseline, candidate, contract) {
+  if (!baseline)
+    return {
+      status: 'unavailable',
+      reason: 'No baseline BPMN artifact was retained with the correction attempt.',
+      violations: [],
+    };
+  if (!candidate) return { status: 'unavailable', reason: 'No corrected BPMN artifact is available.', violations: [] };
+  const declaredIds = (ids) => ids.flatMap((id) => [id, `M_${id}`]);
+  const declaredId = (id) => (id.startsWith('M_') ? id : `M_${id}`);
+  const mutable = new Set(declaredIds(contract.mutableElementIds));
+  const removable = new Set(declaredIds(contract.removableElementIds));
+  const baselineElements = new Map(baseline.elements.map((item) => [item.id, item]));
+  const candidateElements = new Map(candidate.elements.map((item) => [item.id, item]));
+  const violations = [];
+  const observedChanges = new Set();
+  const allowedChange = (changes, id, field, from, to) => {
+    const match = changes.find(
+      (change) =>
+        [change.id, declaredId(change.id)].includes(id) &&
+        change.field === field &&
+        (['source', 'target'].includes(field) ? declaredId(change.from) : change.from) === from &&
+        (['source', 'target'].includes(field) ? declaredId(change.to) : change.to) === to,
+    );
+    if (match) observedChanges.add(`${declaredId(match.id)}\0${match.field}`);
+    return Boolean(match);
+  };
+  const comparableElement = (item) => ({
+    type: item.type,
+    name: item.name,
+    container: item.container,
+    documentation: item.documentation,
+    lanes: [...item.lanes].sort(),
+    attachedTo: item.attachedTo,
+    interrupting: item.interrupting,
+    event: item.event,
+  });
+  for (const [id, original] of baselineElements) {
+    if (removable.has(id)) continue;
+    const current = candidateElements.get(id);
+    if (!current) violations.push({ code: 'stable_element_removed', elementId: id });
+    else if (mutable.has(id)) {
+      const protectedElement = (item) => ({
+        type: item.type,
+        container: item.container,
+        documentation: item.documentation,
+        lanes: [...item.lanes].sort(),
+        attachedTo: item.attachedTo,
+        interrupting: item.interrupting,
+        eventType: item.event?.type ?? null,
+      });
+      if (JSON.stringify(protectedElement(original)) !== JSON.stringify(protectedElement(current)))
+        violations.push({ code: 'mutable_element_changed_outside_contract', elementId: id });
+      for (const [field, from, to] of [
+        ['name', original.name, current.name],
+        ['event.timeDuration', original.event?.timeDuration ?? null, current.event?.timeDuration ?? null],
+      ])
+        if (from !== to && !allowedChange(contract.allowedElementChanges, id, field, from, to))
+          violations.push({ code: 'undeclared_element_change', elementId: id, field, from, to });
+    } else if (JSON.stringify(comparableElement(original)) !== JSON.stringify(comparableElement(current)))
+      violations.push({ code: 'stable_element_changed', elementId: id });
+  }
+  const allowedNewIds = new Set();
+  for (const [id, current] of candidateElements) {
+    if (baselineElements.has(id)) continue;
+    const allowed = contract.allowedNewElements.some(
+      (item) => declaredId(item.id) === id && item.type === current.type && item.nameAliases.includes(current.name),
+    );
+    if (allowed) allowedNewIds.add(id);
+    else violations.push({ code: 'unexpected_element_added', elementId: id });
+  }
+  for (const id of removable)
+    if (baselineElements.has(id) && candidateElements.has(id))
+      violations.push({ code: 'declared_element_not_removed', elementId: id });
+  for (const item of contract.allowedNewElements)
+    if (!allowedNewIds.has(declaredId(item.id)))
+      violations.push({ code: 'declared_element_not_added', elementId: declaredId(item.id) });
+  const baselineFlows = new Map(baseline.flows.map((item) => [item.id, item]));
+  const candidateFlows = new Map(candidate.flows.map((item) => [item.id, item]));
+  const bridgePairs = new Set();
+  for (const removed of removable) {
+    const incoming = baseline.flows.filter((flow) => flow.target === removed).map((flow) => flow.source);
+    const outgoing = baseline.flows.filter((flow) => flow.source === removed).map((flow) => flow.target);
+    for (const source of incoming) for (const target of outgoing) bridgePairs.add(`${source}\0${target}`);
+  }
+  const comparableFlow = (item) => ({
+    source: item.source,
+    target: item.target,
+    name: item.name,
+    condition: item.condition,
+    container: item.container,
+  });
+  for (const [id, original] of baselineFlows) {
+    const current = candidateFlows.get(id);
+    if (!current) {
+      if (!removable.has(original.source) && !removable.has(original.target))
+        violations.push({ code: 'stable_flow_removed', elementId: id });
+    } else if (mutable.has(id)) {
+      if (original.container !== current.container)
+        violations.push({ code: 'mutable_flow_changed_outside_contract', elementId: id });
+      for (const field of ['source', 'target', 'name', 'condition'])
+        if (
+          original[field] !== current[field] &&
+          !allowedChange(contract.allowedFlowChanges, id, field, original[field], current[field])
+        )
+          violations.push({
+            code: 'undeclared_flow_change',
+            elementId: id,
+            field,
+            from: original[field],
+            to: current[field],
+          });
+    } else if (JSON.stringify(comparableFlow(original)) !== JSON.stringify(comparableFlow(current)))
+      violations.push({ code: 'stable_flow_changed', elementId: id });
+  }
+  for (const [id, current] of candidateFlows) {
+    if (baselineFlows.has(id)) continue;
+    const allowed = contract.allowedNewFlows.some(
+      (flow) =>
+        declaredId(flow.id) === id &&
+        declaredId(flow.source) === current.source &&
+        declaredId(flow.target) === current.target &&
+        flow.name === current.name &&
+        flow.condition === current.condition,
+    );
+    if (!allowed && !bridgePairs.has(`${current.source}\0${current.target}`))
+      violations.push({ code: 'unrelated_flow_added', elementId: id });
+  }
+  for (const change of [...contract.allowedElementChanges, ...contract.allowedFlowChanges]) {
+    const key = `${declaredId(change.id)}\0${change.field}`;
+    const relevantBaseline = baselineElements.has(declaredId(change.id)) || baselineFlows.has(declaredId(change.id));
+    if (relevantBaseline && !observedChanges.has(key))
+      violations.push({ code: 'declared_change_missing', elementId: declaredId(change.id), field: change.field });
+  }
+  for (const flow of contract.allowedNewFlows)
+    if (!candidateFlows.has(declaredId(flow.id)))
+      violations.push({ code: 'declared_flow_not_added', elementId: declaredId(flow.id) });
+  return {
+    status: violations.length ? 'fail' : 'pass',
+    reason: violations.length ? 'Correction changed identities or semantics outside its declared scope.' : undefined,
+    violations,
+  };
+}
+
+function handoffBundleViolations(handoff, projection, prefix) {
+  const violations = [];
+  const typeName = (type) => `bpmn:${type[0].toUpperCase()}${type.slice(1)}`;
+  const expectedIds = new Set();
+  const expectedFlowIds = new Set();
+  for (const process of handoff?.request?.model?.processes ?? []) {
+    const laneByNode = new Map();
+    for (const lane of process.lanes ?? [])
+      for (const nodeRef of lane.flowNodeRefs ?? []) laneByNode.set(nodeRef, lane.name);
+    for (const node of process.nodes) {
+      const id = `M_${node.key}`;
+      expectedIds.add(id);
+      const actual = projection.byId.get(id);
+      const expectedEvent =
+        node.event?.kind && node.event.kind !== 'none' ? `${typeName(node.event.kind)}EventDefinition` : null;
+      if (
+        !actual ||
+        actual.type !== typeName(node.type) ||
+        actual.name !== (node.name ?? '') ||
+        actual.container !== `M_${node.containerRef}` ||
+        (laneByNode.has(node.key) && !actual.lanes.includes(laneByNode.get(node.key))) ||
+        (node.attachedToRef && actual.attachedTo !== `M_${node.attachedToRef}`) ||
+        (node.type === 'boundaryEvent' && actual.interrupting !== (node.interrupting ?? true)) ||
+        (expectedEvent && actual.event?.type !== expectedEvent) ||
+        (node.event?.timeDate && actual.event?.timeDate !== node.event.timeDate) ||
+        (node.event?.timeDuration && actual.event?.timeDuration !== node.event.timeDuration) ||
+        (node.event?.timeCycle && actual.event?.timeCycle !== node.event.timeCycle)
+      )
+        violations.push({ code: `${prefix}_handoff_element_mismatch`, elementId: id });
+    }
+    const flows = new Map(projection.flows.map((flow) => [flow.id, flow]));
+    for (const flow of process.flows) {
+      const id = `M_${flow.key}`;
+      expectedFlowIds.add(id);
+      const actual = flows.get(id);
+      if (
+        !actual ||
+        actual.source !== `M_${flow.sourceRef}` ||
+        actual.target !== `M_${flow.targetRef}` ||
+        actual.container !== `M_${flow.containerRef}` ||
+        actual.name !== (flow.name ?? '') ||
+        actual.condition !== (flow.condition ?? '')
+      )
+        violations.push({ code: `${prefix}_handoff_flow_mismatch`, elementId: id });
+    }
+  }
+  for (const element of projection.elements)
+    if (element.id.startsWith('M_') && !expectedIds.has(element.id))
+      violations.push({ code: `${prefix}_bundle_has_unrequested_element`, elementId: element.id });
+  for (const flow of projection.flows)
+    if (flow.id.startsWith('M_') && !expectedFlowIds.has(flow.id))
+      violations.push({ code: `${prefix}_bundle_has_unrequested_flow`, elementId: flow.id });
+  return violations;
 }
 
 async function assess(root, flags) {
@@ -691,7 +1323,11 @@ async function assess(root, flags) {
   const runPath = await realpath(resolve(runOption));
   const runDirectory = dirname(runPath);
   const run = await readJson(runPath);
-  assert.equal(run.runContractVersion, '1.0.0', 'Unsupported run contract.');
+  assert.equal(
+    run.runContractVersion,
+    '2.0.0',
+    `Unsupported run contract ${run.runContractVersion}; version 1 records require evaluator 1.x and are never regraded against current assertions.`,
+  );
   assert.ok(validateRunSchema(run), `Invalid run contract: ${ajv.errorsText(validateRunSchema.errors)}`);
   assert.equal(run.attemptCount, run.attempts.length, 'Attempt count cannot omit retained attempts.');
   assert.equal(
@@ -810,6 +1446,7 @@ async function assess(root, flags) {
       assertions: [],
       findings: [],
       artifacts: [],
+      preservation: null,
     };
     if (attempt.status !== 'completed') {
       result.status = attempt.status;
@@ -824,6 +1461,14 @@ async function assess(root, flags) {
       continue;
     }
     let projection;
+    let baselineProjection;
+    let renderedSvg;
+    let startingHandoff;
+    let baselineHandoff;
+    let candidateHandoff;
+    let baselineQualityReport;
+    let qualityReport;
+    const assessmentPhase = attempt.phase;
     for (const artifact of attempt.artifacts ?? []) {
       const artifactPath = inside(runDirectory, artifact.path, `${attempt.attemptId} artifact`);
       let bytes;
@@ -854,7 +1499,7 @@ async function assess(root, flags) {
         });
         continue;
       }
-      if (artifact.kind === 'bpmn') {
+      if (artifact.kind === 'bpmn' || artifact.kind === 'baseline-bpmn') {
         try {
           const xml = bytes.toString('utf8');
           const parsed = await new BpmnModdle().fromXML(xml);
@@ -865,18 +1510,138 @@ async function assess(root, flags) {
               status: 'fail',
               count: parsed.warnings.length,
             });
-          projection = bpmnProjection(parsed.rootElement, xml);
+          const parsedProjection = bpmnProjection(parsed.rootElement, xml);
+          if (artifact.kind === 'baseline-bpmn') baselineProjection = parsedProjection;
+          else projection = parsedProjection;
         } catch (error) {
           result.findings.push({ code: 'invalid_bpmn', severity: 'critical', status: 'fail', reason: error.message });
         }
+      } else if (artifact.kind === 'svg' || artifact.kind === 'baseline-svg') {
+        const svg = bytes.toString('utf8');
+        if (artifact.kind === 'svg') renderedSvg = svg;
+        if (!/<svg(?:\s|>)/.test(svg))
+          result.findings.push({ code: 'invalid_svg', severity: 'major', status: 'fail', artifact: artifact.path });
+      } else if (['starting-handoff', 'baseline-handoff', 'handoff'].includes(artifact.kind)) {
+        try {
+          const handoff = JSON.parse(bytes.toString('utf8'));
+          assert.ok(validateHandoffSchema(handoff), `Invalid Handoff: ${ajv.errorsText(validateHandoffSchema.errors)}`);
+          if (artifact.kind === 'starting-handoff') startingHandoff = handoff;
+          else if (artifact.kind === 'baseline-handoff') baselineHandoff = handoff;
+          else candidateHandoff = handoff;
+        } catch (error) {
+          result.findings.push({
+            code: 'invalid_handoff',
+            severity: 'critical',
+            status: 'fail',
+            artifact: artifact.path,
+            reason: error.message,
+          });
+        }
+      } else if (artifact.kind === 'baseline-quality-report' || artifact.kind === 'quality-report') {
+        try {
+          const report = JSON.parse(bytes.toString('utf8'));
+          assert.ok(
+            validateQualityReportSchema(report),
+            `Invalid Quality Report: ${ajv.errorsText(validateQualityReportSchema.errors)}`,
+          );
+          if (artifact.kind === 'baseline-quality-report') baselineQualityReport = report;
+          else qualityReport = report;
+        } catch (error) {
+          result.findings.push({
+            code: 'invalid_quality_report',
+            severity: 'critical',
+            status: 'fail',
+            artifact: artifact.path,
+            reason: error.message,
+          });
+        }
       }
     }
+    if (assessmentPhase === 'correction' && selected.contract.correctionContract) {
+      result.preservation = preservationResult(baselineProjection, projection, selected.contract.correctionContract);
+    }
+    if (assessmentPhase === 'correction' && selected.contract.primaryTask === 'maintenance') {
+      const artifactKinds = new Set((attempt.artifacts ?? []).map((artifact) => artifact.kind));
+      const missingKinds = [
+        'starting-handoff',
+        'baseline-handoff',
+        'baseline-bpmn',
+        'baseline-svg',
+        'baseline-quality-report',
+        'handoff',
+        'bpmn',
+        'svg',
+        'quality-report',
+      ].filter((kind) => !artifactKinds.has(kind));
+      if (missingKinds.length) {
+        result.preservation = {
+          status: 'unavailable',
+          reason: `Paired correction evidence is incomplete: missing ${missingKinds.join(', ')}.`,
+          violations: [],
+        };
+      } else if (result.preservation.status === 'pass') {
+        const violations = [];
+        violations.push(...handoffBundleViolations(baselineHandoff, baselineProjection, 'baseline'));
+        violations.push(...handoffBundleViolations(candidateHandoff, projection, 'candidate'));
+        if (JSON.stringify(startingHandoff?.request) !== JSON.stringify(baselineHandoff?.request))
+          violations.push({ code: 'starting_handoff_baseline_mismatch' });
+        const nonModelRequest = (handoff) => {
+          const { model: _model, links: _links, ...rest } = handoff?.request ?? {};
+          return rest;
+        };
+        if (JSON.stringify(nonModelRequest(baselineHandoff)) !== JSON.stringify(nonModelRequest(candidateHandoff)))
+          violations.push({ code: 'handoff_non_model_state_changed' });
+        const correctionIds = new Set([
+          ...selected.contract.correctionContract.removableElementIds,
+          ...selected.contract.correctionContract.allowedNewElements.map((element) => element.id),
+        ]);
+        const stableLinks = (handoff) =>
+          (handoff?.request?.links ?? []).filter((link) => !correctionIds.has(link.elementRef));
+        if (JSON.stringify(stableLinks(baselineHandoff)) !== JSON.stringify(stableLinks(candidateHandoff)))
+          violations.push({ code: 'handoff_stable_links_changed' });
+        if (baselineQualityReport?.modelKey !== baselineHandoff?.request?.model?.key)
+          violations.push({ code: 'baseline_quality_report_model_mismatch' });
+        if (JSON.stringify(baselineHandoff?.lastReport) !== JSON.stringify(baselineQualityReport))
+          violations.push({ code: 'baseline_handoff_quality_report_mismatch' });
+        if (qualityReport?.modelKey !== candidateHandoff?.request?.model?.key)
+          violations.push({ code: 'quality_report_model_mismatch' });
+        if (JSON.stringify(candidateHandoff?.lastReport) !== JSON.stringify(qualityReport))
+          violations.push({ code: 'handoff_quality_report_mismatch' });
+        const failedBundleChecks = [...(baselineQualityReport?.checks ?? []), ...(qualityReport?.checks ?? [])]
+          .filter((check) => ['xml', 'xsd', 'semantics', 'profile', 'di', 'render'].includes(check.id))
+          .filter((check) => check.status !== 'passed')
+          .map((check) => check.id);
+        if (failedBundleChecks.length)
+          violations.push({ code: 'output_bundle_check_failed', checks: failedBundleChecks });
+        if (violations.length)
+          result.preservation = {
+            status: 'fail',
+            reason: 'The paired Handoff, Output Bundle, and Quality Report are inconsistent.',
+            violations,
+          };
+      }
+    }
+    if (result.preservation?.status === 'fail')
+      result.findings.push({
+        code: 'unrelated_correction_change',
+        severity: 'critical',
+        status: 'fail',
+        reason: result.preservation.reason,
+        violations: result.preservation.violations,
+      });
     const observations = new Map(
       (attempt.observations ?? []).map((observation) => [observation.assertionId, observation]),
     );
     for (const assertion of effectiveAssertions) {
       let assertionResult;
-      if (assertion.evaluation.kind === 'automated') {
+      if (assertion.appliesTo && !assertion.appliesTo.includes(assessmentPhase)) {
+        assertionResult = {
+          assertionId: assertion.id,
+          status: 'not_applicable',
+          method: assertion.evaluation.kind,
+          reason: `Assertion applies only to ${assertion.appliesTo.join(' or ')} assessment.`,
+        };
+      } else if (assertion.evaluation.kind === 'automated') {
         if (!projection) {
           assertionResult = {
             assertionId: assertion.id,
@@ -885,12 +1650,17 @@ async function assess(root, flags) {
             reason: 'No readable BPMN artifact.',
           };
         } else {
-          const observed = matcherObserved(projection, assertion.evaluation.matcher);
-          const passed = assertion.evaluation.matcher.expect === 'absent' ? !observed : observed;
+          const match = matcherResult(projection, assertion.evaluation.matcher, renderedSvg);
+          const conclusive = !match.status || match.status === 'fail';
+          const passed =
+            !match.status && (assertion.evaluation.matcher.expect === 'absent' ? !match.observed : match.observed);
+          const status = match.status ?? (passed ? 'pass' : 'fail');
           assertionResult = {
             assertionId: assertion.id,
-            status: passed ? 'pass' : 'fail',
+            status,
             method: 'automated',
+            reason: match.reason,
+            measurements: match.measurements,
             evidence: [
               {
                 artifact: attempt.artifacts.find((artifact) => artifact.kind === 'bpmn')?.path,
@@ -898,7 +1668,7 @@ async function assess(root, flags) {
               },
             ],
           };
-          if (!passed)
+          if (conclusive && status === 'fail')
             result.findings.push({
               assertionId: assertion.id,
               code: assertion.evaluation.code,
@@ -970,7 +1740,10 @@ async function assess(root, flags) {
     if (result.findings.some((finding) => finding.status === 'fail')) result.status = 'fail';
     else if (result.assertions.some((assertion) => assertion.status === 'blocked')) result.status = 'blocked';
     else if (result.assertions.some((assertion) => assertion.status === 'unsupported')) result.status = 'unsupported';
-    else if (result.assertions.some((assertion) => assertion.status === 'not_run' || assertion.status === 'unresolved'))
+    else if (
+      result.preservation?.status === 'unavailable' ||
+      result.assertions.some((assertion) => ['not_run', 'unresolved', 'unavailable'].includes(assertion.status))
+    )
       result.status = 'partial';
     else result.status = 'pass';
     attempts.push(result);
@@ -981,14 +1754,33 @@ async function assess(root, flags) {
   for (const attempt of attempts) {
     for (const assertionResult of attempt.assertions) {
       const assertion = effectiveAssertions.find((candidate) => candidate.id === assertionResult.assertionId);
-      if (!assertion) continue;
+      if (!assertion || assertionResult.status === 'not_applicable') continue;
       dimensions[assertion.dimension] ??= {};
       const dimension = dimensions[assertion.dimension];
       dimension[assertionResult.status] = (dimension[assertionResult.status] ?? 0) + 1;
     }
   }
+  const completedHumanChecks = attempts
+    .flatMap((attempt) => attempt.assertions)
+    .filter(
+      (assertion) => assertion.method === 'human' && !['not_run', 'blocked', 'unavailable'].includes(assertion.status),
+    );
+  const requestedHumanChecks =
+    attempts.length * effectiveAssertions.filter((assertion) => assertion.evaluation.kind === 'human').length;
+  const proposedAgentChecks = attempts
+    .flatMap((attempt) => attempt.assertions)
+    .filter((assertion) => assertion.method === 'agent' && assertion.adjudicationStatus === 'proposed').length;
+  const supportedAttempts = selected.contract.applicability.status === 'supported' ? attempts : [];
+  const qualifyingPasses = supportedAttempts.filter((attempt) => attempt.status === 'pass').length;
+  const attemptedCount = run.attempts.filter((attempt) => attempt.status !== 'not_run').length;
+  const completedCount = run.attempts.filter((attempt) => attempt.status === 'completed').length;
   const report = {
-    assessmentVersion: '1.0.0',
+    assessmentVersion: '2.0.0',
+    evaluatorRevision: '2.0.0',
+    compatibility: {
+      runContractVersion: run.runContractVersion,
+      interpretation: 'current',
+    },
     status: 'complete',
     familyId: run.familyId,
     caseId: run.caseId,
@@ -1005,17 +1797,52 @@ async function assess(root, flags) {
     skill: run.skill,
     model: run.model,
     isolation: run.isolation,
+    applicability: selected.contract.applicability,
     reviewRubric: selected.reviewer.reviewRubric,
     inputFindings,
     attempts,
     summary: {
       attemptCount: attempts.length,
+      sessions: {
+        planned: run.attemptCount,
+        attempted: attemptedCount,
+        completed: completedCount,
+        firstGeneration: attempts[0]?.status ?? 'not_run',
+        repairedCompletion: attempts.slice(1).some((attempt) => attempt.status === 'pass'),
+      },
       statuses,
       criticalFailures:
         attempts.flatMap((attempt) => attempt.findings).filter((finding) => finding.severity === 'critical').length +
         inputFindings.filter((finding) => finding.severity === 'critical').length,
-      humanChecks: attempts.flatMap((attempt) => attempt.assertions).filter((assertion) => assertion.method === 'human')
-        .length,
+      humanChecks: {
+        requested: requestedHumanChecks,
+        completed: completedHumanChecks.length,
+        missing: requestedHumanChecks - completedHumanChecks.length,
+      },
+      reviewState: {
+        proposedAgentChecks,
+        recordedHumanChecks: completedHumanChecks.length,
+        adjudicatedChecks: completedHumanChecks.filter((assertion) => assertion.adjudicationStatus === 'adjudicated')
+          .length,
+      },
+      unresolvedJudgments: attempts
+        .flatMap((attempt) => attempt.assertions)
+        .filter((assertion) => ['unresolved', 'unavailable'].includes(assertion.status)).length,
+      preservation: Object.fromEntries(
+        ['pass', 'fail', 'unavailable'].map((status) => [
+          status,
+          attempts.filter((attempt) => attempt.preservation?.status === status).length,
+        ]),
+      ),
+      supportedProduct: {
+        applicable: selected.contract.applicability.status === 'supported',
+        denominator: supportedAttempts.length,
+        passed: qualifyingPasses,
+        qualified:
+          supportedAttempts.length > 0 &&
+          qualifyingPasses === supportedAttempts.length &&
+          requestedHumanChecks === completedHumanChecks.length,
+      },
       dimensions,
       correctionMinutes: run.metrics.humanCorrectionMinutes,
     },
@@ -1043,10 +1870,16 @@ async function compare(root, flags) {
   const baseline = await readJson(await realpath(resolve(baselineOption)));
   const candidate = await readJson(await realpath(resolve(candidateOption)));
   for (const report of [baseline, candidate]) {
-    assert.equal(report.assessmentVersion, '1.0.0', 'Unsupported assessment version.');
+    assert.ok(
+      ['1.0.0', '2.0.0'].includes(report.assessmentVersion),
+      `Unsupported assessment version ${report.assessmentVersion}; no compatibility path is defined.`,
+    );
     assert.equal(report.status, 'complete', 'Only completed assessment records can be compared.');
     assert.equal(report.summary.attemptCount, report.attempts.length, 'Assessment summary omits attempts.');
   }
+  const baselineEvaluator = baseline.evaluatorRevision ?? baseline.assessmentVersion;
+  const candidateEvaluator = candidate.evaluatorRevision ?? candidate.assessmentVersion;
+  const gradingChanged = baselineEvaluator !== candidateEvaluator;
   const comparisons = [
     ['familyId', baseline.familyId, candidate.familyId],
     ['caseId', baseline.caseId, candidate.caseId],
@@ -1071,6 +1904,15 @@ async function compare(root, flags) {
   const mismatches = comparisons
     .filter(([, left, right]) => JSON.stringify(left) !== JSON.stringify(right))
     .map(([field, left, right]) => ({ field, baseline: left, candidate: right }));
+  const unknownSettings = [
+    baseline.model?.id,
+    candidate.model?.id,
+    baseline.model?.reasoningSettings,
+    candidate.model?.reasoningSettings,
+    baseline.environment?.browser,
+    candidate.environment?.browser,
+  ].some((value) => !value || ['unknown', 'not_observed'].includes(value));
+  const nonIsolated = [baseline.isolation?.status, candidate.isolation?.status].some((status) => status !== 'isolated');
   const summarize = (report) => ({
     runId: report.runId,
     candidate: report.candidate,
@@ -1087,20 +1929,34 @@ async function compare(root, flags) {
     attempts: report.attempts,
   });
   const result = {
-    comparisonVersion: '1.0.0',
+    comparisonVersion: '2.0.0',
     status: 'complete',
-    comparability: mismatches.length ? 'mismatched' : 'comparable',
+    comparability: mismatches.length ? 'mismatched' : gradingChanged ? 'grading-change' : 'comparable',
+    comparisonClass:
+      mismatches.length || gradingChanged || unknownSettings || nonIsolated ? 'exploratory' : 'controlled',
+    controlledComparison: !mismatches.length && !gradingChanged && !unknownSettings && !nonIsolated,
+    grading: {
+      changed: gradingChanged,
+      baselineEvaluator,
+      candidateEvaluator,
+      candidateImprovementClaimAllowed: !gradingChanged,
+    },
     mismatches,
     runs: { baseline: summarize(baseline), candidate: summarize(candidate) },
-    delta: mismatches.length
-      ? null
-      : {
-          criticalFailures: candidate.summary.criticalFailures - baseline.summary.criticalFailures,
-          attemptCount: candidate.summary.attemptCount - baseline.summary.attemptCount,
-        },
+    delta:
+      mismatches.length || gradingChanged
+        ? null
+        : {
+            criticalFailures: candidate.summary.criticalFailures - baseline.summary.criticalFailures,
+            attemptCount: candidate.summary.attemptCount - baseline.summary.attemptCount,
+          },
     interpretation: mismatches.length
       ? 'Runs are retained side by side but not combined because relevant inputs or settings differ.'
-      : 'Runs share the declared case, sources, environment, skill, model, and reasoning settings.',
+      : gradingChanged
+        ? 'The same artifacts were graded by different evaluator revisions; changed findings are grading changes, not candidate improvements.'
+        : unknownSettings || nonIsolated
+          ? 'Inputs match, but unknown settings or missing isolation limit this to an exploratory comparison.'
+          : 'Runs share the declared case, sources, environment, skill, model, reasoning settings, and evaluator revision.',
     limits: [
       'Corpus integrity does not establish factual fidelity, clean export, human comprehension, or downstream tenant compatibility.',
       'Null metrics remain unavailable and are not treated as zero or pass.',

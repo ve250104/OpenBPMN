@@ -1,0 +1,280 @@
+{
+  "schemaVersion": "1.0.0",
+  "profileVersion": "1.0.0",
+  "model": {
+    "key": "supplier_onboarding_model",
+    "name": "Current supplier onboarding",
+    "documentation": "Current ordinary supplier onboarding from source evidence. Document transmission is not approval; Vendor Risk clearance is required before Master Data attempts record creation.",
+    "primaryRef": "supplier_onboarding",
+    "processes": [
+      {
+        "key": "supplier_onboarding",
+        "name": "Current supplier onboarding",
+        "documentation": "Covers ordinary supplier onboarding from form collection through screening and record-creation status. Unobserved appeal, urgent-bypass, and inconclusive-screening behavior remains outside the modeled path and is recorded as unresolved.",
+        "nodes": [
+          {
+            "key": "onboarding_requested",
+            "type": "startEvent",
+            "name": "Onboarding requested",
+            "containerRef": "supplier_onboarding",
+            "event": { "kind": "none" }
+          },
+          {
+            "key": "collect_tax_bank_forms",
+            "type": "userTask",
+            "name": "Collect tax and bank forms",
+            "containerRef": "supplier_onboarding"
+          },
+          {
+            "key": "send_pack_to_vendor_risk",
+            "type": "sendTask",
+            "name": "Send pack to Vendor Risk",
+            "containerRef": "supplier_onboarding"
+          },
+          {
+            "key": "screen_supplier",
+            "type": "userTask",
+            "name": "Screen supplier for sanctions",
+            "containerRef": "supplier_onboarding"
+          },
+          {
+            "key": "screening_outcome",
+            "type": "exclusiveGateway",
+            "name": "Screening outcome",
+            "containerRef": "supplier_onboarding"
+          },
+          {
+            "key": "request_missing_evidence",
+            "type": "sendTask",
+            "name": "Request missing evidence",
+            "containerRef": "supplier_onboarding"
+          },
+          {
+            "key": "collect_missing_evidence",
+            "type": "userTask",
+            "name": "Collect missing evidence",
+            "containerRef": "supplier_onboarding"
+          },
+          {
+            "key": "send_additional_evidence",
+            "type": "sendTask",
+            "name": "Send additional evidence",
+            "containerRef": "supplier_onboarding"
+          },
+          {
+            "key": "attempt_vendor_record_creation",
+            "type": "userTask",
+            "name": "Create vendor record",
+            "documentation": "Master Data attempts creation only after Vendor Risk clearance. The evidence does not equate clearance with successful record creation.",
+            "containerRef": "supplier_onboarding"
+          },
+          {
+            "key": "record_creation_outcome",
+            "type": "exclusiveGateway",
+            "name": "Record creation completed?",
+            "containerRef": "supplier_onboarding"
+          },
+          {
+            "key": "confirm_creation_completed",
+            "type": "sendTask",
+            "name": "Tell buyer creation completed",
+            "containerRef": "supplier_onboarding"
+          },
+          {
+            "key": "report_creation_incomplete",
+            "type": "sendTask",
+            "name": "Tell buyer creation incomplete",
+            "containerRef": "supplier_onboarding"
+          },
+          {
+            "key": "supplier_onboarded",
+            "type": "endEvent",
+            "name": "Supplier onboarded",
+            "containerRef": "supplier_onboarding",
+            "event": { "kind": "none" }
+          },
+          {
+            "key": "onboarding_rejected",
+            "type": "endEvent",
+            "name": "Onboarding rejected",
+            "containerRef": "supplier_onboarding",
+            "event": { "kind": "none" }
+          },
+          {
+            "key": "record_not_created",
+            "type": "endEvent",
+            "name": "Record not created",
+            "containerRef": "supplier_onboarding",
+            "event": { "kind": "none" }
+          }
+        ],
+        "flows": [
+          { "key": "flow_start_collect", "containerRef": "supplier_onboarding", "sourceRef": "onboarding_requested", "targetRef": "collect_tax_bank_forms" },
+          { "key": "flow_collect_send", "containerRef": "supplier_onboarding", "sourceRef": "collect_tax_bank_forms", "targetRef": "send_pack_to_vendor_risk" },
+          { "key": "flow_send_screen", "containerRef": "supplier_onboarding", "sourceRef": "send_pack_to_vendor_risk", "targetRef": "screen_supplier" },
+          { "key": "flow_screen_outcome", "containerRef": "supplier_onboarding", "sourceRef": "screen_supplier", "targetRef": "screening_outcome" },
+          { "key": "flow_cleared_create", "name": "Cleared", "condition": "Vendor Risk clears the supplier", "containerRef": "supplier_onboarding", "sourceRef": "screening_outcome", "targetRef": "attempt_vendor_record_creation" },
+          { "key": "flow_rejected_end", "name": "Rejected", "condition": "Vendor Risk rejects the onboarding", "containerRef": "supplier_onboarding", "sourceRef": "screening_outcome", "targetRef": "onboarding_rejected" },
+          { "key": "flow_missing_request", "name": "Missing evidence", "condition": "Vendor Risk requires missing evidence", "containerRef": "supplier_onboarding", "sourceRef": "screening_outcome", "targetRef": "request_missing_evidence" },
+          { "key": "flow_request_collect", "containerRef": "supplier_onboarding", "sourceRef": "request_missing_evidence", "targetRef": "collect_missing_evidence" },
+          { "key": "flow_collect_additional_send", "containerRef": "supplier_onboarding", "sourceRef": "collect_missing_evidence", "targetRef": "send_additional_evidence" },
+          { "key": "flow_additional_rescreen", "containerRef": "supplier_onboarding", "sourceRef": "send_additional_evidence", "targetRef": "screen_supplier" },
+          { "key": "flow_create_outcome", "containerRef": "supplier_onboarding", "sourceRef": "attempt_vendor_record_creation", "targetRef": "record_creation_outcome" },
+          { "key": "flow_creation_complete_report", "name": "Completed", "condition": "Vendor record creation completed", "containerRef": "supplier_onboarding", "sourceRef": "record_creation_outcome", "targetRef": "confirm_creation_completed" },
+          { "key": "flow_creation_incomplete_report", "name": "Not completed", "condition": "Vendor record creation did not complete", "containerRef": "supplier_onboarding", "sourceRef": "record_creation_outcome", "targetRef": "report_creation_incomplete" },
+          { "key": "flow_confirm_onboarded", "containerRef": "supplier_onboarding", "sourceRef": "confirm_creation_completed", "targetRef": "supplier_onboarded" },
+          { "key": "flow_report_not_created", "containerRef": "supplier_onboarding", "sourceRef": "report_creation_incomplete", "targetRef": "record_not_created" }
+        ],
+        "lanes": [
+          {
+            "key": "lane_buyer",
+            "name": "Buyer",
+            "parentRef": "supplier_onboarding",
+            "flowNodeRefs": ["onboarding_requested", "collect_tax_bank_forms", "send_pack_to_vendor_risk", "collect_missing_evidence", "send_additional_evidence", "supplier_onboarded", "record_not_created"]
+          },
+          {
+            "key": "lane_vendor_risk",
+            "name": "Vendor Risk",
+            "parentRef": "supplier_onboarding",
+            "flowNodeRefs": ["screen_supplier", "screening_outcome", "request_missing_evidence", "onboarding_rejected"]
+          },
+          {
+            "key": "lane_master_data",
+            "name": "Master Data",
+            "parentRef": "supplier_onboarding",
+            "flowNodeRefs": ["attempt_vendor_record_creation", "record_creation_outcome", "confirm_creation_completed", "report_creation_incomplete"]
+          }
+        ]
+      }
+    ]
+  },
+  "evidence": [
+    {
+      "key": "evidence_interview",
+      "source": "Buyer and Risk analyst interview",
+      "summary": "Buyer collects tax and bank forms and sends the pack to Vendor Risk; Vendor Risk screens the supplier and sends a decision to Master Data.",
+      "locator": "inputs/interview.txt"
+    },
+    {
+      "key": "evidence_checklist",
+      "source": "Supplier checklist",
+      "summary": "The checklist names tax form, bank evidence, sanctions screening, and master-data creation.",
+      "locator": "inputs/checklist.docx, paragraph 1"
+    },
+    {
+      "key": "evidence_master_data_correction",
+      "source": "Master Data lead correction dated 2026-08-14",
+      "summary": "Procurement no longer creates vendor records; Master Data creates them after Vendor Risk approval.",
+      "locator": "inputs/dated-correction.txt, line 1"
+    },
+    {
+      "key": "evidence_regional_interview",
+      "source": "Regional operations interview dated 2026-08-16",
+      "summary": "Vendor Risk clears, rejects, or requests missing evidence; clearance does not create the vendor record; Master Data creates it after clearance and reports whether creation completed. Appeal ownership, urgent screening bypass, and handling of inconclusive sanctions data were not observed.",
+      "locator": "inputs/regional-interview.txt"
+    }
+  ],
+  "decisions": [
+    {
+      "key": "decision_current_record_owner",
+      "description": "Model Master Data as the current owner of vendor-record creation after Vendor Risk clearance, applying the dated correction and retaining prior Procurement ownership only as historical source context.",
+      "elementRefs": ["attempt_vendor_record_creation", "lane_master_data"],
+      "evidenceRefs": ["evidence_master_data_correction", "evidence_regional_interview"]
+    },
+    {
+      "key": "decision_transmission_not_approval",
+      "description": "Treat sending documents as a handoff into screening, not as approval. The clearance branch from Vendor Risk is the gate to record creation.",
+      "elementRefs": ["send_pack_to_vendor_risk", "screen_supplier", "screening_outcome", "flow_cleared_create"],
+      "evidenceRefs": ["evidence_interview", "evidence_master_data_correction", "evidence_regional_interview"]
+    },
+    {
+      "key": "decision_unobserved_exceptions_omitted",
+      "description": "Do not invent appeal ownership, an urgent screening bypass, or handling for inconclusive sanctions data; retain them as unresolved questions outside the ordinary modeled path.",
+      "elementRefs": ["screen_supplier", "screening_outcome", "onboarding_rejected"],
+      "evidenceRefs": ["evidence_regional_interview"]
+    }
+  ],
+  "issues": [
+    {
+      "key": "issue_historical_record_owner",
+      "kind": "conflict",
+      "description": "The dated correction records a change from prior Procurement ownership to current Master Data ownership for vendor-record creation.",
+      "affectsMeaning": true,
+      "evidenceRefs": ["evidence_master_data_correction", "evidence_regional_interview"],
+      "elementRefs": ["attempt_vendor_record_creation", "lane_master_data"],
+      "resolution": { "decisionRef": "decision_current_record_owner", "kind": "resolved" }
+    },
+    {
+      "key": "issue_appeal_owner",
+      "kind": "question",
+      "description": "Which team, if any, owns an appeal after Vendor Risk rejects onboarding?",
+      "affectsMeaning": true,
+      "evidenceRefs": ["evidence_regional_interview"],
+      "elementRefs": ["onboarding_rejected"]
+    },
+    {
+      "key": "issue_urgent_bypass",
+      "kind": "question",
+      "description": "Can an urgent exception bypass sanctions screening, and if so, who authorizes it?",
+      "affectsMeaning": true,
+      "evidenceRefs": ["evidence_regional_interview"],
+      "elementRefs": ["screen_supplier", "screening_outcome"]
+    },
+    {
+      "key": "issue_inconclusive_screening",
+      "kind": "question",
+      "description": "How is the supplier handled when sanctions data is inconclusive?",
+      "affectsMeaning": true,
+      "evidenceRefs": ["evidence_regional_interview"],
+      "elementRefs": ["screen_supplier", "screening_outcome"]
+    }
+  ],
+  "links": [
+    { "elementRef": "collect_tax_bank_forms", "assertion": "Buyer collects the tax and bank forms.", "basis": "evidence", "supportRefs": ["evidence_interview", "evidence_checklist", "evidence_regional_interview"] },
+    { "elementRef": "send_pack_to_vendor_risk", "assertion": "Buyer sends the document pack to Vendor Risk without that transmission constituting approval.", "basis": "decision", "supportRefs": ["decision_transmission_not_approval"] },
+    { "elementRef": "screen_supplier", "assertion": "Vendor Risk owns sanctions screening.", "basis": "evidence", "supportRefs": ["evidence_checklist", "evidence_regional_interview"] },
+    { "elementRef": "screening_outcome", "assertion": "Observed screening results are clearance, rejection, or a request for missing evidence.", "basis": "evidence", "supportRefs": ["evidence_regional_interview"] },
+    { "elementRef": "request_missing_evidence", "assertion": "Vendor Risk asks the Buyer for missing evidence.", "basis": "evidence", "supportRefs": ["evidence_regional_interview"] },
+    { "elementRef": "attempt_vendor_record_creation", "assertion": "Master Data creates the record only after clearance; the current owner supersedes prior Procurement ownership.", "basis": "decision", "supportRefs": ["decision_current_record_owner"] },
+    { "elementRef": "record_creation_outcome", "assertion": "Clearance and record creation are distinct; Master Data reports whether creation completed.", "basis": "evidence", "supportRefs": ["evidence_regional_interview"] },
+    { "elementRef": "onboarding_rejected", "assertion": "Vendor Risk can reject onboarding; any appeal path remains unobserved.", "basis": "evidence", "supportRefs": ["evidence_regional_interview"] }
+  ],
+  "scenarios": [
+    {
+      "key": "scenario_clear_and_create",
+      "name": "Supplier cleared and record created",
+      "startRef": "onboarding_requested",
+      "steps": ["collect_tax_bank_forms", "send_pack_to_vendor_risk", "screen_supplier", "screening_outcome", "attempt_vendor_record_creation", "record_creation_outcome", "confirm_creation_completed", "supplier_onboarded"],
+      "expectedOutcome": "Master Data creates the vendor record after Vendor Risk clearance and tells the Buyer that creation completed.",
+      "evidenceRefs": ["evidence_interview", "evidence_checklist", "evidence_master_data_correction", "evidence_regional_interview"]
+    },
+    {
+      "key": "scenario_missing_evidence",
+      "name": "Missing evidence is supplied and rescreened",
+      "startRef": "onboarding_requested",
+      "steps": ["collect_tax_bank_forms", "send_pack_to_vendor_risk", "screen_supplier", "screening_outcome", "request_missing_evidence", "collect_missing_evidence", "send_additional_evidence", "screen_supplier"],
+      "expectedOutcome": "The Buyer supplies requested evidence and Vendor Risk screens the supplier again before any approval or record creation.",
+      "evidenceRefs": ["evidence_regional_interview"]
+    },
+    {
+      "key": "scenario_rejected",
+      "name": "Onboarding rejected",
+      "startRef": "onboarding_requested",
+      "steps": ["collect_tax_bank_forms", "send_pack_to_vendor_risk", "screen_supplier", "screening_outcome", "onboarding_rejected"],
+      "expectedOutcome": "Onboarding ends as rejected; no appeal path is modeled because ownership is unobserved.",
+      "evidenceRefs": ["evidence_regional_interview"]
+    },
+    {
+      "key": "scenario_creation_incomplete",
+      "name": "Record creation does not complete",
+      "startRef": "onboarding_requested",
+      "steps": ["collect_tax_bank_forms", "send_pack_to_vendor_risk", "screen_supplier", "screening_outcome", "attempt_vendor_record_creation", "record_creation_outcome", "report_creation_incomplete", "record_not_created"],
+      "expectedOutcome": "Master Data tells the Buyer that record creation did not complete; the evidence does not describe further remediation.",
+      "evidenceRefs": ["evidence_regional_interview"]
+    }
+  ],
+  "presentation": {
+    "direction": "leftToRight",
+    "laneOrder": ["lane_buyer", "lane_vendor_risk", "lane_master_data"]
+  }
+}

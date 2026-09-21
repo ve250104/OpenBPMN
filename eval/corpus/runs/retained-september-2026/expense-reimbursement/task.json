@@ -1,0 +1,34 @@
+{
+  "caseContractVersion": "1.0.0",
+  "familyId": "expense-reimbursement",
+  "caseId": "expense-reimbursement.base",
+  "variantId": null,
+  "title": "Expense reimbursement",
+  "primaryTask": "description",
+  "evaluationLane": "sop-to-process",
+  "prompt": "Model employee expense reimbursement from the supplied procedure, retaining the different owner and approver roles.",
+  "scope": {
+    "requested": "Expense reimbursement",
+    "excluded": [
+      "process improvement unless explicitly requested"
+    ]
+  },
+  "clarificationAnswers": [],
+  "correctionTurns": [],
+  "applicability": {
+    "status": "supported",
+    "capability": "source-driven-modeling-session",
+    "reason": "Within the current declared public boundary.",
+    "fixedBeforeExecution": true
+  },
+  "replacesSourceIds": [],
+  "inputArtifacts": [
+    {
+      "id": "expense-reimbursement.source.1",
+      "path": "inputs/procedure.txt",
+      "mediaType": "text/plain",
+      "sha256": "c106190a51aa8926422a823d9608917ce21ce555f59c39da669a51c51e9d9dac"
+    }
+  ],
+  "variantArtifacts": []
+}
