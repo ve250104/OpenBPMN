@@ -1,5 +1,5 @@
 {
-  "reviewVersion": "1.0.0",
+  "reviewVersion": "2.0.0",
   "familyId": "editable-flowchart-translation",
   "canary": "reviewer-only-canary-25839de056f71825",
   "authoredIndependentlyOfCandidate": true,
@@ -59,6 +59,75 @@
         "kind": "agent",
         "instructions": "Inspect the cited source and externally observable candidate artifacts; do not infer from candidate plausibility."
       }
+    },
+    {
+      "id": "editable-flowchart-translation.assertion.3",
+      "claim": "customer-service and quality responsibilities remain distinguishable",
+      "disposition": "required",
+      "severity": "major",
+      "dimension": "representation",
+      "epistemicStatus": "established",
+      "evidence": [
+        {
+          "sourceId": "editable-flowchart-translation.source.1",
+          "locator": "customer-service and quality containers",
+          "stance": "supports",
+          "effectiveDate": null,
+          "entityScope": "legacy model owner",
+          "caseScope": "editable return flow"
+        }
+      ],
+      "outputLocations": ["BPMN semantics", "SVG preview"],
+      "evaluation": {
+        "kind": "agent",
+        "instructions": "Check responsibility cues without requiring one particular BPMN participant topology."
+      }
+    },
+    {
+      "id": "editable-flowchart-translation.assertion.4",
+      "claim": "ordering between customer remedy and inventory disposition remains explicitly unresolved",
+      "disposition": "unresolved",
+      "severity": "major",
+      "dimension": "coverage",
+      "epistemicStatus": "unknown",
+      "evidence": [
+        {
+          "sourceId": "editable-flowchart-translation.source.1",
+          "locator": "ambiguity annotation",
+          "stance": "supports",
+          "effectiveDate": null,
+          "entityScope": "legacy model owner",
+          "caseScope": "editable return flow"
+        }
+      ],
+      "outputLocations": ["BPMN semantics", "Quality Report", "final delivery claims"],
+      "evaluation": {
+        "kind": "agent",
+        "instructions": "Verify that the candidate asks or scopes the unresolved ordering rather than inventing it."
+      }
+    },
+    {
+      "id": "editable-flowchart-translation.assertion.5",
+      "claim": "a reader can trace eligibility, remedy, and disposition routes in the rendered result",
+      "disposition": "required",
+      "severity": "major",
+      "dimension": "readability",
+      "epistemicStatus": "established",
+      "evidence": [
+        {
+          "sourceId": "editable-flowchart-translation.source.1",
+          "locator": "routing edges f3-f9",
+          "stance": "supports",
+          "effectiveDate": null,
+          "entityScope": "legacy model owner",
+          "caseScope": "editable return flow"
+        }
+      ],
+      "outputLocations": ["SVG preview"],
+      "evaluation": {
+        "kind": "human",
+        "instructions": "Trace the three decisions in the rendered preview and record concrete source and output citations."
+      }
     }
   ],
   "variantAssertions": [],
@@ -101,5 +170,41 @@
   "acceptableAlternatives": [
     "Any BPMN topology is acceptable when it preserves every assertion and does not add forbidden meaning."
   ],
-  "observedResults": []
+  "observedResults": [],
+  "expectationReview": {
+    "status": "completed",
+    "method": "independent-agent",
+    "scope": "Source passages, scope, assertions, alternatives, output locations, and coverage tags.",
+    "adjudication": "proposed-not-expert"
+  },
+  "sourceFactLedger": [
+    {
+      "id": "legacy.fact.1",
+      "sourceId": "editable-flowchart-translation.source.1",
+      "locator": "customer-service and quality containers",
+      "statement": "Responsibility cues distinguish customer service from quality.",
+      "treatment": "required-in-diagram"
+    },
+    {
+      "id": "legacy.fact.2",
+      "sourceId": "editable-flowchart-translation.source.1",
+      "locator": "edges f3-f6",
+      "statement": "Eligibility and remedy are separate routing decisions.",
+      "treatment": "required-in-diagram"
+    },
+    {
+      "id": "legacy.fact.3",
+      "sourceId": "editable-flowchart-translation.source.1",
+      "locator": "edges f8-f9",
+      "statement": "Inventory disposition distinguishes damaged from resalable parts.",
+      "treatment": "required-in-diagram"
+    },
+    {
+      "id": "legacy.fact.4",
+      "sourceId": "editable-flowchart-translation.source.1",
+      "locator": "ambiguity annotation",
+      "statement": "Ordering between customer remedy and inventory disposition is unresolved.",
+      "treatment": "question-required"
+    }
+  ]
 }

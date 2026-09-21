@@ -1,0 +1,48 @@
+{
+  "campaignVersion": "2.0.0",
+  "campaignId": "reliability-richer-packs-2026-09-21",
+  "predeclared": true,
+  "scope": "Observational Host Agent sessions for the three richer related cases.",
+  "reviewState": "not_adjudicated",
+  "retainedDiagnostics": {
+    "status": "unavailable",
+    "reason": "The original three September session records are not present in this checkout; redistributable CLI counterexamples are used instead and no historical reassessment is fabricated."
+  },
+  "isolation": {
+    "staging": "source-only",
+    "filesystemBoundary": "not_enforced",
+    "reviewerMaterialAccessibleFromHost": true
+  },
+  "sessions": [
+    {
+      "familyId": "expense-reimbursement",
+      "status": "not_run",
+      "applicability": "supported",
+      "reason": "No reviewer-blind fresh Host Agent session was available inside this implementation task; no result is fabricated.",
+      "firstAttemptArtifacts": [],
+      "repairArtifacts": [],
+      "rubricResponses": [],
+      "correctionEffortMinutes": null
+    },
+    {
+      "familyId": "supplier-onboarding-discovery",
+      "status": "not_run",
+      "applicability": "supported",
+      "reason": "No reviewer-blind fresh Host Agent session was available inside this implementation task; no result is fabricated.",
+      "firstAttemptArtifacts": [],
+      "repairArtifacts": [],
+      "rubricResponses": [],
+      "correctionEffortMinutes": null
+    },
+    {
+      "familyId": "editable-flowchart-translation",
+      "status": "not_run",
+      "applicability": "unsupported",
+      "reason": "No reviewer-blind fresh Host Agent session was available inside this implementation task; no exploratory result is fabricated.",
+      "firstAttemptArtifacts": [],
+      "repairArtifacts": [],
+      "rubricResponses": [],
+      "correctionEffortMinutes": null
+    }
+  ]
+}

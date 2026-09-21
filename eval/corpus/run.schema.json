@@ -1,10 +1,10 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:openbpmn:evaluation:run:1.0.0",
+  "$id": "urn:openbpmn:evaluation:run:2.0.0",
   "type": "object",
   "additionalProperties": false,
   "properties": {
-    "runContractVersion": { "const": "1.0.0" },
+    "runContractVersion": { "const": "2.0.0" },
     "runId": { "type": ["string", "null"] },
     "familyId": { "type": "string", "minLength": 1 },
     "caseId": { "type": "string", "minLength": 1 },
@@ -125,6 +125,7 @@
       "additionalProperties": false,
       "properties": {
         "attemptId": { "type": "string", "minLength": 1 },
+        "phase": { "enum": ["initial", "correction"] },
         "status": { "enum": ["completed", "failed", "blocked", "unsupported", "not_run"] },
         "reason": { "type": "string" },
         "startedAt": { "type": ["string", "null"] },
@@ -139,6 +140,7 @@
       },
       "required": [
         "attemptId",
+        "phase",
         "status",
         "startedAt",
         "finishedAt",
@@ -176,7 +178,7 @@
         "assertionId": { "type": "string", "minLength": 1 },
         "method": { "enum": ["agent", "human"] },
         "methodDescription": { "type": "string", "minLength": 1 },
-        "status": { "enum": ["pass", "fail", "blocked", "unsupported", "not_applicable", "unresolved"] },
+        "status": { "enum": ["pass", "fail", "blocked", "unsupported", "not_applicable", "unresolved", "unavailable"] },
         "reviewer": { "$ref": "#/$defs/reviewer" },
         "sourceCitations": {
           "type": "array",

@@ -1,5 +1,5 @@
 {
-  "reviewVersion": "1.0.0",
+  "reviewVersion": "2.0.0",
   "familyId": "expense-reimbursement",
   "canary": "reviewer-only-canary-24503ab218d61542",
   "authoredIndependentlyOfCandidate": true,
@@ -33,15 +33,21 @@
         "matcher": {
           "kind": "element",
           "name": "Approve business purpose",
+          "aliases": [
+            "Validate business purpose",
+            "Confirm business purpose"
+          ],
           "type": "bpmn:UserTask",
+          "allowGenericTask": true,
           "lane": "Line manager",
+          "start": "Claim submitted",
           "expect": "present"
         }
       }
     },
     {
       "id": "expense-reimbursement.assertion.2",
-      "claim": "a Procurement Director recipient is not established",
+      "claim": "the diagram must not invent a Procurement Director recipient",
       "disposition": "forbidden",
       "severity": "critical",
       "dimension": "coverage",
@@ -109,7 +115,7 @@
     },
     {
       "id": "expense-reimbursement.assertion.4",
-      "claim": "business-purpose approval precedes the additional-approval decision",
+      "claim": "claims above the threshold require both manager and controller approval without prescribing their order",
       "disposition": "required",
       "severity": "critical",
       "dimension": "representation",
@@ -117,7 +123,7 @@
       "evidence": [
         {
           "sourceId": "expense-reimbursement.source.1",
-          "locator": "sentences 3-4",
+          "locator": "sentences 3-4; no approval order is stated",
           "stance": "supports",
           "effectiveDate": null,
           "entityScope": "process owner",
@@ -132,11 +138,17 @@
       ],
       "evaluation": {
         "kind": "automated",
-        "code": "reversed_connection",
+        "code": "missing_required_approval",
         "matcher": {
-          "kind": "path",
-          "from": "Approve business purpose",
-          "to": "Additional approval needed?",
+          "kind": "element",
+          "name": "Finance controller approves",
+          "aliases": [
+            "Controller reviews high-value claim",
+            "Obtain controller approval"
+          ],
+          "type": "bpmn:UserTask",
+          "allowGenericTask": true,
+          "start": "Claim submitted",
           "expect": "present"
         }
       }
@@ -146,7 +158,7 @@
       "claim": "finance controller approval applies only above EUR 2,000",
       "disposition": "required",
       "severity": "critical",
-      "dimension": "technicalValidity",
+      "dimension": "behavior",
       "epistemicStatus": "established",
       "evidence": [
         {
@@ -168,9 +180,14 @@
         "kind": "automated",
         "code": "threshold_or_negation_changed",
         "matcher": {
-          "kind": "sequence",
+          "kind": "condition",
           "target": "Finance controller approves",
-          "condition": "amount > 2000",
+          "condition": {
+            "variable": "amount",
+            "operator": ">",
+            "value": 2000,
+            "unit": "EUR"
+          },
           "expect": "present"
         }
       }
@@ -180,7 +197,7 @@
       "claim": "the amount decision permits exactly one threshold branch",
       "disposition": "required",
       "severity": "critical",
-      "dimension": "readability",
+      "dimension": "behavior",
       "epistemicStatus": "established",
       "evidence": [
         {
@@ -214,7 +231,7 @@
       "claim": "the above-threshold branch remains visibly labelled",
       "disposition": "required",
       "severity": "major",
-      "dimension": "interaction",
+      "dimension": "readability",
       "epistemicStatus": "established",
       "evidence": [
         {
@@ -238,6 +255,7 @@
         "matcher": {
           "kind": "di-label",
           "sequenceName": "Above EUR 2,000",
+          "maxDistance": 160,
           "expect": "present"
         }
       }
@@ -247,7 +265,7 @@
       "claim": "the unrelated payment activity remains unchanged in a correction",
       "disposition": "required",
       "severity": "critical",
-      "dimension": "downstreamUsability",
+      "dimension": "representation",
       "epistemicStatus": "established",
       "evidence": [
         {
@@ -265,6 +283,9 @@
         "Quality Report",
         "final delivery claims"
       ],
+      "appliesTo": [
+        "correction"
+      ],
       "evaluation": {
         "kind": "automated",
         "code": "unrelated_correction_change",
@@ -272,6 +293,143 @@
           "kind": "element",
           "name": "Pay approved claim",
           "type": "bpmn:ServiceTask",
+          "expect": "present"
+        }
+      }
+    },
+    {
+      "id": "expense-reimbursement.assertion.9",
+      "claim": "payment cannot be reached from claim submission without business-purpose approval",
+      "disposition": "forbidden",
+      "severity": "critical",
+      "dimension": "behavior",
+      "epistemicStatus": "established",
+      "evidence": [
+        {
+          "sourceId": "expense-reimbursement.source.1",
+          "locator": "sentences 2-5",
+          "stance": "supports",
+          "effectiveDate": null,
+          "entityScope": "process owner",
+          "caseScope": "Expense reimbursement"
+        }
+      ],
+      "outputLocations": [
+        "BPMN semantics",
+        "Quality Report"
+      ],
+      "evaluation": {
+        "kind": "automated",
+        "code": "approval_bypass",
+        "matcher": {
+          "kind": "dependency",
+          "start": "Claim submitted",
+          "to": "Pay approved claim",
+          "required": [
+            "Approve business purpose"
+          ],
+          "aliases": [
+            "Validate business purpose",
+            "Confirm business purpose"
+          ],
+          "expect": "present"
+        }
+      }
+    },
+    {
+      "id": "expense-reimbursement.assertion.10",
+      "claim": "claims at or below EUR 2,000 take the complementary route without controller approval",
+      "disposition": "required",
+      "severity": "critical",
+      "dimension": "behavior",
+      "epistemicStatus": "established",
+      "evidence": [
+        {
+          "sourceId": "expense-reimbursement.source.3",
+          "locator": "item 4",
+          "stance": "supports",
+          "effectiveDate": "2026-01-01",
+          "entityScope": "process owner",
+          "caseScope": "Expense reimbursement"
+        }
+      ],
+      "outputLocations": ["BPMN semantics", "Quality Report"],
+      "evaluation": {
+        "kind": "automated",
+        "code": "threshold_complement_changed",
+        "matcher": {
+          "kind": "condition",
+          "name": "EUR 2,000 or less",
+          "condition": {
+            "variable": "amount",
+            "operator": "<=",
+            "value": 2000,
+            "unit": "EUR"
+          },
+          "expect": "present"
+        }
+      }
+    },
+    {
+      "id": "expense-reimbursement.assertion.11",
+      "claim": "the rejected condition leads to the rejected outcome",
+      "disposition": "required",
+      "severity": "critical",
+      "dimension": "behavior",
+      "epistemicStatus": "established",
+      "evidence": [
+        {
+          "sourceId": "expense-reimbursement.source.3",
+          "locator": "item 5",
+          "stance": "supports",
+          "effectiveDate": "2026-01-01",
+          "entityScope": "process owner",
+          "caseScope": "Expense reimbursement"
+        }
+      ],
+      "outputLocations": ["BPMN semantics", "Quality Report"],
+      "evaluation": {
+        "kind": "automated",
+        "code": "swapped_decision_destination",
+        "matcher": {
+          "kind": "condition",
+          "target": "Claim rejected",
+          "condition": {
+            "allowedExpressions": ["not approved"],
+            "forbiddenExpressions": ["approved"]
+          },
+          "expect": "present"
+        }
+      }
+    },
+    {
+      "id": "expense-reimbursement.assertion.12",
+      "claim": "the approved condition leads to the additional-approval decision",
+      "disposition": "required",
+      "severity": "critical",
+      "dimension": "behavior",
+      "epistemicStatus": "established",
+      "evidence": [
+        {
+          "sourceId": "expense-reimbursement.source.3",
+          "locator": "items 3-5",
+          "stance": "supports",
+          "effectiveDate": "2026-01-01",
+          "entityScope": "process owner",
+          "caseScope": "Expense reimbursement"
+        }
+      ],
+      "outputLocations": ["BPMN semantics", "Quality Report"],
+      "evaluation": {
+        "kind": "automated",
+        "code": "swapped_decision_destination",
+        "matcher": {
+          "kind": "condition",
+          "target": "Additional approval needed?",
+          "condition": {
+            "allowedExpressions": ["approved"],
+            "forbiddenExpressions": ["not approved"]
+          },
           "expect": "present"
         }
       }
@@ -323,6 +481,63 @@
       "path": "reference.bpmn",
       "mediaType": "application/xml",
       "sha256": "d2a3890aaf9a902a3e87849b0e5c9b50791ad57db65134020e98603afb548a87"
+    }
+  ],
+  "expectationReview": {
+    "status": "completed",
+    "method": "independent-agent",
+    "scope": "Source passages, scope, assertions, alternatives, output locations, and coverage tags.",
+    "adjudication": "proposed-not-expert"
+  },
+  "sourceFactLedger": [
+    {
+      "id": "expense.fact.1",
+      "sourceId": "expense-reimbursement.source.1",
+      "locator": "sentence 1",
+      "statement": "Employee submits a claim.",
+      "treatment": "required-in-diagram"
+    },
+    {
+      "id": "expense.fact.2",
+      "sourceId": "expense-reimbursement.source.3",
+      "locator": "items 1-2",
+      "statement": "Accounts Payable checks receipts and returns incomplete claims for correction.",
+      "treatment": "required-in-diagram"
+    },
+    {
+      "id": "expense.fact.3",
+      "sourceId": "expense-reimbursement.source.2",
+      "locator": "employee paragraph",
+      "statement": "A corrected submission retains the claim identity.",
+      "treatment": "permitted-scope"
+    },
+    {
+      "id": "expense.fact.4",
+      "sourceId": "expense-reimbursement.source.3",
+      "locator": "items 3-4",
+      "statement": "Manager and threshold-dependent controller approvals are both required before payment.",
+      "treatment": "required-in-diagram"
+    },
+    {
+      "id": "expense.fact.5",
+      "sourceId": "expense-reimbursement.source.3",
+      "locator": "item 4",
+      "statement": "The evidence does not prescribe approval order.",
+      "treatment": "permitted-scope"
+    },
+    {
+      "id": "expense.fact.6",
+      "sourceId": "expense-reimbursement.source.3",
+      "locator": "item 5",
+      "statement": "Payment and rejection have distinguishable notices.",
+      "treatment": "required-in-diagram"
+    },
+    {
+      "id": "expense.fact.7",
+      "sourceId": "expense-reimbursement.source.2",
+      "locator": "employee paragraph",
+      "statement": "Disagreement escalation ownership is unknown.",
+      "treatment": "question-required"
     }
   ]
 }

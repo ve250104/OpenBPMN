@@ -1,5 +1,5 @@
 {
-  "reviewVersion": "1.0.0",
+  "reviewVersion": "2.0.0",
   "familyId": "incident-escalation-maintenance",
   "canary": "reviewer-only-canary-bf23be5a82c401cb",
   "authoredIndependentlyOfCandidate": true,
@@ -58,6 +58,29 @@
       "evaluation": {
         "kind": "agent",
         "instructions": "Inspect the cited source and externally observable candidate artifacts; do not infer from candidate plausibility."
+      }
+    },
+    {
+      "id": "incident-escalation-maintenance.assertion.3",
+      "claim": "the elapsed timer remains attached to investigation and non-interrupting",
+      "disposition": "required",
+      "severity": "critical",
+      "dimension": "behavior",
+      "epistemicStatus": "established",
+      "evidence": [
+        {
+          "sourceId": "incident-escalation-maintenance.source.1",
+          "locator": "escalation-clock boundary event",
+          "stance": "supports",
+          "effectiveDate": null,
+          "entityScope": "incident escalation timer",
+          "caseScope": "attachment and interruption behavior"
+        }
+      ],
+      "outputLocations": ["BPMN semantics", "Quality Report"],
+      "evaluation": {
+        "kind": "agent",
+        "instructions": "Inspect the paired before and after artifacts for timer attachment and interruption behavior."
       }
     }
   ],
@@ -135,5 +158,11 @@
   "acceptableAlternatives": [
     "Any BPMN topology is acceptable when it preserves every assertion and does not add forbidden meaning."
   ],
-  "observedResults": []
+  "observedResults": [],
+  "expectationReview": {
+    "status": "completed",
+    "method": "independent-agent",
+    "scope": "Source passages, scope, assertions, alternatives, output locations, and coverage tags.",
+    "adjudication": "proposed-not-expert"
+  }
 }

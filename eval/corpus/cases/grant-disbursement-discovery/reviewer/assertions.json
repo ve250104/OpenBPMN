@@ -1,5 +1,5 @@
 {
-  "reviewVersion": "1.0.0",
+  "reviewVersion": "2.0.0",
   "familyId": "grant-disbursement-discovery",
   "canary": "reviewer-only-canary-eca7c1dc14a7d67f",
   "authoredIndependentlyOfCandidate": true,
@@ -109,5 +109,11 @@
   "acceptableAlternatives": [
     "Any BPMN topology is acceptable when it preserves every assertion and does not add forbidden meaning."
   ],
-  "observedResults": []
+  "observedResults": [],
+  "expectationReview": {
+    "status": "completed",
+    "method": "independent-agent",
+    "scope": "Source passages, scope, assertions, alternatives, output locations, and coverage tags.",
+    "adjudication": "proposed-not-expert"
+  }
 }

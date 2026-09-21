@@ -21,7 +21,7 @@
               "key": "session-start",
               "type": "startEvent",
               "containerRef": "incident-escalation",
-              "name": "Existing session started",
+              "name": "Incident opened",
               "event": {
                 "kind": "none"
               }
@@ -30,25 +30,40 @@
               "key": "investigate",
               "type": "task",
               "containerRef": "incident-escalation",
-              "name": "investigate"
+              "name": "Investigate incident"
             },
             {
               "key": "escalation-clock",
-              "type": "task",
+              "type": "boundaryEvent",
               "containerRef": "incident-escalation",
-              "name": "escalation clock"
+              "name": "Escalation elapsed",
+              "attachedToRef": "investigate",
+              "interrupting": false,
+              "event": {
+                "kind": "timer",
+                "timeDuration": "PT4H"
+              }
             },
             {
               "key": "notify-team-lead",
               "type": "task",
               "containerRef": "incident-escalation",
-              "name": "notify team lead"
+              "name": "Notify team lead"
             },
             {
-              "key": "session-end",
+              "key": "resolved",
               "type": "endEvent",
               "containerRef": "incident-escalation",
-              "name": "Existing modeled outcome",
+              "name": "Incident resolved",
+              "event": {
+                "kind": "none"
+              }
+            },
+            {
+              "key": "escalated",
+              "type": "endEvent",
+              "containerRef": "incident-escalation",
+              "name": "Escalation sent",
               "event": {
                 "kind": "none"
               }
@@ -56,41 +71,42 @@
           ],
           "flows": [
             {
-              "key": "session-flow-1",
+              "key": "incident-start",
               "containerRef": "incident-escalation",
               "sourceRef": "session-start",
               "targetRef": "investigate"
             },
             {
-              "key": "session-flow-2",
+              "key": "incident-resolved",
               "containerRef": "incident-escalation",
               "sourceRef": "investigate",
-              "targetRef": "escalation-clock"
+              "targetRef": "resolved"
             },
             {
-              "key": "session-flow-3",
+              "key": "timer-fired",
               "containerRef": "incident-escalation",
               "sourceRef": "escalation-clock",
               "targetRef": "notify-team-lead"
             },
             {
-              "key": "session-flow-4",
+              "key": "escalation-sent",
               "containerRef": "incident-escalation",
               "sourceRef": "notify-team-lead",
-              "targetRef": "session-end"
+              "targetRef": "escalated"
             }
           ],
           "lanes": [
             {
-              "key": "current-owner",
-              "name": "Current modeled owner",
+              "key": "service-team",
+              "name": "Service team",
               "parentRef": "incident-escalation",
               "flowNodeRefs": [
                 "session-start",
                 "investigate",
                 "escalation-clock",
                 "notify-team-lead",
-                "session-end"
+                "resolved",
+                "escalated"
               ]
             }
           ]
@@ -124,6 +140,14 @@
       {
         "elementRef": "notify-team-lead",
         "assertion": "Retain the existing notify-team-lead identity unless the correction names it.",
+        "basis": "evidence",
+        "supportRefs": [
+          "session-account"
+        ]
+      },
+      {
+        "elementRef": "service-team",
+        "assertion": "The service team owns investigation and notification in this baseline.",
         "basis": "evidence",
         "supportRefs": [
           "session-account"

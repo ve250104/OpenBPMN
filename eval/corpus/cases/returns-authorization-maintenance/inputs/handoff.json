@@ -21,7 +21,7 @@
               "key": "session-start",
               "type": "startEvent",
               "containerRef": "returns-authorization",
-              "name": "Existing session started",
+              "name": "Return requested",
               "event": {
                 "kind": "none"
               }
@@ -30,31 +30,48 @@
               "key": "inspect",
               "type": "task",
               "containerRef": "returns-authorization",
-              "name": "inspect"
+              "name": "Inspect returned item"
+            },
+            {
+              "key": "warehouse-approval",
+              "type": "task",
+              "containerRef": "returns-authorization",
+              "name": "Obtain warehouse approval",
+              "documentation": "This step is present in the baseline but unsupported by the source and targeted for removal."
             },
             {
               "key": "choose-remedy",
-              "type": "task",
+              "type": "exclusiveGateway",
               "containerRef": "returns-authorization",
-              "name": "choose remedy"
+              "name": "Refund or replacement?",
+              "defaultFlowRef": "replacement-route"
             },
             {
               "key": "refund",
               "type": "task",
               "containerRef": "returns-authorization",
-              "name": "refund"
+              "name": "Issue refund"
             },
             {
               "key": "replacement",
               "type": "task",
               "containerRef": "returns-authorization",
-              "name": "replacement"
+              "name": "Send replacement"
             },
             {
-              "key": "session-end",
+              "key": "refund-end",
               "type": "endEvent",
               "containerRef": "returns-authorization",
-              "name": "Existing modeled outcome",
+              "name": "Refund completed",
+              "event": {
+                "kind": "none"
+              }
+            },
+            {
+              "key": "replacement-end",
+              "type": "endEvent",
+              "containerRef": "returns-authorization",
+              "name": "Replacement completed",
               "event": {
                 "kind": "none"
               }
@@ -62,48 +79,65 @@
           ],
           "flows": [
             {
-              "key": "session-flow-1",
+              "key": "return-start",
               "containerRef": "returns-authorization",
               "sourceRef": "session-start",
               "targetRef": "inspect"
             },
             {
-              "key": "session-flow-2",
+              "key": "inspection-complete",
               "containerRef": "returns-authorization",
               "sourceRef": "inspect",
+              "targetRef": "warehouse-approval"
+            },
+            {
+              "key": "approval-complete",
+              "containerRef": "returns-authorization",
+              "sourceRef": "warehouse-approval",
               "targetRef": "choose-remedy"
             },
             {
-              "key": "session-flow-3",
+              "key": "refund-route",
               "containerRef": "returns-authorization",
               "sourceRef": "choose-remedy",
-              "targetRef": "refund"
+              "targetRef": "refund",
+              "name": "Refund selected",
+              "condition": "remedy = refund"
             },
             {
-              "key": "session-flow-4",
+              "key": "replacement-route",
+              "containerRef": "returns-authorization",
+              "sourceRef": "choose-remedy",
+              "targetRef": "replacement",
+              "name": "Otherwise"
+            },
+            {
+              "key": "refund-complete",
               "containerRef": "returns-authorization",
               "sourceRef": "refund",
-              "targetRef": "replacement"
+              "targetRef": "refund-end"
             },
             {
-              "key": "session-flow-5",
+              "key": "replacement-complete",
               "containerRef": "returns-authorization",
               "sourceRef": "replacement",
-              "targetRef": "session-end"
+              "targetRef": "replacement-end"
             }
           ],
           "lanes": [
             {
-              "key": "current-owner",
-              "name": "Current modeled owner",
+              "key": "returns-team",
+              "name": "Returns team",
               "parentRef": "returns-authorization",
               "flowNodeRefs": [
                 "session-start",
                 "inspect",
+                "warehouse-approval",
                 "choose-remedy",
                 "refund",
                 "replacement",
-                "session-end"
+                "refund-end",
+                "replacement-end"
               ]
             }
           ]
@@ -145,6 +179,30 @@
       {
         "elementRef": "replacement",
         "assertion": "Retain the existing replacement identity unless the correction names it.",
+        "basis": "evidence",
+        "supportRefs": [
+          "session-account"
+        ]
+      },
+      {
+        "elementRef": "warehouse-approval",
+        "assertion": "The baseline contains the unsupported warehouse approval targeted for removal.",
+        "basis": "evidence",
+        "supportRefs": [
+          "session-account"
+        ]
+      },
+      {
+        "elementRef": "returns-team",
+        "assertion": "The returns team owns the supplied baseline activities.",
+        "basis": "evidence",
+        "supportRefs": [
+          "session-account"
+        ]
+      },
+      {
+        "elementRef": "refund-route",
+        "assertion": "Refund is one mutually exclusive remedy route.",
         "basis": "evidence",
         "supportRefs": [
           "session-account"

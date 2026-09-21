@@ -1,1 +1,32 @@
-<mxfile><diagram name="Return"><mxGraphModel><root><mxCell id="0"/><mxCell id="1" parent="0"/><mxCell id="2" value="Inspect returned part" vertex="1" parent="1"><mxGeometry x="80" y="80" width="160" height="60" as="geometry"/></mxCell><mxCell id="3" value="Supplier accepts?" vertex="1" parent="1"><mxGeometry x="300" y="80" width="120" height="60" as="geometry"/></mxCell><mxCell id="4" value="Send replacement" vertex="1" parent="1"><mxGeometry x="480" y="40" width="140" height="60" as="geometry"/></mxCell><mxCell id="5" value="Escalate dispute" vertex="1" parent="1"><mxGeometry x="480" y="140" width="140" height="60" as="geometry"/></mxCell><mxCell id="6" edge="1" source="2" target="3" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell><mxCell id="7" value="yes" edge="1" source="3" target="4" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell><mxCell id="8" value="no" edge="1" source="3" target="5" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell></root></mxGraphModel></diagram></mxfile>
+<mxfile>
+  <diagram name="Return authorization">
+    <mxGraphModel>
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="lane-service" value="Customer service" vertex="1" parent="1"><mxGeometry x="20" y="20" width="860" height="150" as="geometry"/></mxCell>
+        <mxCell id="lane-quality" value="Quality" vertex="1" parent="1"><mxGeometry x="20" y="170" width="860" height="150" as="geometry"/></mxCell>
+        <mxCell id="request" value="Receive return request" vertex="1" parent="lane-service"><mxGeometry x="90" y="50" width="150" height="60" as="geometry"/></mxCell>
+        <mxCell id="inspect" value="Inspect returned part" vertex="1" parent="lane-quality"><mxGeometry x="280" y="50" width="150" height="60" as="geometry"/></mxCell>
+        <mxCell id="eligible" value="Return eligible?" vertex="1" parent="lane-quality"><mxGeometry x="470" y="50" width="120" height="60" as="geometry"/></mxCell>
+        <mxCell id="remedy" value="Customer wants replacement?" vertex="1" parent="lane-service"><mxGeometry x="630" y="25" width="170" height="60" as="geometry"/></mxCell>
+        <mxCell id="reject" value="Explain rejection" vertex="1" parent="lane-service"><mxGeometry x="630" y="100" width="140" height="50" as="geometry"/></mxCell>
+        <mxCell id="replace" value="Send replacement" vertex="1" parent="lane-service"><mxGeometry x="830" y="20" width="140" height="50" as="geometry"/></mxCell>
+        <mxCell id="refund" value="Issue refund" vertex="1" parent="lane-service"><mxGeometry x="830" y="85" width="140" height="50" as="geometry"/></mxCell>
+        <mxCell id="restock" value="Restock or dispose?" vertex="1" parent="lane-quality"><mxGeometry x="630" y="55" width="150" height="60" as="geometry"/></mxCell>
+        <mxCell id="dispose" value="Dispose part" vertex="1" parent="lane-quality"><mxGeometry x="830" y="35" width="120" height="50" as="geometry"/></mxCell>
+        <mxCell id="stock" value="Return to stock" vertex="1" parent="lane-quality"><mxGeometry x="830" y="100" width="120" height="50" as="geometry"/></mxCell>
+        <mxCell id="f1" edge="1" source="request" target="inspect" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f2" edge="1" source="inspect" target="eligible" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f3" value="yes" edge="1" source="eligible" target="remedy" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f4" value="no" edge="1" source="eligible" target="reject" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f5" value="yes" edge="1" source="remedy" target="replace" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f6" value="no" edge="1" source="remedy" target="refund" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f7" value="after inspection" edge="1" source="inspect" target="restock" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f8" value="damaged" edge="1" source="restock" target="dispose" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f9" value="resalable" edge="1" source="restock" target="stock" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="ambiguity" value="Unresolved: does inventory disposition wait for the customer remedy?" vertex="1" parent="1"><mxGeometry x="450" y="335" width="390" height="40" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

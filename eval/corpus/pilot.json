@@ -1,5 +1,5 @@
 {
-  "corpusVersion": "1.0.0",
+  "corpusVersion": "2.0.0",
   "title": "OpenBPMN evidence-grounded pilot corpus",
   "familyCount": 24,
   "taskAllocation": {
@@ -128,6 +128,7 @@
     }
   ],
   "smokeCampaign": "runs/smoke-campaign.json",
+  "reliabilityCampaign": "runs/reliability-campaign.json",
   "technicalFixturesExcludedFromFamilyCount": [
     "../composition/manifest.json",
     "../compatibility/analysis/manifest.json"

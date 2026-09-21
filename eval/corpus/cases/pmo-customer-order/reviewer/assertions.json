@@ -1,5 +1,5 @@
 {
-  "reviewVersion": "1.0.0",
+  "reviewVersion": "2.0.0",
   "familyId": "pmo-customer-order",
   "canary": "reviewer-only-canary-a2fca6b9f50dd24e",
   "authoredIndependentlyOfCandidate": true,
@@ -62,16 +62,16 @@
     },
     {
       "id": "pmo-customer-order.assertion.3",
-      "claim": "an internal quote approver exists",
+      "claim": "customer approval is treated as belonging to an unknown approver",
       "disposition": "forbidden",
       "severity": "critical",
       "dimension": "behavior",
-      "epistemicStatus": "unknown",
+      "epistemicStatus": "established",
       "evidence": [
         {
           "sourceId": "pmo-customer-order.source.1",
           "locator": "line 4",
-          "stance": "does-not-support",
+          "stance": "contradicts",
           "effectiveDate": null,
           "entityScope": "process owner",
           "caseScope": "Customer inquiry to confirmed order"
@@ -157,5 +157,11 @@
   "acceptableAlternatives": [
     "Sales staff and customer support may be separate lanes or one named responsibility group."
   ],
-  "observedResults": []
+  "observedResults": [],
+  "expectationReview": {
+    "status": "completed",
+    "method": "independent-agent",
+    "scope": "Source passages, scope, assertions, alternatives, output locations, and coverage tags.",
+    "adjudication": "proposed-not-expert"
+  }
 }

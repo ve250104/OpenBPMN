@@ -1,5 +1,5 @@
 {
-  "caseVersion": "1.0.0",
+  "caseVersion": "2.0.0",
   "familyId": "expense-reimbursement",
   "caseId": "expense-reimbursement.base",
   "title": "Expense reimbursement",
@@ -11,7 +11,7 @@
   "knownRegression": true,
   "difficultyTags": [
     "adversarial",
-    "single-source"
+    "multi-source"
   ],
   "coverage": {
     "cross-lane-routing": [
@@ -30,13 +30,33 @@
       ]
     },
     "clarificationAnswers": [],
-    "correctionTurns": []
+    "correctionTurns": [
+      "Later correction: rename the line-manager activity to Validate business purpose, retain the Accounts Payable payment after approval, and do not replace it with a Procurement notification."
+    ]
   },
   "applicability": {
     "status": "supported",
     "capability": "source-driven-modeling-session",
     "reason": "Within the current declared public boundary.",
     "fixedBeforeExecution": true
+  },
+  "correctionContract": {
+    "baselineRequired": true,
+    "mutableElementIds": [
+      "Approve"
+    ],
+    "removableElementIds": [],
+    "allowedNewElements": [],
+    "allowedElementChanges": [
+      {
+        "id": "Approve",
+        "field": "name",
+        "from": "Approve business purpose",
+        "to": "Validate business purpose"
+      }
+    ],
+    "allowedFlowChanges": [],
+    "allowedNewFlows": []
   },
   "sourceArtifacts": [
     {
@@ -61,6 +81,54 @@
       },
       "transformationHistory": [
         "Authored directly in the declared format."
+      ]
+    },
+    {
+      "id": "expense-reimbursement.source.2",
+      "path": "inputs/interviews.txt",
+      "mediaType": "text/plain",
+      "sha256": "d740276192c82d63eb404eb2dd44f94fb1c70a54183994743a3d73dbe0956f17",
+      "role": "evidence",
+      "viewpoint": "employee and line manager",
+      "provenance": {
+        "classification": "synthetic-fiction",
+        "sourceFamily": "OpenBPMN evaluation corpus",
+        "sourceVersion": "2.0.0",
+        "originalUrl": null,
+        "authorshipRecord": "Authored for OpenBPMN issue #45; not client or operational material.",
+        "retrievedAt": "2026-09-21",
+        "rights": {
+          "license": "MIT",
+          "licenseUrl": "https://opensource.org/license/mit",
+          "attribution": "OpenBPMN contributors"
+        }
+      },
+      "transformationHistory": [
+        "Authored directly in the declared format as a richer related case pack."
+      ]
+    },
+    {
+      "id": "expense-reimbursement.source.3",
+      "path": "inputs/policy.txt",
+      "mediaType": "text/plain",
+      "sha256": "532e85832d112eea49baf77d3c3e8530eaa8f32b2b8d835a0d20bb75f91fcb0d",
+      "role": "evidence",
+      "viewpoint": "process owner",
+      "provenance": {
+        "classification": "synthetic-fiction",
+        "sourceFamily": "OpenBPMN evaluation corpus",
+        "sourceVersion": "2.0.0",
+        "originalUrl": null,
+        "authorshipRecord": "Authored for OpenBPMN issue #45; not client or operational material.",
+        "retrievedAt": "2026-09-21",
+        "rights": {
+          "license": "MIT",
+          "licenseUrl": "https://opensource.org/license/mit",
+          "attribution": "OpenBPMN contributors"
+        }
+      },
+      "transformationHistory": [
+        "Authored directly in the declared format as a richer related case pack."
       ]
     }
   ],

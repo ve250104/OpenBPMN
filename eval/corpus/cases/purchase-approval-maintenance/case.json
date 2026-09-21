@@ -1,5 +1,5 @@
 {
-  "caseVersion": "1.0.0",
+  "caseVersion": "2.0.0",
   "familyId": "purchase-approval-maintenance",
   "caseId": "purchase-approval-maintenance.base",
   "title": "Purchase approval correction",
@@ -40,12 +40,53 @@
     "reason": "Within the current declared public boundary.",
     "fixedBeforeExecution": true
   },
+  "correctionContract": {
+    "baselineRequired": true,
+    "mutableElementIds": ["approval-threshold", "approval-required", "below-threshold", "prepare-po"],
+    "removableElementIds": [],
+    "allowedNewElements": [],
+    "allowedElementChanges": [
+      {
+        "id": "approval-threshold",
+        "field": "name",
+        "from": "At least EUR 5,000?",
+        "to": "At least EUR 7,500?"
+      },
+      {
+        "id": "prepare-po",
+        "field": "name",
+        "from": "Create purchase order",
+        "to": "Prepare purchase order"
+      }
+    ],
+    "allowedFlowChanges": [
+      {
+        "id": "approval-required",
+        "field": "name",
+        "from": "EUR 5,000 or more",
+        "to": "EUR 7,500 or more"
+      },
+      {
+        "id": "approval-required",
+        "field": "condition",
+        "from": "amount >= 5000",
+        "to": "amount >= 7500"
+      },
+      {
+        "id": "below-threshold",
+        "field": "name",
+        "from": "Below EUR 5,000",
+        "to": "Below EUR 7,500"
+      }
+    ],
+    "allowedNewFlows": []
+  },
   "sourceArtifacts": [
     {
       "id": "purchase-approval-maintenance.source.1",
       "path": "inputs/handoff.json",
       "mediaType": "application/json",
-      "sha256": "4b63a5d221b5b9ff769478380f442869993094ad8cc7ec939350674093a2ff84",
+      "sha256": "d473d0e8155a6fe03a62e6a9ff87c17783393acf327af78695f50e481060534d",
       "role": "evidence",
       "viewpoint": "session owner",
       "provenance": {
@@ -81,7 +122,7 @@
           "id": "purchase-approval-maintenance.variant.wording-only.source.1",
           "path": "variants/wording-only/handoff.json",
           "mediaType": "application/json",
-          "sha256": "4fe5e150facf87046095a51d05d96194e6930171348aa654b95eb0a0d8b39d5b",
+          "sha256": "1d5474d6ed063d0ec4d7cc111376aba78218d3c924761c223a6184f1d364a3b4",
           "role": "evidence",
           "viewpoint": "session owner",
           "provenance": {
@@ -104,7 +145,9 @@
       ],
       "stableAssertionIds": [
         "purchase-approval-maintenance.assertion.1",
-        "purchase-approval-maintenance.assertion.2"
+        "purchase-approval-maintenance.assertion.2",
+        "purchase-approval-maintenance.assertion.3",
+        "purchase-approval-maintenance.assertion.4"
       ],
       "changedAssertionIds": []
     }
