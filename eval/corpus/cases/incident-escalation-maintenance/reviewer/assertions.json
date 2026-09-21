@@ -1,0 +1,139 @@
+{
+  "reviewVersion": "1.0.0",
+  "familyId": "incident-escalation-maintenance",
+  "canary": "reviewer-only-canary-bf23be5a82c401cb",
+  "authoredIndependentlyOfCandidate": true,
+  "assertions": [
+    {
+      "id": "incident-escalation-maintenance.assertion.1",
+      "claim": "the interval changes from PT4H to PT3H",
+      "disposition": "required",
+      "severity": "critical",
+      "dimension": "evidenceFidelity",
+      "epistemicStatus": "established",
+      "evidence": [
+        {
+          "sourceId": "incident-escalation-maintenance.source.1",
+          "locator": "correction",
+          "stance": "supports",
+          "effectiveDate": null,
+          "entityScope": "session owner",
+          "caseScope": "Incident escalation correction"
+        }
+      ],
+      "outputLocations": [
+        "BPMN semantics",
+        "SVG preview",
+        "Quality Report",
+        "final delivery claims"
+      ],
+      "evaluation": {
+        "kind": "agent",
+        "instructions": "Inspect the cited source and externally observable candidate artifacts; do not infer from candidate plausibility."
+      }
+    },
+    {
+      "id": "incident-escalation-maintenance.assertion.2",
+      "claim": "the escalation-clock identity is retained",
+      "disposition": "required",
+      "severity": "critical",
+      "dimension": "coverage",
+      "epistemicStatus": "established",
+      "evidence": [
+        {
+          "sourceId": "incident-escalation-maintenance.source.1",
+          "locator": "boundaryEventId",
+          "stance": "supports",
+          "effectiveDate": null,
+          "entityScope": "session owner",
+          "caseScope": "Incident escalation correction"
+        }
+      ],
+      "outputLocations": [
+        "BPMN semantics",
+        "SVG preview",
+        "Quality Report",
+        "final delivery claims"
+      ],
+      "evaluation": {
+        "kind": "agent",
+        "instructions": "Inspect the cited source and externally observable candidate artifacts; do not infer from candidate plausibility."
+      }
+    }
+  ],
+  "variantAssertions": [
+    {
+      "variantId": "three-to-two-hours",
+      "assertions": [
+        {
+          "id": "incident-escalation-maintenance.assertion.1",
+          "claim": "the interval changes from PT4H to PT2H",
+          "disposition": "required",
+          "severity": "critical",
+          "dimension": "evidenceFidelity",
+          "epistemicStatus": "established",
+          "evidence": [
+            {
+              "sourceId": "incident-escalation-maintenance.variant.three-to-two-hours.source.1",
+              "locator": "correction",
+              "stance": "supports",
+              "effectiveDate": null,
+              "entityScope": "incident escalation timer",
+              "caseScope": "targeted correction variant"
+            }
+          ],
+          "outputLocations": [
+            "BPMN semantics",
+            "SVG preview",
+            "Quality Report",
+            "final delivery claims"
+          ],
+          "evaluation": {
+            "kind": "agent",
+            "instructions": "Inspect the cited source and externally observable candidate artifacts; do not infer from candidate plausibility."
+          }
+        }
+      ]
+    }
+  ],
+  "reviewRubric": {
+    "version": "1.0.0",
+    "criteria": [
+      {
+        "id": "comprehension",
+        "question": "Can a reviewer identify ownership, branching, and completion without author assistance?",
+        "scale": [
+          "clear",
+          "partly clear",
+          "unclear"
+        ],
+        "citationRequired": true
+      },
+      {
+        "id": "ambiguity",
+        "question": "Are material unknowns and competing interpretations visible rather than silently resolved?",
+        "scale": [
+          "explicit",
+          "partly explicit",
+          "hidden"
+        ],
+        "citationRequired": true
+      },
+      {
+        "id": "correction-effort",
+        "question": "How much measured reviewer effort was required to reach an acceptable correction?",
+        "scale": [
+          "no correction",
+          "minor correction",
+          "major correction",
+          "not measured"
+        ],
+        "citationRequired": true
+      }
+    ]
+  },
+  "acceptableAlternatives": [
+    "Any BPMN topology is acceptable when it preserves every assertion and does not add forbidden meaning."
+  ],
+  "observedResults": []
+}

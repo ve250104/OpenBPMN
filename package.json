@@ -40,7 +40,8 @@
     "test:package": "node scripts/package-archives.mjs && node scripts/test-package.mjs",
     "package:platform": "node scripts/package-platform.mjs",
     "test:platform-package": "node scripts/test-platform-package.mjs",
-    "test:installation": "node scripts/test-installation.mjs"
+    "test:installation": "node scripts/test-installation.mjs",
+    "eval:corpus": "node eval/corpus/run.mjs"
   },
   "dependencies": {
     "ajv": "8.18.0",

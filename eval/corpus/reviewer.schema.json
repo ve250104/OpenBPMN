@@ -1,0 +1,189 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:openbpmn:evaluation:reviewer:1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "reviewVersion": { "const": "1.0.0" },
+    "familyId": { "$ref": "#/$defs/id" },
+    "canary": { "type": "string", "pattern": "^reviewer-only-canary-[a-f0-9]{16}$" },
+    "authoredIndependentlyOfCandidate": { "const": true },
+    "assertions": {
+      "type": "array",
+      "minItems": 2,
+      "items": { "$ref": "#/$defs/assertion" }
+    },
+    "variantAssertions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "variantId": { "$ref": "#/$defs/id" },
+          "assertions": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "$ref": "#/$defs/assertion" }
+          }
+        },
+        "required": ["variantId", "assertions"]
+      }
+    },
+    "reviewRubric": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "version": { "const": "1.0.0" },
+        "criteria": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": { "enum": ["comprehension", "ambiguity", "correction-effort"] },
+              "question": { "$ref": "#/$defs/text" },
+              "scale": {
+                "type": "array",
+                "minItems": 2,
+                "uniqueItems": true,
+                "items": { "$ref": "#/$defs/text" }
+              },
+              "citationRequired": { "const": true }
+            },
+            "required": ["id", "question", "scale", "citationRequired"]
+          }
+        }
+      },
+      "required": ["version", "criteria"]
+    },
+    "acceptableAlternatives": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/text" }
+    },
+    "observedResults": { "type": "array", "maxItems": 0 },
+    "referenceArtifacts": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/referenceArtifact" }
+    }
+  },
+  "required": [
+    "reviewVersion",
+    "familyId",
+    "canary",
+    "authoredIndependentlyOfCandidate",
+    "assertions",
+    "variantAssertions",
+    "reviewRubric",
+    "acceptableAlternatives",
+    "observedResults"
+  ],
+  "$defs": {
+    "id": { "type": "string", "minLength": 1, "maxLength": 200, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*$" },
+    "text": { "type": "string", "minLength": 1, "maxLength": 8000 },
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sourceId": { "$ref": "#/$defs/id" },
+        "locator": { "$ref": "#/$defs/text" },
+        "stance": { "enum": ["supports", "contradicts", "does-not-support"] },
+        "effectiveDate": {
+          "anyOf": [{ "type": "null" }, { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" }]
+        },
+        "entityScope": { "$ref": "#/$defs/text" },
+        "caseScope": { "$ref": "#/$defs/text" }
+      },
+      "required": ["sourceId", "locator", "stance", "effectiveDate", "entityScope", "caseScope"]
+    },
+    "matcher": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "enum": ["element", "sequence", "path", "di-label"] },
+        "name": { "type": "string" },
+        "nameMode": { "enum": ["equals", "includes"] },
+        "type": { "type": "string" },
+        "lane": { "type": "string" },
+        "source": { "type": "string" },
+        "target": { "type": "string" },
+        "condition": { "type": "string" },
+        "from": { "type": "string" },
+        "to": { "type": "string" },
+        "sequenceName": { "type": "string" },
+        "expect": { "enum": ["present", "absent"] }
+      },
+      "required": ["kind", "expect"]
+    },
+    "evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "enum": ["automated", "agent", "human"] },
+        "code": { "$ref": "#/$defs/id" },
+        "matcher": { "$ref": "#/$defs/matcher" },
+        "instructions": { "$ref": "#/$defs/text" }
+      },
+      "required": ["kind"]
+    },
+    "assertion": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "claim": { "$ref": "#/$defs/text" },
+        "disposition": { "enum": ["required", "forbidden", "unresolved", "permitted-scope-choice"] },
+        "severity": { "enum": ["critical", "major", "minor"] },
+        "dimension": {
+          "enum": [
+            "evidenceFidelity",
+            "coverage",
+            "behavior",
+            "representation",
+            "technicalValidity",
+            "readability",
+            "interaction",
+            "downstreamUsability"
+          ]
+        },
+        "epistemicStatus": { "enum": ["established", "disputed", "suggested", "unknown"] },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/evidence" }
+        },
+        "outputLocations": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/text" }
+        },
+        "evaluation": { "$ref": "#/$defs/evaluation" }
+      },
+      "required": [
+        "id",
+        "claim",
+        "disposition",
+        "severity",
+        "dimension",
+        "epistemicStatus",
+        "evidence",
+        "outputLocations",
+        "evaluation"
+      ]
+    },
+    "referenceArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "mediaType": { "$ref": "#/$defs/text" },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      },
+      "required": ["path", "mediaType", "sha256"]
+    }
+  }
+}

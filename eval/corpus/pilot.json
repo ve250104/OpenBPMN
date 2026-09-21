@@ -1,0 +1,135 @@
+{
+  "corpusVersion": "1.0.0",
+  "title": "OpenBPMN evidence-grounded pilot corpus",
+  "familyCount": 24,
+  "taskAllocation": {
+    "description": 6,
+    "discovery": 8,
+    "legacy": 6,
+    "maintenance": 4
+  },
+  "coverage": {
+    "alternatives": "Alternative paths and outcomes",
+    "concurrency": "Concurrent work and synchronization",
+    "retries": "Retries or rework",
+    "cancellation-escalation-timeout": "Cancellation, escalation, or timeout",
+    "participant-handoffs": "Participant handoffs",
+    "incomplete-continuations": "Incomplete continuation evidence",
+    "case-vs-batch": "Case-level versus portfolio or batch scope",
+    "long-labels": "Long labels and readable association",
+    "cross-lane-routing": "Cross-lane routing",
+    "nested-detail-views": "Nested or detail views",
+    "estimated-vs-mandatory-thresholds": "Estimated versus mandatory thresholds",
+    "business-vs-elapsed-time": "Business versus elapsed time",
+    "contradictory-ownership": "Contradictory ownership evidence",
+    "policy-practice-disagreement": "Policy and practice disagreement",
+    "unsupported-inference": "Unsupported responsibility, receipt, or ordering inference"
+  },
+  "publicSourceRequirements": {
+    "minimumFamilies": 4,
+    "minimumCollections": 2
+  },
+  "cases": [
+    {
+      "familyId": "pmo-customer-order",
+      "case": "cases/pmo-customer-order/case.json"
+    },
+    {
+      "familyId": "pmo-inventory-restock",
+      "case": "cases/pmo-inventory-restock/case.json"
+    },
+    {
+      "familyId": "flowbench-incident-routing",
+      "case": "cases/flowbench-incident-routing/case.json"
+    },
+    {
+      "familyId": "flowbench-account-filing",
+      "case": "cases/flowbench-account-filing/case.json"
+    },
+    {
+      "familyId": "permit-renewal",
+      "case": "cases/permit-renewal/case.json"
+    },
+    {
+      "familyId": "expense-reimbursement",
+      "case": "cases/expense-reimbursement/case.json"
+    },
+    {
+      "familyId": "automotive-ar-discovery",
+      "case": "cases/automotive-ar-discovery/case.json"
+    },
+    {
+      "familyId": "supplier-onboarding-discovery",
+      "case": "cases/supplier-onboarding-discovery/case.json"
+    },
+    {
+      "familyId": "service-incident-discovery",
+      "case": "cases/service-incident-discovery/case.json"
+    },
+    {
+      "familyId": "grant-disbursement-discovery",
+      "case": "cases/grant-disbursement-discovery/case.json"
+    },
+    {
+      "familyId": "clinic-discharge-discovery",
+      "case": "cases/clinic-discharge-discovery/case.json"
+    },
+    {
+      "familyId": "retail-returns-discovery",
+      "case": "cases/retail-returns-discovery/case.json"
+    },
+    {
+      "familyId": "university-access-discovery",
+      "case": "cases/university-access-discovery/case.json"
+    },
+    {
+      "familyId": "contract-renewal-discovery",
+      "case": "cases/contract-renewal-discovery/case.json"
+    },
+    {
+      "familyId": "structured-bpmn-preservation",
+      "case": "cases/structured-bpmn-preservation/case.json"
+    },
+    {
+      "familyId": "editable-flowchart-translation",
+      "case": "cases/editable-flowchart-translation/case.json"
+    },
+    {
+      "familyId": "vector-pdf-preservation",
+      "case": "cases/vector-pdf-preservation/case.json"
+    },
+    {
+      "familyId": "clean-raster-bpmn",
+      "case": "cases/clean-raster-bpmn/case.json"
+    },
+    {
+      "familyId": "ambiguous-swimlane-diagram",
+      "case": "cases/ambiguous-swimlane-diagram/case.json"
+    },
+    {
+      "familyId": "degraded-diagram-recognition",
+      "case": "cases/degraded-diagram-recognition/case.json"
+    },
+    {
+      "familyId": "purchase-approval-maintenance",
+      "case": "cases/purchase-approval-maintenance/case.json"
+    },
+    {
+      "familyId": "incident-escalation-maintenance",
+      "case": "cases/incident-escalation-maintenance/case.json"
+    },
+    {
+      "familyId": "account-closure-maintenance",
+      "case": "cases/account-closure-maintenance/case.json"
+    },
+    {
+      "familyId": "returns-authorization-maintenance",
+      "case": "cases/returns-authorization-maintenance/case.json"
+    }
+  ],
+  "smokeCampaign": "runs/smoke-campaign.json",
+  "technicalFixturesExcludedFromFamilyCount": [
+    "../composition/manifest.json",
+    "../compatibility/analysis/manifest.json"
+  ]
+}

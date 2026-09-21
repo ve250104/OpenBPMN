@@ -1,1 +1,2 @@
 assets/xsd/*.xsd -text
+eval/corpus/**/*.pdf binary

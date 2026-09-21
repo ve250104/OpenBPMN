@@ -1,0 +1,75 @@
+{
+  "caseVersion": "1.0.0",
+  "familyId": "expense-reimbursement",
+  "caseId": "expense-reimbursement.base",
+  "title": "Expense reimbursement",
+  "primaryTask": "description",
+  "evaluationLane": "sop-to-process",
+  "businessDomain": "finance",
+  "partition": "known-regression",
+  "upstreamOverlapGroup": "expense-reimbursement",
+  "knownRegression": true,
+  "difficultyTags": [
+    "adversarial",
+    "single-source"
+  ],
+  "coverage": {
+    "cross-lane-routing": [
+      "expense-reimbursement.assertion.1"
+    ],
+    "alternatives": [
+      "expense-reimbursement.assertion.1"
+    ]
+  },
+  "task": {
+    "prompt": "Model employee expense reimbursement from the supplied procedure, retaining the different owner and approver roles.",
+    "scope": {
+      "requested": "Expense reimbursement",
+      "excluded": [
+        "process improvement unless explicitly requested"
+      ]
+    },
+    "clarificationAnswers": [],
+    "correctionTurns": []
+  },
+  "applicability": {
+    "status": "supported",
+    "capability": "source-driven-modeling-session",
+    "reason": "Within the current declared public boundary.",
+    "fixedBeforeExecution": true
+  },
+  "sourceArtifacts": [
+    {
+      "id": "expense-reimbursement.source.1",
+      "path": "inputs/procedure.txt",
+      "mediaType": "text/plain",
+      "sha256": "c106190a51aa8926422a823d9608917ce21ce555f59c39da669a51c51e9d9dac",
+      "role": "evidence",
+      "viewpoint": "process owner",
+      "provenance": {
+        "classification": "synthetic-fiction",
+        "sourceFamily": "OpenBPMN evaluation corpus",
+        "sourceVersion": "1.0.0",
+        "originalUrl": null,
+        "authorshipRecord": "Authored for OpenBPMN issue #44; not client or operational material.",
+        "retrievedAt": "2026-09-21",
+        "rights": {
+          "license": "MIT",
+          "licenseUrl": "https://opensource.org/license/mit",
+          "attribution": "OpenBPMN contributors"
+        }
+      },
+      "transformationHistory": [
+        "Authored directly in the declared format."
+      ]
+    }
+  ],
+  "reviewerMaterial": "reviewer/assertions.json",
+  "variants": [],
+  "reviewStatus": {
+    "machineIntegrity": "pass-at-authored-version",
+    "independentAgentReview": "completed-for-consistency",
+    "expertAdjudication": "not_run",
+    "humanUsabilityReview": "not_run"
+  }
+}

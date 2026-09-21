@@ -1,0 +1,77 @@
+{
+  "caseVersion": "1.0.0",
+  "familyId": "returns-authorization-maintenance",
+  "caseId": "returns-authorization-maintenance.base",
+  "title": "Returns authorization correction",
+  "primaryTask": "maintenance",
+  "evaluationLane": "conversational-correction",
+  "businessDomain": "retail",
+  "partition": "held-out",
+  "upstreamOverlapGroup": "returns-authorization-maintenance",
+  "knownRegression": false,
+  "difficultyTags": [
+    "routine",
+    "single-source"
+  ],
+  "coverage": {
+    "alternatives": [
+      "returns-authorization-maintenance.assertion.1"
+    ],
+    "unsupported-inference": [
+      "returns-authorization-maintenance.assertion.1"
+    ]
+  },
+  "task": {
+    "prompt": "Remove the unsupported warehouse-approval step while preserving refund and replacement routing and unaffected identities.",
+    "scope": {
+      "requested": "Returns authorization correction",
+      "excluded": [
+        "process improvement unless explicitly requested"
+      ]
+    },
+    "clarificationAnswers": [],
+    "correctionTurns": [
+      "Remove the unsupported warehouse-approval step while preserving refund and replacement routing and unaffected identities."
+    ]
+  },
+  "applicability": {
+    "status": "supported",
+    "capability": "source-driven-modeling-session",
+    "reason": "Within the current declared public boundary.",
+    "fixedBeforeExecution": true
+  },
+  "sourceArtifacts": [
+    {
+      "id": "returns-authorization-maintenance.source.1",
+      "path": "inputs/handoff.json",
+      "mediaType": "application/json",
+      "sha256": "e04cd4a076dd6a7aad76bb8e4aef704c7e8a4314adccc81c2bb3759d3bda31c0",
+      "role": "evidence",
+      "viewpoint": "session owner",
+      "provenance": {
+        "classification": "synthetic-fiction",
+        "sourceFamily": "OpenBPMN evaluation corpus",
+        "sourceVersion": "1.0.0",
+        "originalUrl": null,
+        "authorshipRecord": "Authored for OpenBPMN issue #44; not client or operational material.",
+        "retrievedAt": "2026-09-21",
+        "rights": {
+          "license": "MIT",
+          "licenseUrl": "https://opensource.org/license/mit",
+          "attribution": "OpenBPMN contributors"
+        }
+      },
+      "transformationHistory": [
+        "Authored directly in the declared format."
+      ]
+    }
+  ],
+  "reviewerMaterial": "reviewer/assertions.json",
+  "variants": [],
+  "reviewStatus": {
+    "machineIntegrity": "pass-at-authored-version",
+    "independentAgentReview": "completed-for-consistency",
+    "expertAdjudication": "not_run",
+    "humanUsabilityReview": "not_run"
+  }
+}

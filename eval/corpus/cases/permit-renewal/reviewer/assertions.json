@@ -1,0 +1,105 @@
+{
+  "reviewVersion": "1.0.0",
+  "familyId": "permit-renewal",
+  "canary": "reviewer-only-canary-60e23be5ca1a35ac",
+  "authoredIndependentlyOfCandidate": true,
+  "assertions": [
+    {
+      "id": "permit-renewal.assertion.1",
+      "claim": "five business days is a review target, not an elapsed timer definition",
+      "disposition": "required",
+      "severity": "critical",
+      "dimension": "evidenceFidelity",
+      "epistemicStatus": "established",
+      "evidence": [
+        {
+          "sourceId": "permit-renewal.source.1",
+          "locator": "sentences 3-4",
+          "stance": "supports",
+          "effectiveDate": null,
+          "entityScope": "process owner",
+          "caseScope": "Permit renewal intake"
+        }
+      ],
+      "outputLocations": [
+        "BPMN semantics",
+        "SVG preview",
+        "Quality Report",
+        "final delivery claims"
+      ],
+      "evaluation": {
+        "kind": "agent",
+        "instructions": "Inspect the cited source and externally observable candidate artifacts; do not infer from candidate plausibility."
+      }
+    },
+    {
+      "id": "permit-renewal.assertion.2",
+      "claim": "30 calendar days applies only after a returned incomplete request",
+      "disposition": "required",
+      "severity": "critical",
+      "dimension": "coverage",
+      "epistemicStatus": "established",
+      "evidence": [
+        {
+          "sourceId": "permit-renewal.source.1",
+          "locator": "sentence 4",
+          "stance": "supports",
+          "effectiveDate": null,
+          "entityScope": "process owner",
+          "caseScope": "Permit renewal intake"
+        }
+      ],
+      "outputLocations": [
+        "BPMN semantics",
+        "SVG preview",
+        "Quality Report",
+        "final delivery claims"
+      ],
+      "evaluation": {
+        "kind": "agent",
+        "instructions": "Inspect the cited source and externally observable candidate artifacts; do not infer from candidate plausibility."
+      }
+    }
+  ],
+  "variantAssertions": [],
+  "reviewRubric": {
+    "version": "1.0.0",
+    "criteria": [
+      {
+        "id": "comprehension",
+        "question": "Can a reviewer identify ownership, branching, and completion without author assistance?",
+        "scale": [
+          "clear",
+          "partly clear",
+          "unclear"
+        ],
+        "citationRequired": true
+      },
+      {
+        "id": "ambiguity",
+        "question": "Are material unknowns and competing interpretations visible rather than silently resolved?",
+        "scale": [
+          "explicit",
+          "partly explicit",
+          "hidden"
+        ],
+        "citationRequired": true
+      },
+      {
+        "id": "correction-effort",
+        "question": "How much measured reviewer effort was required to reach an acceptable correction?",
+        "scale": [
+          "no correction",
+          "minor correction",
+          "major correction",
+          "not measured"
+        ],
+        "citationRequired": true
+      }
+    ]
+  },
+  "acceptableAlternatives": [
+    "Any BPMN topology is acceptable when it preserves every assertion and does not add forbidden meaning."
+  ],
+  "observedResults": []
+}

@@ -1,0 +1,1 @@
+South analyst: We invoice on shipment. Logistics confirms quantity disputes. Month-end AR sends an accrual extract to General Ledger.

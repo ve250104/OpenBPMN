@@ -1,0 +1,1 @@
+Monitor stock continuously. Reorder when available stock is 20 units or fewer. Procurement orders from a supplier. Inspect received stock and update inventory.

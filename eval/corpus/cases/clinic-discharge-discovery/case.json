@@ -1,0 +1,99 @@
+{
+  "caseVersion": "1.0.0",
+  "familyId": "clinic-discharge-discovery",
+  "caseId": "clinic-discharge-discovery.base",
+  "title": "Clinic discharge discovery",
+  "primaryTask": "discovery",
+  "evaluationLane": "mixed-evidence-discovery",
+  "businessDomain": "healthcare",
+  "partition": "held-out",
+  "upstreamOverlapGroup": "clinic-discharge-discovery",
+  "knownRegression": false,
+  "difficultyTags": [
+    "challenging",
+    "multi-source"
+  ],
+  "coverage": {
+    "participant-handoffs": [
+      "clinic-discharge-discovery.assertion.1"
+    ],
+    "incomplete-continuations": [
+      "clinic-discharge-discovery.assertion.1"
+    ]
+  },
+  "task": {
+    "prompt": "Discover discharge preparation. Show what is known, and leave the missing transport continuation unresolved.",
+    "scope": {
+      "requested": "Clinic discharge discovery",
+      "excluded": [
+        "process improvement unless explicitly requested"
+      ]
+    },
+    "clarificationAnswers": [],
+    "correctionTurns": []
+  },
+  "applicability": {
+    "status": "supported",
+    "capability": "source-driven-modeling-session",
+    "reason": "Within the current declared public boundary.",
+    "fixedBeforeExecution": true
+  },
+  "sourceArtifacts": [
+    {
+      "id": "clinic-discharge-discovery.source.1",
+      "path": "inputs/shift-handover.txt",
+      "mediaType": "text/plain",
+      "sha256": "d67d3d592acb594a98917604a678f8364fa4955b2503c6b6c7426cabaa97e4c6",
+      "role": "evidence",
+      "viewpoint": "ward nurse",
+      "provenance": {
+        "classification": "synthetic-fiction",
+        "sourceFamily": "OpenBPMN evaluation corpus",
+        "sourceVersion": "1.0.0",
+        "originalUrl": null,
+        "authorshipRecord": "Authored for OpenBPMN issue #44; not client or operational material.",
+        "retrievedAt": "2026-09-21",
+        "rights": {
+          "license": "MIT",
+          "licenseUrl": "https://opensource.org/license/mit",
+          "attribution": "OpenBPMN contributors"
+        }
+      },
+      "transformationHistory": [
+        "Authored directly in the declared format."
+      ]
+    },
+    {
+      "id": "clinic-discharge-discovery.source.2",
+      "path": "inputs/discharge-policy.txt",
+      "mediaType": "text/plain",
+      "sha256": "9feabe97ddd6a1d1b37bd75712f1bd721dbd57672e50e8261ef81595c44f50d1",
+      "role": "evidence",
+      "viewpoint": "clinical governance",
+      "provenance": {
+        "classification": "synthetic-fiction",
+        "sourceFamily": "OpenBPMN evaluation corpus",
+        "sourceVersion": "1.0.0",
+        "originalUrl": null,
+        "authorshipRecord": "Authored for OpenBPMN issue #44; not client or operational material.",
+        "retrievedAt": "2026-09-21",
+        "rights": {
+          "license": "MIT",
+          "licenseUrl": "https://opensource.org/license/mit",
+          "attribution": "OpenBPMN contributors"
+        }
+      },
+      "transformationHistory": [
+        "Authored directly in the declared format."
+      ]
+    }
+  ],
+  "reviewerMaterial": "reviewer/assertions.json",
+  "variants": [],
+  "reviewStatus": {
+    "machineIntegrity": "pass-at-authored-version",
+    "independentAgentReview": "completed-for-consistency",
+    "expertAdjudication": "not_run",
+    "humanUsabilityReview": "not_run"
+  }
+}

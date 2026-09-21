@@ -1,0 +1,1 @@
+Finance verifies bank details while Programs verifies milestone evidence. Both checks are required before release. The policy names the CFO as release approver.

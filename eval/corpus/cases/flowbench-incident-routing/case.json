@@ -1,0 +1,74 @@
+{
+  "caseVersion": "1.0.0",
+  "familyId": "flowbench-incident-routing",
+  "caseId": "flowbench-incident-routing.base",
+  "title": "Impact-based incident routing",
+  "primaryTask": "description",
+  "evaluationLane": "text-to-process",
+  "businessDomain": "information-technology",
+  "partition": "development",
+  "upstreamOverlapGroup": "flowbench-incident-routing",
+  "knownRegression": false,
+  "difficultyTags": [
+    "routine",
+    "single-source"
+  ],
+  "coverage": {
+    "alternatives": [
+      "flowbench-incident-routing.assertion.1"
+    ],
+    "participant-handoffs": [
+      "flowbench-incident-routing.assertion.1"
+    ]
+  },
+  "task": {
+    "prompt": "Translate the supplied enterprise-workflow utterance into BPMN while keeping the high-impact condition exact.",
+    "scope": {
+      "requested": "Impact-based incident routing",
+      "excluded": [
+        "process improvement unless explicitly requested"
+      ]
+    },
+    "clarificationAnswers": [],
+    "correctionTurns": []
+  },
+  "applicability": {
+    "status": "supported",
+    "capability": "source-driven-modeling-session",
+    "reason": "Within the current declared public boundary.",
+    "fixedBeforeExecution": true
+  },
+  "sourceArtifacts": [
+    {
+      "id": "flowbench-incident-routing.source.1",
+      "path": "inputs/utterance.txt",
+      "mediaType": "text/plain",
+      "sha256": "8c0c61ff1887440b535f455968d52b13edc69b983edc06e5e2de83c63efc255b",
+      "role": "evidence",
+      "viewpoint": "process owner",
+      "provenance": {
+        "classification": "public-academic",
+        "sourceFamily": "IBM FLOW-BENCH",
+        "sourceVersion": "git commit 2e4c1e3a128d27b905ab98baa7b13fe4433c9ce7",
+        "originalUrl": "https://github.com/IBM/flow-bench",
+        "retrievedAt": "2026-09-21",
+        "rights": {
+          "license": "Apache-2.0",
+          "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0",
+          "attribution": "IBM FLOW-BENCH contributors"
+        }
+      },
+      "transformationHistory": [
+        "Extracted tests[uid=2].input.utterance from data/conditional_ootb.yaml without semantic edits."
+      ]
+    }
+  ],
+  "reviewerMaterial": "reviewer/assertions.json",
+  "variants": [],
+  "reviewStatus": {
+    "machineIntegrity": "pass-at-authored-version",
+    "independentAgentReview": "completed-for-consistency",
+    "expertAdjudication": "not_run",
+    "humanUsabilityReview": "not_run"
+  }
+}

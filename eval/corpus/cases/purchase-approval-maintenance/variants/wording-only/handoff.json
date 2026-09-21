@@ -1,0 +1,155 @@
+{
+  "handoffVersion": "1.0.0",
+  "lifecycleStatus": "Synthetic correction fixture; human correction requested but not yet applied.",
+  "reviewNotes": [
+    "Use 7,500 EUR or more; call the creation step Prepare purchase order.",
+    "Session facts: {\"process\":\"purchase approval\",\"identities\":[\"check\",\"budget-approval\",\"finance-approval\",\"prepare-po\"],\"threshold\":\"EUR 5,000 inclusive\",\"correction\":\"Use 7,500 EUR or more; call the creation step Prepare purchase order.\"}"
+  ],
+  "request": {
+    "schemaVersion": "1.0.0",
+    "profileVersion": "1.0.0",
+    "model": {
+      "key": "purchase-approval-model",
+      "name": "purchase approval",
+      "primaryRef": "purchase-approval",
+      "processes": [
+        {
+          "key": "purchase-approval",
+          "name": "purchase approval",
+          "nodes": [
+            {
+              "key": "session-start",
+              "type": "startEvent",
+              "containerRef": "purchase-approval",
+              "name": "Existing session started",
+              "event": {
+                "kind": "none"
+              }
+            },
+            {
+              "key": "check",
+              "type": "task",
+              "containerRef": "purchase-approval",
+              "name": "check"
+            },
+            {
+              "key": "budget-approval",
+              "type": "task",
+              "containerRef": "purchase-approval",
+              "name": "budget approval"
+            },
+            {
+              "key": "finance-approval",
+              "type": "task",
+              "containerRef": "purchase-approval",
+              "name": "finance approval"
+            },
+            {
+              "key": "prepare-po",
+              "type": "task",
+              "containerRef": "purchase-approval",
+              "name": "prepare po"
+            },
+            {
+              "key": "session-end",
+              "type": "endEvent",
+              "containerRef": "purchase-approval",
+              "name": "Existing modeled outcome",
+              "event": {
+                "kind": "none"
+              }
+            }
+          ],
+          "flows": [
+            {
+              "key": "session-flow-1",
+              "containerRef": "purchase-approval",
+              "sourceRef": "session-start",
+              "targetRef": "check"
+            },
+            {
+              "key": "session-flow-2",
+              "containerRef": "purchase-approval",
+              "sourceRef": "check",
+              "targetRef": "budget-approval"
+            },
+            {
+              "key": "session-flow-3",
+              "containerRef": "purchase-approval",
+              "sourceRef": "budget-approval",
+              "targetRef": "finance-approval"
+            },
+            {
+              "key": "session-flow-4",
+              "containerRef": "purchase-approval",
+              "sourceRef": "finance-approval",
+              "targetRef": "prepare-po"
+            },
+            {
+              "key": "session-flow-5",
+              "containerRef": "purchase-approval",
+              "sourceRef": "prepare-po",
+              "targetRef": "session-end"
+            }
+          ],
+          "lanes": [
+            {
+              "key": "current-owner",
+              "name": "Current modeled owner",
+              "parentRef": "purchase-approval",
+              "flowNodeRefs": [
+                "session-start",
+                "check",
+                "budget-approval",
+                "finance-approval",
+                "prepare-po",
+                "session-end"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "evidence": [
+      {
+        "key": "session-account",
+        "source": "Synthetic session account",
+        "summary": "{\"process\":\"purchase approval\",\"identities\":[\"check\",\"budget-approval\",\"finance-approval\",\"prepare-po\"],\"threshold\":\"EUR 5,000 inclusive\",\"correction\":\"Use 7,500 EUR or more; call the creation step Prepare purchase order.\"}"
+      }
+    ],
+    "links": [
+      {
+        "elementRef": "check",
+        "assertion": "Retain the existing check identity unless the correction names it.",
+        "basis": "evidence",
+        "supportRefs": [
+          "session-account"
+        ]
+      },
+      {
+        "elementRef": "budget-approval",
+        "assertion": "Retain the existing budget-approval identity unless the correction names it.",
+        "basis": "evidence",
+        "supportRefs": [
+          "session-account"
+        ]
+      },
+      {
+        "elementRef": "finance-approval",
+        "assertion": "Retain the existing finance-approval identity unless the correction names it.",
+        "basis": "evidence",
+        "supportRefs": [
+          "session-account"
+        ]
+      },
+      {
+        "elementRef": "prepare-po",
+        "assertion": "Retain the existing prepare-po identity unless the correction names it.",
+        "basis": "evidence",
+        "supportRefs": [
+          "session-account"
+        ]
+      }
+    ]
+  }
+}

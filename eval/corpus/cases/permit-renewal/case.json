@@ -1,0 +1,75 @@
+{
+  "caseVersion": "1.0.0",
+  "familyId": "permit-renewal",
+  "caseId": "permit-renewal.base",
+  "title": "Permit renewal intake",
+  "primaryTask": "description",
+  "evaluationLane": "sop-to-process",
+  "businessDomain": "public-administration",
+  "partition": "development",
+  "upstreamOverlapGroup": "permit-renewal",
+  "knownRegression": false,
+  "difficultyTags": [
+    "routine",
+    "single-source"
+  ],
+  "coverage": {
+    "long-labels": [
+      "permit-renewal.assertion.1"
+    ],
+    "cancellation-escalation-timeout": [
+      "permit-renewal.assertion.1"
+    ]
+  },
+  "task": {
+    "prompt": "Model the permit renewal SOP, keeping the 30 calendar day expiry separate from the five business day review target.",
+    "scope": {
+      "requested": "Permit renewal intake",
+      "excluded": [
+        "process improvement unless explicitly requested"
+      ]
+    },
+    "clarificationAnswers": [],
+    "correctionTurns": []
+  },
+  "applicability": {
+    "status": "supported",
+    "capability": "source-driven-modeling-session",
+    "reason": "Within the current declared public boundary.",
+    "fixedBeforeExecution": true
+  },
+  "sourceArtifacts": [
+    {
+      "id": "permit-renewal.source.1",
+      "path": "inputs/sop.txt",
+      "mediaType": "text/plain",
+      "sha256": "2071bca857c8c10f38466cac148aca9794c45f455acfed57be0ee5eaab98765a",
+      "role": "evidence",
+      "viewpoint": "process owner",
+      "provenance": {
+        "classification": "synthetic-fiction",
+        "sourceFamily": "OpenBPMN evaluation corpus",
+        "sourceVersion": "1.0.0",
+        "originalUrl": null,
+        "authorshipRecord": "Authored for OpenBPMN issue #44; not client or operational material.",
+        "retrievedAt": "2026-09-21",
+        "rights": {
+          "license": "MIT",
+          "licenseUrl": "https://opensource.org/license/mit",
+          "attribution": "OpenBPMN contributors"
+        }
+      },
+      "transformationHistory": [
+        "Authored directly in the declared format."
+      ]
+    }
+  ],
+  "reviewerMaterial": "reviewer/assertions.json",
+  "variants": [],
+  "reviewStatus": {
+    "machineIntegrity": "pass-at-authored-version",
+    "independentAgentReview": "completed-for-consistency",
+    "expertAdjudication": "not_run",
+    "humanUsabilityReview": "not_run"
+  }
+}

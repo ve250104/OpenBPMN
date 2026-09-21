@@ -1,0 +1,102 @@
+{
+  "caseVersion": "1.0.0",
+  "familyId": "service-incident-discovery",
+  "caseId": "service-incident-discovery.base",
+  "title": "Service incident triage discovery",
+  "primaryTask": "discovery",
+  "evaluationLane": "mixed-evidence-discovery",
+  "businessDomain": "information-technology",
+  "partition": "held-out",
+  "upstreamOverlapGroup": "service-incident-discovery",
+  "knownRegression": false,
+  "difficultyTags": [
+    "challenging",
+    "multi-source"
+  ],
+  "coverage": {
+    "cancellation-escalation-timeout": [
+      "service-incident-discovery.assertion.1"
+    ],
+    "business-vs-elapsed-time": [
+      "service-incident-discovery.assertion.1"
+    ],
+    "retries": [
+      "service-incident-discovery.assertion.1"
+    ]
+  },
+  "task": {
+    "prompt": "Discover incident triage and escalation from the operator account and duty table. Keep unknown calendar behavior unresolved.",
+    "scope": {
+      "requested": "Service incident triage discovery",
+      "excluded": [
+        "process improvement unless explicitly requested"
+      ]
+    },
+    "clarificationAnswers": [],
+    "correctionTurns": []
+  },
+  "applicability": {
+    "status": "supported",
+    "capability": "source-driven-modeling-session",
+    "reason": "Within the current declared public boundary.",
+    "fixedBeforeExecution": true
+  },
+  "sourceArtifacts": [
+    {
+      "id": "service-incident-discovery.source.1",
+      "path": "inputs/operator-transcript.txt",
+      "mediaType": "text/plain",
+      "sha256": "ce043666bf34f61261942b6e7b1f452304b1f88e90fdf08b720860624e09cdb9",
+      "role": "evidence",
+      "viewpoint": "service desk operator",
+      "provenance": {
+        "classification": "synthetic-fiction",
+        "sourceFamily": "OpenBPMN evaluation corpus",
+        "sourceVersion": "1.0.0",
+        "originalUrl": null,
+        "authorshipRecord": "Authored for OpenBPMN issue #44; not client or operational material.",
+        "retrievedAt": "2026-09-21",
+        "rights": {
+          "license": "MIT",
+          "licenseUrl": "https://opensource.org/license/mit",
+          "attribution": "OpenBPMN contributors"
+        }
+      },
+      "transformationHistory": [
+        "Authored directly in the declared format."
+      ]
+    },
+    {
+      "id": "service-incident-discovery.source.2",
+      "path": "inputs/duty-roster.csv",
+      "mediaType": "text/csv",
+      "sha256": "096bf12a9f765d34985aa0800e7ba280f2df5c37b8eed67aa96fcf05e113ea92",
+      "role": "evidence",
+      "viewpoint": "operations roster owner",
+      "provenance": {
+        "classification": "synthetic-fiction",
+        "sourceFamily": "OpenBPMN evaluation corpus",
+        "sourceVersion": "1.0.0",
+        "originalUrl": null,
+        "authorshipRecord": "Authored for OpenBPMN issue #44; not client or operational material.",
+        "retrievedAt": "2026-09-21",
+        "rights": {
+          "license": "MIT",
+          "licenseUrl": "https://opensource.org/license/mit",
+          "attribution": "OpenBPMN contributors"
+        }
+      },
+      "transformationHistory": [
+        "Authored directly in the declared format."
+      ]
+    }
+  ],
+  "reviewerMaterial": "reviewer/assertions.json",
+  "variants": [],
+  "reviewStatus": {
+    "machineIntegrity": "pass-at-authored-version",
+    "independentAgentReview": "completed-for-consistency",
+    "expertAdjudication": "not_run",
+    "humanUsabilityReview": "not_run"
+  }
+}

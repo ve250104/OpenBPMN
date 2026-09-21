@@ -1,0 +1,155 @@
+{
+  "handoffVersion": "1.0.0",
+  "lifecycleStatus": "Synthetic correction fixture; human correction requested but not yet applied.",
+  "reviewNotes": [
+    "remove unsupported approval",
+    "Session facts: {\"process\":\"returns authorization\",\"identities\":[\"inspect\",\"choose-remedy\",\"refund\",\"replacement\"],\"unsupported\":\"warehouse approval\",\"correction\":\"remove unsupported approval\"}"
+  ],
+  "request": {
+    "schemaVersion": "1.0.0",
+    "profileVersion": "1.0.0",
+    "model": {
+      "key": "returns-authorization-model",
+      "name": "returns authorization",
+      "primaryRef": "returns-authorization",
+      "processes": [
+        {
+          "key": "returns-authorization",
+          "name": "returns authorization",
+          "nodes": [
+            {
+              "key": "session-start",
+              "type": "startEvent",
+              "containerRef": "returns-authorization",
+              "name": "Existing session started",
+              "event": {
+                "kind": "none"
+              }
+            },
+            {
+              "key": "inspect",
+              "type": "task",
+              "containerRef": "returns-authorization",
+              "name": "inspect"
+            },
+            {
+              "key": "choose-remedy",
+              "type": "task",
+              "containerRef": "returns-authorization",
+              "name": "choose remedy"
+            },
+            {
+              "key": "refund",
+              "type": "task",
+              "containerRef": "returns-authorization",
+              "name": "refund"
+            },
+            {
+              "key": "replacement",
+              "type": "task",
+              "containerRef": "returns-authorization",
+              "name": "replacement"
+            },
+            {
+              "key": "session-end",
+              "type": "endEvent",
+              "containerRef": "returns-authorization",
+              "name": "Existing modeled outcome",
+              "event": {
+                "kind": "none"
+              }
+            }
+          ],
+          "flows": [
+            {
+              "key": "session-flow-1",
+              "containerRef": "returns-authorization",
+              "sourceRef": "session-start",
+              "targetRef": "inspect"
+            },
+            {
+              "key": "session-flow-2",
+              "containerRef": "returns-authorization",
+              "sourceRef": "inspect",
+              "targetRef": "choose-remedy"
+            },
+            {
+              "key": "session-flow-3",
+              "containerRef": "returns-authorization",
+              "sourceRef": "choose-remedy",
+              "targetRef": "refund"
+            },
+            {
+              "key": "session-flow-4",
+              "containerRef": "returns-authorization",
+              "sourceRef": "refund",
+              "targetRef": "replacement"
+            },
+            {
+              "key": "session-flow-5",
+              "containerRef": "returns-authorization",
+              "sourceRef": "replacement",
+              "targetRef": "session-end"
+            }
+          ],
+          "lanes": [
+            {
+              "key": "current-owner",
+              "name": "Current modeled owner",
+              "parentRef": "returns-authorization",
+              "flowNodeRefs": [
+                "session-start",
+                "inspect",
+                "choose-remedy",
+                "refund",
+                "replacement",
+                "session-end"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "evidence": [
+      {
+        "key": "session-account",
+        "source": "Synthetic session account",
+        "summary": "{\"process\":\"returns authorization\",\"identities\":[\"inspect\",\"choose-remedy\",\"refund\",\"replacement\"],\"unsupported\":\"warehouse approval\",\"correction\":\"remove unsupported approval\"}"
+      }
+    ],
+    "links": [
+      {
+        "elementRef": "inspect",
+        "assertion": "Retain the existing inspect identity unless the correction names it.",
+        "basis": "evidence",
+        "supportRefs": [
+          "session-account"
+        ]
+      },
+      {
+        "elementRef": "choose-remedy",
+        "assertion": "Retain the existing choose-remedy identity unless the correction names it.",
+        "basis": "evidence",
+        "supportRefs": [
+          "session-account"
+        ]
+      },
+      {
+        "elementRef": "refund",
+        "assertion": "Retain the existing refund identity unless the correction names it.",
+        "basis": "evidence",
+        "supportRefs": [
+          "session-account"
+        ]
+      },
+      {
+        "elementRef": "replacement",
+        "assertion": "Retain the existing replacement identity unless the correction names it.",
+        "basis": "evidence",
+        "supportRefs": [
+          "session-account"
+        ]
+      }
+    ]
+  }
+}

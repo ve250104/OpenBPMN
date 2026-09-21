@@ -1,0 +1,2 @@
+Interviewer: What starts billing?
+North analyst: We wait for the customer self-bill, then reconcile quantity and price differences. I flag doubtful balances to General Ledger; GL decides provisions and write-offs.

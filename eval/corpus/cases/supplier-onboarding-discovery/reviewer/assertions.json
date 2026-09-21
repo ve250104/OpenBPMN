@@ -1,0 +1,139 @@
+{
+  "reviewVersion": "1.0.0",
+  "familyId": "supplier-onboarding-discovery",
+  "canary": "reviewer-only-canary-07dd1c25c5486732",
+  "authoredIndependentlyOfCandidate": true,
+  "assertions": [
+    {
+      "id": "supplier-onboarding-discovery.assertion.1",
+      "claim": "Vendor Risk decides screening and Master Data creates the record",
+      "disposition": "required",
+      "severity": "critical",
+      "dimension": "evidenceFidelity",
+      "epistemicStatus": "established",
+      "evidence": [
+        {
+          "sourceId": "supplier-onboarding-discovery.source.3",
+          "locator": "dated message",
+          "stance": "supports",
+          "effectiveDate": "2026-08-14",
+          "entityScope": "Master Data and Vendor Risk",
+          "caseScope": "supplier records created on or after the correction date"
+        }
+      ],
+      "outputLocations": [
+        "BPMN semantics",
+        "SVG preview",
+        "Quality Report",
+        "final delivery claims"
+      ],
+      "evaluation": {
+        "kind": "agent",
+        "instructions": "Inspect the cited source and externally observable candidate artifacts; do not infer from candidate plausibility."
+      }
+    },
+    {
+      "id": "supplier-onboarding-discovery.assertion.2",
+      "claim": "sending the pack establishes that Vendor Risk approved it",
+      "disposition": "forbidden",
+      "severity": "critical",
+      "dimension": "coverage",
+      "epistemicStatus": "unknown",
+      "evidence": [
+        {
+          "sourceId": "supplier-onboarding-discovery.source.1",
+          "locator": "buyer statement",
+          "stance": "does-not-support",
+          "effectiveDate": null,
+          "entityScope": "buyer and risk analyst",
+          "caseScope": "Supplier onboarding discovery"
+        }
+      ],
+      "outputLocations": [
+        "BPMN semantics",
+        "SVG preview",
+        "Quality Report",
+        "final delivery claims"
+      ],
+      "evaluation": {
+        "kind": "agent",
+        "instructions": "Inspect the cited source and externally observable candidate artifacts; do not infer from candidate plausibility."
+      }
+    }
+  ],
+  "variantAssertions": [
+    {
+      "variantId": "record-owner-changed",
+      "assertions": [
+        {
+          "id": "supplier-onboarding-discovery.assertion.1",
+          "claim": "Vendor Risk decides screening and Buyers create the record",
+          "disposition": "required",
+          "severity": "critical",
+          "dimension": "evidenceFidelity",
+          "epistemicStatus": "established",
+          "evidence": [
+            {
+              "sourceId": "supplier-onboarding-discovery.variant.record-owner-changed.source.1",
+              "locator": "dated message",
+              "stance": "supports",
+              "effectiveDate": "2026-09-18",
+              "entityScope": "Procurement buyers and Vendor Risk",
+              "caseScope": "supplier records created on or after the correction date"
+            }
+          ],
+          "outputLocations": [
+            "BPMN semantics",
+            "SVG preview",
+            "Quality Report",
+            "final delivery claims"
+          ],
+          "evaluation": {
+            "kind": "agent",
+            "instructions": "Inspect the cited source and externally observable candidate artifacts; do not infer from candidate plausibility."
+          }
+        }
+      ]
+    }
+  ],
+  "reviewRubric": {
+    "version": "1.0.0",
+    "criteria": [
+      {
+        "id": "comprehension",
+        "question": "Can a reviewer identify ownership, branching, and completion without author assistance?",
+        "scale": [
+          "clear",
+          "partly clear",
+          "unclear"
+        ],
+        "citationRequired": true
+      },
+      {
+        "id": "ambiguity",
+        "question": "Are material unknowns and competing interpretations visible rather than silently resolved?",
+        "scale": [
+          "explicit",
+          "partly explicit",
+          "hidden"
+        ],
+        "citationRequired": true
+      },
+      {
+        "id": "correction-effort",
+        "question": "How much measured reviewer effort was required to reach an acceptable correction?",
+        "scale": [
+          "no correction",
+          "minor correction",
+          "major correction",
+          "not measured"
+        ],
+        "citationRequired": true
+      }
+    ]
+  },
+  "acceptableAlternatives": [
+    "Any BPMN topology is acceptable when it preserves every assertion and does not add forbidden meaning."
+  ],
+  "observedResults": []
+}

@@ -1,0 +1,105 @@
+{
+  "reviewVersion": "1.0.0",
+  "familyId": "ambiguous-swimlane-diagram",
+  "canary": "reviewer-only-canary-cfd7e18bfac73787",
+  "authoredIndependentlyOfCandidate": true,
+  "assertions": [
+    {
+      "id": "ambiguous-swimlane-diagram.assertion.1",
+      "claim": "release ownership is ambiguous because the box crosses the lane boundary",
+      "disposition": "unresolved",
+      "severity": "critical",
+      "dimension": "evidenceFidelity",
+      "epistemicStatus": "unknown",
+      "evidence": [
+        {
+          "sourceId": "ambiguous-swimlane-diagram.source.1",
+          "locator": "Release load box",
+          "stance": "supports",
+          "effectiveDate": null,
+          "entityScope": "legacy model owner",
+          "caseScope": "Ambiguous informal swimlane diagram"
+        }
+      ],
+      "outputLocations": [
+        "BPMN semantics",
+        "SVG preview",
+        "Quality Report",
+        "final delivery claims"
+      ],
+      "evaluation": {
+        "kind": "agent",
+        "instructions": "Inspect the cited source and externally observable candidate artifacts; do not infer from candidate plausibility."
+      }
+    },
+    {
+      "id": "ambiguous-swimlane-diagram.assertion.2",
+      "claim": "vertical position alone establishes the release performer",
+      "disposition": "forbidden",
+      "severity": "critical",
+      "dimension": "coverage",
+      "epistemicStatus": "unknown",
+      "evidence": [
+        {
+          "sourceId": "ambiguous-swimlane-diagram.source.1",
+          "locator": "lane boundary",
+          "stance": "does-not-support",
+          "effectiveDate": null,
+          "entityScope": "legacy model owner",
+          "caseScope": "Ambiguous informal swimlane diagram"
+        }
+      ],
+      "outputLocations": [
+        "BPMN semantics",
+        "SVG preview",
+        "Quality Report",
+        "final delivery claims"
+      ],
+      "evaluation": {
+        "kind": "agent",
+        "instructions": "Inspect the cited source and externally observable candidate artifacts; do not infer from candidate plausibility."
+      }
+    }
+  ],
+  "variantAssertions": [],
+  "reviewRubric": {
+    "version": "1.0.0",
+    "criteria": [
+      {
+        "id": "comprehension",
+        "question": "Can a reviewer identify ownership, branching, and completion without author assistance?",
+        "scale": [
+          "clear",
+          "partly clear",
+          "unclear"
+        ],
+        "citationRequired": true
+      },
+      {
+        "id": "ambiguity",
+        "question": "Are material unknowns and competing interpretations visible rather than silently resolved?",
+        "scale": [
+          "explicit",
+          "partly explicit",
+          "hidden"
+        ],
+        "citationRequired": true
+      },
+      {
+        "id": "correction-effort",
+        "question": "How much measured reviewer effort was required to reach an acceptable correction?",
+        "scale": [
+          "no correction",
+          "minor correction",
+          "major correction",
+          "not measured"
+        ],
+        "citationRequired": true
+      }
+    ]
+  },
+  "acceptableAlternatives": [
+    "Any BPMN topology is acceptable when it preserves every assertion and does not add forbidden meaning."
+  ],
+  "observedResults": []
+}

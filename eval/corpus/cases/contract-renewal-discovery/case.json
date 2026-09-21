@@ -1,0 +1,99 @@
+{
+  "caseVersion": "1.0.0",
+  "familyId": "contract-renewal-discovery",
+  "caseId": "contract-renewal-discovery.base",
+  "title": "Contract renewal discovery",
+  "primaryTask": "discovery",
+  "evaluationLane": "mixed-evidence-discovery",
+  "businessDomain": "legal",
+  "partition": "held-out",
+  "upstreamOverlapGroup": "contract-renewal-discovery",
+  "knownRegression": false,
+  "difficultyTags": [
+    "challenging",
+    "multi-source"
+  ],
+  "coverage": {
+    "case-vs-batch": [
+      "contract-renewal-discovery.assertion.1"
+    ],
+    "long-labels": [
+      "contract-renewal-discovery.assertion.1"
+    ]
+  },
+  "task": {
+    "prompt": "Model one contract renewal case. Keep the monthly portfolio review outside the case flow.",
+    "scope": {
+      "requested": "Contract renewal discovery",
+      "excluded": [
+        "process improvement unless explicitly requested"
+      ]
+    },
+    "clarificationAnswers": [],
+    "correctionTurns": []
+  },
+  "applicability": {
+    "status": "supported",
+    "capability": "source-driven-modeling-session",
+    "reason": "Within the current declared public boundary.",
+    "fixedBeforeExecution": true
+  },
+  "sourceArtifacts": [
+    {
+      "id": "contract-renewal-discovery.source.1",
+      "path": "inputs/renewal-sop.txt",
+      "mediaType": "text/plain",
+      "sha256": "566804f7160429845f0728ae304c7bad96970b47161974a23170616a509fdd1e",
+      "role": "evidence",
+      "viewpoint": "legal operations",
+      "provenance": {
+        "classification": "synthetic-fiction",
+        "sourceFamily": "OpenBPMN evaluation corpus",
+        "sourceVersion": "1.0.0",
+        "originalUrl": null,
+        "authorshipRecord": "Authored for OpenBPMN issue #44; not client or operational material.",
+        "retrievedAt": "2026-09-21",
+        "rights": {
+          "license": "MIT",
+          "licenseUrl": "https://opensource.org/license/mit",
+          "attribution": "OpenBPMN contributors"
+        }
+      },
+      "transformationHistory": [
+        "Authored directly in the declared format."
+      ]
+    },
+    {
+      "id": "contract-renewal-discovery.source.2",
+      "path": "inputs/portfolio-note.txt",
+      "mediaType": "text/plain",
+      "sha256": "cd30e4d7df576d27953824efa113200bebc6bf7582f9aec068af7e3e702199c2",
+      "role": "evidence",
+      "viewpoint": "sales operations",
+      "provenance": {
+        "classification": "synthetic-fiction",
+        "sourceFamily": "OpenBPMN evaluation corpus",
+        "sourceVersion": "1.0.0",
+        "originalUrl": null,
+        "authorshipRecord": "Authored for OpenBPMN issue #44; not client or operational material.",
+        "retrievedAt": "2026-09-21",
+        "rights": {
+          "license": "MIT",
+          "licenseUrl": "https://opensource.org/license/mit",
+          "attribution": "OpenBPMN contributors"
+        }
+      },
+      "transformationHistory": [
+        "Authored directly in the declared format."
+      ]
+    }
+  ],
+  "reviewerMaterial": "reviewer/assertions.json",
+  "variants": [],
+  "reviewStatus": {
+    "machineIntegrity": "pass-at-authored-version",
+    "independentAgentReview": "completed-for-consistency",
+    "expertAdjudication": "not_run",
+    "humanUsabilityReview": "not_run"
+  }
+}

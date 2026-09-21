@@ -1,0 +1,133 @@
+{
+  "reviewVersion": "1.0.0",
+  "familyId": "structured-bpmn-preservation",
+  "canary": "reviewer-only-canary-771b9ac1d4d0f4d4",
+  "authoredIndependentlyOfCandidate": true,
+  "assertions": [
+    {
+      "id": "structured-bpmn-preservation.assertion.1",
+      "claim": "the completeness rework loop is preserved",
+      "disposition": "required",
+      "severity": "critical",
+      "dimension": "evidenceFidelity",
+      "epistemicStatus": "established",
+      "evidence": [
+        {
+          "sourceId": "structured-bpmn-preservation.source.1",
+          "locator": "BPMN ids M_check, M_complete, M_missing, M_correct, M_retry",
+          "stance": "supports",
+          "effectiveDate": null,
+          "entityScope": "legacy model owner",
+          "caseScope": "Structured BPMN preservation"
+        }
+      ],
+      "outputLocations": [
+        "BPMN semantics",
+        "SVG preview",
+        "Quality Report",
+        "final delivery claims"
+      ],
+      "evaluation": {
+        "kind": "agent",
+        "instructions": "Inspect the cited source and externally observable candidate artifacts; do not infer from candidate plausibility."
+      }
+    },
+    {
+      "id": "structured-bpmn-preservation.assertion.2",
+      "claim": "the approved and rejected outcomes remain distinguishable",
+      "disposition": "required",
+      "severity": "critical",
+      "dimension": "coverage",
+      "epistemicStatus": "established",
+      "evidence": [
+        {
+          "sourceId": "structured-bpmn-preservation.source.1",
+          "locator": "BPMN ids M_approval, M_rejection, M_sent, M_rejected",
+          "stance": "supports",
+          "effectiveDate": null,
+          "entityScope": "legacy model owner",
+          "caseScope": "Structured BPMN preservation"
+        }
+      ],
+      "outputLocations": [
+        "BPMN semantics",
+        "SVG preview",
+        "Quality Report",
+        "final delivery claims"
+      ],
+      "evaluation": {
+        "kind": "agent",
+        "instructions": "Inspect the cited source and externally observable candidate artifacts; do not infer from candidate plausibility."
+      }
+    },
+    {
+      "id": "structured-bpmn-preservation.assertion.3",
+      "claim": "validation or rendering repairs the supplied semantics",
+      "disposition": "forbidden",
+      "severity": "critical",
+      "dimension": "behavior",
+      "epistemicStatus": "unknown",
+      "evidence": [
+        {
+          "sourceId": "structured-bpmn-preservation.source.1",
+          "locator": "entire artifact",
+          "stance": "does-not-support",
+          "effectiveDate": null,
+          "entityScope": "legacy model owner",
+          "caseScope": "Structured BPMN preservation"
+        }
+      ],
+      "outputLocations": [
+        "BPMN semantics",
+        "SVG preview",
+        "Quality Report",
+        "final delivery claims"
+      ],
+      "evaluation": {
+        "kind": "agent",
+        "instructions": "Inspect the cited source and externally observable candidate artifacts; do not infer from candidate plausibility."
+      }
+    }
+  ],
+  "variantAssertions": [],
+  "reviewRubric": {
+    "version": "1.0.0",
+    "criteria": [
+      {
+        "id": "comprehension",
+        "question": "Can a reviewer identify ownership, branching, and completion without author assistance?",
+        "scale": [
+          "clear",
+          "partly clear",
+          "unclear"
+        ],
+        "citationRequired": true
+      },
+      {
+        "id": "ambiguity",
+        "question": "Are material unknowns and competing interpretations visible rather than silently resolved?",
+        "scale": [
+          "explicit",
+          "partly explicit",
+          "hidden"
+        ],
+        "citationRequired": true
+      },
+      {
+        "id": "correction-effort",
+        "question": "How much measured reviewer effort was required to reach an acceptable correction?",
+        "scale": [
+          "no correction",
+          "minor correction",
+          "major correction",
+          "not measured"
+        ],
+        "citationRequired": true
+      }
+    ]
+  },
+  "acceptableAlternatives": [
+    "Any BPMN topology is acceptable when it preserves every assertion and does not add forbidden meaning."
+  ],
+  "observedResults": []
+}

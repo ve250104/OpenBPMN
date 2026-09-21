@@ -1,0 +1,99 @@
+{
+  "caseVersion": "1.0.0",
+  "familyId": "retail-returns-discovery",
+  "caseId": "retail-returns-discovery.base",
+  "title": "Retail returns discovery",
+  "primaryTask": "discovery",
+  "evaluationLane": "mixed-evidence-discovery",
+  "businessDomain": "retail",
+  "partition": "development",
+  "upstreamOverlapGroup": "retail-returns-discovery",
+  "knownRegression": false,
+  "difficultyTags": [
+    "challenging",
+    "multi-source"
+  ],
+  "coverage": {
+    "alternatives": [
+      "retail-returns-discovery.assertion.1"
+    ],
+    "estimated-vs-mandatory-thresholds": [
+      "retail-returns-discovery.assertion.1"
+    ]
+  },
+  "task": {
+    "prompt": "Model actual returns handling while keeping the spreadsheet threshold and customer account in their dated scope.",
+    "scope": {
+      "requested": "Retail returns discovery",
+      "excluded": [
+        "process improvement unless explicitly requested"
+      ]
+    },
+    "clarificationAnswers": [],
+    "correctionTurns": []
+  },
+  "applicability": {
+    "status": "supported",
+    "capability": "source-driven-modeling-session",
+    "reason": "Within the current declared public boundary.",
+    "fixedBeforeExecution": true
+  },
+  "sourceArtifacts": [
+    {
+      "id": "retail-returns-discovery.source.1",
+      "path": "inputs/customer-message.txt",
+      "mediaType": "text/plain",
+      "sha256": "d8d671ed6fe7a7fb3b41f9915739e7e9a386a29dd26487598a0a7778f63a4cd9",
+      "role": "evidence",
+      "viewpoint": "customer",
+      "provenance": {
+        "classification": "synthetic-fiction",
+        "sourceFamily": "OpenBPMN evaluation corpus",
+        "sourceVersion": "1.0.0",
+        "originalUrl": null,
+        "authorshipRecord": "Authored for OpenBPMN issue #44; not client or operational material.",
+        "retrievedAt": "2026-09-21",
+        "rights": {
+          "license": "MIT",
+          "licenseUrl": "https://opensource.org/license/mit",
+          "attribution": "OpenBPMN contributors"
+        }
+      },
+      "transformationHistory": [
+        "Authored directly in the declared format."
+      ]
+    },
+    {
+      "id": "retail-returns-discovery.source.2",
+      "path": "inputs/returns-register.xlsx",
+      "mediaType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "sha256": "16b8f354984bef71917b1bea9e2fdf75e242cf0abb2821de6dc36d247469fa7c",
+      "role": "evidence",
+      "viewpoint": "store register owner",
+      "provenance": {
+        "classification": "synthetic-fiction",
+        "sourceFamily": "OpenBPMN evaluation corpus",
+        "sourceVersion": "1.0.0",
+        "originalUrl": null,
+        "authorshipRecord": "Authored for OpenBPMN issue #44; not client or operational material.",
+        "retrievedAt": "2026-09-21",
+        "rights": {
+          "license": "MIT",
+          "licenseUrl": "https://opensource.org/license/mit",
+          "attribution": "OpenBPMN contributors"
+        }
+      },
+      "transformationHistory": [
+        "Authored directly in the declared format."
+      ]
+    }
+  ],
+  "reviewerMaterial": "reviewer/assertions.json",
+  "variants": [],
+  "reviewStatus": {
+    "machineIntegrity": "pass-at-authored-version",
+    "independentAgentReview": "completed-for-consistency",
+    "expertAdjudication": "not_run",
+    "humanUsabilityReview": "not_run"
+  }
+}

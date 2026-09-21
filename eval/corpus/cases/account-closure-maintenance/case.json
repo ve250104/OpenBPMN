@@ -1,0 +1,77 @@
+{
+  "caseVersion": "1.0.0",
+  "familyId": "account-closure-maintenance",
+  "caseId": "account-closure-maintenance.base",
+  "title": "Customer account closure correction",
+  "primaryTask": "maintenance",
+  "evaluationLane": "conversational-correction",
+  "businessDomain": "banking",
+  "partition": "development",
+  "upstreamOverlapGroup": "account-closure-maintenance",
+  "knownRegression": false,
+  "difficultyTags": [
+    "routine",
+    "single-source"
+  ],
+  "coverage": {
+    "concurrency": [
+      "account-closure-maintenance.assertion.1"
+    ],
+    "participant-handoffs": [
+      "account-closure-maintenance.assertion.1"
+    ]
+  },
+  "task": {
+    "prompt": "Add the approved archive notification after both balance settlement and access revocation; preserve every other identity.",
+    "scope": {
+      "requested": "Customer account closure correction",
+      "excluded": [
+        "process improvement unless explicitly requested"
+      ]
+    },
+    "clarificationAnswers": [],
+    "correctionTurns": [
+      "Add the approved archive notification after both balance settlement and access revocation; preserve every other identity."
+    ]
+  },
+  "applicability": {
+    "status": "supported",
+    "capability": "source-driven-modeling-session",
+    "reason": "Within the current declared public boundary.",
+    "fixedBeforeExecution": true
+  },
+  "sourceArtifacts": [
+    {
+      "id": "account-closure-maintenance.source.1",
+      "path": "inputs/handoff.json",
+      "mediaType": "application/json",
+      "sha256": "e8380f14a7d43168188c02c14de1eb8dff23bed112bb539ef44337381a5e946d",
+      "role": "evidence",
+      "viewpoint": "session owner",
+      "provenance": {
+        "classification": "synthetic-fiction",
+        "sourceFamily": "OpenBPMN evaluation corpus",
+        "sourceVersion": "1.0.0",
+        "originalUrl": null,
+        "authorshipRecord": "Authored for OpenBPMN issue #44; not client or operational material.",
+        "retrievedAt": "2026-09-21",
+        "rights": {
+          "license": "MIT",
+          "licenseUrl": "https://opensource.org/license/mit",
+          "attribution": "OpenBPMN contributors"
+        }
+      },
+      "transformationHistory": [
+        "Authored directly in the declared format."
+      ]
+    }
+  ],
+  "reviewerMaterial": "reviewer/assertions.json",
+  "variants": [],
+  "reviewStatus": {
+    "machineIntegrity": "pass-at-authored-version",
+    "independentAgentReview": "completed-for-consistency",
+    "expertAdjudication": "not_run",
+    "humanUsabilityReview": "not_run"
+  }
+}

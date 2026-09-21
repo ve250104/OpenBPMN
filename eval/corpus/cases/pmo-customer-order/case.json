@@ -1,0 +1,120 @@
+{
+  "caseVersion": "1.0.0",
+  "familyId": "pmo-customer-order",
+  "caseId": "pmo-customer-order.base",
+  "title": "Customer inquiry to confirmed order",
+  "primaryTask": "description",
+  "evaluationLane": "text-to-process",
+  "businessDomain": "sales",
+  "partition": "development",
+  "upstreamOverlapGroup": "pmo-customer-order",
+  "knownRegression": false,
+  "difficultyTags": [
+    "routine",
+    "single-source"
+  ],
+  "coverage": {
+    "alternatives": [
+      "pmo-customer-order.assertion.1"
+    ],
+    "participant-handoffs": [
+      "pmo-customer-order.assertion.1"
+    ],
+    "unsupported-inference": [
+      "pmo-customer-order.assertion.1"
+    ]
+  },
+  "task": {
+    "prompt": "Model only the customer-order process established by the supplied description. Preserve uncertainty about who approves the quote.",
+    "scope": {
+      "requested": "Customer inquiry to confirmed order",
+      "excluded": [
+        "process improvement unless explicitly requested"
+      ]
+    },
+    "clarificationAnswers": [],
+    "correctionTurns": []
+  },
+  "applicability": {
+    "status": "supported",
+    "capability": "source-driven-modeling-session",
+    "reason": "Within the current declared public boundary.",
+    "fixedBeforeExecution": true
+  },
+  "sourceArtifacts": [
+    {
+      "id": "pmo-customer-order.source.1",
+      "path": "inputs/description.txt",
+      "mediaType": "text/plain",
+      "sha256": "f6d293f8373efc436004d24c080540b630f423666733a815f3bcc3d52737f138",
+      "role": "evidence",
+      "viewpoint": "process owner",
+      "provenance": {
+        "classification": "public-academic",
+        "sourceFamily": "PMo Dataset",
+        "sourceVersion": "1.0.0 (Zenodo record 15857589)",
+        "originalUrl": "https://doi.org/10.5281/zenodo.15857589",
+        "retrievedAt": "2026-09-21",
+        "rights": {
+          "license": "CC-BY-4.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/legalcode",
+          "attribution": "Alexis Brissard, Frederic Cuppens, and Amal Zouaq, PMo Dataset v1.0.0"
+        }
+      },
+      "transformationHistory": [
+        "Extracted descriptions/01.txt from pmo-dataset.zip (MD5 414d9fbc5aa04bc70db8bf1673f4c69a) and normalized CRLF to LF without semantic edits."
+      ]
+    }
+  ],
+  "reviewerMaterial": "reviewer/assertions.json",
+  "variants": [
+    {
+      "id": "independent-sentences-reordered",
+      "kind": "meaning-preserving",
+      "partition": "development",
+      "prompt": "Model only the customer-order process established by the supplied description. Preserve uncertainty about who approves the quote.",
+      "replacesSourceIds": [
+        "pmo-customer-order.source.1"
+      ],
+      "inputArtifacts": [
+        {
+          "id": "pmo-customer-order.variant.independent-sentences-reordered.source.1",
+          "path": "variants/independent-sentences-reordered/description.txt",
+          "mediaType": "text/plain",
+          "sha256": "8f6d6e6fed5f6627d58f0b5d8f5b7a224f378b85fb7c606ef45ee56a8ead4d0c",
+          "role": "evidence",
+          "viewpoint": "process owner",
+          "provenance": {
+            "classification": "synthetic-fiction",
+            "sourceFamily": "OpenBPMN evaluation corpus",
+            "sourceVersion": "1.0.0",
+            "originalUrl": null,
+            "authorshipRecord": "Authored for OpenBPMN issue #44; not client or operational material.",
+            "retrievedAt": "2026-09-21",
+            "rights": {
+              "license": "MIT",
+              "licenseUrl": "https://opensource.org/license/mit",
+              "attribution": "OpenBPMN contributors"
+            }
+          },
+          "transformationHistory": [
+            "Authored directly in the declared format."
+          ]
+        }
+      ],
+      "stableAssertionIds": [
+        "pmo-customer-order.assertion.1",
+        "pmo-customer-order.assertion.2",
+        "pmo-customer-order.assertion.3",
+        "pmo-customer-order.assertion.4"
+      ],
+      "changedAssertionIds": []
+    }
+  ],
+  "reviewStatus": {
+    "machineIntegrity": "pass-at-authored-version",
+    "independentAgentReview": "completed-for-consistency",
+    "expertAdjudication": "not_run",
+    "humanUsabilityReview": "not_run"
+  }
+}

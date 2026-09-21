@@ -1,0 +1,161 @@
+{
+  "reviewVersion": "1.0.0",
+  "familyId": "pmo-customer-order",
+  "canary": "reviewer-only-canary-a2fca6b9f50dd24e",
+  "authoredIndependentlyOfCandidate": true,
+  "assertions": [
+    {
+      "id": "pmo-customer-order.assertion.1",
+      "claim": "customer interest is an alternative before quoting",
+      "disposition": "required",
+      "severity": "critical",
+      "dimension": "evidenceFidelity",
+      "epistemicStatus": "established",
+      "evidence": [
+        {
+          "sourceId": "pmo-customer-order.source.1",
+          "locator": "lines 2-4",
+          "stance": "supports",
+          "effectiveDate": null,
+          "entityScope": "process owner",
+          "caseScope": "Customer inquiry to confirmed order"
+        }
+      ],
+      "outputLocations": [
+        "BPMN semantics",
+        "SVG preview",
+        "Quality Report",
+        "final delivery claims"
+      ],
+      "evaluation": {
+        "kind": "agent",
+        "instructions": "Inspect the cited source and externally observable candidate artifacts; do not infer from candidate plausibility."
+      }
+    },
+    {
+      "id": "pmo-customer-order.assertion.2",
+      "claim": "customer approval precedes order placement",
+      "disposition": "required",
+      "severity": "critical",
+      "dimension": "coverage",
+      "epistemicStatus": "established",
+      "evidence": [
+        {
+          "sourceId": "pmo-customer-order.source.1",
+          "locator": "line 4",
+          "stance": "supports",
+          "effectiveDate": null,
+          "entityScope": "process owner",
+          "caseScope": "Customer inquiry to confirmed order"
+        }
+      ],
+      "outputLocations": [
+        "BPMN semantics",
+        "SVG preview",
+        "Quality Report",
+        "final delivery claims"
+      ],
+      "evaluation": {
+        "kind": "agent",
+        "instructions": "Inspect the cited source and externally observable candidate artifacts; do not infer from candidate plausibility."
+      }
+    },
+    {
+      "id": "pmo-customer-order.assertion.3",
+      "claim": "an internal quote approver exists",
+      "disposition": "forbidden",
+      "severity": "critical",
+      "dimension": "behavior",
+      "epistemicStatus": "unknown",
+      "evidence": [
+        {
+          "sourceId": "pmo-customer-order.source.1",
+          "locator": "line 4",
+          "stance": "does-not-support",
+          "effectiveDate": null,
+          "entityScope": "process owner",
+          "caseScope": "Customer inquiry to confirmed order"
+        }
+      ],
+      "outputLocations": [
+        "BPMN semantics",
+        "SVG preview",
+        "Quality Report",
+        "final delivery claims"
+      ],
+      "evaluation": {
+        "kind": "agent",
+        "instructions": "Inspect the cited source and externally observable candidate artifacts; do not infer from candidate plausibility."
+      }
+    },
+    {
+      "id": "pmo-customer-order.assertion.4",
+      "claim": "sales staff and customer support may be one responsibility group or separate lanes",
+      "disposition": "permitted-scope-choice",
+      "severity": "minor",
+      "dimension": "representation",
+      "epistemicStatus": "established",
+      "evidence": [
+        {
+          "sourceId": "pmo-customer-order.source.1",
+          "locator": "line 2",
+          "stance": "supports",
+          "effectiveDate": null,
+          "entityScope": "process owner",
+          "caseScope": "responsibility grouping only"
+        }
+      ],
+      "outputLocations": [
+        "BPMN semantics",
+        "SVG preview",
+        "Quality Report",
+        "final delivery claims"
+      ],
+      "evaluation": {
+        "kind": "agent",
+        "instructions": "Inspect the cited source and externally observable candidate artifacts; do not infer from candidate plausibility."
+      }
+    }
+  ],
+  "variantAssertions": [],
+  "reviewRubric": {
+    "version": "1.0.0",
+    "criteria": [
+      {
+        "id": "comprehension",
+        "question": "Can a reviewer identify ownership, branching, and completion without author assistance?",
+        "scale": [
+          "clear",
+          "partly clear",
+          "unclear"
+        ],
+        "citationRequired": true
+      },
+      {
+        "id": "ambiguity",
+        "question": "Are material unknowns and competing interpretations visible rather than silently resolved?",
+        "scale": [
+          "explicit",
+          "partly explicit",
+          "hidden"
+        ],
+        "citationRequired": true
+      },
+      {
+        "id": "correction-effort",
+        "question": "How much measured reviewer effort was required to reach an acceptable correction?",
+        "scale": [
+          "no correction",
+          "minor correction",
+          "major correction",
+          "not measured"
+        ],
+        "citationRequired": true
+      }
+    ]
+  },
+  "acceptableAlternatives": [
+    "Sales staff and customer support may be separate lanes or one named responsibility group."
+  ],
+  "observedResults": []
+}

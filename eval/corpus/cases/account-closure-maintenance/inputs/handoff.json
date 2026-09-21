@@ -1,0 +1,134 @@
+{
+  "handoffVersion": "1.0.0",
+  "lifecycleStatus": "Synthetic correction fixture; human correction requested but not yet applied.",
+  "reviewNotes": [
+    "add archive notification after join",
+    "Session facts: {\"process\":\"account closure\",\"identities\":[\"settle-balance\",\"revoke-access\",\"closure-controls-complete\"],\"parallel\":[\"settle-balance\",\"revoke-access\"],\"join\":\"closure-controls-complete\",\"correction\":\"add archive notification after join\"}"
+  ],
+  "request": {
+    "schemaVersion": "1.0.0",
+    "profileVersion": "1.0.0",
+    "model": {
+      "key": "account-closure-model",
+      "name": "account closure",
+      "primaryRef": "account-closure",
+      "processes": [
+        {
+          "key": "account-closure",
+          "name": "account closure",
+          "nodes": [
+            {
+              "key": "session-start",
+              "type": "startEvent",
+              "containerRef": "account-closure",
+              "name": "Existing session started",
+              "event": {
+                "kind": "none"
+              }
+            },
+            {
+              "key": "settle-balance",
+              "type": "task",
+              "containerRef": "account-closure",
+              "name": "settle balance"
+            },
+            {
+              "key": "revoke-access",
+              "type": "task",
+              "containerRef": "account-closure",
+              "name": "revoke access"
+            },
+            {
+              "key": "closure-controls-complete",
+              "type": "task",
+              "containerRef": "account-closure",
+              "name": "closure controls complete"
+            },
+            {
+              "key": "session-end",
+              "type": "endEvent",
+              "containerRef": "account-closure",
+              "name": "Existing modeled outcome",
+              "event": {
+                "kind": "none"
+              }
+            }
+          ],
+          "flows": [
+            {
+              "key": "session-flow-1",
+              "containerRef": "account-closure",
+              "sourceRef": "session-start",
+              "targetRef": "settle-balance"
+            },
+            {
+              "key": "session-flow-2",
+              "containerRef": "account-closure",
+              "sourceRef": "settle-balance",
+              "targetRef": "revoke-access"
+            },
+            {
+              "key": "session-flow-3",
+              "containerRef": "account-closure",
+              "sourceRef": "revoke-access",
+              "targetRef": "closure-controls-complete"
+            },
+            {
+              "key": "session-flow-4",
+              "containerRef": "account-closure",
+              "sourceRef": "closure-controls-complete",
+              "targetRef": "session-end"
+            }
+          ],
+          "lanes": [
+            {
+              "key": "current-owner",
+              "name": "Current modeled owner",
+              "parentRef": "account-closure",
+              "flowNodeRefs": [
+                "session-start",
+                "settle-balance",
+                "revoke-access",
+                "closure-controls-complete",
+                "session-end"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "evidence": [
+      {
+        "key": "session-account",
+        "source": "Synthetic session account",
+        "summary": "{\"process\":\"account closure\",\"identities\":[\"settle-balance\",\"revoke-access\",\"closure-controls-complete\"],\"parallel\":[\"settle-balance\",\"revoke-access\"],\"join\":\"closure-controls-complete\",\"correction\":\"add archive notification after join\"}"
+      }
+    ],
+    "links": [
+      {
+        "elementRef": "settle-balance",
+        "assertion": "Retain the existing settle-balance identity unless the correction names it.",
+        "basis": "evidence",
+        "supportRefs": [
+          "session-account"
+        ]
+      },
+      {
+        "elementRef": "revoke-access",
+        "assertion": "Retain the existing revoke-access identity unless the correction names it.",
+        "basis": "evidence",
+        "supportRefs": [
+          "session-account"
+        ]
+      },
+      {
+        "elementRef": "closure-controls-complete",
+        "assertion": "Retain the existing closure-controls-complete identity unless the correction names it.",
+        "basis": "evidence",
+        "supportRefs": [
+          "session-account"
+        ]
+      }
+    ]
+  }
+}
