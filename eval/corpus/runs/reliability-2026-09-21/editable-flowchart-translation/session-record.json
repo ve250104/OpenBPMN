@@ -1,0 +1,61 @@
+{
+  "recordVersion": "1.0.0",
+  "recordedAt": "2026-09-21T15:49:45Z",
+  "caseId": "editable-flowchart-translation.base",
+  "status": "unsupported",
+  "capability": "arbitrary-non-bpmn-conversion",
+  "reason": "The fixed pre-execution applicability contract identifies this exploratory corpus probe as unsupported by the current product contract.",
+  "source": {
+    "path": "inputs/return-flow.drawio",
+    "mediaType": "application/vnd.jgraph.mxfile",
+    "sizeBytes": 3609,
+    "modifiedAt": "2026-09-21T18:48:26+0300",
+    "sha256Expected": "af3157a8384ec8e1c124b1c015f5bede9e869ac632d76cb34abc3a3643069d9d",
+    "sha256Observed": "af3157a8384ec8e1c124b1c015f5bede9e869ac632d76cb34abc3a3643069d9d",
+    "xmlWellFormed": true,
+    "observations": {
+      "diagramName": "Return authorization",
+      "diagramCount": 1,
+      "vertexCount": 13,
+      "edgeCount": 9,
+      "laneLikeContainerCount": 2,
+      "laneLabels": [
+        "Customer service",
+        "Quality"
+      ],
+      "explicitUnresolvedText": "Unresolved: does inventory disposition wait for the customer remedy?"
+    }
+  },
+  "toolCheck": {
+    "command": "openbpmn capabilities --json",
+    "status": "completed",
+    "signal": "capabilities_reported",
+    "toolVersion": "0.1.0-dev.0",
+    "schemaVersion": "1.0.0",
+    "profileVersion": "1.0.0",
+    "matchesSkillVersionDeclaration": true
+  },
+  "safeCommands": [
+    "openbpmn capabilities --json",
+    "shasum -a 256 inputs/return-flow.drawio",
+    "file inputs/return-flow.drawio",
+    "xmllint --noout inputs/return-flow.drawio",
+    "xmllint --xpath 'concat(\"diagrams=\", count(/mxfile/diagram), \"; vertices=\", count(//mxCell[@vertex=\"1\"]), \"; edges=\", count(//mxCell[@edge=\"1\"]), \"; lanes=\", count(//mxCell[starts-with(@id,\"lane-\")]))' inputs/return-flow.drawio"
+  ],
+  "actions": {
+    "conversionAttempted": false,
+    "generationInvoked": false,
+    "bpmnValidationInvoked": false,
+    "renderInvoked": false,
+    "outputBundleCreated": false,
+    "runJsonEdited": false
+  },
+  "claims": [
+    "The staged source is a well-formed, uncompressed draw.io XML document whose observed SHA-256 matches task.json.",
+    "The source visibly describes a return-authorization flow with two responsibility groupings, decision-labeled steps, and nine directed connectors.",
+    "The source itself preserves an unresolved dependency between customer remedy and inventory disposition.",
+    "No supported translation, BPMN model, SVG preview, handoff, or Output Bundle was produced.",
+    "No claim is made that any inferred BPMN semantics would be complete, reviewed, valid, or equivalent to the source."
+  ],
+  "conclusion": "Exploratory source inspection completed. The request remains unsupported as fixed by task.json; producing a BPMN translation would exceed the current product contract and would require resolving consequential semantics rather than fabricating an output."
+}

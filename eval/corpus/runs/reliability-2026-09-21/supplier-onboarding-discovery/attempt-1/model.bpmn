@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="M_supplier_onboarding_model" name="Current supplier onboarding" targetNamespace="urn:process-model:supplier_onboarding_model">
+  <bpmn:process id="M_supplier_onboarding" name="Current supplier onboarding" isExecutable="false">
+    <bpmn:documentation>Covers ordinary supplier onboarding from form collection through screening and record-creation status. Unobserved appeal, urgent-bypass, and inconclusive-screening behavior remains outside the modeled path and is recorded as unresolved.</bpmn:documentation>
+    <bpmn:documentation>Current ordinary supplier onboarding from source evidence. Document transmission is not approval; Vendor Risk clearance is required before Master Data attempts record creation.</bpmn:documentation>
+    <bpmn:laneSet id="G_lanes_supplier_onboarding">
+      <bpmn:lane id="M_lane_buyer" name="Buyer">
+        <bpmn:flowNodeRef>M_onboarding_requested</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>M_collect_tax_bank_forms</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>M_send_pack_to_vendor_risk</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>M_collect_missing_evidence</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>M_send_additional_evidence</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>M_supplier_onboarded</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>M_record_not_created</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="M_lane_vendor_risk" name="Vendor Risk">
+        <bpmn:flowNodeRef>M_screen_supplier</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>M_screening_outcome</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>M_request_missing_evidence</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>M_onboarding_rejected</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="M_lane_master_data" name="Master Data">
+        <bpmn:flowNodeRef>M_attempt_vendor_record_creation</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>M_record_creation_outcome</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>M_confirm_creation_completed</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>M_report_creation_incomplete</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="M_onboarding_requested" name="Onboarding requested">
+      <bpmn:outgoing>M_flow_start_collect</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:userTask id="M_collect_tax_bank_forms" name="Collect tax and bank forms">
+      <bpmn:incoming>M_flow_start_collect</bpmn:incoming>
+      <bpmn:outgoing>M_flow_collect_send</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sendTask id="M_send_pack_to_vendor_risk" name="Send pack to Vendor Risk">
+      <bpmn:incoming>M_flow_collect_send</bpmn:incoming>
+      <bpmn:outgoing>M_flow_send_screen</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:userTask id="M_screen_supplier" name="Screen supplier for sanctions">
+      <bpmn:incoming>M_flow_send_screen</bpmn:incoming>
+      <bpmn:incoming>M_flow_additional_rescreen</bpmn:incoming>
+      <bpmn:outgoing>M_flow_screen_outcome</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="M_screening_outcome" name="Screening outcome">
+      <bpmn:incoming>M_flow_screen_outcome</bpmn:incoming>
+      <bpmn:outgoing>M_flow_cleared_create</bpmn:outgoing>
+      <bpmn:outgoing>M_flow_rejected_end</bpmn:outgoing>
+      <bpmn:outgoing>M_flow_missing_request</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sendTask id="M_request_missing_evidence" name="Request missing evidence">
+      <bpmn:incoming>M_flow_missing_request</bpmn:incoming>
+      <bpmn:outgoing>M_flow_request_collect</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:userTask id="M_collect_missing_evidence" name="Collect missing evidence">
+      <bpmn:incoming>M_flow_request_collect</bpmn:incoming>
+      <bpmn:outgoing>M_flow_collect_additional_send</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sendTask id="M_send_additional_evidence" name="Send additional evidence">
+      <bpmn:incoming>M_flow_collect_additional_send</bpmn:incoming>
+      <bpmn:outgoing>M_flow_additional_rescreen</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:userTask id="M_attempt_vendor_record_creation" name="Create vendor record">
+      <bpmn:documentation>Master Data attempts creation only after Vendor Risk clearance. The evidence does not equate clearance with successful record creation.</bpmn:documentation>
+      <bpmn:incoming>M_flow_cleared_create</bpmn:incoming>
+      <bpmn:outgoing>M_flow_create_outcome</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="M_record_creation_outcome" name="Record creation completed?">
+      <bpmn:incoming>M_flow_create_outcome</bpmn:incoming>
+      <bpmn:outgoing>M_flow_creation_complete_report</bpmn:outgoing>
+      <bpmn:outgoing>M_flow_creation_incomplete_report</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sendTask id="M_confirm_creation_completed" name="Tell buyer creation completed">
+      <bpmn:incoming>M_flow_creation_complete_report</bpmn:incoming>
+      <bpmn:outgoing>M_flow_confirm_onboarded</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:sendTask id="M_report_creation_incomplete" name="Tell buyer creation incomplete">
+      <bpmn:incoming>M_flow_creation_incomplete_report</bpmn:incoming>
+      <bpmn:outgoing>M_flow_report_not_created</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:endEvent id="M_supplier_onboarded" name="Supplier onboarded">
+      <bpmn:incoming>M_flow_confirm_onboarded</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="M_onboarding_rejected" name="Onboarding rejected">
+      <bpmn:incoming>M_flow_rejected_end</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="M_record_not_created" name="Record not created">
+      <bpmn:incoming>M_flow_report_not_created</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="M_flow_start_collect" sourceRef="M_onboarding_requested" targetRef="M_collect_tax_bank_forms" />
+    <bpmn:sequenceFlow id="M_flow_collect_send" sourceRef="M_collect_tax_bank_forms" targetRef="M_send_pack_to_vendor_risk" />
+    <bpmn:sequenceFlow id="M_flow_send_screen" sourceRef="M_send_pack_to_vendor_risk" targetRef="M_screen_supplier" />
+    <bpmn:sequenceFlow id="M_flow_screen_outcome" sourceRef="M_screen_supplier" targetRef="M_screening_outcome" />
+    <bpmn:sequenceFlow id="M_flow_cleared_create" name="Cleared" sourceRef="M_screening_outcome" targetRef="M_attempt_vendor_record_creation">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Vendor Risk clears the supplier</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="M_flow_rejected_end" name="Rejected" sourceRef="M_screening_outcome" targetRef="M_onboarding_rejected">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Vendor Risk rejects the onboarding</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="M_flow_missing_request" name="Missing evidence" sourceRef="M_screening_outcome" targetRef="M_request_missing_evidence">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Vendor Risk requires missing evidence</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="M_flow_request_collect" sourceRef="M_request_missing_evidence" targetRef="M_collect_missing_evidence" />
+    <bpmn:sequenceFlow id="M_flow_collect_additional_send" sourceRef="M_collect_missing_evidence" targetRef="M_send_additional_evidence" />
+    <bpmn:sequenceFlow id="M_flow_additional_rescreen" sourceRef="M_send_additional_evidence" targetRef="M_screen_supplier" />
+    <bpmn:sequenceFlow id="M_flow_create_outcome" sourceRef="M_attempt_vendor_record_creation" targetRef="M_record_creation_outcome" />
+    <bpmn:sequenceFlow id="M_flow_creation_complete_report" name="Completed" sourceRef="M_record_creation_outcome" targetRef="M_confirm_creation_completed">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Vendor record creation completed</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="M_flow_creation_incomplete_report" name="Not completed" sourceRef="M_record_creation_outcome" targetRef="M_report_creation_incomplete">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Vendor record creation did not complete</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="M_flow_confirm_onboarded" sourceRef="M_confirm_creation_completed" targetRef="M_supplier_onboarded" />
+    <bpmn:sequenceFlow id="M_flow_report_not_created" sourceRef="M_report_creation_incomplete" targetRef="M_record_not_created" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="D_diagram_M_supplier_onboarding">
+    <bpmndi:BPMNPlane id="D_plane_M_supplier_onboarding" bpmnElement="M_supplier_onboarding">
+      <bpmndi:BPMNShape id="D_shape_M_supplier_onboarding_M_lane_buyer" bpmnElement="M_lane_buyer" isHorizontal="true">
+        <dc:Bounds x="80" y="80" width="1602" height="516" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_supplier_onboarding_M_lane_vendor_risk" bpmnElement="M_lane_vendor_risk" isHorizontal="true">
+        <dc:Bounds x="80" y="596" width="1602" height="516" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_supplier_onboarding_M_lane_master_data" bpmnElement="M_lane_master_data" isHorizontal="true">
+        <dc:Bounds x="80" y="1112" width="1602" height="400" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_supplier_onboarding_M_onboarding_requested" bpmnElement="M_onboarding_requested">
+        <dc:Bounds x="120" y="342" width="36" height="36" />
+        <bpmndi:BPMNLabel id="D_label_M_supplier_onboarding_M_onboarding_requested">
+          <dc:Bounds x="116" y="414" width="152" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_supplier_onboarding_M_collect_tax_bank_forms" bpmnElement="M_collect_tax_bank_forms">
+        <dc:Bounds x="256" y="320" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_supplier_onboarding_M_send_pack_to_vendor_risk" bpmnElement="M_send_pack_to_vendor_risk">
+        <dc:Bounds x="456" y="320" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_supplier_onboarding_M_screen_supplier" bpmnElement="M_screen_supplier">
+        <dc:Bounds x="656" y="836" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_supplier_onboarding_M_screening_outcome" bpmnElement="M_screening_outcome" isMarkerVisible="true">
+        <dc:Bounds x="856" y="851" width="50" height="50" />
+        <bpmndi:BPMNLabel id="D_label_M_supplier_onboarding_M_screening_outcome">
+          <dc:Bounds x="815.5" y="909" width="131" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_supplier_onboarding_M_request_missing_evidence" bpmnElement="M_request_missing_evidence">
+        <dc:Bounds x="1006" y="676" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_supplier_onboarding_M_collect_missing_evidence" bpmnElement="M_collect_missing_evidence">
+        <dc:Bounds x="1206" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_supplier_onboarding_M_send_additional_evidence" bpmnElement="M_send_additional_evidence">
+        <dc:Bounds x="1406" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_supplier_onboarding_M_attempt_vendor_record_creation" bpmnElement="M_attempt_vendor_record_creation">
+        <dc:Bounds x="1006" y="1192" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_supplier_onboarding_M_record_creation_outcome" bpmnElement="M_record_creation_outcome" isMarkerVisible="true">
+        <dc:Bounds x="1231" y="1207" width="50" height="50" />
+        <bpmndi:BPMNLabel id="D_label_M_supplier_onboarding_M_record_creation_outcome">
+          <dc:Bounds x="1165" y="1265" width="182" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_supplier_onboarding_M_confirm_creation_completed" bpmnElement="M_confirm_creation_completed">
+        <dc:Bounds x="1406" y="1192" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_supplier_onboarding_M_report_creation_incomplete" bpmnElement="M_report_creation_incomplete">
+        <dc:Bounds x="1406" y="1352" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_supplier_onboarding_M_supplier_onboarded" bpmnElement="M_supplier_onboarded">
+        <dc:Bounds x="1606" y="342" width="36" height="36" />
+        <bpmndi:BPMNLabel id="D_label_M_supplier_onboarding_M_supplier_onboarded">
+          <dc:Bounds x="1540" y="386" width="134" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_supplier_onboarding_M_onboarding_rejected" bpmnElement="M_onboarding_rejected">
+        <dc:Bounds x="1038" y="996" width="36" height="36" />
+        <bpmndi:BPMNLabel id="D_label_M_supplier_onboarding_M_onboarding_rejected">
+          <dc:Bounds x="986.5" y="1040" width="139" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_supplier_onboarding_M_record_not_created" bpmnElement="M_record_not_created">
+        <dc:Bounds x="1606" y="480" width="36" height="36" />
+        <bpmndi:BPMNLabel id="D_label_M_supplier_onboarding_M_record_not_created">
+          <dc:Bounds x="1545" y="524" width="129" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="D_edge_M_supplier_onboarding_M_flow_start_collect" bpmnElement="M_flow_start_collect">
+        <di:waypoint x="156" y="360" />
+        <di:waypoint x="256" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_supplier_onboarding_M_flow_collect_send" bpmnElement="M_flow_collect_send">
+        <di:waypoint x="356" y="360" />
+        <di:waypoint x="456" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_supplier_onboarding_M_flow_send_screen" bpmnElement="M_flow_send_screen">
+        <di:waypoint x="556" y="360" />
+        <di:waypoint x="706" y="360" />
+        <di:waypoint x="706" y="836" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_supplier_onboarding_M_flow_screen_outcome" bpmnElement="M_flow_screen_outcome">
+        <di:waypoint x="756" y="876" />
+        <di:waypoint x="772" y="876" />
+        <di:waypoint x="772" y="827" />
+        <di:waypoint x="922" y="827" />
+        <di:waypoint x="922" y="863.5" />
+        <di:waypoint x="893.5" y="863.5" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_supplier_onboarding_M_flow_cleared_create" bpmnElement="M_flow_cleared_create">
+        <di:waypoint x="856" y="876" />
+        <di:waypoint x="787.5" y="876" />
+        <di:waypoint x="787.5" y="1232" />
+        <di:waypoint x="1006" y="1232" />
+        <bpmndi:BPMNLabel id="D_label_M_supplier_onboarding_M_flow_cleared_create">
+          <dc:Bounds x="795.5" y="1042.5" width="90" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_supplier_onboarding_M_flow_create_outcome" bpmnElement="M_flow_create_outcome">
+        <di:waypoint x="1106" y="1232" />
+        <di:waypoint x="1122" y="1232" />
+        <di:waypoint x="1122" y="1191" />
+        <di:waypoint x="1256" y="1191" />
+        <di:waypoint x="1256" y="1207" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_supplier_onboarding_M_flow_creation_complete_report" bpmnElement="M_flow_creation_complete_report">
+        <di:waypoint x="1231" y="1232" />
+        <di:waypoint x="1215" y="1232" />
+        <di:waypoint x="1215" y="1183" />
+        <di:waypoint x="1390" y="1183" />
+        <di:waypoint x="1390" y="1232" />
+        <di:waypoint x="1406" y="1232" />
+        <bpmndi:BPMNLabel id="D_label_M_supplier_onboarding_M_flow_creation_complete_report">
+          <dc:Bounds x="1257.5" y="1152" width="90" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_supplier_onboarding_M_flow_confirm_onboarded" bpmnElement="M_flow_confirm_onboarded">
+        <di:waypoint x="1456" y="1192" />
+        <di:waypoint x="1456" y="1176" />
+        <di:waypoint x="1530" y="1176" />
+        <di:waypoint x="1530" y="360" />
+        <di:waypoint x="1606" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_supplier_onboarding_M_flow_rejected_end" bpmnElement="M_flow_rejected_end">
+        <di:waypoint x="906" y="876" />
+        <di:waypoint x="1022" y="876" />
+        <di:waypoint x="1022" y="1014" />
+        <di:waypoint x="1038" y="1014" />
+        <bpmndi:BPMNLabel id="D_label_M_supplier_onboarding_M_flow_rejected_end">
+          <dc:Bounds x="930.6" y="845" width="90" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_supplier_onboarding_M_flow_missing_request" bpmnElement="M_flow_missing_request">
+        <di:waypoint x="881" y="851" />
+        <di:waypoint x="881" y="716" />
+        <di:waypoint x="1006" y="716" />
+        <bpmndi:BPMNLabel id="D_label_M_supplier_onboarding_M_flow_missing_request">
+          <dc:Bounds x="889" y="772" width="117" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_supplier_onboarding_M_flow_creation_incomplete_report" bpmnElement="M_flow_creation_incomplete_report">
+        <di:waypoint x="1281" y="1232" />
+        <di:waypoint x="1390" y="1232" />
+        <di:waypoint x="1390" y="1392" />
+        <di:waypoint x="1406" y="1392" />
+        <bpmndi:BPMNLabel id="D_label_M_supplier_onboarding_M_flow_creation_incomplete_report">
+          <dc:Bounds x="1398" y="1300.5" width="103" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_supplier_onboarding_M_flow_request_collect" bpmnElement="M_flow_request_collect">
+        <di:waypoint x="1106" y="716" />
+        <di:waypoint x="1256" y="716" />
+        <di:waypoint x="1256" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_supplier_onboarding_M_flow_collect_additional_send" bpmnElement="M_flow_collect_additional_send">
+        <di:waypoint x="1306" y="200" />
+        <di:waypoint x="1406" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_supplier_onboarding_M_flow_report_not_created" bpmnElement="M_flow_report_not_created">
+        <di:waypoint x="1506" y="1392" />
+        <di:waypoint x="1522" y="1392" />
+        <di:waypoint x="1522" y="465" />
+        <di:waypoint x="1658" y="465" />
+        <di:waypoint x="1658" y="498" />
+        <di:waypoint x="1642" y="498" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_supplier_onboarding_M_flow_additional_rescreen" bpmnElement="M_flow_additional_rescreen">
+        <di:waypoint x="1456" y="240" />
+        <di:waypoint x="1456" y="936" />
+        <di:waypoint x="706" y="936" />
+        <di:waypoint x="706" y="916" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

@@ -1,0 +1,37 @@
+{
+  "attempt": 1,
+  "attemptStatus": "completed",
+  "attempt2Created": false,
+  "attempt2Reason": "Attempt 1 completed successfully with signal snapshot_ready and exit code 0; no repair attempt was required.",
+  "modeledScope": "Current ordinary supplier onboarding from initial form collection through screening and vendor-record creation status.",
+  "semanticSummary": [
+    "Buyer collects tax and bank forms and sends the pack to Vendor Risk.",
+    "Sending the pack is not approval; Vendor Risk sanctions screening produces clearance, rejection, or a request for missing evidence.",
+    "Missing evidence returns to the Buyer and then to Vendor Risk for rescreening.",
+    "Only a Vendor Risk clearance routes to Master Data for vendor-record creation.",
+    "The 2026-08-14 correction supersedes prior Procurement ownership: Master Data owns current record creation.",
+    "Master Data reports whether record creation completed, with distinct onboarded and record-not-created outcomes."
+  ],
+  "preservedConflict": {
+    "issueKey": "issue_historical_record_owner",
+    "status": "resolved",
+    "resolution": "Use Master Data as current owner while retaining the prior Procurement ownership statement as dated historical context."
+  },
+  "unresolvedQuestions": [
+    "Which team, if any, owns an appeal after rejection?",
+    "Can an urgent exception bypass sanctions screening, and who authorizes it?",
+    "How is a supplier handled when sanctions data is inconclusive?"
+  ],
+  "visualReview": {
+    "status": "passed",
+    "reviewedArtifact": "attempt-1/model.svg",
+    "observations": [
+      "Buyer, Vendor Risk, and Master Data lanes are visible and ordered correctly.",
+      "Clearance, rejection, missing-evidence, completion, and non-completion routing labels are visible.",
+      "The missing-evidence loop returns to sanctions screening.",
+      "No path treats document transmission as approval.",
+      "All three modeled outcomes are visible."
+    ]
+  },
+  "runJsonEdited": false
+}

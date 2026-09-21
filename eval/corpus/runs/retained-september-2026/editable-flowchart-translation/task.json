@@ -1,0 +1,34 @@
+{
+  "caseContractVersion": "1.0.0",
+  "familyId": "editable-flowchart-translation",
+  "caseId": "editable-flowchart-translation.base",
+  "variantId": null,
+  "title": "Editable non-BPMN flowchart translation",
+  "primaryTask": "legacy",
+  "evaluationLane": "legacy-translation",
+  "prompt": "Propose a reviewed BPMN translation of the editable flowchart. Keep translation decisions visible.",
+  "scope": {
+    "requested": "Editable non-BPMN flowchart translation",
+    "excluded": [
+      "process improvement unless explicitly requested"
+    ]
+  },
+  "clarificationAnswers": [],
+  "correctionTurns": [],
+  "applicability": {
+    "status": "unsupported",
+    "capability": "arbitrary-non-bpmn-conversion",
+    "reason": "Exploratory corpus probe; current product contract does not implement this conversion.",
+    "fixedBeforeExecution": true
+  },
+  "replacesSourceIds": [],
+  "inputArtifacts": [
+    {
+      "id": "editable-flowchart-translation.source.1",
+      "path": "inputs/return-flow.drawio",
+      "mediaType": "application/vnd.jgraph.mxfile",
+      "sha256": "37cd608d2d4ab87d2edb63399f35856ff7b1f3e66d2bf1f7814289d54a95d32b"
+    }
+  ],
+  "variantArtifacts": []
+}

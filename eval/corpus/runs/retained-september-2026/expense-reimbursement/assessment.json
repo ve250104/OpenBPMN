@@ -1,0 +1,328 @@
+{
+  "assessmentVersion": "1.0.0",
+  "status": "complete",
+  "familyId": "expense-reimbursement",
+  "caseId": "expense-reimbursement.base",
+  "variantId": null,
+  "runId": "fresh-expense-reimbursement-20260921",
+  "identities": {
+    "caseSha256": "362fabdeebf850aefe9330cfa46a913a5c7464e77d65b6c126e6e23ee9687455",
+    "assertionSha256": "c76c034795b7d1e12b4a7aa278062ad8f88d64f1d9a0045f2f8c29d53802674a",
+    "sourceArtifacts": [
+      {
+        "id": "expense-reimbursement.source.1",
+        "path": "inputs/procedure.txt",
+        "mediaType": "text/plain",
+        "sha256": "c106190a51aa8926422a823d9608917ce21ce555f59c39da669a51c51e9d9dac",
+        "declaredSha256": "c106190a51aa8926422a823d9608917ce21ce555f59c39da669a51c51e9d9dac",
+        "observedSha256": "c106190a51aa8926422a823d9608917ce21ce555f59c39da669a51c51e9d9dac",
+        "identity": "current"
+      }
+    ],
+    "case": "current",
+    "assertions": "current",
+    "sources": "current"
+  },
+  "candidate": {
+    "commit": "6fc6b6e02b3e565b5b4320e0b74c798dc05a8921",
+    "buildIdentity": "a83d830ef49b1970e26a39587cbe244e7fe50eebc3802e3aec964714661bd79a",
+    "dirtyState": "clean"
+  },
+  "environment": {
+    "runtime": "v24.19.0",
+    "platform": "darwin",
+    "architecture": "arm64",
+    "browser": "Google Chrome 153.0.8010.52",
+    "host": "Codex desktop local fresh projectless task"
+  },
+  "skill": {
+    "version": "0.1.0-dev.0"
+  },
+  "model": {
+    "id": "not_observed (Codex task host default)",
+    "reasoningSettings": "not_observed"
+  },
+  "isolation": {
+    "status": "not_isolated",
+    "stagingSeparation": "case-only-directory",
+    "filesystemBoundary": "not_enforced",
+    "reviewerFilesAccessibleFromHost": true,
+    "reason": "Preparation limits staged inputs, but this local process can still reach the repository and reviewer files.",
+    "canaryCheck": "absent_from_staged_files"
+  },
+  "reviewRubric": {
+    "version": "1.0.0",
+    "criteria": [
+      {
+        "id": "comprehension",
+        "question": "Can a reviewer identify ownership, branching, and completion without author assistance?",
+        "scale": [
+          "clear",
+          "partly clear",
+          "unclear"
+        ],
+        "citationRequired": true
+      },
+      {
+        "id": "ambiguity",
+        "question": "Are material unknowns and competing interpretations visible rather than silently resolved?",
+        "scale": [
+          "explicit",
+          "partly explicit",
+          "hidden"
+        ],
+        "citationRequired": true
+      },
+      {
+        "id": "correction-effort",
+        "question": "How much measured reviewer effort was required to reach an acceptable correction?",
+        "scale": [
+          "no correction",
+          "minor correction",
+          "major correction",
+          "not measured"
+        ],
+        "citationRequired": true
+      }
+    ]
+  },
+  "inputFindings": [],
+  "attempts": [
+    {
+      "attemptId": "initial-session",
+      "recordedStatus": "completed",
+      "status": "fail",
+      "assertions": [
+        {
+          "claim": "the line manager, not Accounts Payable, approves business purpose",
+          "disposition": "required",
+          "epistemicStatus": "established",
+          "dimension": "evidenceFidelity",
+          "assertionId": "expense-reimbursement.assertion.1",
+          "status": "fail",
+          "method": "automated",
+          "evidence": [
+            {
+              "artifact": "artifacts/initial/expense-reimbursement-initial.bpmn",
+              "locator": "element"
+            }
+          ]
+        },
+        {
+          "claim": "a Procurement Director recipient is not established",
+          "disposition": "forbidden",
+          "epistemicStatus": "unknown",
+          "dimension": "coverage",
+          "assertionId": "expense-reimbursement.assertion.2",
+          "status": "pass",
+          "method": "automated",
+          "evidence": [
+            {
+              "artifact": "artifacts/initial/expense-reimbursement-initial.bpmn",
+              "locator": "element"
+            }
+          ]
+        },
+        {
+          "claim": "a rejected claim reaches a distinct rejected outcome",
+          "disposition": "required",
+          "epistemicStatus": "established",
+          "dimension": "behavior",
+          "assertionId": "expense-reimbursement.assertion.3",
+          "status": "fail",
+          "method": "automated",
+          "evidence": [
+            {
+              "artifact": "artifacts/initial/expense-reimbursement-initial.bpmn",
+              "locator": "path"
+            }
+          ]
+        },
+        {
+          "claim": "business-purpose approval precedes the additional-approval decision",
+          "disposition": "required",
+          "epistemicStatus": "established",
+          "dimension": "representation",
+          "assertionId": "expense-reimbursement.assertion.4",
+          "status": "fail",
+          "method": "automated",
+          "evidence": [
+            {
+              "artifact": "artifacts/initial/expense-reimbursement-initial.bpmn",
+              "locator": "path"
+            }
+          ]
+        },
+        {
+          "claim": "finance controller approval applies only above EUR 2,000",
+          "disposition": "required",
+          "epistemicStatus": "established",
+          "dimension": "technicalValidity",
+          "assertionId": "expense-reimbursement.assertion.5",
+          "status": "fail",
+          "method": "automated",
+          "evidence": [
+            {
+              "artifact": "artifacts/initial/expense-reimbursement-initial.bpmn",
+              "locator": "sequence"
+            }
+          ]
+        },
+        {
+          "claim": "the amount decision permits exactly one threshold branch",
+          "disposition": "required",
+          "epistemicStatus": "established",
+          "dimension": "readability",
+          "assertionId": "expense-reimbursement.assertion.6",
+          "status": "fail",
+          "method": "automated",
+          "evidence": [
+            {
+              "artifact": "artifacts/initial/expense-reimbursement-initial.bpmn",
+              "locator": "element"
+            }
+          ]
+        },
+        {
+          "claim": "the above-threshold branch remains visibly labelled",
+          "disposition": "required",
+          "epistemicStatus": "established",
+          "dimension": "interaction",
+          "assertionId": "expense-reimbursement.assertion.7",
+          "status": "fail",
+          "method": "automated",
+          "evidence": [
+            {
+              "artifact": "artifacts/initial/expense-reimbursement-initial.bpmn",
+              "locator": "di-label"
+            }
+          ]
+        },
+        {
+          "claim": "the unrelated payment activity remains unchanged in a correction",
+          "disposition": "required",
+          "epistemicStatus": "established",
+          "dimension": "downstreamUsability",
+          "assertionId": "expense-reimbursement.assertion.8",
+          "status": "fail",
+          "method": "automated",
+          "evidence": [
+            {
+              "artifact": "artifacts/initial/expense-reimbursement-initial.bpmn",
+              "locator": "element"
+            }
+          ]
+        }
+      ],
+      "findings": [
+        {
+          "assertionId": "expense-reimbursement.assertion.1",
+          "code": "wrong_approver",
+          "severity": "critical",
+          "status": "fail",
+          "reason": "the line manager, not Accounts Payable, approves business purpose"
+        },
+        {
+          "assertionId": "expense-reimbursement.assertion.3",
+          "code": "missing_required_branch",
+          "severity": "critical",
+          "status": "fail",
+          "reason": "a rejected claim reaches a distinct rejected outcome"
+        },
+        {
+          "assertionId": "expense-reimbursement.assertion.4",
+          "code": "reversed_connection",
+          "severity": "critical",
+          "status": "fail",
+          "reason": "business-purpose approval precedes the additional-approval decision"
+        },
+        {
+          "assertionId": "expense-reimbursement.assertion.5",
+          "code": "threshold_or_negation_changed",
+          "severity": "critical",
+          "status": "fail",
+          "reason": "finance controller approval applies only above EUR 2,000"
+        },
+        {
+          "assertionId": "expense-reimbursement.assertion.6",
+          "code": "wrong_gateway_behavior",
+          "severity": "critical",
+          "status": "fail",
+          "reason": "the amount decision permits exactly one threshold branch"
+        },
+        {
+          "assertionId": "expense-reimbursement.assertion.7",
+          "code": "detached_label",
+          "severity": "major",
+          "status": "fail",
+          "reason": "the above-threshold branch remains visibly labelled"
+        },
+        {
+          "assertionId": "expense-reimbursement.assertion.8",
+          "code": "unrelated_correction_change",
+          "severity": "critical",
+          "status": "fail",
+          "reason": "the unrelated payment activity remains unchanged in a correction"
+        }
+      ],
+      "artifacts": [
+        {
+          "kind": "bpmn",
+          "path": "artifacts/initial/expense-reimbursement-initial.bpmn",
+          "sha256": "2a8f5936d84cddd40e67789409e9d95e471324f15a4779a2134982d76bf6cc7d",
+          "observedSha256": "2a8f5936d84cddd40e67789409e9d95e471324f15a4779a2134982d76bf6cc7d",
+          "identity": "current"
+        },
+        {
+          "kind": "quality",
+          "path": "artifacts/initial/expense-reimbursement-initial.quality.json",
+          "sha256": "8c0029e36bca9e266d7b5cc071cfdbb7019a50d7cc6b719b87453a6a565dd1ed",
+          "observedSha256": "8c0029e36bca9e266d7b5cc071cfdbb7019a50d7cc6b719b87453a6a565dd1ed",
+          "identity": "current"
+        },
+        {
+          "kind": "svg",
+          "path": "artifacts/initial/expense-reimbursement-initial.svg",
+          "sha256": "f791dec32348a35414f708408d1afd6276da3371de90ed541d7c4caea0021597",
+          "observedSha256": "f791dec32348a35414f708408d1afd6276da3371de90ed541d7c4caea0021597",
+          "identity": "current"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "attemptCount": 1,
+    "statuses": {
+      "fail": 1
+    },
+    "criticalFailures": 6,
+    "humanChecks": 0,
+    "dimensions": {
+      "evidenceFidelity": {
+        "fail": 1
+      },
+      "coverage": {
+        "pass": 1
+      },
+      "behavior": {
+        "fail": 1
+      },
+      "representation": {
+        "fail": 1
+      },
+      "technicalValidity": {
+        "fail": 1
+      },
+      "readability": {
+        "fail": 1
+      },
+      "interaction": {
+        "fail": 1
+      },
+      "downstreamUsability": {
+        "fail": 1
+      }
+    },
+    "correctionMinutes": null
+  }
+}

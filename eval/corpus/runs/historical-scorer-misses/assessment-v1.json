@@ -1,0 +1,538 @@
+{
+  "assessmentVersion": "1.0.0",
+  "status": "complete",
+  "familyId": "expense-reimbursement",
+  "caseId": "expense-reimbursement.base",
+  "variantId": null,
+  "runId": "historical-parent-scorer-misses-6fc6b6e",
+  "identities": {
+    "caseSha256": "362fabdeebf850aefe9330cfa46a913a5c7464e77d65b6c126e6e23ee9687455",
+    "assertionSha256": "c76c034795b7d1e12b4a7aa278062ad8f88d64f1d9a0045f2f8c29d53802674a",
+    "sourceArtifacts": [
+      {
+        "id": "expense-reimbursement.source.1",
+        "path": "inputs/procedure.txt",
+        "mediaType": "text/plain",
+        "sha256": "c106190a51aa8926422a823d9608917ce21ce555f59c39da669a51c51e9d9dac",
+        "declaredSha256": "c106190a51aa8926422a823d9608917ce21ce555f59c39da669a51c51e9d9dac",
+        "observedSha256": "c106190a51aa8926422a823d9608917ce21ce555f59c39da669a51c51e9d9dac",
+        "identity": "current"
+      }
+    ],
+    "case": "current",
+    "assertions": "current",
+    "sources": "current"
+  },
+  "candidate": {
+    "commit": "6fc6b6e02b3e565b5b4320e0b74c798dc05a8921",
+    "buildIdentity": "direct-parent-unchanged",
+    "dirtyState": "clean"
+  },
+  "environment": {
+    "runtime": "v24.19.0",
+    "platform": "darwin",
+    "architecture": "arm64",
+    "browser": "not_observed",
+    "host": "local"
+  },
+  "skill": {
+    "version": "not_observed"
+  },
+  "model": {
+    "id": "not_observed",
+    "reasoningSettings": "not_observed"
+  },
+  "isolation": {
+    "status": "not_isolated",
+    "stagingSeparation": "case-only-directory",
+    "filesystemBoundary": "not_enforced",
+    "reviewerFilesAccessibleFromHost": true,
+    "reason": "Preparation limits staged inputs, but this local process can still reach the repository and reviewer files.",
+    "canaryCheck": "absent_from_staged_files"
+  },
+  "reviewRubric": {
+    "version": "1.0.0",
+    "criteria": [
+      {
+        "id": "comprehension",
+        "question": "Can a reviewer identify ownership, branching, and completion without author assistance?",
+        "scale": [
+          "clear",
+          "partly clear",
+          "unclear"
+        ],
+        "citationRequired": true
+      },
+      {
+        "id": "ambiguity",
+        "question": "Are material unknowns and competing interpretations visible rather than silently resolved?",
+        "scale": [
+          "explicit",
+          "partly explicit",
+          "hidden"
+        ],
+        "citationRequired": true
+      },
+      {
+        "id": "correction-effort",
+        "question": "How much measured reviewer effort was required to reach an acceptable correction?",
+        "scale": [
+          "no correction",
+          "minor correction",
+          "major correction",
+          "not measured"
+        ],
+        "citationRequired": true
+      }
+    ]
+  },
+  "inputFindings": [],
+  "attempts": [
+    {
+      "attemptId": "direct-bypass",
+      "recordedStatus": "completed",
+      "status": "pass",
+      "assertions": [
+        {
+          "claim": "the line manager, not Accounts Payable, approves business purpose",
+          "disposition": "required",
+          "epistemicStatus": "established",
+          "dimension": "evidenceFidelity",
+          "assertionId": "expense-reimbursement.assertion.1",
+          "status": "pass",
+          "method": "automated",
+          "evidence": [
+            {
+              "artifact": "direct-bypass/model.bpmn",
+              "locator": "element"
+            }
+          ]
+        },
+        {
+          "claim": "a Procurement Director recipient is not established",
+          "disposition": "forbidden",
+          "epistemicStatus": "unknown",
+          "dimension": "coverage",
+          "assertionId": "expense-reimbursement.assertion.2",
+          "status": "pass",
+          "method": "automated",
+          "evidence": [
+            {
+              "artifact": "direct-bypass/model.bpmn",
+              "locator": "element"
+            }
+          ]
+        },
+        {
+          "claim": "a rejected claim reaches a distinct rejected outcome",
+          "disposition": "required",
+          "epistemicStatus": "established",
+          "dimension": "behavior",
+          "assertionId": "expense-reimbursement.assertion.3",
+          "status": "pass",
+          "method": "automated",
+          "evidence": [
+            {
+              "artifact": "direct-bypass/model.bpmn",
+              "locator": "path"
+            }
+          ]
+        },
+        {
+          "claim": "business-purpose approval precedes the additional-approval decision",
+          "disposition": "required",
+          "epistemicStatus": "established",
+          "dimension": "representation",
+          "assertionId": "expense-reimbursement.assertion.4",
+          "status": "pass",
+          "method": "automated",
+          "evidence": [
+            {
+              "artifact": "direct-bypass/model.bpmn",
+              "locator": "path"
+            }
+          ]
+        },
+        {
+          "claim": "finance controller approval applies only above EUR 2,000",
+          "disposition": "required",
+          "epistemicStatus": "established",
+          "dimension": "technicalValidity",
+          "assertionId": "expense-reimbursement.assertion.5",
+          "status": "pass",
+          "method": "automated",
+          "evidence": [
+            {
+              "artifact": "direct-bypass/model.bpmn",
+              "locator": "sequence"
+            }
+          ]
+        },
+        {
+          "claim": "the amount decision permits exactly one threshold branch",
+          "disposition": "required",
+          "epistemicStatus": "established",
+          "dimension": "readability",
+          "assertionId": "expense-reimbursement.assertion.6",
+          "status": "pass",
+          "method": "automated",
+          "evidence": [
+            {
+              "artifact": "direct-bypass/model.bpmn",
+              "locator": "element"
+            }
+          ]
+        },
+        {
+          "claim": "the above-threshold branch remains visibly labelled",
+          "disposition": "required",
+          "epistemicStatus": "established",
+          "dimension": "interaction",
+          "assertionId": "expense-reimbursement.assertion.7",
+          "status": "pass",
+          "method": "automated",
+          "evidence": [
+            {
+              "artifact": "direct-bypass/model.bpmn",
+              "locator": "di-label"
+            }
+          ]
+        },
+        {
+          "claim": "the unrelated payment activity remains unchanged in a correction",
+          "disposition": "required",
+          "epistemicStatus": "established",
+          "dimension": "downstreamUsability",
+          "assertionId": "expense-reimbursement.assertion.8",
+          "status": "pass",
+          "method": "automated",
+          "evidence": [
+            {
+              "artifact": "direct-bypass/model.bpmn",
+              "locator": "element"
+            }
+          ]
+        }
+      ],
+      "findings": [],
+      "artifacts": [
+        {
+          "kind": "bpmn",
+          "path": "direct-bypass/model.bpmn",
+          "sha256": "3c5be432201977594479c6aef2ba70e94635b3f12ba445a63c2c4cce570c9382",
+          "observedSha256": "3c5be432201977594479c6aef2ba70e94635b3f12ba445a63c2c4cce570c9382",
+          "identity": "current"
+        }
+      ]
+    },
+    {
+      "attemptId": "swapped-conditions",
+      "recordedStatus": "completed",
+      "status": "pass",
+      "assertions": [
+        {
+          "claim": "the line manager, not Accounts Payable, approves business purpose",
+          "disposition": "required",
+          "epistemicStatus": "established",
+          "dimension": "evidenceFidelity",
+          "assertionId": "expense-reimbursement.assertion.1",
+          "status": "pass",
+          "method": "automated",
+          "evidence": [
+            {
+              "artifact": "swapped-conditions/model.bpmn",
+              "locator": "element"
+            }
+          ]
+        },
+        {
+          "claim": "a Procurement Director recipient is not established",
+          "disposition": "forbidden",
+          "epistemicStatus": "unknown",
+          "dimension": "coverage",
+          "assertionId": "expense-reimbursement.assertion.2",
+          "status": "pass",
+          "method": "automated",
+          "evidence": [
+            {
+              "artifact": "swapped-conditions/model.bpmn",
+              "locator": "element"
+            }
+          ]
+        },
+        {
+          "claim": "a rejected claim reaches a distinct rejected outcome",
+          "disposition": "required",
+          "epistemicStatus": "established",
+          "dimension": "behavior",
+          "assertionId": "expense-reimbursement.assertion.3",
+          "status": "pass",
+          "method": "automated",
+          "evidence": [
+            {
+              "artifact": "swapped-conditions/model.bpmn",
+              "locator": "path"
+            }
+          ]
+        },
+        {
+          "claim": "business-purpose approval precedes the additional-approval decision",
+          "disposition": "required",
+          "epistemicStatus": "established",
+          "dimension": "representation",
+          "assertionId": "expense-reimbursement.assertion.4",
+          "status": "pass",
+          "method": "automated",
+          "evidence": [
+            {
+              "artifact": "swapped-conditions/model.bpmn",
+              "locator": "path"
+            }
+          ]
+        },
+        {
+          "claim": "finance controller approval applies only above EUR 2,000",
+          "disposition": "required",
+          "epistemicStatus": "established",
+          "dimension": "technicalValidity",
+          "assertionId": "expense-reimbursement.assertion.5",
+          "status": "pass",
+          "method": "automated",
+          "evidence": [
+            {
+              "artifact": "swapped-conditions/model.bpmn",
+              "locator": "sequence"
+            }
+          ]
+        },
+        {
+          "claim": "the amount decision permits exactly one threshold branch",
+          "disposition": "required",
+          "epistemicStatus": "established",
+          "dimension": "readability",
+          "assertionId": "expense-reimbursement.assertion.6",
+          "status": "pass",
+          "method": "automated",
+          "evidence": [
+            {
+              "artifact": "swapped-conditions/model.bpmn",
+              "locator": "element"
+            }
+          ]
+        },
+        {
+          "claim": "the above-threshold branch remains visibly labelled",
+          "disposition": "required",
+          "epistemicStatus": "established",
+          "dimension": "interaction",
+          "assertionId": "expense-reimbursement.assertion.7",
+          "status": "pass",
+          "method": "automated",
+          "evidence": [
+            {
+              "artifact": "swapped-conditions/model.bpmn",
+              "locator": "di-label"
+            }
+          ]
+        },
+        {
+          "claim": "the unrelated payment activity remains unchanged in a correction",
+          "disposition": "required",
+          "epistemicStatus": "established",
+          "dimension": "downstreamUsability",
+          "assertionId": "expense-reimbursement.assertion.8",
+          "status": "pass",
+          "method": "automated",
+          "evidence": [
+            {
+              "artifact": "swapped-conditions/model.bpmn",
+              "locator": "element"
+            }
+          ]
+        }
+      ],
+      "findings": [],
+      "artifacts": [
+        {
+          "kind": "bpmn",
+          "path": "swapped-conditions/model.bpmn",
+          "sha256": "12a64c6838d3aecc4d43e1f3bbc274e7c00d59249de41d57b116ea40f40ba8f3",
+          "observedSha256": "12a64c6838d3aecc4d43e1f3bbc274e7c00d59249de41d57b116ea40f40ba8f3",
+          "identity": "current"
+        }
+      ]
+    },
+    {
+      "attemptId": "detached-label",
+      "recordedStatus": "completed",
+      "status": "pass",
+      "assertions": [
+        {
+          "claim": "the line manager, not Accounts Payable, approves business purpose",
+          "disposition": "required",
+          "epistemicStatus": "established",
+          "dimension": "evidenceFidelity",
+          "assertionId": "expense-reimbursement.assertion.1",
+          "status": "pass",
+          "method": "automated",
+          "evidence": [
+            {
+              "artifact": "detached-label/model.bpmn",
+              "locator": "element"
+            }
+          ]
+        },
+        {
+          "claim": "a Procurement Director recipient is not established",
+          "disposition": "forbidden",
+          "epistemicStatus": "unknown",
+          "dimension": "coverage",
+          "assertionId": "expense-reimbursement.assertion.2",
+          "status": "pass",
+          "method": "automated",
+          "evidence": [
+            {
+              "artifact": "detached-label/model.bpmn",
+              "locator": "element"
+            }
+          ]
+        },
+        {
+          "claim": "a rejected claim reaches a distinct rejected outcome",
+          "disposition": "required",
+          "epistemicStatus": "established",
+          "dimension": "behavior",
+          "assertionId": "expense-reimbursement.assertion.3",
+          "status": "pass",
+          "method": "automated",
+          "evidence": [
+            {
+              "artifact": "detached-label/model.bpmn",
+              "locator": "path"
+            }
+          ]
+        },
+        {
+          "claim": "business-purpose approval precedes the additional-approval decision",
+          "disposition": "required",
+          "epistemicStatus": "established",
+          "dimension": "representation",
+          "assertionId": "expense-reimbursement.assertion.4",
+          "status": "pass",
+          "method": "automated",
+          "evidence": [
+            {
+              "artifact": "detached-label/model.bpmn",
+              "locator": "path"
+            }
+          ]
+        },
+        {
+          "claim": "finance controller approval applies only above EUR 2,000",
+          "disposition": "required",
+          "epistemicStatus": "established",
+          "dimension": "technicalValidity",
+          "assertionId": "expense-reimbursement.assertion.5",
+          "status": "pass",
+          "method": "automated",
+          "evidence": [
+            {
+              "artifact": "detached-label/model.bpmn",
+              "locator": "sequence"
+            }
+          ]
+        },
+        {
+          "claim": "the amount decision permits exactly one threshold branch",
+          "disposition": "required",
+          "epistemicStatus": "established",
+          "dimension": "readability",
+          "assertionId": "expense-reimbursement.assertion.6",
+          "status": "pass",
+          "method": "automated",
+          "evidence": [
+            {
+              "artifact": "detached-label/model.bpmn",
+              "locator": "element"
+            }
+          ]
+        },
+        {
+          "claim": "the above-threshold branch remains visibly labelled",
+          "disposition": "required",
+          "epistemicStatus": "established",
+          "dimension": "interaction",
+          "assertionId": "expense-reimbursement.assertion.7",
+          "status": "pass",
+          "method": "automated",
+          "evidence": [
+            {
+              "artifact": "detached-label/model.bpmn",
+              "locator": "di-label"
+            }
+          ]
+        },
+        {
+          "claim": "the unrelated payment activity remains unchanged in a correction",
+          "disposition": "required",
+          "epistemicStatus": "established",
+          "dimension": "downstreamUsability",
+          "assertionId": "expense-reimbursement.assertion.8",
+          "status": "pass",
+          "method": "automated",
+          "evidence": [
+            {
+              "artifact": "detached-label/model.bpmn",
+              "locator": "element"
+            }
+          ]
+        }
+      ],
+      "findings": [],
+      "artifacts": [
+        {
+          "kind": "bpmn",
+          "path": "detached-label/model.bpmn",
+          "sha256": "052a69c11f79aea35d09b10b3399e77b746f42810298f2205c187664d7cf491b",
+          "observedSha256": "052a69c11f79aea35d09b10b3399e77b746f42810298f2205c187664d7cf491b",
+          "identity": "current"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "attemptCount": 3,
+    "statuses": {
+      "pass": 3
+    },
+    "criticalFailures": 0,
+    "humanChecks": 0,
+    "dimensions": {
+      "evidenceFidelity": {
+        "pass": 3
+      },
+      "coverage": {
+        "pass": 3
+      },
+      "behavior": {
+        "pass": 3
+      },
+      "representation": {
+        "pass": 3
+      },
+      "technicalValidity": {
+        "pass": 3
+      },
+      "readability": {
+        "pass": 3
+      },
+      "interaction": {
+        "pass": 3
+      },
+      "downstreamUsability": {
+        "pass": 3
+      }
+    },
+    "correctionMinutes": null
+  }
+}

@@ -1,0 +1,214 @@
+{
+  "assessmentVersion": "1.0.0",
+  "status": "complete",
+  "familyId": "supplier-onboarding-discovery",
+  "caseId": "supplier-onboarding-discovery.base",
+  "variantId": null,
+  "runId": "fresh-supplier-onboarding-discovery-20260921",
+  "identities": {
+    "caseSha256": "745957cc73de878a9711e829caa8e647b240cafd4eb4444cf8a0dc7b5069c143",
+    "assertionSha256": "3a3b31b6c542ff49ac5a6ce50bb6f76d2b7e9adf2926ad12d7b94975c2838fe5",
+    "sourceArtifacts": [
+      {
+        "id": "supplier-onboarding-discovery.source.1",
+        "path": "inputs/interview.txt",
+        "mediaType": "text/plain",
+        "sha256": "d185245477c1bf34dbf1676fb288d2d1415f3e636cf855961d22cd963873fea9",
+        "declaredSha256": "d185245477c1bf34dbf1676fb288d2d1415f3e636cf855961d22cd963873fea9",
+        "observedSha256": "d185245477c1bf34dbf1676fb288d2d1415f3e636cf855961d22cd963873fea9",
+        "identity": "current"
+      },
+      {
+        "id": "supplier-onboarding-discovery.source.2",
+        "path": "inputs/checklist.docx",
+        "mediaType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "sha256": "5fd9914492243928a3518c199075dfda7f62c658fc38bca52c37df8016ba5267",
+        "declaredSha256": "5fd9914492243928a3518c199075dfda7f62c658fc38bca52c37df8016ba5267",
+        "observedSha256": "5fd9914492243928a3518c199075dfda7f62c658fc38bca52c37df8016ba5267",
+        "identity": "current"
+      },
+      {
+        "id": "supplier-onboarding-discovery.source.3",
+        "path": "inputs/dated-correction.txt",
+        "mediaType": "text/plain",
+        "sha256": "142adf247f480bb87a4894df601b8fe2d8e2c490250d76b6a7f286c7103eb01c",
+        "declaredSha256": "142adf247f480bb87a4894df601b8fe2d8e2c490250d76b6a7f286c7103eb01c",
+        "observedSha256": "142adf247f480bb87a4894df601b8fe2d8e2c490250d76b6a7f286c7103eb01c",
+        "identity": "current"
+      }
+    ],
+    "case": "current",
+    "assertions": "current",
+    "sources": "current"
+  },
+  "candidate": {
+    "commit": "6fc6b6e02b3e565b5b4320e0b74c798dc05a8921",
+    "buildIdentity": "a83d830ef49b1970e26a39587cbe244e7fe50eebc3802e3aec964714661bd79a",
+    "dirtyState": "clean"
+  },
+  "environment": {
+    "runtime": "v24.19.0",
+    "platform": "darwin",
+    "architecture": "arm64",
+    "browser": "Google Chrome 153.0.8010.52",
+    "host": "local source-only session"
+  },
+  "skill": {
+    "version": "0.1.0-dev.0"
+  },
+  "model": {
+    "id": "not_observed (Codex task host default)",
+    "reasoningSettings": "not_observed"
+  },
+  "isolation": {
+    "status": "not_isolated",
+    "stagingSeparation": "case-only-directory",
+    "filesystemBoundary": "not_enforced",
+    "reviewerFilesAccessibleFromHost": true,
+    "reason": "Preparation limits staged inputs, but this local process can still reach the repository and reviewer files.",
+    "canaryCheck": "absent_from_staged_files"
+  },
+  "reviewRubric": {
+    "version": "1.0.0",
+    "criteria": [
+      {
+        "id": "comprehension",
+        "question": "Can a reviewer identify ownership, branching, and completion without author assistance?",
+        "scale": [
+          "clear",
+          "partly clear",
+          "unclear"
+        ],
+        "citationRequired": true
+      },
+      {
+        "id": "ambiguity",
+        "question": "Are material unknowns and competing interpretations visible rather than silently resolved?",
+        "scale": [
+          "explicit",
+          "partly explicit",
+          "hidden"
+        ],
+        "citationRequired": true
+      },
+      {
+        "id": "correction-effort",
+        "question": "How much measured reviewer effort was required to reach an acceptable correction?",
+        "scale": [
+          "no correction",
+          "minor correction",
+          "major correction",
+          "not measured"
+        ],
+        "citationRequired": true
+      }
+    ]
+  },
+  "inputFindings": [],
+  "attempts": [
+    {
+      "attemptId": "initial-session",
+      "recordedStatus": "completed",
+      "status": "pass",
+      "assertions": [
+        {
+          "claim": "Vendor Risk decides screening and Master Data creates the record",
+          "disposition": "required",
+          "epistemicStatus": "established",
+          "dimension": "evidenceFidelity",
+          "assertionId": "supplier-onboarding-discovery.assertion.1",
+          "method": "agent",
+          "methodDescription": "Independent source, BPMN XML, quality-report, sanitized session provenance, and rendered-preview review; not human adjudication.",
+          "status": "pass",
+          "reviewer": {
+            "identity": "root independent review",
+            "role": "agent"
+          },
+          "sourceCitations": [
+            {
+              "artifact": "inputs/dated-correction.txt",
+              "locator": "entire source"
+            }
+          ],
+          "outputCitations": [
+            {
+              "artifact": "artifacts/initial/supplier-onboarding-initial.bpmn",
+              "locator": "Vendor Risk and Master Data lanes; M_createVendorRecord; M_approvalToCreation"
+            }
+          ],
+          "adjudicationStatus": "proposed",
+          "reason": "Record creation belongs to Master Data and is guarded by Vendor Risk approval."
+        },
+        {
+          "claim": "sending the pack establishes that Vendor Risk approved it",
+          "disposition": "forbidden",
+          "epistemicStatus": "unknown",
+          "dimension": "coverage",
+          "assertionId": "supplier-onboarding-discovery.assertion.2",
+          "method": "agent",
+          "methodDescription": "Independent source, BPMN XML, quality-report, sanitized session provenance, and rendered-preview review; not human adjudication.",
+          "status": "pass",
+          "reviewer": {
+            "identity": "root independent review",
+            "role": "agent"
+          },
+          "sourceCitations": [
+            {
+              "artifact": "inputs/interview.txt",
+              "locator": "entire source"
+            }
+          ],
+          "outputCitations": [
+            {
+              "artifact": "artifacts/initial/supplier-onboarding-initial.bpmn",
+              "locator": "Send pack, Screen supplier, Send risk decision, and conditional approvalToCreation flow"
+            }
+          ],
+          "adjudicationStatus": "proposed",
+          "reason": "Sending the pack is distinct from screening and approval; no unsupported approval shortcut was added."
+        }
+      ],
+      "findings": [],
+      "artifacts": [
+        {
+          "kind": "bpmn",
+          "path": "artifacts/initial/supplier-onboarding-initial.bpmn",
+          "sha256": "c0f8fb3cf90afeb0f8813bcd88c9143c066d47542e85bbfe4b3ddc9a55f109b7",
+          "observedSha256": "c0f8fb3cf90afeb0f8813bcd88c9143c066d47542e85bbfe4b3ddc9a55f109b7",
+          "identity": "current"
+        },
+        {
+          "kind": "quality",
+          "path": "artifacts/initial/supplier-onboarding-initial.quality.json",
+          "sha256": "957a878d6dff6f077ade628e4114fa7b69013c6ead78ac8e25ca2be3be27292c",
+          "observedSha256": "957a878d6dff6f077ade628e4114fa7b69013c6ead78ac8e25ca2be3be27292c",
+          "identity": "current"
+        },
+        {
+          "kind": "svg",
+          "path": "artifacts/initial/supplier-onboarding-initial.svg",
+          "sha256": "6a5ec9dcf1d48525a25e9859682ee5d32ae3809054a2cd77e738feedb2d9dfc7",
+          "observedSha256": "6a5ec9dcf1d48525a25e9859682ee5d32ae3809054a2cd77e738feedb2d9dfc7",
+          "identity": "current"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "attemptCount": 1,
+    "statuses": {
+      "pass": 1
+    },
+    "criticalFailures": 0,
+    "humanChecks": 0,
+    "dimensions": {
+      "evidenceFidelity": {
+        "pass": 1
+      },
+      "coverage": {
+        "pass": 1
+      }
+    },
+    "correctionMinutes": null
+  }
+}

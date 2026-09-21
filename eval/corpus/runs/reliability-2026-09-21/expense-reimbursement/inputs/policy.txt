@@ -1,0 +1,8 @@
+Expense reimbursement control note — effective 2026-01-01
+
+1. Accounts Payable checks that the submitted claim contains the required receipts.
+2. An incomplete claim is returned to the employee for correction and may be checked again under the same claim identity.
+3. The line manager must approve business purpose before payment.
+4. A claim above EUR 2,000 also requires Finance Controller approval before payment. The control note does not prescribe an order between the two approvals.
+5. Accounts Payable records either payment or rejection and sends the employee the corresponding notice.
+6. The note does not identify an escalation approver or a recipient outside the employee.

@@ -31,7 +31,7 @@
     },
     "clarificationAnswers": [],
     "correctionTurns": [
-      "Later correction: rename the line-manager activity to Validate business purpose, retain the Accounts Payable payment after approval, and do not replace it with a Procurement notification."
+      "Later correction: change finance-controller approval from above EUR 2,000 to EUR 2,500 or more, with the complementary route below EUR 2,500; preserve unrelated work and identities."
     ]
   },
   "applicability": {
@@ -43,19 +43,64 @@
   "correctionContract": {
     "baselineRequired": true,
     "mutableElementIds": [
-      "Approve"
+      "F_controller",
+      "F_standard",
+      "controllerRequired",
+      "controllerNotRequired"
     ],
     "removableElementIds": [],
     "allowedNewElements": [],
-    "allowedElementChanges": [
+    "allowedElementChanges": [],
+    "allowedFlowChanges": [
       {
-        "id": "Approve",
+        "id": "F_controller",
         "field": "name",
-        "from": "Approve business purpose",
-        "to": "Validate business purpose"
+        "from": "Above EUR 2,000",
+        "to": "EUR 2,500 or more"
+      },
+      {
+        "id": "F_controller",
+        "field": "condition",
+        "from": "amount > 2000",
+        "to": "amount >= 2500"
+      },
+      {
+        "id": "F_standard",
+        "field": "name",
+        "from": "EUR 2,000 or less",
+        "to": "Below EUR 2,500"
+      },
+      {
+        "id": "F_standard",
+        "field": "condition",
+        "from": "amount <= 2000",
+        "to": "amount < 2500"
+      },
+      {
+        "id": "controllerRequired",
+        "field": "name",
+        "from": "Above EUR 2,000",
+        "to": "EUR 2,500 or more"
+      },
+      {
+        "id": "controllerRequired",
+        "field": "condition",
+        "from": "Claim amount is greater than EUR 2,000.",
+        "to": "Claim amount is greater than or equal to EUR 2,500."
+      },
+      {
+        "id": "controllerNotRequired",
+        "field": "name",
+        "from": "EUR 2,000 or less",
+        "to": "Below EUR 2,500"
+      },
+      {
+        "id": "controllerNotRequired",
+        "field": "condition",
+        "from": "Claim amount is less than or equal to EUR 2,000.",
+        "to": "Claim amount is less than EUR 2,500."
       }
     ],
-    "allowedFlowChanges": [],
     "allowedNewFlows": []
   },
   "sourceArtifacts": [
@@ -129,6 +174,30 @@
       },
       "transformationHistory": [
         "Authored directly in the declared format as a richer related case pack."
+      ]
+    },
+    {
+      "id": "expense-reimbursement.source.4",
+      "path": "inputs/correction.txt",
+      "mediaType": "text/plain",
+      "sha256": "60fd205d2288f7df605d365be47e5b3b5689c1fc098a9906c877216b49c7c188",
+      "role": "evidence",
+      "viewpoint": "process owner",
+      "provenance": {
+        "classification": "synthetic-fiction",
+        "sourceFamily": "OpenBPMN evaluation corpus",
+        "sourceVersion": "2.0.0",
+        "originalUrl": null,
+        "authorshipRecord": "Authored for OpenBPMN issue #45; not client or operational material.",
+        "retrievedAt": "2026-09-21",
+        "rights": {
+          "license": "MIT",
+          "licenseUrl": "https://opensource.org/license/mit",
+          "attribution": "OpenBPMN contributors"
+        }
+      },
+      "transformationHistory": [
+        "Authored directly in the declared format as the correction-turn evidence."
       ]
     }
   ],

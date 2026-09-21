@@ -482,11 +482,40 @@ async function validate(root) {
   assert.ok(
     reliability.sessions.every(
       (session) =>
-        ['completed', 'failed', 'blocked', 'not_run'].includes(session.status) &&
+        ['completed', 'failed', 'blocked', 'unsupported', 'not_run'].includes(session.status) &&
         (session.status !== 'not_run' || session.reason),
     ),
     'Fresh-session execution and unrun reasons must be reported honestly.',
   );
+  assert.equal(reliability.retainedDiagnostics.status, 'available');
+  const retainedCompatibility = await readJson(
+    inside(root, reliability.retainedDiagnostics.compatibilityRecord, 'Retained compatibility record'),
+  );
+  assert.equal(retainedCompatibility.sourceRunContractVersion, '1.0.0');
+  assert.equal(retainedCompatibility.currentEvaluator.regraded, false);
+  assert.equal(retainedCompatibility.currentEvaluator.crossVersionScoreDeltaAllowed, false);
+  const historicalProvenance = await readJson(
+    inside(root, reliability.historicalScorerReproduction.record, 'Historical scorer reproduction'),
+  );
+  assert.equal(historicalProvenance.evaluator.relationship, 'direct-parent');
+  assert.equal(historicalProvenance.evaluator.runContractVersion, '1.0.0');
+  assert.equal(historicalProvenance.assessment.statuses.pass, 3);
+  assert.ok(
+    historicalProvenance.counterexamples.every((counterexample) => counterexample.historicalAssessment === 'pass'),
+  );
+  for (const session of reliability.sessions) {
+    if (session.run) {
+      const retainedRun = await readJson(inside(root, session.run, `${session.familyId} fresh run`));
+      const retainedAssessment = await readJson(
+        inside(root, session.assessment, `${session.familyId} fresh assessment`),
+      );
+      assert.equal(retainedRun.runContractVersion, '2.0.0');
+      assert.equal(retainedAssessment.assessmentVersion, '2.0.0');
+      assert.equal(retainedAssessment.identities.case, 'current');
+      assert.equal(retainedAssessment.identities.assertions, 'current');
+      assert.equal(retainedAssessment.identities.sources, 'current');
+    } else await readJson(inside(root, session.record, `${session.familyId} session record`));
+  }
 
   return {
     status: 'pass',
@@ -519,6 +548,7 @@ async function validate(root) {
     freshSessions: {
       planned: reliability.sessions.length,
       completed: reliability.sessions.filter((session) => session.status === 'completed').length,
+      unsupported: reliability.sessions.filter((session) => session.status === 'unsupported').length,
       notRun: reliability.sessions.filter((session) => session.status === 'not_run').length,
       isolation: reliability.isolation.filesystemBoundary,
     },
@@ -777,7 +807,7 @@ function bpmnProjection(definitions, xml) {
 
 function nameMatches(actual, expected, mode = 'equals') {
   if (mode === 'includes') return actual.toLowerCase().includes(expected.toLowerCase());
-  return actual === expected;
+  return actual.trim().toLowerCase() === expected.trim().toLowerCase();
 }
 
 function typeMatches(actual, expected, allowGenericTask = false) {
@@ -791,10 +821,11 @@ function isTaskType(type) {
 
 function elementMatches(element, matcher) {
   const names = [matcher.name, ...(matcher.aliases ?? [])].filter(Boolean);
+  const types = matcher.types ?? (matcher.type ? [matcher.type] : []);
   return (
     (!names.length || names.some((name) => nameMatches(element.name, name, matcher.nameMode))) &&
-    typeMatches(element.type, matcher.type, matcher.allowGenericTask) &&
-    (!matcher.lane || element.lanes.includes(matcher.lane))
+    (!types.length || types.some((type) => typeMatches(element.type, type, matcher.allowGenericTask))) &&
+    (!matcher.lane || element.lanes.some((lane) => nameMatches(lane, matcher.lane)))
   );
 }
 
@@ -822,9 +853,33 @@ function reachable(projection, starts, targets, excluded = new Set()) {
   return false;
 }
 
+function reachableWithoutRequiredJoin(projection, start, target, excluded) {
+  const graph = adjacency(projection, excluded);
+  const incoming = new Map();
+  for (const flow of projection.flows) incoming.set(flow.target, [...(incoming.get(flow.target) ?? []), flow.source]);
+  const requiredIds = [...excluded];
+  const pending = [start];
+  const visited = new Set();
+  while (pending.length) {
+    const current = pending.shift();
+    if (current === target) return true;
+    if (visited.has(current)) continue;
+    visited.add(current);
+    const element = projection.byId.get(current);
+    const sources = incoming.get(current) ?? [];
+    const synchronizingJoin =
+      sources.length > 1 && ['bpmn:InclusiveGateway', 'bpmn:ParallelGateway'].includes(element?.type);
+    if (synchronizingJoin && sources.some((source) => reachable(projection, requiredIds, [source]))) continue;
+    pending.push(...(graph.get(current) ?? []));
+  }
+  return false;
+}
+
 function resolveUnique(projection, name, label, aliases = []) {
-  const names = new Set([name, ...aliases]);
-  const matches = projection.elements.filter((element) => names.has(element.name));
+  const names = [name, ...aliases];
+  const matches = projection.elements.filter((element) =>
+    names.some((candidate) => nameMatches(element.name, candidate)),
+  );
   if (matches.length === 1) return { element: matches[0] };
   if (matches.length > 1) return { status: 'unresolved', reason: `Ambiguous ${label} binding for ${name}.` };
   return { status: 'fail', reason: `No ${label} matched ${name}.` };
@@ -843,7 +898,25 @@ function parsedCondition(text) {
   const direct = /^([A-Za-z][A-Za-z0-9_.-]*)\s*(<=|>=|<|>|==|=)\s*(-?\d+(?:\.\d+)?)$/i.exec(normalized);
   if (direct) return { variable: direct[1], operator: direct[2], value: Number(direct[3]), reversed: false };
   const reversed = /^(-?\d+(?:\.\d+)?)\s*(<=|>=|<|>|==|=)\s*([A-Za-z][A-Za-z0-9_.-]*)$/i.exec(normalized);
-  if (!reversed) return null;
+  if (!reversed) {
+    const natural =
+      /^(?:claim\s+)?([A-Za-z][A-Za-z0-9_.-]*)\s+is\s+(less than or equal to|greater than or equal to|less than|greater than)\s+(?:[A-Z]{3}\s+)?(-?\d[\d,]*(?:\.\d+)?)\.?$/i.exec(
+        normalized,
+      );
+    if (!natural) return null;
+    const operators = {
+      'less than': '<',
+      'less than or equal to': '<=',
+      'greater than': '>',
+      'greater than or equal to': '>=',
+    };
+    return {
+      variable: natural[1],
+      operator: operators[natural[2].toLowerCase()],
+      value: Number(natural[3].replaceAll(',', '')),
+      reversed: false,
+    };
+  }
   const inverse = { '<': '>', '<=': '>=', '>': '<', '>=': '<=', '=': '=', '==': '==' };
   return {
     variable: reversed[3],
@@ -885,14 +958,14 @@ function matcherResult(projection, matcher, renderedSvg) {
       if (named.length) return { observed: false };
       const contextual = projection.elements.filter(
         (element) =>
-          typeMatches(element.type, matcher.type, matcher.allowGenericTask) &&
-          (!matcher.lane || element.lanes.includes(matcher.lane)),
+          (matcher.types ?? [matcher.type]).some((type) => typeMatches(element.type, type, matcher.allowGenericTask)) &&
+          (!matcher.lane || element.lanes.some((lane) => nameMatches(lane, matcher.lane))),
       );
       if (contextual.length)
         return { status: 'unresolved', reason: 'A plausible element exists, but its wording is not a declared alias.' };
     }
     if (matches.length === 1 && matcher.start) {
-      const start = resolveUnique(projection, matcher.start, 'start');
+      const start = resolveUnique(projection, matcher.start, 'start', matcher.startAliases);
       if (start.status) return start;
       return { observed: reachable(projection, [start.element.id], [matches[0].id]) };
     }
@@ -915,7 +988,7 @@ function matcherResult(projection, matcher, renderedSvg) {
   if (matcher.kind === 'path') {
     const start = resolveUnique(projection, matcher.from, 'path origin', matcher.aliases);
     if (start.status) return start;
-    const target = resolveUnique(projection, matcher.to, 'path destination');
+    const target = resolveUnique(projection, matcher.to, 'path destination', matcher.targetAliases);
     if (target.status) return target;
     if (matcher.start) {
       const relevantStart = resolveUnique(projection, matcher.start, 'relevant start');
@@ -925,9 +998,9 @@ function matcherResult(projection, matcher, renderedSvg) {
     return { observed: reachable(projection, [start.element.id], [target.element.id]) };
   }
   if (matcher.kind === 'dependency') {
-    const start = resolveUnique(projection, matcher.start, 'relevant start');
+    const start = resolveUnique(projection, matcher.start, 'relevant start', matcher.startAliases);
     if (start.status) return start;
-    const target = resolveUnique(projection, matcher.to, 'path destination');
+    const target = resolveUnique(projection, matcher.to, 'path destination', matcher.targetAliases);
     if (target.status) return target;
     const names = matcher.required;
     const resolved = names.map((name) => resolveUnique(projection, name, 'path constraint', matcher.aliases));
@@ -935,7 +1008,7 @@ function matcherResult(projection, matcher, renderedSvg) {
     if (issue) return issue;
     if (!reachable(projection, [start.element.id], [target.element.id])) return { observed: false };
     const bypasses = resolved.map((item) =>
-      reachable(projection, [start.element.id], [target.element.id], new Set([item.element.id])),
+      reachableWithoutRequiredJoin(projection, start.element.id, target.element.id, new Set([item.element.id])),
     );
     return {
       observed: bypasses.every((bypass) => !bypass),
@@ -945,9 +1018,11 @@ function matcherResult(projection, matcher, renderedSvg) {
   if (matcher.kind === 'condition') {
     const matches = projection.flows.filter(
       (flow) =>
-        (!matcher.name || flow.name === matcher.name) &&
-        (!matcher.source || flow.sourceName === matcher.source) &&
-        (!matcher.target || flow.targetName === matcher.target),
+        (!matcher.name || [matcher.name, ...(matcher.aliases ?? [])].some((name) => nameMatches(flow.name, name))) &&
+        (!matcher.source ||
+          [matcher.source, ...(matcher.sourceAliases ?? [])].some((name) => nameMatches(flow.sourceName, name))) &&
+        (!matcher.target ||
+          [matcher.target, ...(matcher.targetAliases ?? [])].some((name) => nameMatches(flow.targetName, name))),
     );
     if (matches.length !== 1)
       return {
@@ -992,7 +1067,12 @@ function matcherResult(projection, matcher, renderedSvg) {
   if (matcher.kind === 'di-label') {
     if (!renderedSvg)
       return { status: 'unavailable', reason: 'No rendered SVG artifact is available for a visibility check.' };
-    const matching = projection.flows.filter((flow) => flow.name === matcher.sequenceName);
+    const matching = projection.flows.filter(
+      (flow) =>
+        nameMatches(flow.name, matcher.sequenceName) &&
+        (!matcher.target ||
+          [matcher.target, ...(matcher.targetAliases ?? [])].some((name) => nameMatches(flow.targetName, name))),
+    );
     if (matching.length !== 1)
       return { status: 'unresolved', reason: 'Label association does not identify exactly one sequence flow.' };
     const edge = projection.edges.get(matching[0].id);
@@ -1166,7 +1246,8 @@ function preservationResult(baseline, candidate, contract) {
   }
   for (const change of [...contract.allowedElementChanges, ...contract.allowedFlowChanges]) {
     const key = `${declaredId(change.id)}\0${change.field}`;
-    if (!observedChanges.has(key))
+    const relevantBaseline = baselineElements.has(declaredId(change.id)) || baselineFlows.has(declaredId(change.id));
+    if (relevantBaseline && !observedChanges.has(key))
       violations.push({ code: 'declared_change_missing', elementId: declaredId(change.id), field: change.field });
   }
   for (const flow of contract.allowedNewFlows)

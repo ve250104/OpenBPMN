@@ -112,15 +112,16 @@ test('the public corpus entry point validates the complete diverse pilot', async
   assert.deepEqual(result.difficultyTags, ['adversarial', 'challenging', 'multi-source', 'routine', 'single-source']);
   assert.deepEqual(result.sourceReview, {
     familiesReviewed: 24,
-    ledgerFacts: 18,
+    ledgerFacts: 19,
     adjudication: 'proposed-not-expert',
   });
   assert.equal(result.maintenancePreconditions.length, 6);
   assert.ok(result.maintenancePreconditions.every((item) => item.status === 'pass'));
   assert.deepEqual(result.freshSessions, {
     planned: 3,
-    completed: 0,
-    notRun: 3,
+    completed: 2,
+    unsupported: 1,
+    notRun: 0,
     isolation: 'not_enforced',
   });
 });
@@ -552,7 +553,7 @@ test('public assessment reports unknown expressions and ambiguous element bindin
   assert.match(specialization.reason, /specialization/);
 });
 
-test('public assessment measures label association instead of accepting label XML presence', async () => {
+test('public assessment measures BPMN DI and binds claimed SVG identity instead of accepting label XML presence', async () => {
   const reference = await readFile(
     new URL('../eval/corpus/cases/expense-reimbursement/reviewer/reference.bpmn', import.meta.url),
     'utf8',
@@ -610,7 +611,34 @@ test('public assessment measures label association instead of accepting label XM
   );
 });
 
-test('expense correction compares saved before and after BPMN and rejects unrelated changes', async () => {
+test('public assessment verifies label association in retained actual generated renders', async () => {
+  const parent = await mkdtemp(join(tmpdir(), 'openbpmn-corpus-actual-render-'));
+  const retained = new URL('../eval/corpus/runs/reliability-2026-09-21/expense-reimbursement/', import.meta.url)
+    .pathname;
+  const prepared = join(parent, 'expense-reimbursement');
+  await cp(retained, prepared, { recursive: true });
+  const result = await corpus(
+    'assess',
+    '--run',
+    join(prepared, 'run.json'),
+    '--output',
+    join(parent, 'reassessment.json'),
+    '--json',
+  );
+  const initialLabel = result.attempts[0].assertions.find(
+    (assertion) => assertion.assertionId === 'expense-reimbursement.assertion.7',
+  );
+  const correctedLabel = result.attempts[2].assertions.find(
+    (assertion) => assertion.assertionId === 'expense-reimbursement.assertion.14',
+  );
+  assert.equal(initialLabel.status, 'pass');
+  assert.equal(initialLabel.measurements.visibleInRender, true);
+  assert.equal(correctedLabel.status, 'pass');
+  assert.equal(correctedLabel.measurements.visibleInRender, true);
+  assert.equal(result.attempts[2].preservation.status, 'pass');
+});
+
+test('expense correction enforces the EUR 2,500 boundary and rejects unrelated changes', async () => {
   const parent = await mkdtemp(join(tmpdir(), 'openbpmn-expense-correction-'));
   const prepared = join(parent, 'prepared');
   await corpus('prepare', '--case', 'expense-reimbursement', '--output', prepared, '--json');
@@ -620,10 +648,14 @@ test('expense correction compares saved before and after BPMN and rejects unrela
     new URL('../eval/corpus/cases/expense-reimbursement/reviewer/reference.bpmn', import.meta.url),
     'utf8',
   );
-  const corrected = baseline.replace('name="Approve business purpose"', 'name="Validate business purpose"');
+  const corrected = baseline
+    .replace('name="EUR 2,000 or less"', 'name="Below EUR 2,500"')
+    .replace('amount &lt;= 2000', 'amount &lt; 2500')
+    .replace('name="Above EUR 2,000"', 'name="EUR 2,500 or more"')
+    .replace('amount &gt; 2000', 'amount &gt;= 2500');
   const unrelated = corrected.replace('name="Pay approved claim"', 'name="Send decision to Procurement Director"');
   const svg =
-    '<svg xmlns="http://www.w3.org/2000/svg"><g data-element-id="F_controller_label" style="display: block;" transform="matrix(1 0 0 1 535 50)"><text><tspan>Above EUR 2,000</tspan></text></g></svg>';
+    '<svg xmlns="http://www.w3.org/2000/svg"><g data-element-id="F_controller_label" style="display: block;" transform="matrix(1 0 0 1 535 50)"><text><tspan>EUR 2,500 or more</tspan></text></g></svg>';
   run.runId = 'expense-correction-preservation';
   run.attemptCount = 2;
   run.attempts = [];
@@ -659,6 +691,30 @@ test('expense correction compares saved before and after BPMN and rejects unrela
   const result = await corpus('assess', '--run', runPath, '--output', join(parent, 'assessment.json'), '--json');
   assert.equal(result.attempts[0].status, 'pass');
   assert.equal(result.attempts[0].preservation.status, 'pass');
+  const highBranch = result.attempts[0].assertions.find(
+    (assertion) => assertion.assertionId === 'expense-reimbursement.assertion.13',
+  );
+  assert.equal(highBranch.status, 'pass');
+  assert.deepEqual(
+    highBranch.measurements.samples.map((sample) => [sample.value, sample.observed]),
+    [
+      [2499, false],
+      [2500, true],
+      [2501, true],
+    ],
+  );
+  const complement = result.attempts[0].assertions.find(
+    (assertion) => assertion.assertionId === 'expense-reimbursement.assertion.15',
+  );
+  assert.equal(complement.status, 'pass');
+  assert.deepEqual(
+    complement.measurements.samples.map((sample) => [sample.value, sample.observed]),
+    [
+      [2499, true],
+      [2500, false],
+      [2501, false],
+    ],
+  );
   assert.equal(result.attempts[1].status, 'fail');
   assert.deepEqual(result.attempts[1].preservation.violations, [{ code: 'stable_element_changed', elementId: 'Pay' }]);
 });

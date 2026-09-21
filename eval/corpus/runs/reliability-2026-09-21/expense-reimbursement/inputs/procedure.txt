@@ -1,0 +1,1 @@
+An employee submits a claim. Accounts Payable checks receipts and returns incomplete claims to the employee. The line manager approves business purpose. Claims above EUR 2,000 additionally require the finance controller. Accounts Payable pays approved claims and informs the employee; rejected claims end with a notice.

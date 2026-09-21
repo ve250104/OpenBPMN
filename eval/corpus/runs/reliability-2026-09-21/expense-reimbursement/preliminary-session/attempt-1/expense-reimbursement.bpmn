@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="M_expenseReimbursement" name="Expense reimbursement" targetNamespace="urn:process-model:expenseReimbursement">
+  <bpmn:process id="M_expenseProcess" name="Expense reimbursement" isExecutable="false">
+    <bpmn:documentation>Employee expense reimbursement from submission through correction, required approvals, payment, or rejection.</bpmn:documentation>
+    <bpmn:laneSet id="G_lanes_expenseProcess">
+      <bpmn:lane id="M_employeeLane" name="Employee">
+        <bpmn:flowNodeRef>M_claimReady</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>M_submitClaim</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>M_correctClaim</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>M_claimPaid</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>M_claimRejected</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="M_accountsPayableLane" name="Accounts Payable">
+        <bpmn:flowNodeRef>M_checkReceipts</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>M_receiptsComplete</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>M_selectApprovals</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>M_requiredApprovalsComplete</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>M_recordRejection</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>M_payClaim</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>M_notifyPayment</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="M_lineManagerLane" name="Line Manager">
+        <bpmn:flowNodeRef>M_managerApproval</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>M_managerApproved</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="M_financeControllerLane" name="Finance Controller">
+        <bpmn:flowNodeRef>M_controllerApproval</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>M_controllerApproved</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="M_claimReady" name="Expense claim ready">
+      <bpmn:outgoing>M_toSubmit</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:userTask id="M_submitClaim" name="Submit expense claim">
+      <bpmn:incoming>M_toSubmit</bpmn:incoming>
+      <bpmn:outgoing>M_toReceiptCheck</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="M_checkReceipts" name="Check receipts">
+      <bpmn:incoming>M_toReceiptCheck</bpmn:incoming>
+      <bpmn:incoming>M_correctionToRecheck</bpmn:incoming>
+      <bpmn:outgoing>M_toCompletenessDecision</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="M_receiptsComplete" name="Receipts complete?">
+      <bpmn:incoming>M_toCompletenessDecision</bpmn:incoming>
+      <bpmn:outgoing>M_incompleteToCorrection</bpmn:outgoing>
+      <bpmn:outgoing>M_completeToApprovals</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="M_correctClaim" name="Correct expense claim">
+      <bpmn:incoming>M_incompleteToCorrection</bpmn:incoming>
+      <bpmn:outgoing>M_correctionToRecheck</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:inclusiveGateway id="M_selectApprovals" name="Select required approvals">
+      <bpmn:incoming>M_completeToApprovals</bpmn:incoming>
+      <bpmn:outgoing>M_standardToManager</bpmn:outgoing>
+      <bpmn:outgoing>M_highValueToManager</bpmn:outgoing>
+      <bpmn:outgoing>M_highValueToController</bpmn:outgoing>
+    </bpmn:inclusiveGateway>
+    <bpmn:userTask id="M_managerApproval" name="Approve business purpose">
+      <bpmn:incoming>M_standardToManager</bpmn:incoming>
+      <bpmn:incoming>M_highValueToManager</bpmn:incoming>
+      <bpmn:outgoing>M_managerToDecision</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="M_managerApproved" name="Business purpose approved?">
+      <bpmn:incoming>M_managerToDecision</bpmn:incoming>
+      <bpmn:outgoing>M_managerApprovalAccepted</bpmn:outgoing>
+      <bpmn:outgoing>M_managerApprovalRejected</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="M_controllerApproval" name="Approve high-value claim">
+      <bpmn:incoming>M_highValueToController</bpmn:incoming>
+      <bpmn:outgoing>M_controllerToDecision</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="M_controllerApproved" name="Finance approval granted?">
+      <bpmn:incoming>M_controllerToDecision</bpmn:incoming>
+      <bpmn:outgoing>M_controllerApprovalAccepted</bpmn:outgoing>
+      <bpmn:outgoing>M_controllerApprovalRejected</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:inclusiveGateway id="M_requiredApprovalsComplete" name="Required approvals complete">
+      <bpmn:incoming>M_managerApprovalAccepted</bpmn:incoming>
+      <bpmn:incoming>M_controllerApprovalAccepted</bpmn:incoming>
+      <bpmn:outgoing>M_approvalsToPayment</bpmn:outgoing>
+    </bpmn:inclusiveGateway>
+    <bpmn:userTask id="M_recordRejection" name="Record rejection and notify employee">
+      <bpmn:incoming>M_managerApprovalRejected</bpmn:incoming>
+      <bpmn:incoming>M_controllerApprovalRejected</bpmn:incoming>
+      <bpmn:outgoing>M_rejectionToEnd</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="M_claimRejected" name="Claim rejected">
+      <bpmn:incoming>M_rejectionToEnd</bpmn:incoming>
+      <bpmn:terminateEventDefinition id="G_event_claimRejected" />
+    </bpmn:endEvent>
+    <bpmn:userTask id="M_payClaim" name="Pay approved claim">
+      <bpmn:incoming>M_approvalsToPayment</bpmn:incoming>
+      <bpmn:outgoing>M_paymentToNotice</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="M_notifyPayment" name="Notify employee of payment">
+      <bpmn:incoming>M_paymentToNotice</bpmn:incoming>
+      <bpmn:outgoing>M_noticeToPaid</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="M_claimPaid" name="Claim paid">
+      <bpmn:incoming>M_noticeToPaid</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="M_toSubmit" sourceRef="M_claimReady" targetRef="M_submitClaim" />
+    <bpmn:sequenceFlow id="M_toReceiptCheck" sourceRef="M_submitClaim" targetRef="M_checkReceipts" />
+    <bpmn:sequenceFlow id="M_toCompletenessDecision" sourceRef="M_checkReceipts" targetRef="M_receiptsComplete" />
+    <bpmn:sequenceFlow id="M_incompleteToCorrection" name="Incomplete" sourceRef="M_receiptsComplete" targetRef="M_correctClaim">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">The claim is missing required receipts.</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="M_correctionToRecheck" sourceRef="M_correctClaim" targetRef="M_checkReceipts" />
+    <bpmn:sequenceFlow id="M_completeToApprovals" name="Complete" sourceRef="M_receiptsComplete" targetRef="M_selectApprovals">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">The claim contains the required receipts.</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="M_standardToManager" name="EUR 2,000 or below" sourceRef="M_selectApprovals" targetRef="M_managerApproval">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Claim amount is less than or equal to EUR 2,000.</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="M_highValueToManager" name="Above EUR 2,000" sourceRef="M_selectApprovals" targetRef="M_managerApproval">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Claim amount is greater than EUR 2,000.</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="M_highValueToController" name="Above EUR 2,000" sourceRef="M_selectApprovals" targetRef="M_controllerApproval">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Claim amount is greater than EUR 2,000.</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="M_managerToDecision" sourceRef="M_managerApproval" targetRef="M_managerApproved" />
+    <bpmn:sequenceFlow id="M_managerApprovalAccepted" name="Approved" sourceRef="M_managerApproved" targetRef="M_requiredApprovalsComplete">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">The line manager approves the business purpose.</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="M_managerApprovalRejected" name="Rejected" sourceRef="M_managerApproved" targetRef="M_recordRejection">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">The line manager rejects the business purpose.</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="M_controllerToDecision" sourceRef="M_controllerApproval" targetRef="M_controllerApproved" />
+    <bpmn:sequenceFlow id="M_controllerApprovalAccepted" name="Approved" sourceRef="M_controllerApproved" targetRef="M_requiredApprovalsComplete">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">The Finance Controller approves the high-value claim.</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="M_controllerApprovalRejected" name="Rejected" sourceRef="M_controllerApproved" targetRef="M_recordRejection">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">The Finance Controller rejects the high-value claim.</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="M_rejectionToEnd" sourceRef="M_recordRejection" targetRef="M_claimRejected" />
+    <bpmn:sequenceFlow id="M_approvalsToPayment" sourceRef="M_requiredApprovalsComplete" targetRef="M_payClaim" />
+    <bpmn:sequenceFlow id="M_paymentToNotice" sourceRef="M_payClaim" targetRef="M_notifyPayment" />
+    <bpmn:sequenceFlow id="M_noticeToPaid" sourceRef="M_notifyPayment" targetRef="M_claimPaid" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="D_diagram_M_expenseProcess">
+    <bpmndi:BPMNPlane id="D_plane_M_expenseProcess" bpmnElement="M_expenseProcess">
+      <bpmndi:BPMNShape id="D_shape_M_expenseProcess_M_employeeLane" bpmnElement="M_employeeLane" isHorizontal="true">
+        <dc:Bounds x="80" y="80" width="2247" height="400" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_expenseProcess_M_accountsPayableLane" bpmnElement="M_accountsPayableLane" isHorizontal="true">
+        <dc:Bounds x="80" y="480" width="2247" height="414" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_expenseProcess_M_lineManagerLane" bpmnElement="M_lineManagerLane" isHorizontal="true">
+        <dc:Bounds x="80" y="894" width="2247" height="240" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_expenseProcess_M_financeControllerLane" bpmnElement="M_financeControllerLane" isHorizontal="true">
+        <dc:Bounds x="80" y="1134" width="2247" height="240" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_expenseProcess_M_claimReady" bpmnElement="M_claimReady">
+        <dc:Bounds x="120" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel id="D_label_M_expenseProcess_M_claimReady">
+          <dc:Bounds x="116" y="226" width="137" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_expenseProcess_M_submitClaim" bpmnElement="M_submitClaim">
+        <dc:Bounds x="256" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_expenseProcess_M_checkReceipts" bpmnElement="M_checkReceipts">
+        <dc:Bounds x="456" y="560" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_expenseProcess_M_receiptsComplete" bpmnElement="M_receiptsComplete" isMarkerVisible="true">
+        <dc:Bounds x="656" y="575" width="50" height="50" />
+        <bpmndi:BPMNLabel id="D_label_M_expenseProcess_M_receiptsComplete">
+          <dc:Bounds x="616.5" y="633" width="129" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_expenseProcess_M_correctClaim" bpmnElement="M_correctClaim">
+        <dc:Bounds x="806" y="320" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_expenseProcess_M_selectApprovals" bpmnElement="M_selectApprovals" isMarkerVisible="true">
+        <dc:Bounds x="831" y="575" width="50" height="50" />
+        <bpmndi:BPMNLabel id="D_label_M_expenseProcess_M_selectApprovals">
+          <dc:Bounds x="772" y="633" width="168" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_expenseProcess_M_managerApproval" bpmnElement="M_managerApproval">
+        <dc:Bounds x="1006" y="974" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_expenseProcess_M_managerApproved" bpmnElement="M_managerApproved" isMarkerVisible="true">
+        <dc:Bounds x="1206" y="989" width="50" height="50" />
+        <bpmndi:BPMNLabel id="D_label_M_expenseProcess_M_managerApproved">
+          <dc:Bounds x="1137" y="1047" width="188" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_expenseProcess_M_controllerApproval" bpmnElement="M_controllerApproval">
+        <dc:Bounds x="1006" y="1214" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_expenseProcess_M_controllerApproved" bpmnElement="M_controllerApproved" isMarkerVisible="true">
+        <dc:Bounds x="1206" y="1229" width="50" height="50" />
+        <bpmndi:BPMNLabel id="D_label_M_expenseProcess_M_controllerApproved">
+          <dc:Bounds x="1144" y="1287" width="174" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_expenseProcess_M_requiredApprovalsComplete" bpmnElement="M_requiredApprovalsComplete" isMarkerVisible="true">
+        <dc:Bounds x="1701" y="575" width="50" height="50" />
+        <bpmndi:BPMNLabel id="D_label_M_expenseProcess_M_requiredApprovalsComplete">
+          <dc:Bounds x="1630.5" y="633" width="191" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_expenseProcess_M_recordRejection" bpmnElement="M_recordRejection">
+        <dc:Bounds x="1356" y="720" width="109" height="94" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_expenseProcess_M_claimRejected" bpmnElement="M_claimRejected">
+        <dc:Bounds x="1565" y="342" width="36" height="36" />
+        <bpmndi:BPMNLabel id="D_label_M_expenseProcess_M_claimRejected">
+          <dc:Bounds x="1533" y="386" width="100" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_expenseProcess_M_payClaim" bpmnElement="M_payClaim">
+        <dc:Bounds x="1851" y="560" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_expenseProcess_M_notifyPayment" bpmnElement="M_notifyPayment">
+        <dc:Bounds x="2051" y="560" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_expenseProcess_M_claimPaid" bpmnElement="M_claimPaid">
+        <dc:Bounds x="2251" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel id="D_label_M_expenseProcess_M_claimPaid">
+          <dc:Bounds x="2224" y="226" width="90" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="D_edge_M_expenseProcess_M_toSubmit" bpmnElement="M_toSubmit">
+        <di:waypoint x="156" y="200" />
+        <di:waypoint x="256" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_expenseProcess_M_toReceiptCheck" bpmnElement="M_toReceiptCheck">
+        <di:waypoint x="356" y="200" />
+        <di:waypoint x="440" y="200" />
+        <di:waypoint x="440" y="600" />
+        <di:waypoint x="456" y="600" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_expenseProcess_M_toCompletenessDecision" bpmnElement="M_toCompletenessDecision">
+        <di:waypoint x="556" y="600" />
+        <di:waypoint x="656" y="600" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_expenseProcess_M_completeToApprovals" bpmnElement="M_completeToApprovals">
+        <di:waypoint x="706" y="600" />
+        <di:waypoint x="722" y="600" />
+        <di:waypoint x="722" y="536" />
+        <di:waypoint x="897" y="536" />
+        <di:waypoint x="897" y="587.5" />
+        <di:waypoint x="868.5" y="587.5" />
+        <bpmndi:BPMNLabel id="D_label_M_expenseProcess_M_completeToApprovals">
+          <dc:Bounds x="764.5" y="505" width="90" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_expenseProcess_M_standardToManager" bpmnElement="M_standardToManager">
+        <di:waypoint x="856" y="575" />
+        <di:waypoint x="856" y="559" />
+        <di:waypoint x="1056" y="559" />
+        <di:waypoint x="1056" y="974" />
+        <bpmndi:BPMNLabel id="D_label_M_expenseProcess_M_standardToManager">
+          <dc:Bounds x="902.1111111111111" y="567" width="130" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_expenseProcess_M_managerToDecision" bpmnElement="M_managerToDecision">
+        <di:waypoint x="1106" y="1014" />
+        <di:waypoint x="1206" y="1014" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_expenseProcess_M_managerApprovalAccepted" bpmnElement="M_managerApprovalAccepted">
+        <di:waypoint x="1256" y="1014" />
+        <di:waypoint x="1272" y="1014" />
+        <di:waypoint x="1272" y="559" />
+        <di:waypoint x="1726" y="559" />
+        <di:waypoint x="1726" y="575" />
+        <bpmndi:BPMNLabel id="D_label_M_expenseProcess_M_managerApprovalAccepted">
+          <dc:Bounds x="1174" y="739.078947368421" width="90" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_expenseProcess_M_approvalsToPayment" bpmnElement="M_approvalsToPayment">
+        <di:waypoint x="1701" y="600" />
+        <di:waypoint x="1685" y="600" />
+        <di:waypoint x="1685" y="551" />
+        <di:waypoint x="1835" y="551" />
+        <di:waypoint x="1835" y="600" />
+        <di:waypoint x="1851" y="600" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_expenseProcess_M_paymentToNotice" bpmnElement="M_paymentToNotice">
+        <di:waypoint x="1951" y="600" />
+        <di:waypoint x="2051" y="600" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_expenseProcess_M_noticeToPaid" bpmnElement="M_noticeToPaid">
+        <di:waypoint x="2151" y="600" />
+        <di:waypoint x="2342" y="600" />
+        <di:waypoint x="2342" y="200" />
+        <di:waypoint x="2287" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_expenseProcess_M_controllerApprovalAccepted" bpmnElement="M_controllerApprovalAccepted">
+        <di:waypoint x="1231" y="1229" />
+        <di:waypoint x="1231" y="1213" />
+        <di:waypoint x="1827" y="1213" />
+        <di:waypoint x="1827" y="600" />
+        <di:waypoint x="1751" y="600" />
+        <bpmndi:BPMNLabel id="D_label_M_expenseProcess_M_controllerApprovalAccepted">
+          <dc:Bounds x="1484" y="1182" width="90" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_expenseProcess_M_incompleteToCorrection" bpmnElement="M_incompleteToCorrection">
+        <di:waypoint x="681" y="575" />
+        <di:waypoint x="681" y="360" />
+        <di:waypoint x="806" y="360" />
+        <bpmndi:BPMNLabel id="D_label_M_expenseProcess_M_incompleteToCorrection">
+          <dc:Bounds x="689" y="444.05555555555554" width="90" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_expenseProcess_M_highValueToController" bpmnElement="M_highValueToController">
+        <di:waypoint x="831" y="600" />
+        <di:waypoint x="815" y="600" />
+        <di:waypoint x="815" y="551" />
+        <di:waypoint x="1122" y="551" />
+        <di:waypoint x="1122" y="1234" />
+        <di:waypoint x="1106" y="1234" />
+        <bpmndi:BPMNLabel id="D_label_M_expenseProcess_M_highValueToController">
+          <dc:Bounds x="911" y="520" width="115" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_expenseProcess_M_managerApprovalRejected" bpmnElement="M_managerApprovalRejected">
+        <di:waypoint x="1231" y="989" />
+        <di:waypoint x="1231" y="767" />
+        <di:waypoint x="1356" y="767" />
+        <bpmndi:BPMNLabel id="D_label_M_expenseProcess_M_managerApprovalRejected">
+          <dc:Bounds x="1133" y="866.5" width="90" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_expenseProcess_M_controllerApprovalRejected" bpmnElement="M_controllerApprovalRejected">
+        <di:waypoint x="1256" y="1254" />
+        <di:waypoint x="1340" y="1254" />
+        <di:waypoint x="1340" y="743.5" />
+        <di:waypoint x="1356" y="743.5" />
+        <bpmndi:BPMNLabel id="D_label_M_expenseProcess_M_controllerApprovalRejected">
+          <dc:Bounds x="1348" y="987.25" width="90" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_expenseProcess_M_highValueToManager" bpmnElement="M_highValueToManager">
+        <di:waypoint x="881" y="600" />
+        <di:waypoint x="990" y="600" />
+        <di:waypoint x="990" y="1014" />
+        <di:waypoint x="1006" y="1014" />
+        <bpmndi:BPMNLabel id="D_label_M_expenseProcess_M_highValueToManager">
+          <dc:Bounds x="867" y="795.5" width="115" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_expenseProcess_M_controllerToDecision" bpmnElement="M_controllerToDecision">
+        <di:waypoint x="1106" y="1254" />
+        <di:waypoint x="1206" y="1254" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_expenseProcess_M_rejectionToEnd" bpmnElement="M_rejectionToEnd">
+        <di:waypoint x="1465" y="767" />
+        <di:waypoint x="1481" y="767" />
+        <di:waypoint x="1481" y="318" />
+        <di:waypoint x="1617" y="318" />
+        <di:waypoint x="1617" y="360" />
+        <di:waypoint x="1601" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_expenseProcess_M_correctionToRecheck" bpmnElement="M_correctionToRecheck">
+        <di:waypoint x="856" y="320" />
+        <di:waypoint x="856" y="300" />
+        <di:waypoint x="506" y="300" />
+        <di:waypoint x="506" y="560" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

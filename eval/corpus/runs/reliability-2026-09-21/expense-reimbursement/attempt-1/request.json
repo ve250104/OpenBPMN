@@ -1,0 +1,335 @@
+{
+  "schemaVersion": "1.0.0",
+  "profileVersion": "1.0.0",
+  "model": {
+    "key": "expenseReimbursementModel",
+    "name": "Expense reimbursement",
+    "documentation": "Current-state employee expense reimbursement from claim submission through payment or rejection notice.",
+    "primaryRef": "expenseReimbursementProcess",
+    "processes": [
+      {
+        "key": "expenseReimbursementProcess",
+        "name": "Expense reimbursement",
+        "nodes": [
+          {
+            "key": "claimReady",
+            "type": "startEvent",
+            "containerRef": "expenseReimbursementProcess",
+            "name": "Claim ready",
+            "event": { "kind": "none" }
+          },
+          {
+            "key": "submitClaim",
+            "type": "userTask",
+            "containerRef": "expenseReimbursementProcess",
+            "name": "Submit claim and receipts"
+          },
+          {
+            "key": "checkReceipts",
+            "type": "userTask",
+            "containerRef": "expenseReimbursementProcess",
+            "name": "Check required receipts"
+          },
+          {
+            "key": "receiptsCompleteGateway",
+            "type": "exclusiveGateway",
+            "containerRef": "expenseReimbursementProcess",
+            "name": "Receipts complete?"
+          },
+          {
+            "key": "correctClaim",
+            "type": "userTask",
+            "containerRef": "expenseReimbursementProcess",
+            "name": "Correct same claim"
+          },
+          {
+            "key": "splitRequiredReviews",
+            "type": "parallelGateway",
+            "containerRef": "expenseReimbursementProcess",
+            "name": "Start required reviews"
+          },
+          {
+            "key": "decideBusinessPurpose",
+            "type": "userTask",
+            "containerRef": "expenseReimbursementProcess",
+            "name": "Decide business purpose"
+          },
+          {
+            "key": "controllerThresholdGateway",
+            "type": "exclusiveGateway",
+            "containerRef": "expenseReimbursementProcess",
+            "name": "Controller approval required?"
+          },
+          {
+            "key": "decideControllerApproval",
+            "type": "userTask",
+            "containerRef": "expenseReimbursementProcess",
+            "name": "Decide controller approval"
+          },
+          {
+            "key": "controllerRouteMerge",
+            "type": "exclusiveGateway",
+            "containerRef": "expenseReimbursementProcess",
+            "name": "Controller route complete"
+          },
+          {
+            "key": "requiredApprovalsJoin",
+            "type": "parallelGateway",
+            "containerRef": "expenseReimbursementProcess",
+            "name": "Required reviews complete"
+          },
+          {
+            "key": "approvalsCompleteGateway",
+            "type": "exclusiveGateway",
+            "containerRef": "expenseReimbursementProcess",
+            "name": "All required approvals present?"
+          },
+          {
+            "key": "payClaim",
+            "type": "userTask",
+            "containerRef": "expenseReimbursementProcess",
+            "name": "Record claim payment"
+          },
+          {
+            "key": "sendPaymentNotice",
+            "type": "sendTask",
+            "containerRef": "expenseReimbursementProcess",
+            "name": "Send payment notice"
+          },
+          {
+            "key": "claimPaid",
+            "type": "endEvent",
+            "containerRef": "expenseReimbursementProcess",
+            "name": "Claim paid",
+            "event": { "kind": "none" }
+          },
+          {
+            "key": "recordRejection",
+            "type": "userTask",
+            "containerRef": "expenseReimbursementProcess",
+            "name": "Record claim rejection"
+          },
+          {
+            "key": "sendRejectionNotice",
+            "type": "sendTask",
+            "containerRef": "expenseReimbursementProcess",
+            "name": "Send rejection notice"
+          },
+          {
+            "key": "claimRejected",
+            "type": "endEvent",
+            "containerRef": "expenseReimbursementProcess",
+            "name": "Claim rejected",
+            "event": { "kind": "none" }
+          }
+        ],
+        "flows": [
+          { "key": "flowClaimReadyToSubmit", "containerRef": "expenseReimbursementProcess", "sourceRef": "claimReady", "targetRef": "submitClaim" },
+          { "key": "flowSubmitToReceiptCheck", "containerRef": "expenseReimbursementProcess", "sourceRef": "submitClaim", "targetRef": "checkReceipts" },
+          { "key": "flowReceiptCheckToCompleteness", "containerRef": "expenseReimbursementProcess", "sourceRef": "checkReceipts", "targetRef": "receiptsCompleteGateway" },
+          {
+            "key": "flowIncompleteToCorrection",
+            "containerRef": "expenseReimbursementProcess",
+            "sourceRef": "receiptsCompleteGateway",
+            "targetRef": "correctClaim",
+            "name": "Incomplete",
+            "condition": "One or more required receipts are missing."
+          },
+          { "key": "flowCorrectionToRecheck", "containerRef": "expenseReimbursementProcess", "sourceRef": "correctClaim", "targetRef": "checkReceipts" },
+          {
+            "key": "flowCompleteToReviews",
+            "containerRef": "expenseReimbursementProcess",
+            "sourceRef": "receiptsCompleteGateway",
+            "targetRef": "splitRequiredReviews",
+            "name": "Complete",
+            "condition": "All required receipts are present."
+          },
+          { "key": "flowReviewsToManager", "containerRef": "expenseReimbursementProcess", "sourceRef": "splitRequiredReviews", "targetRef": "decideBusinessPurpose" },
+          { "key": "flowReviewsToThreshold", "containerRef": "expenseReimbursementProcess", "sourceRef": "splitRequiredReviews", "targetRef": "controllerThresholdGateway" },
+          { "key": "flowManagerToJoin", "containerRef": "expenseReimbursementProcess", "sourceRef": "decideBusinessPurpose", "targetRef": "requiredApprovalsJoin" },
+          {
+            "key": "controllerRequired",
+            "containerRef": "expenseReimbursementProcess",
+            "sourceRef": "controllerThresholdGateway",
+            "targetRef": "decideControllerApproval",
+            "name": "Above EUR 2,000",
+            "condition": "Claim amount is greater than EUR 2,000."
+          },
+          {
+            "key": "controllerNotRequired",
+            "containerRef": "expenseReimbursementProcess",
+            "sourceRef": "controllerThresholdGateway",
+            "targetRef": "controllerRouteMerge",
+            "name": "EUR 2,000 or less",
+            "condition": "Claim amount is less than or equal to EUR 2,000."
+          },
+          { "key": "flowControllerDecisionToMerge", "containerRef": "expenseReimbursementProcess", "sourceRef": "decideControllerApproval", "targetRef": "controllerRouteMerge" },
+          { "key": "flowControllerRouteToJoin", "containerRef": "expenseReimbursementProcess", "sourceRef": "controllerRouteMerge", "targetRef": "requiredApprovalsJoin" },
+          { "key": "flowReviewsToApprovalCheck", "containerRef": "expenseReimbursementProcess", "sourceRef": "requiredApprovalsJoin", "targetRef": "approvalsCompleteGateway" },
+          {
+            "key": "flowApprovedToPayment",
+            "containerRef": "expenseReimbursementProcess",
+            "sourceRef": "approvalsCompleteGateway",
+            "targetRef": "payClaim",
+            "name": "All present",
+            "condition": "The line manager approved business purpose and any required finance-controller approval is present."
+          },
+          { "key": "flowPaymentToNotice", "containerRef": "expenseReimbursementProcess", "sourceRef": "payClaim", "targetRef": "sendPaymentNotice" },
+          { "key": "flowPaymentNoticeToPaid", "containerRef": "expenseReimbursementProcess", "sourceRef": "sendPaymentNotice", "targetRef": "claimPaid" },
+          {
+            "key": "flowMissingApprovalToRejection",
+            "containerRef": "expenseReimbursementProcess",
+            "sourceRef": "approvalsCompleteGateway",
+            "targetRef": "recordRejection",
+            "name": "Approval missing",
+            "condition": "At least one required approval is not present."
+          },
+          { "key": "flowRejectionToNotice", "containerRef": "expenseReimbursementProcess", "sourceRef": "recordRejection", "targetRef": "sendRejectionNotice" },
+          { "key": "flowRejectionNoticeToEnd", "containerRef": "expenseReimbursementProcess", "sourceRef": "sendRejectionNotice", "targetRef": "claimRejected" }
+        ],
+        "lanes": [
+          {
+            "key": "employeeLane",
+            "name": "Employee",
+            "parentRef": "expenseReimbursementProcess",
+            "flowNodeRefs": ["claimReady", "submitClaim", "correctClaim"]
+          },
+          {
+            "key": "accountsPayableLane",
+            "name": "Accounts Payable",
+            "parentRef": "expenseReimbursementProcess",
+            "flowNodeRefs": [
+              "checkReceipts",
+              "receiptsCompleteGateway",
+              "splitRequiredReviews",
+              "controllerThresholdGateway",
+              "controllerRouteMerge",
+              "requiredApprovalsJoin",
+              "approvalsCompleteGateway",
+              "payClaim",
+              "sendPaymentNotice",
+              "claimPaid",
+              "recordRejection",
+              "sendRejectionNotice",
+              "claimRejected"
+            ]
+          },
+          {
+            "key": "lineManagerLane",
+            "name": "Line Manager",
+            "parentRef": "expenseReimbursementProcess",
+            "flowNodeRefs": ["decideBusinessPurpose"]
+          },
+          {
+            "key": "financeControllerLane",
+            "name": "Finance Controller",
+            "parentRef": "expenseReimbursementProcess",
+            "flowNodeRefs": ["decideControllerApproval"]
+          }
+        ]
+      }
+    ]
+  },
+  "evidence": [
+    {
+      "key": "procedureSource",
+      "source": "Expense reimbursement procedure",
+      "summary": "An employee submits a claim; Accounts Payable checks receipts and returns incomplete claims; manager and threshold-based controller approval precede payment; Accounts Payable informs the employee of payment or rejection.",
+      "locator": "inputs/procedure.txt"
+    },
+    {
+      "key": "interviewsSource",
+      "source": "Employee and line manager interviews",
+      "summary": "The employee corrects an incomplete pack under the same claim identity; the manager decides business purpose; controller approval applies above EUR 2,000; approval order is not prescribed; payment waits for every required approval.",
+      "locator": "inputs/interviews.txt"
+    },
+    {
+      "key": "policySource",
+      "source": "Expense reimbursement control note effective 2026-01-01",
+      "summary": "Accounts Payable checks receipts, correction may repeat under the same claim identity, manager approval is mandatory, claims above EUR 2,000 require controller approval without a prescribed order, and Accounts Payable records payment or rejection and sends the matching notice.",
+      "locator": "inputs/policy.txt"
+    }
+  ],
+  "decisions": [
+    {
+      "key": "approvalConcurrencyDecision",
+      "description": "Model the manager review and the controller-threshold route as parallel work because the sources require both when applicable and explicitly prescribe no order.",
+      "elementRefs": ["splitRequiredReviews", "requiredApprovalsJoin", "decideBusinessPurpose", "controllerThresholdGateway", "decideControllerApproval"],
+      "evidenceRefs": ["interviewsSource", "policySource"]
+    },
+    {
+      "key": "omitUnspecifiedEscalationDecision",
+      "description": "Do not invent an escalation or disagreement-resolution path because the sources identify neither an escalation approver nor an external recipient.",
+      "elementRefs": [],
+      "evidenceRefs": ["interviewsSource", "policySource"]
+    }
+  ],
+  "issues": [
+    {
+      "key": "businessPurposeDisagreementOwner",
+      "kind": "question",
+      "description": "The sources do not identify who resolves a disagreement about business purpose; that unsupported exception is omitted from this process scope.",
+      "affectsMeaning": false,
+      "evidenceRefs": ["interviewsSource", "policySource"],
+      "resolution": {
+        "decisionRef": "omitUnspecifiedEscalationDecision",
+        "kind": "acceptedOmission"
+      }
+    }
+  ],
+  "links": [
+    { "elementRef": "submitClaim", "assertion": "The employee submits the claim and receipt images.", "basis": "evidence", "supportRefs": ["procedureSource", "interviewsSource"] },
+    { "elementRef": "checkReceipts", "assertion": "Accounts Payable checks that required receipts are present.", "basis": "evidence", "supportRefs": ["procedureSource", "policySource"] },
+    { "elementRef": "flowIncompleteToCorrection", "assertion": "An incomplete claim is returned for correction.", "basis": "evidence", "supportRefs": ["procedureSource", "policySource"] },
+    { "elementRef": "correctClaim", "assertion": "The employee corrects the same claim rather than creating a new identity.", "basis": "evidence", "supportRefs": ["interviewsSource", "policySource"] },
+    { "elementRef": "flowCorrectionToRecheck", "assertion": "A corrected claim may be checked again.", "basis": "evidence", "supportRefs": ["policySource"] },
+    { "elementRef": "decideBusinessPurpose", "assertion": "The line manager decides whether the expense had a business purpose.", "basis": "evidence", "supportRefs": ["interviewsSource", "policySource"] },
+    { "elementRef": "splitRequiredReviews", "assertion": "No order is prescribed between manager and controller approvals.", "basis": "decision", "supportRefs": ["approvalConcurrencyDecision"] },
+    { "elementRef": "controllerRequired", "assertion": "Controller approval is required when the claim is above EUR 2,000.", "basis": "evidence", "supportRefs": ["procedureSource", "interviewsSource", "policySource"] },
+    { "elementRef": "controllerNotRequired", "assertion": "The complementary route covers claims of EUR 2,000 or less.", "basis": "inference", "supportRefs": ["procedureSource", "interviewsSource", "policySource"] },
+    { "elementRef": "decideControllerApproval", "assertion": "The Finance Controller supplies the additional approval when the threshold is met.", "basis": "evidence", "supportRefs": ["procedureSource", "interviewsSource", "policySource"] },
+    { "elementRef": "flowApprovedToPayment", "assertion": "Payment occurs only after every required approval is present.", "basis": "evidence", "supportRefs": ["interviewsSource", "policySource"] },
+    { "elementRef": "payClaim", "assertion": "Accounts Payable records payment for an approved claim.", "basis": "evidence", "supportRefs": ["procedureSource", "policySource"] },
+    { "elementRef": "recordRejection", "assertion": "Accounts Payable records rejection when required approval is absent.", "basis": "evidence", "supportRefs": ["procedureSource", "policySource"] },
+    { "elementRef": "sendPaymentNotice", "assertion": "Accounts Payable sends the employee a payment notice.", "basis": "evidence", "supportRefs": ["procedureSource", "interviewsSource", "policySource"] },
+    { "elementRef": "sendRejectionNotice", "assertion": "Accounts Payable sends the employee a rejection notice.", "basis": "evidence", "supportRefs": ["procedureSource", "interviewsSource", "policySource"] }
+  ],
+  "scenarios": [
+    {
+      "key": "lowValueApprovedClaim",
+      "name": "Complete claim at or below EUR 2,000 is approved",
+      "startRef": "claimReady",
+      "steps": ["submitClaim", "checkReceipts", "receiptsCompleteGateway", "splitRequiredReviews", "decideBusinessPurpose", "controllerThresholdGateway", "controllerRouteMerge", "requiredApprovalsJoin", "approvalsCompleteGateway", "payClaim", "sendPaymentNotice", "claimPaid"],
+      "expectedOutcome": "The controller route is bypassed, Accounts Payable records payment, and the employee is notified.",
+      "evidenceRefs": ["procedureSource", "interviewsSource", "policySource"]
+    },
+    {
+      "key": "highValueApprovedClaim",
+      "name": "Complete claim above EUR 2,000 is approved",
+      "startRef": "claimReady",
+      "steps": ["submitClaim", "checkReceipts", "receiptsCompleteGateway", "splitRequiredReviews", "decideBusinessPurpose", "controllerThresholdGateway", "decideControllerApproval", "controllerRouteMerge", "requiredApprovalsJoin", "approvalsCompleteGateway", "payClaim", "sendPaymentNotice", "claimPaid"],
+      "expectedOutcome": "Both required approvals are present before Accounts Payable records payment and sends notice.",
+      "evidenceRefs": ["procedureSource", "interviewsSource", "policySource"]
+    },
+    {
+      "key": "incompleteClaimCorrection",
+      "name": "Incomplete claim is corrected under the same identity",
+      "startRef": "claimReady",
+      "steps": ["submitClaim", "checkReceipts", "receiptsCompleteGateway", "correctClaim", "checkReceipts"],
+      "expectedOutcome": "The corrected same claim returns to the receipt check.",
+      "evidenceRefs": ["interviewsSource", "policySource"]
+    },
+    {
+      "key": "claimRejectedScenario",
+      "name": "Claim without every required approval is rejected",
+      "startRef": "claimReady",
+      "steps": ["submitClaim", "checkReceipts", "receiptsCompleteGateway", "splitRequiredReviews", "decideBusinessPurpose", "requiredApprovalsJoin", "approvalsCompleteGateway", "recordRejection", "sendRejectionNotice", "claimRejected"],
+      "expectedOutcome": "Accounts Payable records rejection and sends the employee a rejection notice.",
+      "evidenceRefs": ["procedureSource", "interviewsSource", "policySource"]
+    }
+  ],
+  "presentation": {
+    "direction": "leftToRight",
+    "laneOrder": ["employeeLane", "accountsPayableLane", "lineManagerLane", "financeControllerLane"]
+  }
+}

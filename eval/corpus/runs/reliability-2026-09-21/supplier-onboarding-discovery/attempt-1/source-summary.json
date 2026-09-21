@@ -1,0 +1,39 @@
+{
+  "scope": "Current ordinary supplier onboarding",
+  "sources": [
+    {
+      "path": "inputs/interview.txt",
+      "observations": [
+        "Buyer collects tax and bank forms and sends the pack to Vendor Risk.",
+        "Vendor Risk screens the supplier and sends a decision to Master Data."
+      ]
+    },
+    {
+      "path": "inputs/checklist.docx",
+      "observations": [
+        "Checklist lists tax form, bank evidence, sanctions screening, and master-data creation."
+      ],
+      "renderVerified": true
+    },
+    {
+      "path": "inputs/dated-correction.txt",
+      "observations": [
+        "As of 2026-08-14, Master Data, not Procurement, creates vendor records after Vendor Risk approval."
+      ]
+    },
+    {
+      "path": "inputs/regional-interview.txt",
+      "observations": [
+        "Vendor Risk clears, rejects, or asks the Buyer for missing evidence.",
+        "Clearance is not vendor-record creation.",
+        "Master Data creates the record after clearance and reports whether creation completed.",
+        "Appeal ownership, urgent screening bypass, and inconclusive sanctions-data handling remain unobserved."
+      ]
+    }
+  ],
+  "modelingJudgments": [
+    "Document transmission is a handoff into screening, not approval.",
+    "The dated correction controls current record-creation ownership while prior Procurement ownership remains historical context.",
+    "Unobserved exception behavior is retained as unresolved questions and not invented in the flow."
+  ]
+}

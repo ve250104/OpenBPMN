@@ -1,0 +1,57 @@
+{
+  "reviewVersion": "1.0.0",
+  "reviewedAt": "2026-09-21",
+  "reviewer": {
+    "identity": "issue-45-independent-review",
+    "role": "evaluation maintainer",
+    "adjudicationStatus": "proposed"
+  },
+  "cases": [
+    {
+      "familyId": "expense-reimbursement",
+      "assessment": "expense-reimbursement/assessment.json",
+      "assessmentSha256": "11058ad6791eafc7897adad3b586b47216bdcde803f47c9f86559d0f8bea884d",
+      "initialStatus": "pass",
+      "failedCorrectionAttemptRetained": true,
+      "correctedStatus": "pass",
+      "preservationStatus": "pass",
+      "actualRenderedArtifactsReviewed": [
+        "expense-reimbursement/attempt-1/inspection.png",
+        "expense-reimbursement/attempt-3/inspection.png"
+      ],
+      "observations": [
+        "The initial render visibly separates Employee, Accounts Payable, Line Manager, and Finance Controller work.",
+        "The corrected render visibly associates EUR 2,500 or more with controller approval and Below EUR 2,500 with the complementary route.",
+        "The paired BPMN comparison contains only the four declared threshold flow-field changes.",
+        "The saved Handoff and quality artifacts retain model, process, node, flow, and lane keys."
+      ]
+    },
+    {
+      "familyId": "supplier-onboarding-discovery",
+      "assessment": "supplier-onboarding-discovery/assessment.json",
+      "assessmentSha256": "2202d3c6a5caade30f403d451dbb9b3413a463144c9e4b31e6ded7cd1e9e9042",
+      "initialStatus": "pass",
+      "actualRenderedArtifactsReviewed": ["supplier-onboarding-discovery/attempt-1/model.svg"],
+      "observations": [
+        "The render distinguishes Buyer, Vendor Risk, and Master Data responsibilities.",
+        "Document transmission is separate from screening approval.",
+        "Rejection, missing-evidence rework, and completion notification remain distinguishable."
+      ]
+    },
+    {
+      "familyId": "editable-flowchart-translation",
+      "record": "editable-flowchart-translation/session-record.json",
+      "recordSha256": "b33440415c8b9a67d0ed8ed1f68d287a68e6feb55224bd6babe0ae1e063487ff",
+      "status": "unsupported",
+      "observations": [
+        "The staged draw.io identity was verified.",
+        "The fixed applicability contract was honored and no BPMN or preview was fabricated."
+      ]
+    }
+  ],
+  "limits": [
+    "Filesystem isolation was not enforced.",
+    "Review was performed by an independent agent, not a human adjudicator.",
+    "Three sessions do not establish a statistical reliability estimate."
+  ]
+}

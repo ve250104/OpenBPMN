@@ -1,0 +1,46 @@
+{
+  "caseContractVersion": "1.0.0",
+  "familyId": "supplier-onboarding-discovery",
+  "caseId": "supplier-onboarding-discovery.base",
+  "variantId": null,
+  "title": "Supplier onboarding discovery",
+  "primaryTask": "discovery",
+  "evaluationLane": "mixed-evidence-discovery",
+  "prompt": "Model current supplier onboarding from the interview, checklist, and dated correction. Do not treat document transmission as approval.",
+  "scope": {
+    "requested": "Supplier onboarding discovery",
+    "excluded": [
+      "process improvement unless explicitly requested"
+    ]
+  },
+  "clarificationAnswers": [],
+  "correctionTurns": [],
+  "applicability": {
+    "status": "supported",
+    "capability": "source-driven-modeling-session",
+    "reason": "Within the current declared public boundary.",
+    "fixedBeforeExecution": true
+  },
+  "replacesSourceIds": [],
+  "inputArtifacts": [
+    {
+      "id": "supplier-onboarding-discovery.source.1",
+      "path": "inputs/interview.txt",
+      "mediaType": "text/plain",
+      "sha256": "d185245477c1bf34dbf1676fb288d2d1415f3e636cf855961d22cd963873fea9"
+    },
+    {
+      "id": "supplier-onboarding-discovery.source.2",
+      "path": "inputs/checklist.docx",
+      "mediaType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "sha256": "5fd9914492243928a3518c199075dfda7f62c658fc38bca52c37df8016ba5267"
+    },
+    {
+      "id": "supplier-onboarding-discovery.source.3",
+      "path": "inputs/dated-correction.txt",
+      "mediaType": "text/plain",
+      "sha256": "142adf247f480bb87a4894df601b8fe2d8e2c490250d76b6a7f286c7103eb01c"
+    }
+  ],
+  "variantArtifacts": []
+}

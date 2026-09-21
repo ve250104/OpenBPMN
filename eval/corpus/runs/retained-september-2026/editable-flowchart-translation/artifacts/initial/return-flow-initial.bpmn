@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="M_returnFlowTranslation" name="Return flow translation" targetNamespace="urn:process-model:returnFlowTranslation">
+  <bpmn:process id="M_returnProcess" name="Return flow (shown portion)" isExecutable="false">
+    <bpmn:startEvent id="M_shownFlowStart" name="Shown flow begins">
+      <bpmn:outgoing>M_startToInspection</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="M_inspectReturnedPart" name="Inspect returned part">
+      <bpmn:incoming>M_startToInspection</bpmn:incoming>
+      <bpmn:outgoing>M_inspectToAcceptance</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="M_supplierAccepts" name="Supplier accepts?">
+      <bpmn:incoming>M_inspectToAcceptance</bpmn:incoming>
+      <bpmn:outgoing>M_acceptanceYes</bpmn:outgoing>
+      <bpmn:outgoing>M_acceptanceNo</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="M_sendReplacement" name="Send replacement">
+      <bpmn:incoming>M_acceptanceYes</bpmn:incoming>
+      <bpmn:outgoing>M_replacementToScopeEnd</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="M_escalateDispute" name="Escalate dispute">
+      <bpmn:incoming>M_acceptanceNo</bpmn:incoming>
+      <bpmn:outgoing>M_disputeToScopeEnd</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:endEvent id="M_replacementScopeEnd" name="Shown branch ends">
+      <bpmn:incoming>M_replacementToScopeEnd</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="M_disputeScopeEnd" name="Shown branch ends">
+      <bpmn:incoming>M_disputeToScopeEnd</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="M_startToInspection" sourceRef="M_shownFlowStart" targetRef="M_inspectReturnedPart" />
+    <bpmn:sequenceFlow id="M_inspectToAcceptance" sourceRef="M_inspectReturnedPart" targetRef="M_supplierAccepts" />
+    <bpmn:sequenceFlow id="M_acceptanceYes" name="yes" sourceRef="M_supplierAccepts" targetRef="M_sendReplacement">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Supplier accepts</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="M_acceptanceNo" name="no" sourceRef="M_supplierAccepts" targetRef="M_escalateDispute">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Supplier does not accept</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="M_replacementToScopeEnd" sourceRef="M_sendReplacement" targetRef="M_replacementScopeEnd" />
+    <bpmn:sequenceFlow id="M_disputeToScopeEnd" sourceRef="M_escalateDispute" targetRef="M_disputeScopeEnd" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="D_diagram_M_returnProcess">
+    <bpmndi:BPMNPlane id="D_plane_M_returnProcess" bpmnElement="M_returnProcess">
+      <bpmndi:BPMNShape id="D_shape_M_returnProcess_M_shownFlowStart" bpmnElement="M_shownFlowStart">
+        <dc:Bounds x="80" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel id="D_label_M_returnProcess_M_shownFlowStart">
+          <dc:Bounds x="34.5" y="146" width="127" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_returnProcess_M_inspectReturnedPart" bpmnElement="M_inspectReturnedPart">
+        <dc:Bounds x="216" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_returnProcess_M_supplierAccepts" bpmnElement="M_supplierAccepts" isMarkerVisible="true">
+        <dc:Bounds x="416" y="95" width="50" height="50" />
+        <bpmndi:BPMNLabel id="D_label_M_returnProcess_M_supplierAccepts">
+          <dc:Bounds x="382" y="153" width="118" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_returnProcess_M_sendReplacement" bpmnElement="M_sendReplacement">
+        <dc:Bounds x="566" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_returnProcess_M_escalateDispute" bpmnElement="M_escalateDispute">
+        <dc:Bounds x="566" y="240" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_returnProcess_M_replacementScopeEnd" bpmnElement="M_replacementScopeEnd">
+        <dc:Bounds x="766" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel id="D_label_M_returnProcess_M_replacementScopeEnd">
+          <dc:Bounds x="717.5" y="146" width="133" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="D_shape_M_returnProcess_M_disputeScopeEnd" bpmnElement="M_disputeScopeEnd">
+        <dc:Bounds x="766" y="262" width="36" height="36" />
+        <bpmndi:BPMNLabel id="D_label_M_returnProcess_M_disputeScopeEnd">
+          <dc:Bounds x="717.5" y="306" width="133" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="D_edge_M_returnProcess_M_startToInspection" bpmnElement="M_startToInspection">
+        <di:waypoint x="116" y="120" />
+        <di:waypoint x="216" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_returnProcess_M_inspectToAcceptance" bpmnElement="M_inspectToAcceptance">
+        <di:waypoint x="316" y="120" />
+        <di:waypoint x="332" y="120" />
+        <di:waypoint x="332" y="79" />
+        <di:waypoint x="441" y="79" />
+        <di:waypoint x="441" y="95" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_returnProcess_M_acceptanceYes" bpmnElement="M_acceptanceYes">
+        <di:waypoint x="416" y="120" />
+        <di:waypoint x="400" y="120" />
+        <di:waypoint x="400" y="78" />
+        <di:waypoint x="550" y="78" />
+        <di:waypoint x="550" y="120" />
+        <di:waypoint x="566" y="120" />
+        <bpmndi:BPMNLabel id="D_label_M_returnProcess_M_acceptanceYes">
+          <dc:Bounds x="430" y="47" width="90" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_returnProcess_M_replacementToScopeEnd" bpmnElement="M_replacementToScopeEnd">
+        <di:waypoint x="666" y="120" />
+        <di:waypoint x="766" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_returnProcess_M_acceptanceNo" bpmnElement="M_acceptanceNo">
+        <di:waypoint x="466" y="120" />
+        <di:waypoint x="550" y="120" />
+        <di:waypoint x="550" y="280" />
+        <di:waypoint x="566" y="280" />
+        <bpmndi:BPMNLabel id="D_label_M_returnProcess_M_acceptanceNo">
+          <dc:Bounds x="558" y="188.5" width="90" height="23" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="D_edge_M_returnProcess_M_disputeToScopeEnd" bpmnElement="M_disputeToScopeEnd">
+        <di:waypoint x="666" y="280" />
+        <di:waypoint x="766" y="280" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

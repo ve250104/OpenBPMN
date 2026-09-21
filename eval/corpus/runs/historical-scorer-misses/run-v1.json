@@ -1,0 +1,133 @@
+{
+  "runContractVersion": "1.0.0",
+  "runId": "historical-parent-scorer-misses-6fc6b6e",
+  "familyId": "expense-reimbursement",
+  "caseId": "expense-reimbursement.base",
+  "variantId": null,
+  "caseSha256": "362fabdeebf850aefe9330cfa46a913a5c7464e77d65b6c126e6e23ee9687455",
+  "assertionSha256": "c76c034795b7d1e12b4a7aa278062ad8f88d64f1d9a0045f2f8c29d53802674a",
+  "sourceArtifacts": [
+    {
+      "id": "expense-reimbursement.source.1",
+      "path": "inputs/procedure.txt",
+      "mediaType": "text/plain",
+      "sha256": "c106190a51aa8926422a823d9608917ce21ce555f59c39da669a51c51e9d9dac"
+    }
+  ],
+  "candidate": {
+    "commit": "6fc6b6e02b3e565b5b4320e0b74c798dc05a8921",
+    "buildIdentity": "direct-parent-unchanged",
+    "dirtyState": "clean"
+  },
+  "environment": {
+    "runtime": "v24.19.0",
+    "platform": "darwin",
+    "architecture": "arm64",
+    "browser": "not_observed",
+    "host": "local"
+  },
+  "skill": {
+    "version": "not_observed"
+  },
+  "model": {
+    "id": "not_observed",
+    "reasoningSettings": "not_observed"
+  },
+  "prompt": "Model employee expense reimbursement from the supplied procedure, retaining the different owner and approver roles.",
+  "answers": [],
+  "attemptCount": 3,
+  "attempts": [
+    {
+      "attemptId": "direct-bypass",
+      "status": "completed",
+      "startedAt": "2026-09-21T15:55:00.000Z",
+      "finishedAt": "2026-09-21T15:55:01.000Z",
+      "commands": [
+        "public evaluator 1.0 assess"
+      ],
+      "exitResults": [
+        {
+          "command": "public evaluator 1.0 assess",
+          "exitCode": 0
+        }
+      ],
+      "artifacts": [
+        {
+          "kind": "bpmn",
+          "path": "direct-bypass/model.bpmn",
+          "sha256": "3c5be432201977594479c6aef2ba70e94635b3f12ba445a63c2c4cce570c9382"
+        }
+      ],
+      "conversation": [],
+      "toolCalls": [],
+      "finalClaims": [],
+      "observations": []
+    },
+    {
+      "attemptId": "swapped-conditions",
+      "status": "completed",
+      "startedAt": "2026-09-21T15:55:00.000Z",
+      "finishedAt": "2026-09-21T15:55:01.000Z",
+      "commands": [
+        "public evaluator 1.0 assess"
+      ],
+      "exitResults": [
+        {
+          "command": "public evaluator 1.0 assess",
+          "exitCode": 0
+        }
+      ],
+      "artifacts": [
+        {
+          "kind": "bpmn",
+          "path": "swapped-conditions/model.bpmn",
+          "sha256": "12a64c6838d3aecc4d43e1f3bbc274e7c00d59249de41d57b116ea40f40ba8f3"
+        }
+      ],
+      "conversation": [],
+      "toolCalls": [],
+      "finalClaims": [],
+      "observations": []
+    },
+    {
+      "attemptId": "detached-label",
+      "status": "completed",
+      "startedAt": "2026-09-21T15:55:00.000Z",
+      "finishedAt": "2026-09-21T15:55:01.000Z",
+      "commands": [
+        "public evaluator 1.0 assess"
+      ],
+      "exitResults": [
+        {
+          "command": "public evaluator 1.0 assess",
+          "exitCode": 0
+        }
+      ],
+      "artifacts": [
+        {
+          "kind": "bpmn",
+          "path": "detached-label/model.bpmn",
+          "sha256": "052a69c11f79aea35d09b10b3399e77b746f42810298f2205c187664d7cf491b"
+        }
+      ],
+      "conversation": [],
+      "toolCalls": [],
+      "finalClaims": [],
+      "observations": []
+    }
+  ],
+  "isolation": {
+    "status": "not_isolated",
+    "stagingSeparation": "case-only-directory",
+    "filesystemBoundary": "not_enforced",
+    "reviewerFilesAccessibleFromHost": true,
+    "reason": "Preparation limits staged inputs, but this local process can still reach the repository and reviewer files.",
+    "canaryCheck": "absent_from_staged_files"
+  },
+  "metrics": {
+    "tokens": null,
+    "cost": null,
+    "humanCorrectionMinutes": null
+  },
+  "preparedAt": "2026-09-21T15:54:31.148Z"
+}

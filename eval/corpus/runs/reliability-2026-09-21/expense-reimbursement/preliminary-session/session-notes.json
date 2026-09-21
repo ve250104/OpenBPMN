@@ -1,0 +1,110 @@
+{
+  "session": "fresh source-only expense reimbursement modeling",
+  "attempt": 1,
+  "sourceBoundary": {
+    "task": "task.json",
+    "sources": [
+      "inputs/procedure.txt",
+      "inputs/interviews.txt",
+      "inputs/policy.txt"
+    ],
+    "excludedInspection": [
+      "repository implementation",
+      "evaluator material",
+      "reviewer material",
+      "tests",
+      "other sessions"
+    ],
+    "runJsonEdited": false
+  },
+  "runtime": {
+    "nodeVersion": "24.19.0",
+    "browser": "Google Chrome 153.0.8010.52",
+    "browserAvailable": true,
+    "openbpmnToolVersion": "0.1.0-dev.0",
+    "schemaVersion": "1.0.0",
+    "profileVersion": "1.0.0"
+  },
+  "generation": {
+    "startedAtUtc": "2026-09-21T15:51:49Z",
+    "artifactsWrittenAtUtc": "2026-09-21T15:51:58Z",
+    "status": "completed",
+    "signal": "clean_export_ready",
+    "exitCode": 0,
+    "exportRequested": "auto",
+    "exportOutcome": "clean",
+    "cleanEligible": true,
+    "checks": {
+      "input": "passed",
+      "xml": "passed",
+      "xsd": "passed",
+      "semantics": "passed",
+      "profile": "passed",
+      "di": "passed",
+      "render": "passed",
+      "evidence": "passed",
+      "consulting": "passed"
+    },
+    "advisoryWarnings": 13,
+    "advisorySummary": "Non-blocking evidence-gap warnings were reported for four lane ownership records and nine routing conditions. The export remained clean-eligible.",
+    "repairAttempts": []
+  },
+  "modelingSummary": [
+    "Four lanes retain Employee, Accounts Payable, Line Manager, and Finance Controller responsibility.",
+    "Incomplete claims loop through employee correction back to receipt checking under the same claim identity.",
+    "An inclusive split selects line-manager approval for every claim and additionally selects Finance Controller approval above EUR 2,000, without prescribing an approval order.",
+    "A rejection is recorded and notified by Accounts Payable and ends the process with a terminate event.",
+    "Payment remains an Accounts Payable activity after all selected approvals complete, followed by a payment notice to the employee."
+  ],
+  "visualInspection": {
+    "completedAtUtc": "2026-09-21T15:52:44Z",
+    "status": "passed",
+    "checked": [
+      "activity and gateway labels",
+      "four responsibility lanes",
+      "receipt correction loop",
+      "conditional parallel approval routing",
+      "rejection outcome",
+      "Accounts Payable payment and employee notification"
+    ],
+    "temporaryScreenshots": [],
+    "preservedScreenshots": false
+  },
+  "artifacts": [
+    {
+      "kind": "request",
+      "path": "attempt-1/request.json",
+      "writtenAtUtc": "2026-09-21T15:51:44Z",
+      "bytes": 13416
+    },
+    {
+      "kind": "bpmn",
+      "path": "attempt-1/expense-reimbursement.bpmn",
+      "writtenAtUtc": "2026-09-21T15:51:58Z",
+      "bytes": 22539
+    },
+    {
+      "kind": "svg",
+      "path": "attempt-1/expense-reimbursement.svg",
+      "writtenAtUtc": "2026-09-21T15:51:58Z",
+      "bytes": 86445
+    },
+    {
+      "kind": "quality",
+      "path": "attempt-1/expense-reimbursement.quality.json",
+      "writtenAtUtc": "2026-09-21T15:51:58Z",
+      "bytes": 13270
+    },
+    {
+      "kind": "handoff",
+      "path": "attempt-1/expense-reimbursement.openbpmn.json",
+      "writtenAtUtc": "2026-09-21T15:51:58Z",
+      "bytes": 22021
+    }
+  ],
+  "scopeUpdate": {
+    "receivedAfterAttempt1": true,
+    "instruction": "Preserve only the initial attempt and stop without a correction attempt; a separate fresh source-only session will handle the corrected threshold.",
+    "correctionAttemptCreated": false
+  }
+}

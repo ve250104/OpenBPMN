@@ -1,0 +1,654 @@
+{
+  "reportVersion": "1.0.0",
+  "toolVersion": "0.1.0-dev.0",
+  "profileVersion": "1.0.0",
+  "export": {
+    "requested": "snapshot",
+    "outcome": "snapshot",
+    "cleanEligible": false,
+    "expertOverride": false
+  },
+  "checks": [
+    {
+      "id": "input",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "xml",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "xsd",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "semantics",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "profile",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "di",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "render",
+      "status": "passed",
+      "findingRefs": []
+    },
+    {
+      "id": "evidence",
+      "status": "failed",
+      "findingRefs": [
+        "F_0cfcaf58bf19ecf2a6d0",
+        "F_12cf4eed4cf2ae0cb05b",
+        "F_1e9e2f0525afbde268e0",
+        "F_211cf59e729ffbbae80a",
+        "F_31efc02864580db3a5ed",
+        "F_50434fff70707be0b3be",
+        "F_56259df08e1af725c597",
+        "F_5c9cd2f1036327330a75",
+        "F_6bdf17e3e4ee43ba9caa",
+        "F_6d35c41089e07ee2d23a",
+        "F_71821eab710a3a549efd",
+        "F_9dd9743d82f9440e0ebb",
+        "F_e9f601538aa7c110fa90",
+        "F_ed66616ec08ba7d911e6",
+        "F_fab4b656dce786f44b99"
+      ]
+    },
+    {
+      "id": "consulting",
+      "status": "passed",
+      "findingRefs": [
+        "F_27df5476fae73e7fd58a",
+        "F_4ed2918d78d4c0c6db4a",
+        "F_dcb0621a27139b647b08"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "F_27df5476fae73e7fd58a",
+      "code": "QUALITY_OWNERSHIP",
+      "category": "consulting",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "No named responsibility is supplied for this activity.",
+      "remediation": "Identify a responsible participant or lane, or keep this as an explicit review question.",
+      "elementRefs": [
+        "inspectReturnedPart"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "id": "F_4ed2918d78d4c0c6db4a",
+      "code": "QUALITY_OWNERSHIP",
+      "category": "consulting",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "No named responsibility is supplied for this activity.",
+      "remediation": "Identify a responsible participant or lane, or keep this as an explicit review question.",
+      "elementRefs": [
+        "sendReplacement"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "id": "F_dcb0621a27139b647b08",
+      "code": "QUALITY_OWNERSHIP",
+      "category": "consulting",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "No named responsibility is supplied for this activity.",
+      "remediation": "Identify a responsible participant or lane, or keep this as an explicit review question.",
+      "elementRefs": [
+        "escalateDispute"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "id": "F_0cfcaf58bf19ecf2a6d0",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "error",
+      "blocksClean": true,
+      "message": "A recorded process question or conflict remains unresolved.",
+      "remediation": "Discuss the recorded issue and retain the human decision, or request a faithful snapshot for clarification.",
+      "elementRefs": [
+        "disputeScopeEnd",
+        "escalateDispute",
+        "replacementScopeEnd",
+        "sendReplacement"
+      ],
+      "evidenceRefs": [
+        "sourceBoundaries"
+      ]
+    },
+    {
+      "id": "F_12cf4eed4cf2ae0cb05b",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "error",
+      "blocksClean": true,
+      "message": "A recorded process question or conflict remains unresolved.",
+      "remediation": "Discuss the recorded issue and retain the human decision, or request a faithful snapshot for clarification.",
+      "elementRefs": [
+        "acceptanceNo",
+        "acceptanceYes",
+        "supplierAccepts"
+      ],
+      "evidenceRefs": [
+        "sourceBoundaries",
+        "sourceRouting"
+      ]
+    },
+    {
+      "id": "F_1e9e2f0525afbde268e0",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "A supplied assertion is explicitly identified as inference, not verified process evidence.",
+      "remediation": "Review this inference when it affects a consequential process choice; the Core cannot verify the assertion.",
+      "elementRefs": [
+        "startToInspection"
+      ],
+      "evidenceRefs": [
+        "sourceBoundaries"
+      ]
+    },
+    {
+      "id": "F_211cf59e729ffbbae80a",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "error",
+      "blocksClean": true,
+      "message": "A recorded process question or conflict remains unresolved.",
+      "remediation": "Discuss the recorded issue and retain the human decision, or request a faithful snapshot for clarification.",
+      "elementRefs": [
+        "escalateDispute",
+        "inspectReturnedPart",
+        "returnProcess",
+        "sendReplacement"
+      ],
+      "evidenceRefs": [
+        "sourceActivities",
+        "sourceBoundaries"
+      ]
+    },
+    {
+      "id": "F_31efc02864580db3a5ed",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "A supplied assertion is explicitly identified as inference, not verified process evidence.",
+      "remediation": "Review this inference when it affects a consequential process choice; the Core cannot verify the assertion.",
+      "elementRefs": [
+        "disputeToScopeEnd"
+      ],
+      "evidenceRefs": [
+        "sourceBoundaries"
+      ]
+    },
+    {
+      "id": "F_50434fff70707be0b3be",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "A supplied assertion is explicitly identified as inference, not verified process evidence.",
+      "remediation": "Review this inference when it affects a consequential process choice; the Core cannot verify the assertion.",
+      "elementRefs": [
+        "disputeScopeEnd"
+      ],
+      "evidenceRefs": [
+        "sourceBoundaries"
+      ]
+    },
+    {
+      "id": "F_56259df08e1af725c597",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "A supplied assertion is explicitly identified as inference, not verified process evidence.",
+      "remediation": "Review this inference when it affects a consequential process choice; the Core cannot verify the assertion.",
+      "elementRefs": [
+        "supplierAccepts"
+      ],
+      "evidenceRefs": [
+        "sourceRouting"
+      ]
+    },
+    {
+      "id": "F_5c9cd2f1036327330a75",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "A supplied assertion is explicitly identified as inference, not verified process evidence.",
+      "remediation": "Review this inference when it affects a consequential process choice; the Core cannot verify the assertion.",
+      "elementRefs": [
+        "replacementToScopeEnd"
+      ],
+      "evidenceRefs": [
+        "sourceBoundaries"
+      ]
+    },
+    {
+      "id": "F_6bdf17e3e4ee43ba9caa",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "A supplied assertion is explicitly identified as inference, not verified process evidence.",
+      "remediation": "Review this inference when it affects a consequential process choice; the Core cannot verify the assertion.",
+      "elementRefs": [
+        "inspectReturnedPart"
+      ],
+      "evidenceRefs": [
+        "sourceActivities"
+      ]
+    },
+    {
+      "id": "F_6d35c41089e07ee2d23a",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "A supplied assertion is explicitly identified as inference, not verified process evidence.",
+      "remediation": "Review this inference when it affects a consequential process choice; the Core cannot verify the assertion.",
+      "elementRefs": [
+        "shownFlowStart"
+      ],
+      "evidenceRefs": [
+        "sourceBoundaries"
+      ]
+    },
+    {
+      "id": "F_71821eab710a3a549efd",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "A supplied assertion is explicitly identified as inference, not verified process evidence.",
+      "remediation": "Review this inference when it affects a consequential process choice; the Core cannot verify the assertion.",
+      "elementRefs": [
+        "escalateDispute"
+      ],
+      "evidenceRefs": [
+        "sourceActivities"
+      ]
+    },
+    {
+      "id": "F_9dd9743d82f9440e0ebb",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "A supplied assertion is explicitly identified as inference, not verified process evidence.",
+      "remediation": "Review this inference when it affects a consequential process choice; the Core cannot verify the assertion.",
+      "elementRefs": [
+        "sendReplacement"
+      ],
+      "evidenceRefs": [
+        "sourceActivities"
+      ]
+    },
+    {
+      "id": "F_e9f601538aa7c110fa90",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "error",
+      "blocksClean": true,
+      "message": "A recorded process question or conflict remains unresolved.",
+      "remediation": "Discuss the recorded issue and retain the human decision, or request a faithful snapshot for clarification.",
+      "elementRefs": [
+        "inspectReturnedPart",
+        "shownFlowStart"
+      ],
+      "evidenceRefs": [
+        "sourceBoundaries"
+      ]
+    },
+    {
+      "id": "F_ed66616ec08ba7d911e6",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "A supplied assertion is explicitly identified as inference, not verified process evidence.",
+      "remediation": "Review this inference when it affects a consequential process choice; the Core cannot verify the assertion.",
+      "elementRefs": [
+        "replacementScopeEnd"
+      ],
+      "evidenceRefs": [
+        "sourceBoundaries"
+      ]
+    },
+    {
+      "id": "F_fab4b656dce786f44b99",
+      "code": "EVIDENCE_GAP",
+      "category": "evidence",
+      "severity": "warning",
+      "blocksClean": false,
+      "message": "A supplied assertion is explicitly identified as inference, not verified process evidence.",
+      "remediation": "Review this inference when it affects a consequential process choice; the Core cannot verify the assertion.",
+      "elementRefs": [
+        "returnProcess"
+      ],
+      "evidenceRefs": [
+        "sourceBoundaries"
+      ]
+    }
+  ],
+  "context": {
+    "evidence": [
+      {
+        "key": "sourceActivities",
+        "source": "return-flow.drawio, diagram Return",
+        "summary": "Cells 2, 4 and 5 contain the activity labels Inspect returned part, Send replacement, and Escalate dispute. Their task subtypes and performers are not specified.",
+        "locator": "return-flow.drawio#diagram=Return;mxCell=2,4,5"
+      },
+      {
+        "key": "sourceRouting",
+        "source": "return-flow.drawio, diagram Return",
+        "summary": "Cell 3 asks Supplier accepts? Edge 6 connects inspection to this question; edge 7 labeled yes connects it to Send replacement; edge 8 labeled no connects it to Escalate dispute.",
+        "locator": "return-flow.drawio#diagram=Return;mxCell=3,6,7,8"
+      },
+      {
+        "key": "sourceBoundaries",
+        "source": "return-flow.drawio, diagram Return",
+        "summary": "The complete editable graph contains four vertices and three edges. It specifies no start/end events, owners, participant boundaries, acceptance criteria, waiting behavior, or continuation after either final activity.",
+        "locator": "root"
+      }
+    ],
+    "decisions": [
+      {
+        "key": "genericActivityMapping",
+        "description": "Proposed translation: preserve all three source activity labels as generic BPMN Tasks. The words Send and Escalate do not establish a BPMN Send Task or Escalation Event; no task subtype or message behavior is inferred.",
+        "elementRefs": [
+          "inspectReturnedPart",
+          "sendReplacement",
+          "escalateDispute"
+        ],
+        "evidenceRefs": [
+          "sourceActivities"
+        ]
+      },
+      {
+        "key": "exclusiveDecisionMapping",
+        "description": "Proposed interpretation: use an Exclusive Gateway for Supplier accepts? because the two source edges are labeled yes and no. Preserve both visible labels and use plain-language conditions. Neither branch is an unstated default. No executable acceptance criteria or pending-response behavior is established.",
+        "elementRefs": [
+          "supplierAccepts",
+          "acceptanceYes",
+          "acceptanceNo"
+        ],
+        "evidenceRefs": [
+          "sourceRouting"
+        ]
+      },
+      {
+        "key": "scopeBoundaryMapping",
+        "description": "Analyst-added none Start and End Events delimit only the portion shown in the source. Shown flow begins does not identify the business trigger; Shown branch ends does not claim replacement delivery, dispute resolution, or completion of the wider return process. Added boundary flows are notation scaffolding, not additional source facts.",
+        "elementRefs": [
+          "shownFlowStart",
+          "replacementScopeEnd",
+          "disputeScopeEnd",
+          "startToInspection",
+          "replacementToScopeEnd",
+          "disputeToScopeEnd"
+        ],
+        "evidenceRefs": [
+          "sourceBoundaries"
+        ]
+      },
+      {
+        "key": "unassignedResponsibility",
+        "description": "Proposed snapshot uses one responsibility-unassigned process without lanes or supplier participant/message flows. A supplier is mentioned only in a question, so this is a view of source sequencing, not a determination that all work belongs to one organization. Ownership and participant boundaries remain unresolved.",
+        "elementRefs": [
+          "returnProcess",
+          "inspectReturnedPart",
+          "supplierAccepts",
+          "sendReplacement",
+          "escalateDispute"
+        ],
+        "evidenceRefs": [
+          "sourceActivities",
+          "sourceRouting",
+          "sourceBoundaries"
+        ]
+      },
+      {
+        "key": "preserveTopology",
+        "description": "Preserve all three source edges and their destinations. No merge, loop, parallel branch, additional activity, or business result is added. CLI layout may differ from the drawio coordinates.",
+        "elementRefs": [
+          "inspectToAcceptance",
+          "acceptanceYes",
+          "acceptanceNo"
+        ],
+        "evidenceRefs": [
+          "sourceRouting"
+        ]
+      }
+    ],
+    "issues": [
+      {
+        "key": "triggerUnknown",
+        "description": "What business event initiates inspection of the returned part? The snapshot entry marks only the beginning of the shown fragment.",
+        "elementRefs": [
+          "shownFlowStart",
+          "inspectReturnedPart"
+        ],
+        "evidenceRefs": [
+          "sourceBoundaries"
+        ],
+        "kind": "question",
+        "affectsMeaning": true
+      },
+      {
+        "key": "responsibilityUnknown",
+        "description": "Who performs inspection, sends the replacement, and handles dispute escalation? Which steps belong to the supplier or another independent participant, and what handoffs are required?",
+        "elementRefs": [
+          "returnProcess",
+          "inspectReturnedPart",
+          "sendReplacement",
+          "escalateDispute"
+        ],
+        "evidenceRefs": [
+          "sourceActivities",
+          "sourceBoundaries"
+        ],
+        "kind": "question",
+        "affectsMeaning": true
+      },
+      {
+        "key": "acceptanceMeaningUnknown",
+        "description": "What does the supplier accept, by what criteria, and how is acceptance obtained or recorded? Can the answer be pending or unknown? The snapshot preserves only the source yes/no alternatives and does not invent response collection or waiting behavior.",
+        "elementRefs": [
+          "supplierAccepts",
+          "acceptanceYes",
+          "acceptanceNo"
+        ],
+        "evidenceRefs": [
+          "sourceRouting",
+          "sourceBoundaries"
+        ],
+        "kind": "question",
+        "affectsMeaning": true
+      },
+      {
+        "key": "continuationUnknown",
+        "description": "What happens after Send replacement and Escalate dispute, and what actual business outcomes close each path? The two snapshot end events mark the limit of source coverage and do not establish that the return or dispute is resolved.",
+        "elementRefs": [
+          "sendReplacement",
+          "escalateDispute",
+          "replacementScopeEnd",
+          "disputeScopeEnd"
+        ],
+        "evidenceRefs": [
+          "sourceBoundaries"
+        ],
+        "kind": "question",
+        "affectsMeaning": true
+      }
+    ],
+    "links": [
+      {
+        "elementRef": "inspectReturnedPart",
+        "assertion": "The activity label is explicitly present in the source.",
+        "basis": "evidence",
+        "supportRefs": [
+          "sourceActivities"
+        ]
+      },
+      {
+        "elementRef": "inspectReturnedPart",
+        "assertion": "Generic BPMN Task is the proposed least-specific activity mapping.",
+        "basis": "inference",
+        "supportRefs": [
+          "sourceActivities"
+        ]
+      },
+      {
+        "elementRef": "sendReplacement",
+        "assertion": "The activity label is explicitly present in the source.",
+        "basis": "evidence",
+        "supportRefs": [
+          "sourceActivities"
+        ]
+      },
+      {
+        "elementRef": "sendReplacement",
+        "assertion": "Generic BPMN Task is the proposed least-specific activity mapping.",
+        "basis": "inference",
+        "supportRefs": [
+          "sourceActivities"
+        ]
+      },
+      {
+        "elementRef": "escalateDispute",
+        "assertion": "The activity label is explicitly present in the source.",
+        "basis": "evidence",
+        "supportRefs": [
+          "sourceActivities"
+        ]
+      },
+      {
+        "elementRef": "escalateDispute",
+        "assertion": "Generic BPMN Task is the proposed least-specific activity mapping.",
+        "basis": "inference",
+        "supportRefs": [
+          "sourceActivities"
+        ]
+      },
+      {
+        "elementRef": "supplierAccepts",
+        "assertion": "The source question has outgoing yes and no paths.",
+        "basis": "evidence",
+        "supportRefs": [
+          "sourceRouting"
+        ]
+      },
+      {
+        "elementRef": "supplierAccepts",
+        "assertion": "Exclusive Gateway interprets the source as a mutually exclusive yes/no choice.",
+        "basis": "inference",
+        "supportRefs": [
+          "sourceRouting"
+        ]
+      },
+      {
+        "elementRef": "inspectToAcceptance",
+        "assertion": "Direction, destinations, and source branch labels are retained.",
+        "basis": "evidence",
+        "supportRefs": [
+          "sourceRouting"
+        ]
+      },
+      {
+        "elementRef": "acceptanceYes",
+        "assertion": "Direction, destinations, and source branch labels are retained.",
+        "basis": "evidence",
+        "supportRefs": [
+          "sourceRouting"
+        ]
+      },
+      {
+        "elementRef": "acceptanceNo",
+        "assertion": "Direction, destinations, and source branch labels are retained.",
+        "basis": "evidence",
+        "supportRefs": [
+          "sourceRouting"
+        ]
+      },
+      {
+        "elementRef": "shownFlowStart",
+        "assertion": "Analyst-added boundary of the modeled source fragment; not evidence of a business trigger or final outcome.",
+        "basis": "inference",
+        "supportRefs": [
+          "sourceBoundaries"
+        ]
+      },
+      {
+        "elementRef": "replacementScopeEnd",
+        "assertion": "Analyst-added boundary of the modeled source fragment; not evidence of a business trigger or final outcome.",
+        "basis": "inference",
+        "supportRefs": [
+          "sourceBoundaries"
+        ]
+      },
+      {
+        "elementRef": "disputeScopeEnd",
+        "assertion": "Analyst-added boundary of the modeled source fragment; not evidence of a business trigger or final outcome.",
+        "basis": "inference",
+        "supportRefs": [
+          "sourceBoundaries"
+        ]
+      },
+      {
+        "elementRef": "startToInspection",
+        "assertion": "Analyst-added boundary of the modeled source fragment; not evidence of a business trigger or final outcome.",
+        "basis": "inference",
+        "supportRefs": [
+          "sourceBoundaries"
+        ]
+      },
+      {
+        "elementRef": "replacementToScopeEnd",
+        "assertion": "Analyst-added boundary of the modeled source fragment; not evidence of a business trigger or final outcome.",
+        "basis": "inference",
+        "supportRefs": [
+          "sourceBoundaries"
+        ]
+      },
+      {
+        "elementRef": "disputeToScopeEnd",
+        "assertion": "Analyst-added boundary of the modeled source fragment; not evidence of a business trigger or final outcome.",
+        "basis": "inference",
+        "supportRefs": [
+          "sourceBoundaries"
+        ]
+      },
+      {
+        "elementRef": "returnProcess",
+        "assertion": "Single unassigned process is a provisional view of source sequencing; the actual ownership boundaries remain unknown.",
+        "basis": "inference",
+        "supportRefs": [
+          "sourceBoundaries"
+        ]
+      }
+    ]
+  },
+  "modelKey": "returnFlowTranslation"
+}

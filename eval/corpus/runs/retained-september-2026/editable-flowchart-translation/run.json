@@ -1,0 +1,145 @@
+{
+  "runContractVersion": "1.0.0",
+  "runId": "fresh-editable-flowchart-translation-20260921",
+  "familyId": "editable-flowchart-translation",
+  "caseId": "editable-flowchart-translation.base",
+  "variantId": null,
+  "caseSha256": "5058fe204f66105aaf7c956896d68489a05ee18a27185a2bb545d4a06757e52b",
+  "assertionSha256": "f4b7428c898b5514054a63990052871dd29282fda509aeede43d03cde758b5aa",
+  "sourceArtifacts": [
+    {
+      "id": "editable-flowchart-translation.source.1",
+      "path": "inputs/return-flow.drawio",
+      "mediaType": "application/vnd.jgraph.mxfile",
+      "sha256": "37cd608d2d4ab87d2edb63399f35856ff7b1f3e66d2bf1f7814289d54a95d32b"
+    }
+  ],
+  "candidate": {
+    "commit": "6fc6b6e02b3e565b5b4320e0b74c798dc05a8921",
+    "buildIdentity": "a83d830ef49b1970e26a39587cbe244e7fe50eebc3802e3aec964714661bd79a",
+    "dirtyState": "clean"
+  },
+  "environment": {
+    "runtime": "v24.19.0",
+    "platform": "darwin",
+    "architecture": "arm64",
+    "browser": "Google Chrome 153.0.8010.52",
+    "host": "local source-only session"
+  },
+  "skill": {
+    "version": "0.1.0-dev.0"
+  },
+  "model": {
+    "id": "not_observed (Codex task host default)",
+    "reasoningSettings": "not_observed"
+  },
+  "prompt": "Use the staged OpenBPMN runtime and skill to propose a reviewed BPMN translation of inputs/return-flow.drawio while keeping translation decisions visible. Produce an initial snapshot if supported, keep missing facts unresolved, inspect any preview, use only staged sources, and do not inspect reviewer material.",
+  "answers": [],
+  "attemptCount": 1,
+  "attempts": [
+    {
+      "attemptId": "initial-session",
+      "status": "completed",
+      "startedAt": "2026-09-21T12:13:26+00:00",
+      "finishedAt": "2026-09-21T12:20:20+00:00",
+      "commands": [
+        "openbpmn generate",
+        "browser preview inspection"
+      ],
+      "exitResults": [
+        {
+          "command": "openbpmn generate",
+          "exitCode": 0
+        },
+        {
+          "command": "browser preview inspection",
+          "exitCode": 0
+        }
+      ],
+      "artifacts": [
+        {
+          "kind": "bpmn",
+          "path": "artifacts/initial/return-flow-initial.bpmn",
+          "sha256": "51b99c5363ba71db3631035c2ebe3af38a2da56f7c166eedca1f238a2a57c9b5"
+        },
+        {
+          "kind": "quality",
+          "path": "artifacts/initial/return-flow-initial.quality.json",
+          "sha256": "482755bf3456d1ce30f59512f41a6bd2c16e4fb6962d2d2b6d980feaa0f36bbe"
+        },
+        {
+          "kind": "svg",
+          "path": "artifacts/initial/return-flow-initial.svg",
+          "sha256": "cf0526d1e1e4d5ac7fa67530f187e2b7f1cec0ef63b4a6b6e979a8733b591f2e"
+        }
+      ],
+      "conversation": [],
+      "toolCalls": [],
+      "finalClaims": [],
+      "observations": [
+        {
+          "assertionId": "editable-flowchart-translation.assertion.1",
+          "method": "agent",
+          "methodDescription": "Independent source, BPMN XML, quality-report, sanitized session provenance, and rendered-preview review; not human adjudication.",
+          "status": "pass",
+          "reviewer": {
+            "identity": "root independent review",
+            "role": "agent"
+          },
+          "sourceCitations": [
+            {
+              "artifact": "inputs/return-flow.drawio",
+              "locator": "entire source"
+            }
+          ],
+          "outputCitations": [
+            {
+              "artifact": "artifacts/initial/return-flow-initial.bpmn",
+              "locator": "Supplier accepts? outgoing Yes and No flows"
+            }
+          ],
+          "adjudicationStatus": "proposed",
+          "reason": "Yes leads to Send replacement; No leads to Escalate dispute, preserving source edges 7 and 8."
+        },
+        {
+          "assertionId": "editable-flowchart-translation.assertion.2",
+          "method": "agent",
+          "methodDescription": "Independent source, BPMN XML, quality-report, sanitized session provenance, and rendered-preview review; not human adjudication.",
+          "status": "pass",
+          "reviewer": {
+            "identity": "root independent review",
+            "role": "agent"
+          },
+          "sourceCitations": [
+            {
+              "artifact": "inputs/return-flow.drawio",
+              "locator": "entire source"
+            }
+          ],
+          "outputCitations": [
+            {
+              "artifact": "artifacts/initial/return-flow-initial.quality.json",
+              "locator": "Open questions and inferred translation boundaries"
+            }
+          ],
+          "adjudicationStatus": "proposed",
+          "reason": "Translation choices and unknown responsibilities, acceptance criteria, trigger, and continuations remain explicit; no claim of an unambiguous source or general native importer."
+        }
+      ]
+    }
+  ],
+  "isolation": {
+    "status": "not_isolated",
+    "stagingSeparation": "case-only-directory",
+    "filesystemBoundary": "not_enforced",
+    "reviewerFilesAccessibleFromHost": true,
+    "reason": "Preparation limits staged inputs, but this local process can still reach the repository and reviewer files.",
+    "canaryCheck": "absent_from_staged_files"
+  },
+  "metrics": {
+    "tokens": null,
+    "cost": null,
+    "humanCorrectionMinutes": null
+  },
+  "preparedAt": "2026-09-21T12:12:41.953Z"
+}

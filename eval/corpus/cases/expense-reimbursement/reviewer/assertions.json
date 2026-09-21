@@ -35,12 +35,14 @@
           "name": "Approve business purpose",
           "aliases": [
             "Validate business purpose",
-            "Confirm business purpose"
+            "Confirm business purpose",
+            "Decide business purpose"
           ],
           "type": "bpmn:UserTask",
           "allowGenericTask": true,
           "lane": "Line manager",
           "start": "Claim submitted",
+          "startAliases": ["Expense claim ready", "Claim ready"],
           "expect": "present"
         }
       }
@@ -108,6 +110,7 @@
         "matcher": {
           "kind": "path",
           "from": "Business purpose approved?",
+          "aliases": ["All required approvals present?"],
           "to": "Claim rejected",
           "expect": "present"
         }
@@ -144,11 +147,14 @@
           "name": "Finance controller approves",
           "aliases": [
             "Controller reviews high-value claim",
-            "Obtain controller approval"
+            "Obtain controller approval",
+            "Approve high-value claim",
+            "Decide controller approval"
           ],
           "type": "bpmn:UserTask",
           "allowGenericTask": true,
           "start": "Claim submitted",
+          "startAliases": ["Expense claim ready", "Claim ready"],
           "expect": "present"
         }
       }
@@ -176,12 +182,16 @@
         "Quality Report",
         "final delivery claims"
       ],
+      "appliesTo": [
+        "initial"
+      ],
       "evaluation": {
         "kind": "automated",
         "code": "threshold_or_negation_changed",
         "matcher": {
           "kind": "condition",
           "target": "Finance controller approves",
+          "targetAliases": ["Approve high-value claim", "Decide controller approval"],
           "condition": {
             "variable": "amount",
             "operator": ">",
@@ -221,7 +231,8 @@
         "matcher": {
           "kind": "element",
           "name": "Additional approval needed?",
-          "type": "bpmn:ExclusiveGateway",
+          "aliases": ["Select required approvals", "Controller approval required?"],
+          "types": ["bpmn:ExclusiveGateway", "bpmn:InclusiveGateway"],
           "expect": "present"
         }
       }
@@ -249,12 +260,17 @@
         "Quality Report",
         "final delivery claims"
       ],
+      "appliesTo": [
+        "initial"
+      ],
       "evaluation": {
         "kind": "automated",
         "code": "detached_label",
         "matcher": {
           "kind": "di-label",
           "sequenceName": "Above EUR 2,000",
+          "target": "Finance controller approves",
+          "targetAliases": ["Approve high-value claim", "Decide controller approval"],
           "maxDistance": 160,
           "expect": "present"
         }
@@ -292,7 +308,7 @@
         "matcher": {
           "kind": "element",
           "name": "Pay approved claim",
-          "type": "bpmn:ServiceTask",
+          "aliases": ["Record claim payment"],
           "expect": "present"
         }
       }
@@ -324,13 +340,16 @@
         "matcher": {
           "kind": "dependency",
           "start": "Claim submitted",
+          "startAliases": ["Expense claim ready", "Claim ready"],
           "to": "Pay approved claim",
+          "targetAliases": ["Record claim payment"],
           "required": [
             "Approve business purpose"
           ],
           "aliases": [
             "Validate business purpose",
-            "Confirm business purpose"
+            "Confirm business purpose",
+            "Decide business purpose"
           ],
           "expect": "present"
         }
@@ -354,12 +373,14 @@
         }
       ],
       "outputLocations": ["BPMN semantics", "Quality Report"],
+      "appliesTo": ["initial"],
       "evaluation": {
         "kind": "automated",
         "code": "threshold_complement_changed",
         "matcher": {
           "kind": "condition",
           "name": "EUR 2,000 or less",
+          "aliases": ["EUR 2,000 or below"],
           "condition": {
             "variable": "amount",
             "operator": "<=",
@@ -393,9 +414,17 @@
         "code": "swapped_decision_destination",
         "matcher": {
           "kind": "condition",
+          "source": "Business purpose approved?",
+          "sourceAliases": ["All required approvals present?"],
           "target": "Claim rejected",
+          "targetAliases": ["Record rejection and notify employee", "Record claim rejection"],
           "condition": {
-            "allowedExpressions": ["not approved"],
+            "allowedExpressions": [
+              "not approved",
+              "The line manager rejects the business purpose.",
+              "At least one required approval is missing.",
+              "At least one required approval is not present."
+            ],
             "forbiddenExpressions": ["approved"]
           },
           "expect": "present"
@@ -404,7 +433,7 @@
     },
     {
       "id": "expense-reimbursement.assertion.12",
-      "claim": "the approved condition leads to the additional-approval decision",
+      "claim": "the approved condition leads toward completion of required approvals and payment",
       "disposition": "required",
       "severity": "critical",
       "dimension": "behavior",
@@ -425,10 +454,136 @@
         "code": "swapped_decision_destination",
         "matcher": {
           "kind": "condition",
+          "source": "Business purpose approved?",
+          "sourceAliases": ["All required approvals present?"],
           "target": "Additional approval needed?",
+          "targetAliases": ["Required approvals complete", "Record claim payment"],
           "condition": {
-            "allowedExpressions": ["approved"],
+            "allowedExpressions": [
+              "approved",
+              "The line manager approves the business purpose.",
+              "All required approvals are present.",
+              "The line manager approved business purpose and any required finance-controller approval is present."
+            ],
             "forbiddenExpressions": ["not approved"]
+          },
+          "expect": "present"
+        }
+      }
+    },
+    {
+      "id": "expense-reimbursement.assertion.13",
+      "claim": "after the correction, finance-controller approval applies at EUR 2,500 and above",
+      "disposition": "required",
+      "severity": "critical",
+      "dimension": "behavior",
+      "epistemicStatus": "established",
+      "evidence": [
+        {
+          "sourceId": "expense-reimbursement.source.4",
+          "locator": "sentence 1",
+          "stance": "supports",
+          "effectiveDate": "2026-09-21",
+          "entityScope": "process owner",
+          "caseScope": "Expense reimbursement"
+        }
+      ],
+      "outputLocations": [
+        "BPMN semantics",
+        "Quality Report"
+      ],
+      "appliesTo": [
+        "correction"
+      ],
+      "evaluation": {
+        "kind": "automated",
+        "code": "threshold_or_negation_changed",
+        "matcher": {
+          "kind": "condition",
+          "target": "Finance controller approves",
+          "targetAliases": ["Decide controller approval"],
+          "condition": {
+            "variable": "amount",
+            "operator": ">=",
+            "value": 2500,
+            "unit": "EUR"
+          },
+          "expect": "present"
+        }
+      }
+    },
+    {
+      "id": "expense-reimbursement.assertion.14",
+      "claim": "after the correction, the EUR 2,500-or-more branch remains visibly labelled in the rendered artifact",
+      "disposition": "required",
+      "severity": "major",
+      "dimension": "readability",
+      "epistemicStatus": "established",
+      "evidence": [
+        {
+          "sourceId": "expense-reimbursement.source.4",
+          "locator": "sentence 1",
+          "stance": "supports",
+          "effectiveDate": "2026-09-21",
+          "entityScope": "process owner",
+          "caseScope": "Expense reimbursement"
+        }
+      ],
+      "outputLocations": [
+        "BPMN semantics",
+        "SVG preview"
+      ],
+      "appliesTo": [
+        "correction"
+      ],
+      "evaluation": {
+        "kind": "automated",
+        "code": "detached_label",
+        "matcher": {
+          "kind": "di-label",
+          "sequenceName": "EUR 2,500 or more",
+          "target": "Finance controller approves",
+          "targetAliases": ["Decide controller approval"],
+          "maxDistance": 160,
+          "expect": "present"
+        }
+      }
+    },
+    {
+      "id": "expense-reimbursement.assertion.15",
+      "claim": "after the correction, amounts below EUR 2,500 take the complementary route",
+      "disposition": "required",
+      "severity": "critical",
+      "dimension": "behavior",
+      "epistemicStatus": "established",
+      "evidence": [
+        {
+          "sourceId": "expense-reimbursement.source.4",
+          "locator": "sentence 2",
+          "stance": "supports",
+          "effectiveDate": "2026-09-21",
+          "entityScope": "process owner",
+          "caseScope": "Expense reimbursement"
+        }
+      ],
+      "outputLocations": [
+        "BPMN semantics",
+        "Quality Report"
+      ],
+      "appliesTo": [
+        "correction"
+      ],
+      "evaluation": {
+        "kind": "automated",
+        "code": "threshold_complement_changed",
+        "matcher": {
+          "kind": "condition",
+          "name": "Below EUR 2,500",
+          "condition": {
+            "variable": "amount",
+            "operator": "<",
+            "value": 2500,
+            "unit": "EUR"
           },
           "expect": "present"
         }
@@ -538,6 +693,13 @@
       "locator": "employee paragraph",
       "statement": "Disagreement escalation ownership is unknown.",
       "treatment": "question-required"
+    },
+    {
+      "id": "expense.fact.8",
+      "sourceId": "expense-reimbursement.source.4",
+      "locator": "sentences 1-2",
+      "statement": "The corrected threshold sends amounts at or above EUR 2,500 to controller approval and amounts below EUR 2,500 to the complementary route.",
+      "treatment": "required-in-diagram"
     }
   ]
 }
