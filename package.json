@@ -62,7 +62,7 @@
   "devDependencies": {
     "@biomejs/biome": "2.5.12",
     "@fontsource/noto-sans": "5.3.0",
-    "@types/node": "24.10.0",
+    "@types/node": "26.6.1",
     "bpmn-js": "18.28.0",
     "fflate": "0.8.3",
     "typescript": "5.9.3"
